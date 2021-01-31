@@ -2,6 +2,7 @@ package de.fabmax.physxjni;
 
 public enum Platform {
 
+    LINUX64("de.fabmax.physxjni.NativeMetaLinux64"),
     WIN64("de.fabmax.physxjni.NativeMetaWin64");
 
     private final String metaClassName;
@@ -15,7 +16,13 @@ public enum Platform {
     }
 
     public static Platform getPlatform() {
-        // todo: detect the platform we are running on, however this does not make sense as long as only win64 is supported
-        return WIN64;
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.contains("windows")) {
+            return WIN64;
+        } else if (osName.contains("linux")) {
+            return LINUX64;
+        } else {
+            throw new IllegalStateException("Unsupported OS: " + osName);
+        }
     }
 }

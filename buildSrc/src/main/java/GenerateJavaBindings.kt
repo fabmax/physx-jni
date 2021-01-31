@@ -22,6 +22,6 @@ open class GenerateJavaBindings : DefaultTask() {
             nullableAttributes += "PxBatchQueryDesc.preFilterShader"
             nullableAttributes += "PxBatchQueryDesc.postFilterShader"
         }.generate(model)
-        println("Generated JNI classes (" + (model.interfaces.size + model.enums.size) + " classes)")
+        println("Generated JNI classes: " + (model.interfaces.size + model.enums.size) + " classes")
     }
 }

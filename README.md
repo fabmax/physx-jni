@@ -17,7 +17,8 @@ After build (or after running the corresponding gradle task `generateJniBindings
 classes are located under `physx-jni/src/main/generated`.
 
 ## Supported platforms
-Only windows for now, linux will follow shortly.
+- Windows (64-bit)
+- Linux (64-bit x86)
 
 ## How to use
 TODO... For a (very) basic example you can take a look at
@@ -39,9 +40,9 @@ git submodule update --init
 ./gradlew build
 ```
 
-The above code doesn't compile the native libraries but relies on the pre-built .dll files located in
-`physx-jni-native-win64/src/main/resources/win64`. In order to build the native libs from source you need
-python3, cmake and Visual Studio 2019 (Community):
+The above code doesn't compile the native libraries but relies on the pre-built libraries located in
+the platform subprojects. In order to build the native libs from source you need
+python3, cmake and Visual Studio 2019 Community (on Windows) or clang (on Linux):
 ```
 # Generate PhysX cmake project files
 ./gradlew generateNativeProject

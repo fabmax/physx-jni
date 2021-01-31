@@ -1,6 +1,8 @@
+import org.gradle.internal.os.OperatingSystem
+
 allprojects {
     group = "de.fabmax.physx-jni"
-    version = "0.2.0"
+    version = "0.3.0"
 
     repositories {
         jcenter()
@@ -12,19 +14,16 @@ allprojects {
     }
 }
 
-// make sure version string constants in main project and platform projects match the gradle project version
-tasks.register<VersionNameUpdate>("updateVersionNames") {
-    versionName = "$version"
-    filesToUpdate = listOf(
-        "physx-jni/src/main/java/de/fabmax/physxjni/Loader.java",
-        "physx-jni-native-win64/src/main/java/de/fabmax/physxjni/NativeMetaWin64.java"
-    )
-}
-
 // generates the cmake project for building windows platform native libraries (requires python3)
 tasks.register<Exec>("generateNativeProject") {
     group = "nativeWin64"
-    commandLine = listOf("cmd", "/c", "generate_physx_project.bat")
+
+    commandLine = OperatingSystem.current().let {
+        when {
+            it.isWindows -> listOf("cmd", "/c", "generate_physx_win64.bat")
+            else -> listOf("./generate_physx_linux.sh")
+        }
+    }
 }
 
 // generates native glue code based on PhysXJs.idl
@@ -35,5 +34,11 @@ tasks.register<GenerateNativeGlueCode>("generateNativeGlueCode")
 tasks.register<Exec>("buildNativeProject") {
     group = "nativeWin64"
     dependsOn("generateNativeGlueCode")
-    commandLine = listOf("cmd", "/c", "build_physx_project.bat")
+
+    commandLine = OperatingSystem.current().let {
+        when {
+            it.isWindows -> listOf("cmd", "/c", "build_physx_win64.bat")
+            else -> listOf("./build_physx_linux.sh")
+        }
+    }
 }
