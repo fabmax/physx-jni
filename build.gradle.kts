@@ -1,16 +1,15 @@
 import org.gradle.internal.os.OperatingSystem
 
-allprojects {
-    group = "de.fabmax.physx-jni"
+subprojects {
+    apply(plugin = "java-library")
+    apply(plugin = "maven-publish")
+
+    group = "de.fabmax"
     version = "0.3.0"
 
     repositories {
         jcenter()
         mavenCentral()
-    }
-
-    subprojects {
-        apply(plugin = "java-library")
     }
 }
 
