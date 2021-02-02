@@ -13,11 +13,11 @@ repositories {
 
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.3.0")
+    implementation("de.fabmax:physx-jni:0.3.1")
     
     // native libraries, you can add the one matching your system or both
-    runtimeOnly("de.fabmax:physx-jni:0.3.0:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.3.0:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.3.1:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.3.1:native-linux64")
 }
 ```
 
