@@ -27,9 +27,9 @@ hello world example of how to use the library.
 
 To get a feeling of what can be done with this you can take a look at my [kool](https://github.com/fabmax/kool) demos:
 
-> These demos run directly in the browser and obviously don't use this library, but the webassembly version mentioned
+> *__Note:__ These demos run directly in the browser and obviously don't use this library, but the webassembly version mentioned
 > above. However, the two are functionally identical, so it shouldn't matter too much. The JNI version is much faster
-> though.
+> though.*
 
 - [Vehicle](https://fabmax.github.io/kool/kool-js/?demo=phys-vehicle): Basic vehicle demo with a few obstacles.
 - [Joints](https://fabmax.github.io/kool/kool-js/?demo=phys-joints): A chain running over two gears.
@@ -38,8 +38,7 @@ To get a feeling of what can be done with this you can take a look at my [kool](
 ### Documentation
 Unfortunately, the generated bindings currently don't include any javadoc. However, the Java API
 is very close to the original PhysX C++ API, so you can simply use the official
-[PhysX API documentation](https://gameworksdocs.nvidia.com/PhysX/4.1/documentation/physxapi/files/index.html).
-Additional info is available in the
+[PhysX API documentation](https://gameworksdocs.nvidia.com/PhysX/4.1/documentation/physxapi/files/index.html) and
 [PhysX User's Guide](https://gameworksdocs.nvidia.com/PhysX/4.1/documentation/physxguide/Manual/Index.html).
 
 ## What's included in the bindings?

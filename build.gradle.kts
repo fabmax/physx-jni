@@ -5,7 +5,7 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "de.fabmax"
-    version = "0.3.0"
+    version = "0.3.1"
 
     repositories {
         jcenter()
@@ -15,7 +15,7 @@ subprojects {
 
 // generates the cmake project for building windows platform native libraries (requires python3)
 tasks.register<Exec>("generateNativeProject") {
-    group = "nativeWin64"
+    group = "native build"
 
     commandLine = OperatingSystem.current().let {
         when {
@@ -31,7 +31,7 @@ tasks.register<GenerateNativeGlueCode>("generateNativeGlueCode")
 // builds the windows platform native libraries (requires cmake, Visual Studio 2019 (community) and a
 // JDK with JNI headers)
 tasks.register<Exec>("buildNativeProject") {
-    group = "nativeWin64"
+    group = "native build"
     dependsOn("generateNativeGlueCode")
 
     commandLine = OperatingSystem.current().let {

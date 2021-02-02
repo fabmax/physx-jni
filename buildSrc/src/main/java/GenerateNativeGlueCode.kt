@@ -7,7 +7,7 @@ import java.io.FileNotFoundException
 
 open class GenerateNativeGlueCode : DefaultTask() {
     init {
-        group = "nativeWin64"
+        group = "native build"
     }
 
     @TaskAction
