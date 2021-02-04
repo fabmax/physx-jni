@@ -13,6 +13,12 @@ open class GenerateJavaBindings : DefaultTask() {
             throw FileNotFoundException("PhysX WebIDL definition not found! Forgot to run 'git submodule update --init'?")
         }
 
+        // make sure generator output directory exists
+        val generatorTarget = File("physx-jni/src/main/generated")
+        if (!generatorTarget.exists()) {
+            generatorTarget.mkdirs()
+        }
+
         val model = WebIdlParser().parse(idlFile.path)
         JniJavaGenerator().apply {
             outputDirectory = "physx-jni/src/main/generated/physx"
