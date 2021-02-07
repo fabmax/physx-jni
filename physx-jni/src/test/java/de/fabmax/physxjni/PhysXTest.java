@@ -66,6 +66,9 @@ public class PhysXTest {
         tmpFilterData.destroy();
         tmpPose.destroy();
         tmpVec.destroy();
+        shapeFlags.destroy();
+        sceneDesc.destroy();
+        tolerances.destroy();
 
         // box starts at a height of 5
         float boxHeight = box.getGlobalPose().getP().getY();
@@ -78,12 +81,27 @@ public class PhysXTest {
 
             boxHeight = box.getGlobalPose().getP().getY();
             if (i % 10 == 0) {
-                PxVec3 pos = box.getGlobalPose().getP();
                 System.out.println("Step " + i + ": h = " + boxHeight);
             }
         }
 
         // box should rest on the ground
         Assert.assertEquals(boxHeight, 1f, 0.0001f);
+
+        // cleanup stuff
+        scene.removeActor(ground);
+        ground.release();
+        groundShape.release();
+
+        scene.removeActor(box);
+        box.release();
+        boxShape.release();
+
+        scene.release();
+        material.release();
+        physics.release();
+        foundation.release();
+        errorCb.destroy();
+        allocator.destroy();
     }
 }

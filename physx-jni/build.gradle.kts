@@ -1,6 +1,9 @@
-import java.io.File
 import java.io.FileInputStream
-import java.util.Properties
+import java.util.*
+
+plugins {
+    signing
+}
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -8,6 +11,8 @@ java {
 
     @Suppress("UnstableApiUsage")
     withSourcesJar()
+    @Suppress("UnstableApiUsage")
+    withJavadocJar()
 
     sourceSets {
         main {
@@ -28,34 +33,24 @@ tasks.register<VersionNameUpdate>("updateVersionNames") {
     )
 }
 
-tasks.register<GenerateJavaBindings>("generateJniBindings")
+tasks.register<GenerateJavaBindings>("generateJniBindings") {
+    generatorOutput = File("${projectDir}/src/main/generated/physx").absolutePath
+}
 val compileJava by tasks.existing {
     dependsOn("generateJniBindings")
     dependsOn("updateVersionNames")
 }
 
 dependencies {
-    testImplementation("junit", "junit", "4.12")
+    testImplementation("junit:junit:4.12")
     testRuntimeOnly(project(":physx-jni-native-win64"))
     testRuntimeOnly(project(":physx-jni-native-linux64"))
+
+    testImplementation("org.lwjgl:lwjgl:3.2.3")
+    testRuntimeOnly("org.lwjgl:lwjgl:3.2.3:natives-windows")
 }
 
 publishing {
-    if (File("publishingCredentials.properties").exists()) {
-        val props = Properties()
-        props.load(FileInputStream("publishingCredentials.properties"))
-
-        repositories {
-            maven {
-                url = uri("${props.getProperty("publishRepoUrl")}/physx-jni")
-                credentials {
-                    username = props.getProperty("publishUser")
-                    password = props.getProperty("publishPassword")
-                }
-            }
-        }
-    }
-
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
@@ -72,6 +67,14 @@ publishing {
                 name.set("physx-jni")
                 description.set("JNI bindings for Nvidia PhysX.")
                 url.set("https://github.com/fabmax/physx-jni")
+                developers {
+                    developer {
+                        name.set("Max Thiele")
+                        email.set("fabmax.thiele@gmail.com")
+                        organization.set("github")
+                        organizationUrl.set("https://github.com/fabmax")
+                    }
+                }
                 licenses {
                     license {
                         name.set("MIT License")
@@ -79,11 +82,34 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:https://github.com/fabmax/physx-jni.git")
-                    developerConnection.set("scm:git:https://github.com/fabmax/physx-jni.git")
-                    url.set("https://github.com/fabmax/physx-jni")
+                    connection.set("scm:git:git://github.com/fabmax/physx-jni.git")
+                    developerConnection.set("scm:git:ssh://github.com:fabmax/physx-jni.git")
+                    url.set("https://github.com/fabmax/physx-jni/tree/main")
                 }
             }
+        }
+    }
+
+    if (File("publishingCredentials.properties").exists()) {
+        val props = Properties()
+        props.load(FileInputStream("publishingCredentials.properties"))
+
+        repositories {
+            maven {
+                url = if (version.toString().endsWith("-SNAPSHOT")) {
+                    uri("https://oss.sonatype.org/content/repositories/snapshots")
+                } else {
+                    uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+                }
+                credentials {
+                    username = props.getProperty("publishUser")
+                    password = props.getProperty("publishPassword")
+                }
+            }
+        }
+
+        signing {
+            sign(publications["mavenJava"])
         }
     }
 }

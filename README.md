@@ -5,19 +5,15 @@ This is the Java counterpart to the PhysX bindings for javascript/webassembly pr
 [physx-js-webidl](https://github.com/fabmax/physx-js-webidl).
 
 ## How to use
-The library is available on jcenter, so you can easily add this to your build.gradle:
+The library is available on maven central, so you can easily add this to your build.gradle:
 ```
-repositories {
-    jcenter()
-}
-
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.3.1")
+    implementation("de.fabmax:physx-jni:0.3.2")
     
     // native libraries, you can add the one matching your system or both
-    runtimeOnly("de.fabmax:physx-jni:0.3.1:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.3.1:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.3.2:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.3.2:native-linux64")
 }
 ```
 
@@ -40,6 +36,44 @@ Unfortunately, the generated bindings currently don't include any javadoc. Howev
 is very close to the original PhysX C++ API, so you can simply use the official
 [PhysX API documentation](https://gameworksdocs.nvidia.com/PhysX/4.1/documentation/physxapi/files/index.html) and
 [PhysX User's Guide](https://gameworksdocs.nvidia.com/PhysX/4.1/documentation/physxguide/Manual/Index.html).
+
+### Things to consider when working with native objects
+Whenever you create an instance of a wrapper class within this library, this also creates an object on the native
+side. Native objects are not covered by the garbage collector, so, in order to avoid a memory leak, you have to
+clean up these objects yourself when you are done with them.
+
+Here is an example:
+```java
+// create an object of PxVec3, this also creates a native PxVec3
+// object behind the scenes.
+PxVec3 vector = new PxVec3(1f, 2f, 3f);
+
+// do something with vector...
+
+// destroy the object once you are done with it
+vector.destroy();
+```
+
+This approach has two potential problems: First, as mentioned, if you forget to call destroy(), the memory on the
+native heap is not released resulting in a memory leak. Second, creating new objects on the native heap comes with
+a lot of overhead and is much slower than creating a new object on the Java side.
+
+These issues aren't a big problem for long living objects, which you create on start-up and use until you exit
+the program. However, for short-lived objects like, in many cases, `PxVec3` this can have a large impact. Therefore,
+there is a second method to allocate these objects: Stack allocation. To use this, you will need some sort of
+memory allocator like LWJGL's MemoryStack. With that one the above example could look like this:
+```java
+try (MemoryStack mem = MemoryStack.stackPush()) {
+    // create an object of PxVec3. The native object is allocated in the memory
+    // provided by MemoryStack
+    PxVec3 vector = PxVec3.malloc(mem, MemoryStack::nmalloc, 1f, 2f, 3f);
+    
+    // do something with vector...
+    // no explicit destroy needed, memory is released when we leave the scope
+}
+```
+While the `PxVec3.malloc()` call looks a bit more complicated, this approach is much faster and comes without the
+risk of leaking memory.
 
 ## What's included in the bindings?
 For now only the basic stuff + vehicle physics.
