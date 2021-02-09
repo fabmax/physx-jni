@@ -8,23 +8,36 @@ import java.io.File
 import java.io.FileNotFoundException
 
 private object CommonGeneratorSettings {
-    val stackAllocatableClasses = mutableSetOf(
+    val externallyAllocatableClasses = setOf(
+        "PxBoundedData",
+        "PxBounds3",
         "PxFilterData",
         "PxQuat",
         "PxTransform",
         "PxVec3",
+
+        "PxBoxGeometry",
+        "PxCapsuleGeometry",
+        "PxConvexMeshDesc",
+        "PxConvexMeshGeometry",
+        "PxPlaneGeometry",
+        "PxSphereGeometry",
+        "PxTriangleMeshDesc",
+        "PxTriangleMeshGeometry",
 
         "PxActorFlags",
         "PxBaseFlags",
         "PxConvexFlags",
         "PxConvexMeshGeometryFlags",
         "PxHitFlags",
+        "PxMeshFlags",
         "PxRevoluteJointFlags",
         "PxRigidBodyFlags",
         "PxRigidDynamicLockFlags",
         "PxSceneFlags",
         "PxShapeFlags",
-        "PxVehicleWheelSimFlags"
+        "PxTriangleMeshFlags",
+        "PxVehicleWheelsSimFlags"
     )
 }
 
@@ -45,7 +58,7 @@ open class GenerateJavaBindings : DefaultTask() {
             packagePrefix = "physx"
             onClassLoad = "de.fabmax.physxjni.Loader.load();"
 
-            stackAllocatableClasses += CommonGeneratorSettings.stackAllocatableClasses
+            externallyAllocatableClasses += CommonGeneratorSettings.externallyAllocatableClasses
             nullableAttributes += "PxBatchQueryDesc.preFilterShader"
             nullableAttributes += "PxBatchQueryDesc.postFilterShader"
         }.generate(model)
@@ -70,7 +83,7 @@ open class GenerateNativeGlueCode : DefaultTask() {
             outputDirectory = "PhysX/physx/source/physxjnibindings/src/"
             packagePrefix = "physx"
 
-            stackAllocatableClasses += CommonGeneratorSettings.stackAllocatableClasses
+            externallyAllocatableClasses += CommonGeneratorSettings.externallyAllocatableClasses
         }.generate(model)
     }
 }

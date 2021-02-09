@@ -8,5 +8,5 @@ repositories {
 }
 
 dependencies {
-    implementation("de.fabmax:webidl-util:0.6.0")
+    implementation("de.fabmax:webidl-util:0.6.1-SNAPSHOT")
 }

@@ -10,6 +10,10 @@ import physx.physics.*;
 
 public class PhysXTest {
 
+    /**
+     * Self contained test / example running the whole chain from setting up PhysX to running the simulation
+     * to final clean up.
+     */
     @Test
     public void testBasic() {
         // get PhysX library version
@@ -25,9 +29,10 @@ public class PhysXTest {
         PxPhysics physics = PxTopLevelFunctions.CreatePhysics(version, foundation, tolerances);
 
         // create a physics scene
+        int numThreads = 4;
         PxSceneDesc sceneDesc = new PxSceneDesc(tolerances);
         sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
-        sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(0));
+        sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(numThreads));
         sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
         sceneDesc.getFlags().set(PxSceneFlagEnum.eENABLE_CCD);
         PxScene scene = physics.createScene(sceneDesc);
