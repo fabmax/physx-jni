@@ -9,17 +9,19 @@ The library is available on maven central, so you can easily add this to your bu
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.3.2")
+    implementation("de.fabmax:physx-jni:0.4.0")
     
     // native libraries, you can add the one matching your system or both
-    runtimeOnly("de.fabmax:physx-jni:0.3.2:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.3.2:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.0:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.0:native-linux64")
 }
 ```
 
 ### Examples
-You can take a look at [PhysxTest.java](physx-jni/src/test/java/de/fabmax/physxjni/PhysXTest.java) for a
-hello world example of how to use the library.
+You can take a look at [HelloPhysX.java](physx-jni/src/test/java/de/fabmax/physxjni/HelloPhysX.java) for a
+hello world example of how to use the library. There also are a few
+[tests](https://github.com/fabmax/physx-jni/tree/main/physx-jni/src/test/java/de/fabmax/physxjni) with slightly
+more advanced examples (custom simulation callbacks, triangle mesh collision, etc.).
 
 To get a feeling of what can be done with this you can take a look at my [kool](https://github.com/fabmax/kool) demos:
 
@@ -75,6 +77,28 @@ try (MemoryStack mem = MemoryStack.stackPush()) {
 While the `PxVec3.malloc()` call looks a bit more complicated, this approach is much faster and comes without the
 risk of leaking memory.
 
+### Java Callbacks
+
+At a few places it is possible to register callbacks. For now the only supported callbacks are `PxErrorCallback` and
+`PxSimulationEventCallback`. In order to implement a callback, the corresponding Java callback class has to be
+extended. The implementing class can then be passed into the corresponding PhysX API.
+
+Here's an example how this might look:
+
+```java
+// implement callback
+public class CustomErrorCallback extends JavaErrorCallback {
+    @Override
+    public void reportError(int code, String message, String file, int line) {
+        System.out.println(code + ": " + message);
+    }
+}
+
+// register / use callback
+CustomErrorCallback errorCb = new CustomErrorCallback();
+PxFoundation foundation = PxTopLevelFunctions.CreateFoundation(PX_PHYSICS_VERSION, new PxDefaultAllocator(), errorCb);
+```
+
 ## What's included in the bindings?
 For now only the basic stuff + vehicle physics.
 
@@ -90,11 +114,11 @@ classes are located under `physx-jni/src/main/generated`.
 - Linux (64-bit x86)
 
 ## What's next?
-- Triangle mesh shape
-- More joint types
-- Callbacks from native to Java (e.g. collision callbacks)
-- Character controllers
-- Include API docs
+- [x] Triangle mesh shape
+- [x] Callbacks from native to Java (e.g. collision callbacks)
+- [ ] More joint types
+- [ ] Character controllers
+- [ ] Include API docs
 
 ## Building
 You can build the bindings yourself:

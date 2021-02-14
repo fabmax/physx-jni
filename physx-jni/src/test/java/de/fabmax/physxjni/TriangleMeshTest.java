@@ -17,8 +17,10 @@ import physx.support.Vector_PxVec3;
 public class TriangleMeshTest {
 
     @Test
-    public void TriangleMeshTest() {
+    public void triangleMeshTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
+            PxScene scene = PhysXTestEnv.createEmptyScene(4);
+
             // generate some triangle geometry (negative cone with 10 triangles, 0.5 units deep, 5 units radius)
             Vector_PxVec3 pointVector = new Vector_PxVec3();
             Vector_PxU32 indexVector = new Vector_PxU32();
@@ -58,17 +60,15 @@ public class TriangleMeshTest {
             // create bodies and scene
             PxTriangleMeshGeometry geom = PxTriangleMeshGeometry.createAt(mem, MemoryStack::nmalloc, mesh);
             PxRigidStatic triMesh = PhysXTestEnv.createStaticBody(geom, 0f, 0f, 0f);
+            scene.addActor(triMesh);
 
             PxRigidDynamic box = PhysXTestEnv.createDefaultBox(0f, 5f, 0f);
-
-            PxScene scene = PhysXTestEnv.createEmptyScene(1);
-            scene.addActor(triMesh);
             scene.addActor(box);
 
             // simulate for a few seconds
             PhysXTestEnv.simulateScene(scene, 5, box);
 
-            // box should rest on out tri mesh
+            // box should rest on our tri mesh
             Assert.assertTrue(box.getGlobalPose().getP().getY() > 0);
 
             // clean up

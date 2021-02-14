@@ -1,5 +1,5 @@
-import de.fabmax.webidl.generator.jni.JniJavaGenerator
-import de.fabmax.webidl.generator.jni.JniNativeGenerator
+import de.fabmax.webidl.generator.jni.java.JniJavaGenerator
+import de.fabmax.webidl.generator.jni.nat.JniNativeGenerator
 import de.fabmax.webidl.parser.WebIdlParser
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -22,8 +22,10 @@ private object CommonGeneratorSettings {
         "PxConvexMeshGeometry",
         "PxPlaneGeometry",
         "PxSphereGeometry",
-        "PxTriangleMeshDesc",
         "PxTriangleMeshGeometry",
+
+        "PxSceneDesc",
+        "PxTriangleMeshDesc",
 
         "PxActorFlags",
         "PxBaseFlags",
