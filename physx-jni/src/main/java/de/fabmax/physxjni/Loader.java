@@ -1,5 +1,7 @@
 package de.fabmax.physxjni;
 
+import physx.JniThreadManager;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Loader {
 
-    private static final String version = "0.3.2";
+    private static final String version = "0.4.0";
 
     private static final AtomicBoolean isLoaded = new AtomicBoolean(false);
 
@@ -29,6 +31,8 @@ public class Loader {
                 boolean forceCopy = meta.getVersion().endsWith("-SNAPSHOT")
                         || "true".equalsIgnoreCase(System.getProperty("physx.forceCopyLibs", "false"));
                 loadLibsFromResources(meta.getLibResources(), forceCopy);
+
+                JniThreadManager.init();
 
             } catch (Throwable t) {
                 throw new IllegalStateException("Failed loading native PhysX libraries for platform " + platform, t);
