@@ -34,6 +34,7 @@ tasks.register<VersionNameUpdate>("updateVersionNames") {
 }
 
 tasks.register<GenerateJavaBindings>("generateJniBindings") {
+    idlSource = File("${projectDir}/src/main/webidl/PhysXJs.idl").absolutePath
     generatorOutput = File("${projectDir}/src/main/generated/physx").absolutePath
 }
 val compileJava by tasks.existing {

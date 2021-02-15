@@ -102,8 +102,8 @@ PxFoundation foundation = PxTopLevelFunctions.CreateFoundation(PX_PHYSICS_VERSIO
 ## What's included in the bindings?
 For now only the basic stuff + vehicle physics.
 
-The detailed list of mapped functions is given by the `PhysXJs.idl` in
-`PhysX/physx/source/physxwebbindings/src/` (in the PhysX submodule). The Java classes containing the
+The detailed list of mapped functions is given by the interface definition file 
+[PhysXJs.idl](physx-jni/src/main/webidl/PhysXJs.idl). The Java classes containing the
 actual bindings are generated from that file during build.
 
 After build (or after running the corresponding gradle task `generateJniBindings`) the generated Java
@@ -129,17 +129,17 @@ git clone https://github.com/fabmax/physx-jni.git
 # Enter that directory
 cd physx-jni
 
-# Download submodule containing the PhysX code
-git submodule update --init
-
 # Generate Java/JNI code and build library
 ./gradlew build
 ```
 
 The above code doesn't compile the native libraries but relies on the pre-built libraries located in
-the platform subprojects. In order to build the native libs from source you need
-python3, cmake and Visual Studio 2019 Community (on Windows) or clang (on Linux):
+the platform subprojects. In order to build the native libs from source you need to clone the submodule containing
+the PhysX source code, and you need python3, cmake and Visual Studio 2019 Community (on Windows) or clang (on Linux):
 ```
+# Download submodule containing the PhysX source code
+git submodule update --init
+
 # Generate PhysX cmake project files
 ./gradlew generateNativeProject
 

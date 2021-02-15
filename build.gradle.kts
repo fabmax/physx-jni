@@ -26,7 +26,10 @@ tasks.register<Exec>("generateNativeProject") {
 }
 
 // generates native glue code based on PhysXJs.idl
-tasks.register<GenerateNativeGlueCode>("generateNativeGlueCode")
+tasks.register<GenerateNativeGlueCode>("generateNativeGlueCode") {
+    idlSource = File("${projectDir}/physx-jni/src/main/webidl/PhysXJs.idl").absolutePath
+    generatorOutput = File("${projectDir}/PhysX/physx/source/physxjnibindings/src/").absolutePath
+}
 
 // builds the windows platform native libraries (requires cmake, Visual Studio 2019 (community) and a
 // JDK with JNI headers)
