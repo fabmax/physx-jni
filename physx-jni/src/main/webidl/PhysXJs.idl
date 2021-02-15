@@ -1,0 +1,1699 @@
+
+/****************************************
+ * Static methods / fields
+ ****************************************/
+
+interface PxTopLevelFunctions {
+    static readonly attribute unsigned long PHYSICS_VERSION;
+    
+    [Value] static PxSimulationFilterShader DefaultFilterShader();
+    [Value] static PxBatchQueryPreFilterShader DefaultWheelSceneQueryPreFilterBlocking();
+    [Value] static PxBatchQueryPostFilterShader DefaultWheelSceneQueryPostFilterBlocking();
+
+    static PxCooking CreateCooking(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxCookingParams scale);
+    static PxFoundation CreateFoundation(unsigned long version, [Ref] PxDefaultAllocator allocator, [Ref] PxErrorCallback errorCallback);
+    static PxPhysics CreatePhysics(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxTolerancesScale params);
+    static PxDefaultCpuDispatcher DefaultCpuDispatcherCreate(unsigned long numThreads);
+    static boolean InitExtensions([Ref] PxPhysics physics);
+    static PxRevoluteJoint RevoluteJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
+
+    static octet getU8At([Ref] PxU8Ptr base, long index);
+    static unsigned short getU16At([Ref] PxU16Ptr base, long index);
+    static unsigned long getU32At([Ref] PxU32Ptr base, long index);
+    static float getRealAt([Ref] PxRealPtr base, long index);
+    static PxContactPair getContactPairAt(PxContactPair base, long index);
+    static PxTriggerPair getTriggerPairAt(PxTriggerPair base, long index);
+    static PxVec3 getVec3At(PxVec3 base, long index);
+};
+
+/****************************************
+ * [package=physics]
+ ****************************************/
+
+[Prefix="physx::", NoDelete]
+interface PxActor {
+    PxActorTypeEnum getType();
+    PxScene getScene();
+    void setName(DOMString name);
+    [Const] DOMString getName();
+    [Value] PxBounds3 getWorldBounds(optional float inflation);
+    void setActorFlags([Ref] PxActorFlags flags);
+    [Value] PxActorFlags getActorFlags();
+    void setDominanceGroup(octet dominanceGroup);
+    octet getDominanceGroup();
+    void setOwnerClient(octet inClient);
+    octet getOwnerClient();
+};
+PxActor implements PxBase;
+
+enum PxActorFlagEnum {
+    "PxActorFlagEnum::eVISUALIZATION",
+    "PxActorFlagEnum::eDISABLE_GRAVITY",
+    "PxActorFlagEnum::eSEND_SLEEP_NOTIFIES",
+    "PxActorFlagEnum::eDISABLE_SIMULATION"
+};
+
+[Prefix="physx::"]
+interface PxActorFlags {
+    void PxActorFlags(octet flags);
+    boolean isSet(PxActorFlagEnum flag);
+    void set(PxActorFlagEnum flag);
+    void clear(PxActorFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxActorShape {
+    attribute PxRigidActor actor;
+    attribute PxShape shape;
+};
+
+enum PxActorTypeEnum {
+    "PxActorTypeEnum::eRIGID_STATIC",
+    "PxActorTypeEnum::eRIGID_DYNAMIC",
+    "PxActorTypeEnum::eARTICULATION_LINK",
+    "PxActorTypeEnum::eACTOR_COUNT",
+    "PxActorTypeEnum::eACTOR_FORCE_DWORD",
+};
+
+[Prefix="physx::", NoDelete]
+interface PxBatchQuery {
+    void execute();
+    [Value] PxBatchQueryPreFilterShader getPreFilterShader();
+    [Value] PxBatchQueryPostFilterShader getPostFilterShader();
+    [Const] any getFilterShaderData();
+    unsigned long getFilterShaderDataSize();
+    void setUserMemory([Const, Ref] PxBatchQueryMemory userMemory);
+    [Const, Ref] PxBatchQueryMemory getUserMemory();
+    void release();
+};
+
+[Prefix="physx::"]
+interface PxBatchQueryDesc {
+    void PxBatchQueryDesc(unsigned long maxRaycastsPerExecute, unsigned long maxSweepsPerExecute, unsigned long maxOverlapsPerExecute);
+    boolean isValid();
+    attribute any filterShaderData;
+    attribute unsigned long filterShaderDataSize;
+    [Value] attribute PxBatchQueryPreFilterShader preFilterShader;
+    [Value] attribute PxBatchQueryPostFilterShader postFilterShader;
+    [Value] attribute PxBatchQueryMemory queryMemory;
+};
+
+[Prefix="physx::"]
+interface PxBatchQueryMemory {
+    attribute PxRaycastQueryResult userRaycastResultBuffer;
+    attribute PxRaycastHit userRaycastTouchBuffer;
+    attribute PxSweepQueryResult userSweepResultBuffer;
+    attribute PxSweepHit userSweepTouchBuffer;
+    attribute PxOverlapQueryResult userOverlapResultBuffer;
+    attribute PxOverlapHit userOverlapTouchBuffer;
+    attribute unsigned long raycastTouchBufferSize;
+    attribute unsigned long sweepTouchBufferSize;
+    attribute unsigned long overlapTouchBufferSize;
+};
+
+[Prefix="physx::"]
+interface PxBatchQueryPostFilterShader { };
+
+[Prefix="physx::"]
+interface PxBatchQueryPreFilterShader { };
+
+[Prefix="physx::", NoDelete]
+interface PxConstraint {
+    void release();
+    PxScene getScene();
+    //void getActors();
+    void setActors(PxRigidActor actor0, PxRigidActor actor1);
+    void markDirty();
+    void setFlags([Ref] PxConstraintFlags flags);
+    [Value] PxConstraintFlags getFlags();
+    void setFlag(PxConstraintFlagEnum flag, boolean value);
+    void getForce([Ref] PxVec3 linear, [Ref] PxVec3 angular);
+    boolean isValid();
+    void setBreakForce(float linear, float angular);
+    //void getBreakForce
+    void setMinResponseThreshold(float threshold);
+    float getMinResponseThreshold();
+    //VoidPtr getExternalReference
+    //void setConstraintFunctions
+};
+PxConstraint implements PxBase;
+
+enum PxConstraintFlagEnum {
+    "PxConstraintFlagEnum::eBROKEN",
+    "PxConstraintFlagEnum::ePROJECT_TO_ACTOR0",
+    "PxConstraintFlagEnum::ePROJECT_TO_ACTOR1",
+    "PxConstraintFlagEnum::ePROJECTION",
+    "PxConstraintFlagEnum::eCOLLISION_ENABLED",
+    "PxConstraintFlagEnum::eVISUALIZATION",
+    "PxConstraintFlagEnum::eDRIVE_LIMITS_ARE_FORCES",
+    "PxConstraintFlagEnum::eIMPROVED_SLERP",
+    "PxConstraintFlagEnum::eDISABLE_PREPROCESSING",
+    "PxConstraintFlagEnum::eENABLE_EXTENDED_LIMITS",
+    "PxConstraintFlagEnum::eGPU_COMPATIBLE"
+};
+
+[Prefix="physx::"]
+interface PxConstraintFlags {
+    void PxConstraintFlags(unsigned short flags);
+    boolean isSet(PxConstraintFlagEnum flag);
+    void set(PxConstraintFlagEnum flag);
+    void clear(PxConstraintFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxConstraintInfo {
+    attribute PxConstraint constraint;
+    attribute VoidPtr externalReference;
+    attribute unsigned long type;
+};
+
+enum PxContactPairHeaderFlagEnum {
+    "PxContactPairHeaderFlagEnum::eREMOVED_ACTOR_0",
+    "PxContactPairHeaderFlagEnum::eREMOVED_ACTOR_1"
+};
+
+[Prefix="physx::"]
+interface PxContactPairHeaderFlags {
+    void PxContactPairHeaderFlags(unsigned short flags);
+    boolean isSet(PxContactPairHeaderFlagEnum flag);
+    void set(PxContactPairHeaderFlagEnum flag);
+    void clear(PxContactPairHeaderFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxContactPair {
+    attribute PxShape[] shapes;
+    attribute octet contactCount;
+    attribute octet patchCount;
+    [Value] attribute PxContactPairFlags flags;
+    [Value] attribute PxPairFlags events;
+};
+
+enum PxContactPairFlagEnum {
+    "PxContactPairFlagEnum::eREMOVED_SHAPE_0",
+    "PxContactPairFlagEnum::eREMOVED_SHAPE_1",
+    "PxContactPairFlagEnum::eACTOR_PAIR_HAS_FIRST_TOUCH",
+    "PxContactPairFlagEnum::eACTOR_PAIR_LOST_TOUCH",
+    "PxContactPairFlagEnum::eINTERNAL_HAS_IMPULSES",
+    "PxContactPairFlagEnum::eINTERNAL_CONTACTS_ARE_FLIPPED"
+};
+
+[Prefix="physx::"]
+interface PxContactPairFlags {
+    void PxContactPairFlags(unsigned short flags);
+    boolean isSet(PxContactPairFlagEnum flag);
+    void set(PxContactPairFlagEnum flag);
+    void clear(PxContactPairFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxContactPairHeader {
+    attribute PxRigidActor[] actors;
+    //attribute PxU8Ptr extraDataStream;
+    //attribute short extraDataStreamSize;
+    [Value] attribute PxContactPairHeaderFlags flags;
+    attribute PxContactPair pairs;
+    attribute unsigned long nbPairs;
+};
+
+[Prefix="physx::"]
+interface PxFilterData {
+    void PxFilterData();
+    void PxFilterData(unsigned long w0, unsigned long w1, unsigned long w2, unsigned long w3);
+    attribute unsigned long word0;
+    attribute unsigned long word1;
+    attribute unsigned long word2;
+    attribute unsigned long word3;
+};
+
+enum PxForceModeEnum {
+    "PxForceModeEnum::eFORCE",
+    "PxForceModeEnum::eIMPULSE",
+    "PxForceModeEnum::eVELOCITY_CHANGE",
+    "PxForceModeEnum::eACCELERATION"
+};
+
+enum PxHitFlagEnum {
+    "PxHitFlagEnum::ePOSITION",
+    "PxHitFlagEnum::eNORMAL",
+    "PxHitFlagEnum::eUV",
+    "PxHitFlagEnum::eASSUME_NO_INITIAL_OVERLAP",
+    "PxHitFlagEnum::eMESH_MULTIPLE",
+    "PxHitFlagEnum::eMESH_ANY",
+    "PxHitFlagEnum::eMESH_BOTH_SIDES",
+    "PxHitFlagEnum::ePRECISE_SWEEP",
+    "PxHitFlagEnum::eMTD",
+    "PxHitFlagEnum::eFACE_INDEX",
+    "PxHitFlagEnum::eDEFAULT",
+    "PxHitFlagEnum::eMODIFIABLE_FLAGS"
+};
+
+[Prefix="physx::"]
+interface PxHitFlags {
+    void PxHitFlags(unsigned short flags);
+    boolean isSet(PxHitFlagEnum flag);
+    void set(PxHitFlagEnum flag);
+    void clear(PxHitFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxLocationHit {
+    [Value] attribute PxHitFlags flags;
+    [Value] attribute PxVec3 position;
+    [Value] attribute PxVec3 normal;
+    attribute float distance;
+};
+PxLocationHit implements PxQueryHit;
+
+[Prefix="physx::"]
+interface PxOverlapHit { };
+PxOverlapHit implements PxQueryHit;
+
+[Prefix="physx::"]
+interface PxOverlapQueryResult {
+    unsigned long getNbAnyHits();
+    [Const, Ref] PxOverlapHit getAnyHit(unsigned long index);
+    [Value] attribute PxOverlapHit block;
+    attribute PxOverlapHit touches;
+    attribute unsigned long nbTouches;
+    attribute any userData; 
+    attribute octet queryStatus;
+    attribute boolean hasBlock;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxMaterial { };
+PxMaterial implements PxBase;
+
+enum PxPairFlagEnum {
+    "PxPairFlagEnum::eSOLVE_CONTACT",
+    "PxPairFlagEnum::eMODIFY_CONTACTS",
+    "PxPairFlagEnum::eNOTIFY_TOUCH_FOUND",
+    "PxPairFlagEnum::eNOTIFY_TOUCH_PERSISTS",
+    "PxPairFlagEnum::eNOTIFY_TOUCH_LOST",
+    "PxPairFlagEnum::eNOTIFY_TOUCH_CCD",
+    "PxPairFlagEnum::eNOTIFY_THRESHOLD_FORCE_FOUND",
+    "PxPairFlagEnum::eNOTIFY_THRESHOLD_FORCE_PERSISTS",
+    "PxPairFlagEnum::eNOTIFY_THRESHOLD_FORCE_LOST",
+    "PxPairFlagEnum::eNOTIFY_CONTACT_POINTS",
+    "PxPairFlagEnum::eDETECT_DISCRETE_CONTACT",
+    "PxPairFlagEnum::eDETECT_CCD_CONTACT",
+    "PxPairFlagEnum::ePRE_SOLVER_VELOCITY",
+    "PxPairFlagEnum::ePOST_SOLVER_VELOCITY",
+    "PxPairFlagEnum::eCONTACT_EVENT_POSE",
+    "PxPairFlagEnum::eNEXT_FREE",
+    "PxPairFlagEnum::eCONTACT_DEFAULT"
+};
+
+[Prefix="physx::"]
+interface PxPairFlags {
+    void PxPairFlags(unsigned short flags);
+    boolean isSet(PxPairFlagEnum flag);
+    void set(PxPairFlagEnum flag);
+    void clear(PxPairFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxPhysics {
+    // Basics
+    void release();
+    [Ref] PxFoundation getFoundation();
+    [Const, Ref] PxTolerancesScale getTolerancesScale();
+    // Scenes
+    PxScene createScene([Const, Ref] PxSceneDesc sceneDesc);
+    // Actors
+    PxRigidStatic createRigidStatic([Const, Ref] PxTransform pose);
+    PxRigidDynamic createRigidDynamic([Const, Ref] PxTransform pose);
+    // Shapes
+    PxShape createShape([Const, Ref] PxGeometry geometry, [Const, Ref] PxMaterial material, optional boolean isExclusive, [Ref] optional PxShapeFlags shapeFlags);
+    long getNbShapes();
+    // Materials
+    PxMaterial createMaterial(float staticFriction, float dynamicFriction, float restitution);
+    // Deletion Listeners
+    [Ref] PxPhysicsInsertionCallback getPhysicsInsertionCallback();
+};
+
+[Prefix="physx::"]
+interface PxQueryHit {
+    attribute unsigned long faceIndex;
+};
+PxQueryHit implements PxActorShape;
+
+[Prefix="physx::"]
+interface PxRaycastHit {
+    void PxRaycastHit();
+    attribute float u;
+    attribute float v;
+};
+PxRaycastHit implements PxLocationHit;
+
+[Prefix="physx::"]
+interface PxRaycastQueryResult {
+    unsigned long getNbAnyHits();
+    [Const, Ref] PxRaycastHit getAnyHit(unsigned long index);
+    [Value] attribute PxRaycastHit block;
+    attribute PxRaycastHit touches;
+    attribute unsigned long nbTouches;
+    attribute any userData; 
+    attribute octet queryStatus;
+    attribute boolean hasBlock;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxRigidActor {
+    // Global Pose Manipulation
+    [Value] PxTransform getGlobalPose();
+    void setGlobalPose([Const, Ref] PxTransform pose, optional boolean autowake);
+
+    // Shapes
+    boolean attachShape([Ref] PxShape shape);
+    void detachShape([Ref] PxShape shape, optional boolean wakeOnLostTouch);
+    long getNbShapes();
+    //long getShapes(PxShape[] userBuffer, unsigned long bufferSize, unsigned long startIndex);
+};
+PxRigidActor implements PxActor;
+
+[Prefix="physx::", NoDelete]
+interface PxRigidBody {
+    // Mass Manipulation
+    void setCMassLocalPose([Const, Ref] PxTransform pose);
+    [Value] PxTransform getCMassLocalPose();
+    void setMass(float mass);
+    float getMass();
+    float getInvMass();
+    void setMassSpaceInertiaTensor([Const, Ref] PxVec3 m);
+    [Value] PxVec3 getMassSpaceInertiaTensor();
+    [Value] PxVec3 getMassSpaceInvInertiaTensor();
+
+    // Damping
+    void setLinearDamping(float linDamp);
+    float getLinearDamping();
+    void setAngularDamping(float angDamp);
+    float getAngularDamping();
+
+    // Velocity
+    [Value] PxVec3 getLinearVelocity();
+    void setLinearVelocity([Const, Ref] PxVec3 linVel, optional boolean autowake);
+    [Value] PxVec3 getAngularVelocity();
+    void setAngularVelocity([Const, Ref] PxVec3 angVel, optional boolean autowake);
+    float getMaxLinearVelocity();
+    void setMaxLinearVelocity(float maxLinVel);
+    float getMaxAngularVelocity();
+    void setMaxAngularVelocity(float maxAngVel);
+
+    // Forces
+    void addForce([Const, Ref] PxVec3 force, optional PxForceModeEnum mode, optional boolean autowake);
+    void addTorque([Const, Ref] PxVec3 torque, optional PxForceModeEnum mode, optional boolean autowake);
+    void clearForce(PxForceModeEnum mode);
+    void clearTorque(PxForceModeEnum mode);
+    void setForceAndTorque([Const, Ref] PxVec3 force, [Const, Ref] PxVec3 torque, optional PxForceModeEnum mode);
+
+    void setRigidBodyFlag(PxRigidBodyFlagEnum flag, boolean value);
+    void setRigidBodyFlags([Ref] PxRigidBodyFlags inFlags);
+    [Value] PxRigidBodyFlags getRigidBodyFlags();
+    void setMinCCDAdvanceCoefficient(float advanceCoefficient);
+    float getMinCCDAdvanceCoefficient();
+    void setMaxDepenetrationVelocity(float biasClamp);
+    float getMaxDepenetrationVelocity();
+    void setMaxContactImpulse(float maxImpulse);
+    float getMaxContactImpulse();
+    unsigned long getInternalIslandNodeIndex();
+};
+PxRigidBody implements PxRigidActor;
+
+enum PxRigidBodyFlagEnum {
+    "PxRigidBodyFlagEnum::eKINEMATIC",
+    "PxRigidBodyFlagEnum::eUSE_KINEMATIC_TARGET_FOR_SCENE_QUERIES",
+    "PxRigidBodyFlagEnum::eENABLE_CCD",
+    "PxRigidBodyFlagEnum::eENABLE_CCD_FRICTION",
+    "PxRigidBodyFlagEnum::eENABLE_POSE_INTEGRATION_PREVIEW",
+    "PxRigidBodyFlagEnum::eENABLE_SPECULATIVE_CCD",
+    "PxRigidBodyFlagEnum::eENABLE_CCD_MAX_CONTACT_IMPULSE",
+    "PxRigidBodyFlagEnum::eRETAIN_ACCELERATIONS"
+};
+
+[Prefix="physx::"]
+interface PxRigidBodyFlags {
+    void PxRigidBodyFlags(octet flags);
+    boolean isSet(PxRigidBodyFlagEnum flag);
+    void set(PxRigidBodyFlagEnum flag);
+    void clear(PxRigidBodyFlagEnum flag);
+};
+
+[Prefix="physx::", NoDelete]
+interface PxRigidDynamic {
+    boolean isSleeping();
+    void setSleepThreshold(float threshold);
+    float getSleepThreshold();
+    void setStabilizationThreshold(float threshold);
+    float getStabilizationThreshold();
+    [Value] PxRigidDynamicLockFlags getRigidDynamicLockFlags();
+    void setRigidDynamicLockFlag(PxRigidDynamicLockFlagEnum flag, boolean value);
+    void setRigidDynamicLockFlags([Ref] PxRigidDynamicLockFlags flags);
+    void setWakeCounter(float wakeCounterValue);
+    float getWakeCounter();
+    void wakeUp();
+    void putToSleep();
+    void setSolverIterationCounts(unsigned long minPositionIters, optional unsigned long minVelocityIters);
+    float getContactReportThreshold();
+    void setContactReportThreshold(float threshold);
+};
+PxRigidDynamic implements PxRigidBody;
+
+enum PxRigidDynamicLockFlagEnum {
+    "PxRigidDynamicLockFlagEnum::eLOCK_LINEAR_X",
+    "PxRigidDynamicLockFlagEnum::eLOCK_LINEAR_Y",
+    "PxRigidDynamicLockFlagEnum::eLOCK_LINEAR_Z",
+    "PxRigidDynamicLockFlagEnum::eLOCK_ANGULAR_X",
+    "PxRigidDynamicLockFlagEnum::eLOCK_ANGULAR_Y",
+    "PxRigidDynamicLockFlagEnum::eLOCK_ANGULAR_Z",
+};
+
+[Prefix="physx::"]
+interface PxRigidDynamicLockFlags {
+    void PxRigidDynamicLockFlags(octet flags);
+    boolean isSet(PxRigidDynamicLockFlagEnum flag);
+    void set(PxRigidDynamicLockFlagEnum flag);
+    void clear(PxRigidDynamicLockFlagEnum flag);
+};
+
+[Prefix="physx::", NoDelete]
+interface PxRigidStatic { };
+PxRigidStatic implements PxRigidActor;
+
+[Prefix="physx::", NoDelete]
+interface PxScene {
+    void addActor([Ref] PxActor actor, [Const] optional PxBVHStructure bvhStructure);
+    void removeActor([Ref] PxActor actor, optional boolean wakeOnLostTouch);
+
+    // Simulation
+    void simulate(float elapsedTime, optional PxBaseTask completionTask, optional any scratchMemBlock, optional unsigned long scratchMemBlockSize, optional boolean controlSimulation);
+    boolean fetchResults(optional boolean block);
+    void setGravity([Const, Ref] PxVec3 vec);
+    [Value] PxVec3 getGravity();
+
+    // Scene Query
+    PxBatchQuery createBatchQuery([Const, Ref] PxBatchQueryDesc desc);
+
+    // Basics
+    void release();
+    void setFlag(PxSceneFlagEnum flag, boolean value);
+    [Value] PxSceneFlags getFlags();
+    [Ref] PxPhysics getPhysics();
+    unsigned long getTimestamp();
+};
+
+[Prefix="physx::"]
+interface PxSceneDesc {
+    void PxSceneDesc([Const, Ref] PxTolerancesScale scale);
+    [Value] attribute PxVec3 gravity;
+    attribute PxSimulationEventCallback simulationEventCallback;
+    [Value] attribute PxSimulationFilterShader filterShader;
+    attribute PxCpuDispatcher cpuDispatcher;
+    [Value] attribute PxSceneFlags flags;
+};
+
+enum PxSceneFlagEnum {
+    "PxSceneFlagEnum::eENABLE_ACTIVE_ACTORS",
+    "PxSceneFlagEnum::eENABLE_CCD",
+    "PxSceneFlagEnum::eDISABLE_CCD_RESWEEP",
+    "PxSceneFlagEnum::eADAPTIVE_FORCE",
+    "PxSceneFlagEnum::eENABLE_PCM",
+    "PxSceneFlagEnum::eDISABLE_CONTACT_REPORT_BUFFER_RESIZE",
+    "PxSceneFlagEnum::eDISABLE_CONTACT_CACHE",
+    "PxSceneFlagEnum::eREQUIRE_RW_LOCK",
+    "PxSceneFlagEnum::eENABLE_STABILIZATION",
+    "PxSceneFlagEnum::eENABLE_AVERAGE_POINT",
+    "PxSceneFlagEnum::eEXCLUDE_KINEMATICS_FROM_ACTIVE_ACTORS",
+    "PxSceneFlagEnum::eENABLE_GPU_DYNAMICS",
+    "PxSceneFlagEnum::eENABLE_ENHANCED_DETERMINISM",
+    "PxSceneFlagEnum::eENABLE_FRICTION_EVERY_ITERATION",
+    "PxSceneFlagEnum::eMUTABLE_FLAGS"
+};
+
+[Prefix="physx::"]
+interface PxSceneFlags {
+    void PxSceneFlags(unsigned long flags);
+    boolean isSet(PxSceneFlagEnum flag);
+    void set(PxSceneFlagEnum flag);
+    void clear(PxSceneFlagEnum flag);
+};
+
+[Prefix="physx::", NoDelete]
+interface PxShape {
+    // Pose Manipulation
+    void setLocalPose([Const, Ref] PxTransform pose);
+    [Value] PxTransform getLocalPose(); 
+    // Collision Filtering
+    void setSimulationFilterData([Const, Ref] PxFilterData data);
+    [Value] PxFilterData getSimulationFilterData();
+    void setQueryFilterData([Const, Ref] PxFilterData data);
+    [Value] PxFilterData getQueryFilterData();
+};
+PxShape implements PxBase;
+
+enum PxShapeFlagEnum {
+    "PxShapeFlagEnum::eSIMULATION_SHAPE",
+    "PxShapeFlagEnum::eSCENE_QUERY_SHAPE",
+    "PxShapeFlagEnum::eTRIGGER_SHAPE",
+    "PxShapeFlagEnum::eVISUALIZATION"
+};
+
+[Prefix="physx::"]
+interface PxShapeFlags {
+    void PxShapeFlags(octet flags);
+    boolean isSet(PxShapeFlagEnum flag);
+    void set(PxShapeFlagEnum flag);
+    void clear(PxShapeFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxSimulationEventCallback { };
+
+interface SimpleSimulationEventCallback {
+    void onConstraintBreak(PxConstraintInfo constraints, unsigned long count);
+    void onWake(PxActorPtr actors, unsigned long count);
+    void onSleep(PxActorPtr actors, unsigned long count);
+    void onContact([Const, Ref] PxContactPairHeader pairHeader, [Const] PxContactPair pairs, unsigned long nbPairs);
+    void onTrigger(PxTriggerPair pairs, unsigned long count);
+};
+SimpleSimulationEventCallback implements PxSimulationEventCallback;
+
+[JSImplementation="SimpleSimulationEventCallback"]
+interface JavaSimulationEventCallback {
+    void JavaSimpleSimulationEventCallback();
+    void onConstraintBreak(PxConstraintInfo constraints, unsigned long count);
+    void onWake(PxActorPtr actors, unsigned long count);
+    void onSleep(PxActorPtr actors, unsigned long count);
+    void onContact([Const, Ref] PxContactPairHeader pairHeader, [Const] PxContactPair pairs, unsigned long nbPairs);
+    void onTrigger(PxTriggerPair pairs, unsigned long count);
+};
+
+[Prefix="physx::"]
+interface PxSimulationFilterShader { };
+
+[Prefix="physx::"]
+interface PxSweepHit { };
+PxSweepHit implements PxLocationHit;
+
+[Prefix="physx::"]
+interface PxSweepQueryResult {
+    unsigned long getNbAnyHits();
+    [Const, Ref] PxSweepHit getAnyHit(unsigned long index);
+    [Value] attribute PxSweepHit block;
+    attribute PxSweepHit touches;
+    attribute unsigned long nbTouches;
+    attribute any userData; 
+    attribute octet queryStatus;
+    attribute boolean hasBlock;
+};
+
+[Prefix="physx::"]
+interface PxTriggerPair {
+    attribute PxShape triggerShape;
+    attribute PxRigidActor triggerActor;
+    attribute PxShape otherShape;
+    attribute PxRigidActor otherActor;
+    attribute PxPairFlagEnum status;
+    [Value] attribute PxTriggerPairFlags flags;
+};
+
+enum PxTriggerPairFlagEnum {
+    "PxTriggerPairFlagEnum::eREMOVED_SHAPE_TRIGGER",
+    "PxTriggerPairFlagEnum::eREMOVED_SHAPE_OTHER",
+    "PxTriggerPairFlagEnum::eNEXT_FREE"
+};
+
+[Prefix="physx::"]
+interface PxTriggerPairFlags {
+    void PxTriggerPairFlags(octet flags);
+    boolean isSet(PxTriggerPairFlagEnum flag);
+    void set(PxTriggerPairFlagEnum flag);
+    void clear(PxTriggerPairFlagEnum flag);
+};
+
+/****************************************
+ * [package=vehicle]
+ ****************************************/
+
+interface PxVehicleTopLevelFunctions {
+    static boolean InitVehicleSDK([Ref] PxPhysics physics);
+    static void PxVehicleComputeSprungMasses(unsigned long nbSprungMasses, [Const] PxVec3 sprungMassCoordinates, [Const, Ref] PxVec3 centreOfMass, float totalMass, unsigned long gravityDirection, [Ref] PxRealPtr sprungMasses);
+    static void PxVehicleSuspensionRaycasts(PxBatchQuery batchQuery, [Ref] Vector_PxVehicleWheels vehicles, unsigned long nbSceneQueryResults, PxRaycastQueryResult sceneQueryResults);
+    static void PxVehicleUpdates(float timestep, [Const, Ref] PxVec3 gravity, [Const, Ref] PxVehicleDrivableSurfaceToTireFrictionPairs vehicleDrivableSurfaceToTireFrictionPairs,
+                                 [Ref] Vector_PxVehicleWheels vehicles, PxVehicleWheelQueryResult vehicleWheelQueryResults);
+    static void VehicleSetBasisVectors([Const, Ref] PxVec3 up, [Const, Ref] PxVec3 forward);
+    static void VehicleSetUpdateMode(PxVehicleUpdateModeEnum vehicleUpdateMode);
+
+    static float PxVehicleTireData_getFrictionVsSlipGraph(PxVehicleTireData tireData, unsigned long m, unsigned long n);
+    static void PxVehicleTireData_setFrictionVsSlipGraph(PxVehicleTireData tireData, unsigned long m, unsigned long n, float value);
+};
+
+[Prefix="physx::"]
+interface PxVehicleAckermannGeometryData {
+    void PxVehicleAckermannGeometryData();
+    attribute float mAccuracy;
+    attribute float mFrontWidth;
+    attribute float mRearWidth;
+    attribute float mAxleSeparation;
+};
+
+[Prefix="physx::"]
+interface PxVehicleAntiRollBarData {
+    void PxVehicleAntiRollBarData();
+    attribute unsigned long mWheel0;
+    attribute unsigned long mWheel1;
+    attribute float mStiffness;
+};
+
+[Prefix="physx::"]
+interface PxVehicleAutoBoxData {
+    void PxVehicleAutoBoxData();
+    void setLatency(float latency);
+    float getLatency();
+    float getUpRatios(PxVehicleGearEnum a);
+    void setUpRatios(PxVehicleGearEnum a, float ratio);
+    float getDownRatios(PxVehicleGearEnum a);
+    void setDownRatios(PxVehicleGearEnum a, float ratio);
+
+    attribute float[] mUpRatios;
+    attribute float[] mDownRatios;
+};
+
+[Prefix="physx::"]
+interface PxVehicleChassisData {
+    void PxVehicleChassisData();
+    [Value] attribute PxVec3 mMOI;
+    attribute float mMass;
+    [Value] attribute PxVec3 mCMOffset;
+};
+
+enum PxVehicleClutchAccuracyModeEnum {
+    "PxVehicleClutchAccuracyModeEnum::eESTIMATE",
+    "PxVehicleClutchAccuracyModeEnum::eBEST_POSSIBLE"
+};
+
+[Prefix="physx::"]
+interface PxVehicleClutchData {
+    void PxVehicleClutchData();
+    attribute float mStrength;
+    attribute PxVehicleClutchAccuracyModeEnum mAccuracyMode;
+    attribute unsigned long mEstimateIterations;
+};
+
+[Prefix="physx::"]
+interface PxVehicleDifferential4WData {
+    void PxVehicleDifferential4WData();
+    attribute float mFrontRearSplit;
+    attribute float mFrontLeftRightSplit;
+    attribute float mRearLeftRightSplit;
+    attribute float mCentreBias;
+    attribute float mFrontBias;
+    attribute float mRearBias;
+    attribute PxVehicleDifferential4WDataEnum mType;
+};
+
+enum PxVehicleDifferential4WDataEnum {
+    "PxVehicleDifferential4WDataEnum::eDIFF_TYPE_LS_4WD",
+    "PxVehicleDifferential4WDataEnum::eDIFF_TYPE_LS_FRONTWD",
+    "PxVehicleDifferential4WDataEnum::eDIFF_TYPE_LS_REARWD",
+    "PxVehicleDifferential4WDataEnum::eDIFF_TYPE_OPEN_4WD",
+    "PxVehicleDifferential4WDataEnum::eDIFF_TYPE_OPEN_FRONTWD",
+    "PxVehicleDifferential4WDataEnum::eDIFF_TYPE_OPEN_REARWD",
+    "PxVehicleDifferential4WDataEnum::eMAX_NB_DIFF_TYPES"
+};
+
+[Prefix="physx::", NoDelete]
+interface PxVehicleDrivableSurfaceToTireFrictionPairs {
+    static PxVehicleDrivableSurfaceToTireFrictionPairs allocate(unsigned long maxNbTireTypes, unsigned long maxNbSurfaceTypes);
+    void setup(unsigned long nbTireTypes, unsigned long nbSurfaceTypes, PxMaterialPtr drivableSurfaceMaterials, [Const] PxVehicleDrivableSurfaceType drivableSurfaceTypes);
+    void release();
+    void setTypePairFriction(unsigned long surfaceType, unsigned long tireType, float value);
+    float getTypePairFriction(unsigned long surfaceType, unsigned long tireType);
+    unsigned long getMaxNbSurfaceTypes();
+    unsigned long getMaxNbTireTypes();
+};
+
+[Prefix="physx::"]
+interface PxVehicleDrivableSurfaceType {
+    void PxVehicleDrivableSurfaceType();
+    attribute unsigned long mType;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxVehicleDrive {
+    [Value] attribute PxVehicleDriveDynData mDriveDynData;
+};
+PxVehicleDrive implements PxVehicleWheels;
+
+[Prefix="physx::", NoDelete]
+interface PxVehicleDrive4W {
+    static PxVehicleDrive4W allocate(unsigned long nbWheels);
+    //void PxVehicleDrive4W([Ref] PxBaseFlags baseFlags);
+    void free();
+    void setup(PxPhysics physics, PxRigidDynamic vehActor, [Const, Ref] PxVehicleWheelsSimData wheelsData, [Const, Ref] PxVehicleDriveSimData4W driveData, unsigned long nbNonDrivenWheels);
+    void setToRestState();
+
+    [Value] attribute PxVehicleDriveSimData4W mDriveSimData;
+};
+PxVehicleDrive4W implements PxVehicleDrive;
+
+enum PxVehicleDrive4WControlEnum {
+    "PxVehicleDrive4WControlEnum::eANALOG_INPUT_ACCEL",
+    "PxVehicleDrive4WControlEnum::eANALOG_INPUT_BRAKE",
+    "PxVehicleDrive4WControlEnum::eANALOG_INPUT_HANDBRAKE",
+    "PxVehicleDrive4WControlEnum::eANALOG_INPUT_STEER_LEFT",
+    "PxVehicleDrive4WControlEnum::eANALOG_INPUT_STEER_RIGHT",
+    "PxVehicleDrive4WControlEnum::eMAX_NB_DRIVE4W_ANALOG_INPUTS"
+};
+
+[Prefix="physx::"]
+interface PxVehicleDriveDynData {
+    void setToRestState();
+    void setAnalogInput(unsigned long type, float analogVal);
+    float getAnalogInput(unsigned long type);
+    void setGearUp(boolean digitalVal);
+    void setGearDown(boolean digitalVal);
+    boolean getGearUp();
+    boolean getGearDown();
+    void setUseAutoGears(boolean useAutoGears);
+    boolean getUseAutoGears();
+    void toggleAutoGears();
+    void setCurrentGear(unsigned long currentGear);
+    unsigned long getCurrentGear();
+    void setTargetGear(unsigned long targetGear);
+    unsigned long getTargetGear();
+    void startGearChange(unsigned long targetGear);
+    void forceGearChange(unsigned long targetGear);
+    void setEngineRotationSpeed(float speed);
+    float getEngineRotationSpeed();
+    float getGearSwitchTime();
+    float getAutoBoxSwitchTime();
+    unsigned long getNbAnalogInput();
+    void setGearChange(unsigned long gearChange);
+    unsigned long getGearChange();
+    void setGearSwitchTime(float switchTime);
+    void setAutoBoxSwitchTime(float autoBoxSwitchTime);
+
+    attribute float[] mControlAnalogVals;
+    attribute boolean mUseAutoGears;
+    attribute boolean mGearUpPressed;
+    attribute boolean mGearDownPressed;
+    attribute unsigned long mCurrentGear;
+    attribute unsigned long mTargetGear;
+    attribute float mEnginespeed;
+    attribute float mGearSwitchTime;
+    attribute float mAutoBoxSwitchTime;
+};
+
+[Prefix="physx::"]
+interface PxVehicleDriveSimData {
+    void PxVehicleDriveSimData();
+    [Const, Ref] PxVehicleEngineData getEngineData();
+    void setEngineData([Const, Ref] PxVehicleEngineData engine);
+    [Const, Ref] PxVehicleGearsData getGearsData();
+    void setGearsData([Const, Ref] PxVehicleGearsData gears);
+    [Const, Ref] PxVehicleClutchData getClutchData();
+    void setClutchData([Const, Ref] PxVehicleClutchData clutch);
+    [Const, Ref] PxVehicleAutoBoxData getAutoBoxData();
+    void setAutoBoxData([Const, Ref] PxVehicleAutoBoxData clutch);
+};
+
+[Prefix="physx::"]
+interface PxVehicleDriveSimData4W {
+    void PxVehicleDriveSimData4W();
+    [Const, Ref] PxVehicleDifferential4WData getDiffData();
+    [Const, Ref] PxVehicleAckermannGeometryData getAckermannGeometryData();
+    void setDiffData([Const, Ref] PxVehicleDifferential4WData diff);
+    void setAckermannGeometryData([Const, Ref] PxVehicleAckermannGeometryData ackermannData);
+};
+PxVehicleDriveSimData4W implements PxVehicleDriveSimData;
+
+[Prefix="physx::"]
+interface PxVehicleEngineData {
+    void PxVehicleEngineData();
+
+    [Value] attribute PxEngineTorqueLookupTable mTorqueCurve;
+    attribute float mMOI;
+    attribute float mPeakTorque;
+    attribute float mMaxOmega;
+    attribute float mDampingRateFullThrottle;
+    attribute float mDampingRateZeroThrottleClutchEngaged;
+    attribute float mDampingRateZeroThrottleClutchDisengaged;
+};
+
+interface PxEngineTorqueLookupTable {
+    void PxEngineTorqueLookupTable();
+    void addPair(float x, float y);
+    float getYVal(float x);
+    unsigned long getNbDataPairs();
+    void clear();
+    float getX(unsigned long i);
+    float getY(unsigned long i);
+
+    attribute float[] mDataPairs;
+    attribute unsigned long mNbDataPairs;
+};
+
+[Prefix="physx::"]
+interface PxVehicleGearsData {
+    void PxVehicleGearsData();
+    float getGearRatio(PxVehicleGearEnum a);
+    void setGearRatio(PxVehicleGearEnum a, float ratio);
+
+    attribute float[] mRatios;
+    attribute float mFinalRatio;
+    attribute unsigned long mNbRatios;
+    attribute float mSwitchTime;
+};
+
+enum PxVehicleGearEnum {
+    "PxVehicleGearEnum::eREVERSE",
+    "PxVehicleGearEnum::eNEUTRAL",
+    "PxVehicleGearEnum::eFIRST",
+    "PxVehicleGearEnum::eSECOND",
+    "PxVehicleGearEnum::eTHIRD",
+    "PxVehicleGearEnum::eFOURTH",
+    "PxVehicleGearEnum::eFIFTH",
+    "PxVehicleGearEnum::eSIXTH",
+    "PxVehicleGearEnum::eSEVENTH",
+    "PxVehicleGearEnum::eEIGHTH",
+    "PxVehicleGearEnum::eNINTH",
+    "PxVehicleGearEnum::eTENTH",
+    "PxVehicleGearEnum::eELEVENTH",
+    "PxVehicleGearEnum::eTWELFTH",
+    "PxVehicleGearEnum::eTHIRTEENTH",
+    "PxVehicleGearEnum::eFOURTEENTH",
+    "PxVehicleGearEnum::eFIFTEENTH",
+    "PxVehicleGearEnum::eSIXTEENTH",
+    "PxVehicleGearEnum::eSEVENTEENTH",
+    "PxVehicleGearEnum::eEIGHTEENTH",
+    "PxVehicleGearEnum::eNINETEENTH",
+    "PxVehicleGearEnum::eTWENTIETH",
+    "PxVehicleGearEnum::eTWENTYFIRST",
+    "PxVehicleGearEnum::eTWENTYSECOND",
+    "PxVehicleGearEnum::eTWENTYTHIRD",
+    "PxVehicleGearEnum::eTWENTYFOURTH",
+    "PxVehicleGearEnum::eTWENTYFIFTH",
+    "PxVehicleGearEnum::eTWENTYSIXTH",
+    "PxVehicleGearEnum::eTWENTYSEVENTH",
+    "PxVehicleGearEnum::eTWENTYEIGHTH",
+    "PxVehicleGearEnum::eTWENTYNINTH",
+    "PxVehicleGearEnum::eTHIRTIETH",
+    "PxVehicleGearEnum::eGEARSRATIO_COUNT"
+};
+
+[Prefix="physx::"]
+interface PxVehicleSuspensionData {
+    void PxVehicleSuspensionData();
+    void setMassAndPreserveNaturalFrequency(float newSprungMass);
+    attribute float mSpringStrength;
+    attribute float mSpringDamperRate;
+    attribute float mMaxCompression;
+    attribute float mMaxDroop;
+    attribute float mSprungMass;
+    attribute float mCamberAtRest;
+    attribute float mCamberAtMaxCompression;
+    attribute float mCamberAtMaxDroop;
+};
+
+[Prefix="physx::"]
+interface PxVehicleTireData {
+    void PxVehicleTireData();
+    attribute float mLatStiffX;
+    attribute float mLatStiffY;
+    attribute float mLongitudinalStiffnessPerUnitGravity;
+    attribute float mCamberStiffnessPerUnitGravity;
+    //attribute float[][] mFrictionVsSlipGraph;     // 2-dimensional array is not supported by WebIDL
+    attribute unsigned long mType;
+};
+
+[Prefix="physx::"]
+interface PxVehicleTireLoadFilterData {
+    void PxVehicleTireLoadFilterData();
+    float getDenominator();
+    attribute float mMinNormalisedLoad;
+    attribute float mMinFilteredNormalisedLoad;
+    attribute float mMaxNormalisedLoad;
+    attribute float mMaxFilteredNormalisedLoad;
+};
+
+enum PxVehicleUpdateModeEnum {
+    "PxVehicleUpdateModeEnum::eVELOCITY_CHANGE",
+    "PxVehicleUpdateModeEnum::eACCELERATION"
+};
+
+[Prefix="physx::"]
+interface PxVehicleWheelData {
+    void PxVehicleWheelData();
+    attribute float mRadius;
+    attribute float mWidth;
+    attribute float mMass;
+    attribute float mMOI;
+    attribute float mDampingRate;
+    attribute float mMaxBrakeTorque;
+    attribute float mMaxHandBrakeTorque;
+    attribute float mMaxSteer;
+    attribute float mToeAngle;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxVehicleWheelQueryResult {
+    void PxVehicleWheelQueryResult();
+    attribute PxWheelQueryResult wheelQueryResults;
+    attribute unsigned long nbWheelQueryResults;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxVehicleWheels {
+    unsigned long getVehicleType();
+    PxRigidDynamic getRigidDynamicActor();
+    float computeForwardSpeed();
+    float computeSidewaysSpeed();
+    unsigned long getNbNonDrivenWheels();
+
+    [Value] attribute PxVehicleWheelsSimData mWheelsSimData;
+    [Value] attribute PxVehicleWheelsDynData mWheelsDynData;
+};
+PxVehicleWheels implements PxBase;
+
+[Prefix="physx::"]
+interface PxVehicleWheelsDynData {
+    void setToRestState();
+    //void setTireForceShaderFunction(PxVehicleComputeTireForce tireForceShaderFn);
+    //void setTireForceShaderData(unsigned long tireId, [Const] any tireForceShaderData);
+    //[Const] any getTireForceShaderData(unsigned long tireId);
+    void setWheelRotationSpeed(unsigned long wheelIdx, float speed);
+    float getWheelRotationSpeed(unsigned long wheelIdx);
+    void setWheelRotationAngle(unsigned long wheelIdx, float angle);
+    float getWheelRotationAngle(unsigned long wheelIdx);
+    //void setUserData(unsigned long tireIdx, any userData);
+    //any getUserData(unsigned long tireIdx);
+    void copy([Const, Ref] PxVehicleWheelsDynData src, unsigned long srcWheel, unsigned long trgWheel);
+    unsigned long getNbWheelRotationSpeed();
+    unsigned long getNbWheelRotationAngle();
+};
+
+[Prefix="physx::"]
+interface PxVehicleWheelsSimData {
+    static PxVehicleWheelsSimData allocate(unsigned long nbWheels);
+
+    void setChassisMass(float chassisMass);
+    void free();
+    void copy([Const, Ref] PxVehicleWheelsSimData src, unsigned long srcWheel, unsigned long trgWheel);
+    unsigned long getNbWheels();
+    
+    [Const, Ref] PxVehicleSuspensionData getSuspensionData(unsigned long id);
+    [Const, Ref] PxVehicleWheelData getWheelData(unsigned long id);
+    [Const, Ref] PxVehicleTireData getTireData(unsigned long id);
+    [Const, Ref] PxVec3 getSuspTravelDirection(unsigned long id);
+    [Const, Ref] PxVec3 getSuspForceAppPointOffset(unsigned long id);
+    [Const, Ref] PxVec3 getTireForceAppPointOffset(unsigned long id);
+    [Const, Ref] PxVec3 getWheelCentreOffset(unsigned long id);
+    long getWheelShapeMapping(unsigned long wheelId);
+    [Const, Ref] PxFilterData getSceneQueryFilterData(unsigned long suspId);
+    unsigned long getNbAntiRollBars();
+    [Const, Ref] PxVehicleAntiRollBarData getAntiRollBarData(unsigned long antiRollId);
+    [Const, Ref] PxVehicleTireLoadFilterData getTireLoadFilterData();
+    
+    void setSuspensionData(unsigned long id, [Const, Ref] PxVehicleSuspensionData susp);
+    void setWheelData(unsigned long id, [Const, Ref] PxVehicleWheelData wheel);
+    void setTireData(unsigned long id, [Const, Ref] PxVehicleTireData tire);
+    void setSuspTravelDirection(unsigned long id, [Const, Ref] PxVec3 dir);
+    void setSuspForceAppPointOffset(unsigned long id, [Const, Ref] PxVec3 offset);
+    void setTireForceAppPointOffset(unsigned long id, [Const, Ref] PxVec3 offset);
+    void setWheelCentreOffset(unsigned long id, [Const, Ref] PxVec3 offset);
+    void setWheelShapeMapping(unsigned long wheelId, long shapeId);
+    void setSceneQueryFilterData(unsigned long suspId, [Const, Ref] PxFilterData sqFilterData);
+    void setTireLoadFilterData([Const, Ref] PxVehicleTireLoadFilterData tireLoadFilter);
+    unsigned long addAntiRollBarData([Const, Ref] PxVehicleAntiRollBarData antiRoll);
+
+    void disableWheel(unsigned long wheel);
+    void enableWheel(unsigned long wheel);
+    boolean getIsWheelDisabled(unsigned long wheel);
+    void setSubStepCount(float thresholdLongitudinalSpeed, unsigned long lowForwardSpeedSubStepCount, unsigned long highForwardSpeedSubStepCount);
+    void setMinLongSlipDenominator(float minLongSlipDenominator);
+    void setFlags([Ref] PxVehicleWheelsSimFlags flags);
+    [Value] PxVehicleWheelsSimFlags getFlags();
+
+    unsigned long getNbWheels4();
+    unsigned long getNbSuspensionData();
+    unsigned long getNbWheelData();
+    unsigned long getNbSuspTravelDirection();
+    unsigned long getNbTireData();
+    unsigned long getNbSuspForceAppPointOffset();
+    unsigned long getNbTireForceAppPointOffset();
+    unsigned long getNbWheelCentreOffset();
+    unsigned long getNbWheelShapeMapping();
+    unsigned long getNbSceneQueryFilterData();
+    float getMinLongSlipDenominator();
+    void setThresholdLongSpeed(float f);
+    float getThresholdLongSpeed();
+    void setLowForwardSpeedSubStepCount(unsigned long f);
+    unsigned long getLowForwardSpeedSubStepCount();
+    void setHighForwardSpeedSubStepCount(unsigned long f);
+    unsigned long getHighForwardSpeedSubStepCount();
+    void setWheelEnabledState(unsigned long wheel, boolean state);
+    boolean getWheelEnabledState(unsigned long wheel);
+    unsigned long getNbWheelEnabledState();
+    unsigned long getNbAntiRollBars4();
+    unsigned long getNbAntiRollBarData();
+    void setAntiRollBarData(unsigned long id, [Const, Ref] PxVehicleAntiRollBarData antiRoll);
+};
+
+enum PxVehicleWheelsSimFlagEnum {
+    "PxVehicleWheelsSimFlagEnum::eLIMIT_SUSPENSION_EXPANSION_VELOCITY"
+};
+
+[Prefix="physx::"]
+interface PxVehicleWheelsSimFlags {
+    void PxVehicleWheelsSimFlags(unsigned long flags);
+    boolean isSet(PxVehicleWheelsSimFlagEnum flag);
+    void set(PxVehicleWheelsSimFlagEnum flag);
+    void clear(PxVehicleWheelsSimFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxWheelQueryResult {
+    void PxWheelQueryResult();
+    [Value] attribute PxVec3 suspLineStart;
+    [Value] attribute PxVec3 suspLineDir;
+    attribute float suspLineLength;
+    attribute boolean isInAir;
+    attribute PxActor tireContactActor;
+    attribute PxShape tireContactShape;
+    [Const] attribute PxMaterial tireSurfaceMaterial;
+    attribute unsigned long tireSurfaceType;
+    [Value] attribute PxVec3 tireContactPoint;
+    [Value] attribute PxVec3 tireContactNormal;
+    attribute float tireFriction;
+    attribute float suspJounce;
+    attribute float suspSpringForce;
+    [Value] attribute PxVec3 tireLongitudinalDir;
+    [Value] attribute PxVec3 tireLateralDir;
+    attribute float longitudinalSlip;
+    attribute float lateralSlip;
+    attribute float steerAngle;
+    [Value] attribute PxTransform localPose;
+};
+
+enum VehicleSurfaceTypeMask {
+    "DRIVABLE_SURFACE",
+    "UNDRIVABLE_SURFACE",
+};
+
+/****************************************
+ * [package=geomutils]
+ ****************************************/
+
+[Prefix="physx::"]
+interface PxBoxGeometry {
+    void PxBoxGeometry(float hx, float hy, float hz);
+};
+PxBoxGeometry implements PxGeometry;
+
+[Prefix="physx::", NoDelete]
+interface PxBVHStructure { };
+PxBVHStructure implements PxBase;
+
+[Prefix="physx::"]
+interface PxCapsuleGeometry {
+    void PxCapsuleGeometry(float radius, float halfHeight);
+};
+PxCapsuleGeometry implements PxGeometry;
+
+[Prefix="physx::", NoDelete]
+interface PxConvexMesh {
+    unsigned long getNbVertices();
+    [Const] PxVec3 getVertices();
+    [Value] PxU8Ptr getIndexBuffer();
+    unsigned long getNbPolygons();
+    boolean getPolygonData(unsigned long index, [Ref] PxHullPolygon data);
+    unsigned long getReferenceCount();
+    void acquireReference();
+    [Value] PxBounds3 getLocalBounds();
+    boolean isGpuCompatible();
+};
+PxConvexMesh implements PxBase;
+
+[Prefix="physx::"]
+interface PxConvexMeshGeometry {
+    void PxConvexMeshGeometry(PxConvexMesh mesh, [Const, Ref] optional PxMeshScale scaling, [Ref] optional PxConvexMeshGeometryFlags flags);
+};
+PxConvexMeshGeometry implements PxGeometry;
+
+enum PxConvexMeshGeometryFlagEnum {
+    "PxConvexMeshGeometryFlagEnum::eTIGHT_BOUNDS"
+};
+
+[Prefix="physx::"]
+interface PxConvexMeshGeometryFlags {
+    void PxConvexMeshGeometryFlags(octet flags);
+    boolean isSet(PxConvexMeshGeometryFlagEnum flag);
+    void set(PxConvexMeshGeometryFlagEnum flag);
+    void clear(PxConvexMeshGeometryFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxGeometry { };
+
+[Prefix="physx::"]
+interface PxHullPolygon {
+    void PxHullPolygon();
+    attribute float[] mPlane;
+    attribute short mNbVerts;
+    attribute short mIndexBase;
+};
+
+enum PxMeshFlagEnum {
+    "PxMeshFlagEnum::eFLIPNORMALS",
+    "PxMeshFlagEnum::e16_BIT_INDICES"
+};
+
+[Prefix="physx::"]
+interface PxMeshFlags {
+    void PxMeshFlags(octet flags);
+    boolean isSet(PxMeshFlagEnum flag);
+    void set(PxMeshFlagEnum flag);
+    void clear(PxMeshFlagEnum flag);
+};
+
+enum PxMeshGeometryFlagEnum {
+    "PxMeshGeometryFlagEnum::eDOUBLE_SIDED"
+};
+
+[Prefix="physx::"]
+interface PxMeshGeometryFlags {
+    void PxMeshGeometryFlags(octet flags);
+    boolean isSet(PxMeshGeometryFlagEnum flag);
+    void set(PxMeshGeometryFlagEnum flag);
+    void clear(PxMeshGeometryFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxMeshScale {
+    void PxMeshScale();
+    void PxMeshScale(float r);
+    void PxMeshScale([Const, Ref] PxVec3 s, [Const, Ref] PxQuat r);
+};
+
+[Prefix="physx::"]
+interface PxPlaneGeometry {
+    void PxPlaneGeometry();
+};
+PxPlaneGeometry implements PxGeometry;
+
+[Prefix="physx::"]
+interface PxSimpleTriangleMesh {
+    void PxSimpleTriangleMesh();
+    void setToDefault();
+    boolean isValid();
+    [Value] attribute PxBoundedData points;
+    [Value] attribute PxBoundedData triangles;
+    [Value] attribute PxMeshFlags flags;
+};
+
+[Prefix="physx::"]
+interface PxSphereGeometry {
+    void PxSphereGeometry(float ir);
+};
+PxSphereGeometry implements PxGeometry;
+
+[Prefix="physx::", NoDelete]
+interface PxTriangleMesh {
+    unsigned long getNbVertices();
+    [Const] PxVec3 getVertices();
+    PxVec3 getVerticesForModification();
+    [Value] PxBounds3 refitBVH();
+    unsigned long getNbTriangles();
+    [Const] VoidPtr getTriangles();
+    [Value] PxTriangleMeshFlags getTriangleMeshFlags();
+    [Const] PxU32Ptr getTrianglesRemap();
+    unsigned short getTriangleMaterialIndex(unsigned long triangleIndex);
+    [Value] PxBounds3 getLocalBounds();
+    unsigned long getReferenceCount();
+    void acquireReference();
+
+};
+PxTriangleMesh implements PxBase;
+
+enum PxTriangleMeshFlagEnum {
+    "PxTriangleMeshFlagEnum::e16_BIT_INDICES",
+    "PxTriangleMeshFlagEnum::eADJACENCY_INFO"
+};
+
+[Prefix="physx::"]
+interface PxTriangleMeshFlags {
+    void PxTriangleMeshFlags(octet flags);
+    boolean isSet(PxTriangleMeshFlagEnum flag);
+    void set(PxTriangleMeshFlagEnum flag);
+    void clear(PxTriangleMeshFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxTriangleMeshGeometry {
+    void PxTriangleMeshGeometry(PxTriangleMesh mesh, [Const, Ref] optional PxMeshScale scaling, [Ref] optional PxMeshGeometryFlags flags);
+    boolean isValid();
+};
+PxTriangleMeshGeometry implements PxGeometry;
+
+/****************************************
+ * [package=cooking]
+ ****************************************/
+
+[Prefix="physx::"]
+interface PxBVH33MidphaseDesc {
+    void setToDefault();
+    boolean isValid();
+
+    attribute float meshSizePerformanceTradeOff;
+    attribute PxMeshCookingHintEnum meshCookingHint;
+};
+
+[Prefix="physx::"]
+interface PxBVH34MidphaseDesc {
+    void setToDefault();
+    boolean isValid();
+
+    attribute unsigned long numPrimsPerLeaf;
+};
+
+enum PxConvexFlagEnum {
+    "PxConvexFlagEnum::e16_BIT_INDICES",
+    "PxConvexFlagEnum::eCOMPUTE_CONVEX",
+    "PxConvexFlagEnum::eCHECK_ZERO_AREA_TRIANGLES",
+    "PxConvexFlagEnum::eQUANTIZE_INPUT",
+    "PxConvexFlagEnum::eDISABLE_MESH_VALIDATION",
+    "PxConvexFlagEnum::ePLANE_SHIFTING",
+    "PxConvexFlagEnum::eFAST_INERTIA_COMPUTATION",
+    "PxConvexFlagEnum::eGPU_COMPATIBLE",
+    "PxConvexFlagEnum::eSHIFT_VERTICES"
+};
+
+[Prefix="physx::"]
+interface PxConvexFlags {
+    void PxConvexFlags(unsigned short flags);
+    boolean isSet(PxConvexFlagEnum flag);
+    void set(PxConvexFlagEnum flag);
+    void clear(PxConvexFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxConvexMeshDesc {
+    void PxConvexMeshDesc();
+    [Value] attribute PxBoundedData points;
+    [Value] attribute PxConvexFlags flags;
+};
+
+enum PxConvexMeshCookingTypeEnum {
+    "PxConvexMeshCookingTypeEnum::eQUICKHULL"
+};
+
+[Prefix="physx::", NoDelete]
+interface PxCooking {
+    void release();
+    PxConvexMesh createConvexMesh([Const, Ref] PxConvexMeshDesc desc, [Ref] PxPhysicsInsertionCallback insertionCallback);
+    PxTriangleMesh createTriangleMesh([Const, Ref] PxTriangleMeshDesc desc, [Ref] PxPhysicsInsertionCallback insertionCallback);
+};
+
+[Prefix="physx::"]
+interface PxCookingParams {
+    void PxCookingParams([Const, Ref] PxTolerancesScale sc);
+    attribute float areaTestEpsilon;
+    attribute float planeTolerance;
+    attribute PxConvexMeshCookingTypeEnum convexMeshCookingType;
+    attribute boolean suppressTriangleMeshRemapTable;
+    attribute boolean buildTriangleAdjacencies;
+    attribute boolean buildGPUData;
+    [Value] attribute PxTolerancesScale scale;
+    [Value] attribute PxMeshPreprocessingFlags meshPreprocessParams;
+    attribute float meshWeldTolerance;
+    [Value] attribute PxMidphaseDesc midphaseDesc;
+    attribute unsigned long gaussMapLimit;
+};
+
+enum PxMeshCookingHintEnum {
+    "PxMeshCookingHintEnum::eSIM_PERFORMANCE",
+    "PxMeshCookingHintEnum::eCOOKING_PERFORMANCE"
+};
+
+enum PxMeshPreprocessingFlagEnum {
+    "PxMeshPreprocessingFlagEnum::eWELD_VERTICES",
+    "PxMeshPreprocessingFlagEnum::eDISABLE_CLEAN_MESH",
+    "PxMeshPreprocessingFlagEnum::eDISABLE_ACTIVE_EDGES_PRECOMPUTE",
+    "PxMeshPreprocessingFlagEnum::eFORCE_32BIT_INDICES"
+};
+
+[Prefix="physx::"]
+interface PxMeshPreprocessingFlags {
+    void PxMeshPreprocessingFlags(unsigned long flags);
+    boolean isSet(PxMeshPreprocessingFlagEnum flag);
+    void set(PxMeshPreprocessingFlagEnum flag);
+    void clear(PxMeshPreprocessingFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxMidphaseDesc {
+    void PxMidphaseDesc();
+    PxMeshMidPhaseEnum getType();
+    void setToDefault(PxMeshMidPhaseEnum type);
+    boolean isValid();
+
+    [Value] attribute PxBVH33MidphaseDesc mBVH33Desc;
+    [Value] attribute PxBVH34MidphaseDesc mBVH34Desc;
+};
+
+enum PxMeshMidPhaseEnum {
+    "PxMeshMidPhaseEnum::eBVH33",
+    "PxMeshMidPhaseEnum::eBVH34"
+};
+
+[Prefix="physx::"]
+interface PxTriangleMeshDesc {
+    void PxTriangleMeshDesc();
+    void setToDefault();
+    boolean isValid();
+
+    [Value] attribute PxU16StridedData materialIndices;
+};
+PxTriangleMeshDesc implements PxSimpleTriangleMesh;
+
+/****************************************
+ * [package=common]
+ ****************************************/
+
+[Prefix="physx::", NoDelete]
+interface PxBase {
+    void release();
+    [Const] DOMString getConcreteTypeName();
+    long getConcreteType();
+    void setBaseFlag(PxBaseFlagEnum flag, boolean value);
+    void setBaseFlags([Ref] PxBaseFlags inFlags);
+    [Value] PxBaseFlags getBaseFlags();
+    boolean isReleasable();
+};
+
+enum PxBaseFlagEnum {
+    "PxBaseFlagEnum::eOWNS_MEMORY",
+    "PxBaseFlagEnum::eIS_RELEASABLE"
+};
+
+[Prefix="physx::"]
+interface PxBaseFlags {
+    void PxBaseFlags(unsigned short flags);
+    boolean isSet(PxBaseFlagEnum flag);
+    void set(PxBaseFlagEnum flag);
+    void clear(PxBaseFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxBaseTask { };
+
+[Prefix="physx::"]
+interface PxBoundedData {
+    void PxBoundedData();
+    attribute unsigned long count;
+    attribute unsigned long stride;
+    [Const] attribute VoidPtr data;
+};
+
+[Prefix="physx::"]
+interface PxBounds3 {
+    void PxBounds3();
+    void PxBounds3([Const, Ref] PxVec3 minimum, [Const, Ref] PxVec3 maximum);
+    void setEmpty();
+    void setMaximal();
+    void include([Const, Ref] PxVec3 v);
+    boolean isEmpty();
+    boolean intersects([Const, Ref] PxBounds3 b);
+    boolean intersects1D([Const, Ref] PxBounds3 b, unsigned long axis);
+    boolean contains([Const, Ref] PxVec3 v);
+    boolean isInside([Const, Ref] PxBounds3 box);
+    [Value] PxVec3 getCenter();
+    [Value] PxVec3 getDimensions();
+    [Value] PxVec3 getExtents();
+    void scaleSafe(float scale);
+    void scaleFast(float scale);
+    void fattenSafe(float distance);
+    void fattenFast(float distance);
+    boolean isFinite();
+    boolean isValid();
+    [Value] attribute PxVec3 minimum;
+    [Value] attribute PxVec3 maximum;
+};
+
+[Prefix="physx::"]
+interface PxCpuDispatcher { };
+
+[Prefix="physx::"]
+interface PxDefaultErrorCallback {
+    void PxDefaultErrorCallback();
+};
+PxDefaultErrorCallback implements PxErrorCallback;
+
+[Prefix="physx::"]
+interface PxErrorCallback {
+    void reportError(PxErrorCodeEnum code, DOMString message, DOMString file, long line);
+};
+
+[JSImplementation="PxErrorCallback"]
+interface JavaErrorCallback {
+    void JavaErrorCallback();
+    void reportError(PxErrorCodeEnum code, DOMString message, DOMString file, long line);
+};
+
+enum PxErrorCodeEnum {
+    "PxErrorCodeEnum::eNO_ERROR",
+    "PxErrorCodeEnum::eDEBUG_INFO",
+    "PxErrorCodeEnum::eDEBUG_WARNING",
+    "PxErrorCodeEnum::eINVALID_PARAMETER",
+    "PxErrorCodeEnum::eINVALID_OPERATION",
+    "PxErrorCodeEnum::eOUT_OF_MEMORY",
+    "PxErrorCodeEnum::eINTERNAL_ERROR",
+    "PxErrorCodeEnum::eABORT",
+    "PxErrorCodeEnum::ePERF_WARNING",
+    "PxErrorCodeEnum::eMASK_ALL"
+};
+
+[Prefix="physx::", NoDelete]
+interface PxFoundation {
+    void release();
+};
+
+enum PxIDENTITYEnum {
+    "PxIDENTITYEnum::PxIdentity"
+};
+
+[Prefix="physx::", NoDelete]
+interface PxPhysicsInsertionCallback { };
+
+[Prefix="physx::"]
+interface PxQuat {
+    void PxQuat();
+    void PxQuat(float x, float y, float z, float w);
+    attribute float x;
+    attribute float y;
+    attribute float z;
+    attribute float w;
+};
+
+[Prefix="physx::"]
+interface PxTolerancesScale {
+    void PxTolerancesScale();
+};
+
+[Prefix="physx::"]
+interface PxTransform {
+    void PxTransform(PxIDENTITYEnum r);
+    void PxTransform([Const, Ref] PxVec3 p0, [Const, Ref] PxQuat q0);
+    [Value] attribute PxQuat q;
+    [Value] attribute PxVec3 p;
+};
+
+interface PxU16StridedData {
+    attribute unsigned long stride;
+    [Const, Value] attribute PxU16Ptr data;
+};
+
+[Prefix="physx::"]
+interface PxVec3 {
+    void PxVec3();
+    void PxVec3(float x, float y, float z);
+    attribute float x;
+    attribute float y;
+    attribute float z;
+};
+
+/****************************************
+ * [package=extensions]
+ ****************************************/
+
+[Prefix="physx::"]
+interface PxDefaultAllocator {
+    void PxDefaultAllocator();
+};
+
+[Prefix="physx::"]
+interface PxDefaultCpuDispatcher { };
+PxDefaultCpuDispatcher implements PxCpuDispatcher;
+
+[Prefix="physx::", NoDelete]
+interface PxJoint { };
+PxJoint implements PxBase;
+
+[Prefix="physx::"]
+interface PxRevoluteJoint {
+    void setDriveVelocity(float velocity, optional boolean autowake);
+    float getDriveVelocity();
+
+    void setDriveForceLimit(float limit);
+    float getDriveForceLimit();
+
+    void setDriveGearRatio(float ratio);
+    float getDriveGearRatio();
+
+    void setRevoluteJointFlags([Ref] PxRevoluteJointFlags flags);
+    void setRevoluteJointFlag(PxRevoluteJointFlagEnum flag, boolean value);
+    [Value] PxRevoluteJointFlags getRevoluteJointFlags();
+};
+PxRevoluteJoint implements PxJoint;
+
+enum PxRevoluteJointFlagEnum {
+    "PxRevoluteJointFlagEnum::eLIMIT_ENABLED",
+    "PxRevoluteJointFlagEnum::eDRIVE_ENABLED",
+    "PxRevoluteJointFlagEnum::eDRIVE_FREESPIN"
+};
+
+[Prefix="physx::"]
+interface PxRevoluteJointFlags {
+    void PxRevoluteJointFlags(unsigned short flags);
+    boolean isSet(PxRevoluteJointFlagEnum flag);
+    void set(PxRevoluteJointFlagEnum flag);
+    void clear(PxRevoluteJointFlagEnum flag);
+};
+
+/****************************************
+ * [package=support]
+ ****************************************/
+
+interface PxActorPtr { };
+
+interface PxMaterialPtr { };
+
+interface PxRealPtr { };
+
+interface PxU8Ptr { };
+
+interface PxU16Ptr { };
+
+interface PxU32Ptr { };
+
+interface Vector_PxMaterial {
+    void Vector_PxMaterial();
+    void Vector_PxMaterial(unsigned long size);
+    [Const] PxMaterial at(unsigned long index);
+    PxMaterialPtr data();
+    unsigned long size();
+    void push_back(PxMaterial value);
+};
+
+interface Vector_PxReal {
+    void Vector_PxReal();
+    void Vector_PxReal(unsigned long size);
+    float at(unsigned long index);
+    VoidPtr data();
+    unsigned long size();
+    void push_back(float value);
+};
+
+interface Vector_PxU16 {
+    void Vector_PxU16();
+    void Vector_PxU16(unsigned long size);
+    unsigned short at(unsigned long index);
+    VoidPtr data();
+    unsigned long size();
+    void push_back(unsigned short value);
+};
+
+interface Vector_PxU32 {
+    void Vector_PxU32();
+    void Vector_PxU32(unsigned long size);
+    unsigned long at(unsigned long index);
+    VoidPtr data();
+    unsigned long size();
+    void push_back(unsigned long value);
+};
+
+interface Vector_PxVec3 {
+    void Vector_PxVec3();
+    void Vector_PxVec3(unsigned long size);
+    [Ref] PxVec3 at(unsigned long index);
+    PxVec3 data();
+    unsigned long size();
+    void push_back([Ref] PxVec3 value);
+};
+
+interface Vector_PxRaycastQueryResult {
+    void Vector_PxRaycastQueryResult();
+    void Vector_PxRaycastQueryResult(unsigned long size);
+    [Ref] PxRaycastQueryResult at(unsigned long index);
+    PxRaycastQueryResult data();
+    unsigned long size();
+    void push_back([Ref] PxRaycastQueryResult value);
+};
+
+interface Vector_PxSweepQueryResult {
+    void Vector_PxSweepQueryResult();
+    void Vector_PxSweepQueryResult(unsigned long size);
+    [Ref] PxSweepQueryResult at(unsigned long index);
+    PxSweepQueryResult data();
+    unsigned long size();
+    void push_back([Ref] PxSweepQueryResult value);
+};
+
+interface Vector_PxRaycastHit {
+    void Vector_PxRaycastHit();
+    void Vector_PxRaycastHit(unsigned long size);
+    [Ref] PxRaycastHit at(unsigned long index);
+    PxRaycastHit data();
+    unsigned long size();
+    void push_back([Ref] PxRaycastHit value);
+};
+
+interface Vector_PxSweepHit {
+    void Vector_PxSweepHit();
+    void Vector_PxSweepHit(unsigned long size);
+    [Ref] PxSweepHit at(unsigned long index);
+    PxSweepHit data();
+    unsigned long size();
+    void push_back([Ref] PxSweepHit value);
+};
+
+interface Vector_PxVehicleDrivableSurfaceType {
+    void Vector_PxVehicleDrivableSurfaceType();
+    void Vector_PxVehicleDrivableSurfaceType(unsigned long size);
+    [Ref] PxVehicleDrivableSurfaceType at(unsigned long index);
+    PxVehicleDrivableSurfaceType data();
+    unsigned long size();
+    void push_back([Ref] PxVehicleDrivableSurfaceType value);
+};
+
+interface Vector_PxWheelQueryResult {
+    void Vector_PxWheelQueryResult();
+    void Vector_PxWheelQueryResult(unsigned long size);
+    [Ref] PxWheelQueryResult at(unsigned long index);
+    PxWheelQueryResult data();
+    unsigned long size();
+    void push_back([Ref] PxWheelQueryResult value);
+};
+
+interface PxVehicleWheelsPtr { };
+
+interface Vector_PxVehicleWheels {
+    void Vector_PxVehicleWheels();
+    void Vector_PxVehicleWheels(unsigned long size);
+    PxVehicleWheels at(unsigned long index);
+    PxVehicleWheelsPtr data();
+    unsigned long size();
+    void push_back(PxVehicleWheels value);
+};

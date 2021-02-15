@@ -45,13 +45,15 @@ private object CommonGeneratorSettings {
 
 open class GenerateJavaBindings : DefaultTask() {
     @Input
+    var idlSource = ""
+    @Input
     var generatorOutput = "./generated"
 
     @TaskAction
     fun generate() {
-        val idlFile = File("PhysX/physx/source/physxwebbindings/src/PhysXJs.idl")
+        val idlFile = File(idlSource)
         if (!idlFile.exists()) {
-            throw FileNotFoundException("PhysX WebIDL definition not found! Forgot to run 'git submodule update --init'?")
+            throw FileNotFoundException("PhysX WebIDL definition not found!")
         }
 
         val model = WebIdlParser().parse(idlFile.path)
@@ -73,16 +75,22 @@ open class GenerateNativeGlueCode : DefaultTask() {
         group = "native build"
     }
 
+    @Input
+    var idlSource = ""
+    @Input
+    var generatorOutput = "./generated"
+
     @TaskAction
     fun generate() {
-        val idlFile = File("PhysX/physx/source/physxwebbindings/src/PhysXJs.idl")
+        val idlFile = File(idlSource)
         if (!idlFile.exists()) {
-            throw FileNotFoundException("PhysX WebIDL definition not found! Forgot to run 'git submodule update --init'?")
+            throw FileNotFoundException("PhysX WebIDL definition not found!")
         }
+        println("generator out: $generatorOutput")
 
         val model = WebIdlParser().parse(idlFile.path)
         JniNativeGenerator().apply {
-            outputDirectory = "PhysX/physx/source/physxjnibindings/src/"
+            outputDirectory = generatorOutput
             packagePrefix = "physx"
 
             externallyAllocatableClasses += CommonGeneratorSettings.externallyAllocatableClasses
