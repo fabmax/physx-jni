@@ -16,14 +16,6 @@ interface PxTopLevelFunctions {
     static PxDefaultCpuDispatcher DefaultCpuDispatcherCreate(unsigned long numThreads);
     static boolean InitExtensions([Ref] PxPhysics physics);
     static PxRevoluteJoint RevoluteJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
-
-    static octet getU8At([Ref] PxU8Ptr base, long index);
-    static unsigned short getU16At([Ref] PxU16Ptr base, long index);
-    static unsigned long getU32At([Ref] PxU32Ptr base, long index);
-    static float getRealAt([Ref] PxRealPtr base, long index);
-    static PxContactPair getContactPairAt(PxContactPair base, long index);
-    static PxTriggerPair getTriggerPairAt(PxTriggerPair base, long index);
-    static PxVec3 getVec3At(PxVec3 base, long index);
 };
 
 /****************************************
@@ -212,7 +204,7 @@ interface PxContactPairHeader {
     //attribute PxU8Ptr extraDataStream;
     //attribute short extraDataStreamSize;
     [Value] attribute PxContactPairHeaderFlags flags;
-    attribute PxContactPair pairs;
+    [Const] attribute PxContactPair pairs;
     attribute unsigned long nbPairs;
 };
 
@@ -1228,7 +1220,7 @@ interface PxTriangleMesh {
     unsigned long getNbTriangles();
     [Const] VoidPtr getTriangles();
     [Value] PxTriangleMeshFlags getTriangleMeshFlags();
-    [Const] PxU32Ptr getTrianglesRemap();
+    [Const, Value] PxU32Ptr getTrianglesRemap();
     unsigned short getTriangleMaterialIndex(unsigned long triangleIndex);
     [Value] PxBounds3 getLocalBounds();
     unsigned long getReferenceCount();
@@ -1453,13 +1445,13 @@ PxDefaultErrorCallback implements PxErrorCallback;
 
 [Prefix="physx::"]
 interface PxErrorCallback {
-    void reportError(PxErrorCodeEnum code, DOMString message, DOMString file, long line);
+    void reportError(PxErrorCodeEnum code, [Const] DOMString message, [Const] DOMString file, long line);
 };
 
 [JSImplementation="PxErrorCallback"]
 interface JavaErrorCallback {
     void JavaErrorCallback();
-    void reportError(PxErrorCodeEnum code, DOMString message, DOMString file, long line);
+    void reportError(PxErrorCodeEnum code, [Const] DOMString message, [Const] DOMString file, long line);
 };
 
 enum PxErrorCodeEnum {
@@ -1580,6 +1572,8 @@ interface PxActorPtr { };
 
 interface PxMaterialPtr { };
 
+interface PxVehicleWheelsPtr { };
+
 interface PxRealPtr { };
 
 interface PxU8Ptr { };
@@ -1587,6 +1581,21 @@ interface PxU8Ptr { };
 interface PxU16Ptr { };
 
 interface PxU32Ptr { };
+
+interface TypeHelpers {
+    static octet getU8At([Ref] PxU8Ptr base, long index);
+    static unsigned short getU16At([Ref] PxU16Ptr base, long index);
+    static unsigned long getU32At([Ref] PxU32Ptr base, long index);
+    static float getRealAt([Ref] PxRealPtr base, long index);
+    static PxContactPair getContactPairAt(PxContactPair base, long index);
+    static PxTriggerPair getTriggerPairAt(PxTriggerPair base, long index);
+    static PxVec3 getVec3At(PxVec3 base, long index);
+
+    [Value] static PxU8Ptr voidToU8Ptr(VoidPtr voidPtr);
+    [Value] static PxU16Ptr voidToU16Ptr(VoidPtr voidPtr);
+    [Value] static PxU32Ptr voidToU32Ptr(VoidPtr voidPtr);
+    [Value] static PxRealPtr voidToRealPtr(VoidPtr voidPtr);
+};
 
 interface Vector_PxMaterial {
     void Vector_PxMaterial();
@@ -1686,8 +1695,6 @@ interface Vector_PxWheelQueryResult {
     unsigned long size();
     void push_back([Ref] PxWheelQueryResult value);
 };
-
-interface PxVehicleWheelsPtr { };
 
 interface Vector_PxVehicleWheels {
     void Vector_PxVehicleWheels();

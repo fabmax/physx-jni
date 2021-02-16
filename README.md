@@ -1,4 +1,9 @@
 # physx-jni
+
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni)
+![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
+
 Java JNI bindings for Nvidia PhysX
 
 This is the Java counterpart to the PhysX bindings for javascript/webassembly provided by
