@@ -55,19 +55,19 @@ public class SimCallbackTest {
             scene.addActor(ground);
 
             // associate body pointers with human-readable names
-            simCallback.actorNames.put(box.getAddress(), "Box");
-            simCallback.actorNames.put(trigger.getAddress(), "Trigger");
-            simCallback.actorNames.put(ground.getAddress(), "Ground");
+            simCallback.actorNames.put(box, "Box");
+            simCallback.actorNames.put(trigger, "Trigger");
+            simCallback.actorNames.put(ground, "Ground");
 
             PhysXTestEnv.simulateScene(scene, 5f, box);
 
             Assert.assertEquals(2, simCallback.contactBodies.size());
-            Assert.assertTrue(simCallback.contactBodies.contains(box.getAddress()));
-            Assert.assertTrue(simCallback.contactBodies.contains(ground.getAddress()));
+            Assert.assertTrue(simCallback.contactBodies.contains(box));
+            Assert.assertTrue(simCallback.contactBodies.contains(ground));
 
             Assert.assertEquals(2, simCallback.triggerBodies.size());
-            Assert.assertTrue(simCallback.triggerBodies.contains(box.getAddress()));
-            Assert.assertTrue(simCallback.triggerBodies.contains(trigger.getAddress()));
+            Assert.assertTrue(simCallback.triggerBodies.contains(box));
+            Assert.assertTrue(simCallback.triggerBodies.contains(trigger));
 
             // clean up
             scene.release();
@@ -79,21 +79,21 @@ public class SimCallbackTest {
     }
 
     private static class TestSimulationCallback extends JavaSimulationEventCallback {
-        Map<Long, String> actorNames = new HashMap<>();
+        Map<PxActor, String> actorNames = new HashMap<>();
 
-        Set<Long> contactBodies = new HashSet<>();
-        Set<Long> triggerBodies = new HashSet<>();
+        Set<PxActor> contactBodies = new HashSet<>();
+        Set<PxActor> triggerBodies = new HashSet<>();
 
         @Override
         public void onContact(PxContactPairHeader pairHeader, PxContactPair pairs, int nbPairs) {
             PxActor actor0 = pairHeader.getActors(0);
             PxActor actor1 = pairHeader.getActors(1);
-            contactBodies.add(actor0.getAddress());
-            contactBodies.add(actor1.getAddress());
-            Assert.assertTrue(actorNames.containsKey(actor0.getAddress()));
-            Assert.assertTrue(actorNames.containsKey(actor1.getAddress()));
-            String name0 = actorNames.get(actor0.getAddress());
-            String name1 = actorNames.get(actor1.getAddress());
+            contactBodies.add(actor0);
+            contactBodies.add(actor1);
+            Assert.assertTrue(actorNames.containsKey(actor0));
+            Assert.assertTrue(actorNames.containsKey(actor1));
+            String name0 = actorNames.get(actor0);
+            String name1 = actorNames.get(actor1);
 
             PxPairFlags events = pairs.getEvents();
             String event = "OTHER";
@@ -109,12 +109,12 @@ public class SimCallbackTest {
         public void onTrigger(PxTriggerPair pairs, int count) {
             PxActor actor0 = pairs.getTriggerActor();
             PxActor actor1 = pairs.getOtherActor();
-            triggerBodies.add(actor0.getAddress());
-            triggerBodies.add(actor1.getAddress());
-            Assert.assertTrue(actorNames.containsKey(actor0.getAddress()));
-            Assert.assertTrue(actorNames.containsKey(actor1.getAddress()));
-            String name0 = actorNames.get(actor0.getAddress());
-            String name1 = actorNames.get(actor1.getAddress());
+            triggerBodies.add(actor0);
+            triggerBodies.add(actor1);
+            Assert.assertTrue(actorNames.containsKey(actor0));
+            Assert.assertTrue(actorNames.containsKey(actor1));
+            String name0 = actorNames.get(actor0);
+            String name1 = actorNames.get(actor1);
 
             int status = pairs.getStatus();
             String event = "OTHER";

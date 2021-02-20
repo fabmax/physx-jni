@@ -25,11 +25,13 @@ public class TriangleMeshTest {
             Vector_PxVec3 pointVector = new Vector_PxVec3();
             Vector_PxU32 indexVector = new Vector_PxU32();
             pointVector.push_back(PxVec3.createAt(mem, MemoryStack::nmalloc, 0f, -0.5f, 0f));
+            PxVec3 tmpVec = PxVec3.createAt(mem, MemoryStack::nmalloc, 0f, 0f, 0f);
             for (int i = 0; i <= 10; i++) {
                 double a = i / 10.0 * 2 * Math.PI;
-                float x = (float) Math.cos(a) * 5f;
-                float z = (float) Math.sin(a) * -5f;
-                pointVector.push_back(PxVec3.createAt(mem, MemoryStack::nmalloc, x, 0f, z));
+                tmpVec.setX((float) Math.cos(a) * 5f);
+                tmpVec.setZ((float) Math.sin(a) * -5f);
+                // Vector_PxVec3 stores PxVec3's as value, we can (and should) recycle the same temporary PxVec3 object to fill it
+                pointVector.push_back(tmpVec);
                 if (i > 0) {
                     indexVector.push_back(0);
                     indexVector.push_back(i);

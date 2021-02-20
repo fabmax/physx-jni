@@ -3,10 +3,9 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    implementation("de.fabmax:webidl-util:0.7.0")
+    implementation("de.fabmax:webidl-util:0.7.1")
 }
