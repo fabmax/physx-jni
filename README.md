@@ -14,11 +14,11 @@ The library is available on maven central, so you can easily add this to your bu
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.4.0")
+    implementation("de.fabmax:physx-jni:0.4.1")
     
     // native libraries, you can add the one matching your system or both
-    runtimeOnly("de.fabmax:physx-jni:0.4.0:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.0:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.1:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.1:native-linux64")
 }
 ```
 
@@ -71,9 +71,9 @@ there is a second method to allocate these objects: Stack allocation. To use thi
 memory allocator like LWJGL's MemoryStack. With that one the above example could look like this:
 ```java
 try (MemoryStack mem = MemoryStack.stackPush()) {
-    // create an object of PxVec3. The native object is allocated in the memory
+    // create an object of PxVec3. The native object is allocated in memory
     // provided by MemoryStack
-    PxVec3 vector = PxVec3.malloc(mem, MemoryStack::nmalloc, 1f, 2f, 3f);
+    PxVec3 vector = PxVec3.createAt(mem, MemoryStack::nmalloc, 1f, 2f, 3f);
     
     // do something with vector...
     // no explicit destroy needed, memory is released when we leave the scope

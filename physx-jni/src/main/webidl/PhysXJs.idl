@@ -949,7 +949,7 @@ interface PxVehicleWheelData {
     attribute float mToeAngle;
 };
 
-[Prefix="physx::", NoDelete]
+[Prefix="physx::"]
 interface PxVehicleWheelQueryResult {
     void PxVehicleWheelQueryResult();
     attribute PxWheelQueryResult wheelQueryResults;
