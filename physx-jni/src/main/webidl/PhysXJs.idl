@@ -1688,7 +1688,8 @@ enum PxJointActorIndexEnum {
 
 [Prefix="physx::"]
 interface PxJointAngularLimitPair {
-    void PxJointAngularLimitPair(float lowerLimit, float upperLimit, optional float contactDist);
+    // javascript bindings do not support overloaded functions with same parameter count
+    //void PxJointAngularLimitPair(float lowerLimit, float upperLimit, optional float contactDist);
     void PxJointAngularLimitPair(float lowerLimit, float upperLimit, [Const, Ref] PxSpring spring);
 
     attribute float upper;
@@ -1698,7 +1699,8 @@ PxJointAngularLimitPair implements PxJointLimitParameters;
 
 [Prefix="physx::"]
 interface PxJointLimitCone {
-    void PxJointLimitCone(float yLimitAngle, float zLimitAngle, optional float contactDist);
+    // javascript bindings do not support overloaded functions with same parameter count
+    //void PxJointLimitCone(float yLimitAngle, float zLimitAngle, optional float contactDist);
     void PxJointLimitCone(float yLimitAngle, float zLimitAngle, [Const, Ref] PxSpring spring);
 
     attribute float yAngle;
@@ -1708,8 +1710,6 @@ PxJointLimitCone implements PxJointLimitParameters;
 
 [Prefix="physx::", NoDelete]
 interface PxJointLimitParameters {
-    //void PxJointLimitParameters();
-    //void PxJointLimitParameters([Const, Ref] PxJointLimitParameters p);
     boolean isValid();
     boolean isSoft();
 
@@ -1722,7 +1722,8 @@ interface PxJointLimitParameters {
 
 [Prefix="physx::"]
 interface PxJointLimitPyramid {
-    void PxJointLimitPyramid(float yLimitAngleMin, float yLimitAngleMax, float zLimitAngleMin, float zLimitAngleMax, optional float contactDist);
+    // javascript bindings do not support overloaded functions with same parameter count
+    //void PxJointLimitPyramid(float yLimitAngleMin, float yLimitAngleMax, float zLimitAngleMin, float zLimitAngleMax, optional float contactDist);
     void PxJointLimitPyramid(float yLimitAngleMin, float yLimitAngleMax, float zLimitAngleMin, float zLimitAngleMax, [Const, Ref] PxSpring spring);
 
     attribute float yAngleMin;
@@ -1734,7 +1735,8 @@ PxJointLimitPyramid implements PxJointLimitParameters;
 
 [Prefix="physx::"]
 interface PxJointLinearLimit {
-    void PxJointLinearLimit([Const, Ref] PxTolerancesScale scale, float extent, optional float contactDist);
+    // javascript bindings do not support overloaded functions with same parameter count
+    //void PxJointLinearLimit([Const, Ref] PxTolerancesScale scale, float extent, optional float contactDist);
     void PxJointLinearLimit(float extent, [Const, Ref] PxSpring spring);
 
     attribute float value;
@@ -1743,7 +1745,8 @@ PxJointLinearLimitPair implements PxJointLimitParameters;
 
 [Prefix="physx::"]
 interface PxJointLinearLimitPair {
-    void PxJointLinearLimitPair([Const, Ref] PxTolerancesScale scale, optional float lowerLimit, optional float upperLimit, optional float contactDist);
+    // javascript bindings do not support overloaded functions with same parameter count
+    //void PxJointLinearLimitPair([Const, Ref] PxTolerancesScale scale, optional float lowerLimit, optional float upperLimit, optional float contactDist);
     void PxJointLinearLimitPair(float lowerLimit, float upperLimit, [Const, Ref] PxSpring spring);
 
     attribute float upper;
@@ -1777,6 +1780,37 @@ interface PxPrismaticJointFlags {
     boolean isSet(PxPrismaticJointFlagEnum flag);
     void set(PxPrismaticJointFlagEnum flag);
     void clear(PxPrismaticJointFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxRigidActorExt {
+    static PxShape createExclusiveShape([Ref] PxRigidActor actor, [Const, Ref] PxGeometry geometry, [Const, Ref] PxMaterial material, [Ref] optional PxShapeFlags flags);
+};
+
+[Prefix="physx::"]
+interface PxRigidBodyExt {
+    static boolean updateMassAndInertia([Ref] PxRigidBody body, [Ref] PxRealPtr shapeDensities, unsigned long shapeDensityCount, optional PxVec3 massLocalPose, optional boolean includeNonSimShapes);
+    static boolean updateMassAndInertia([Ref] PxRigidBody body, float density, optional PxVec3 massLocalPose, optional boolean includeNonSimShapes);
+    static boolean setMassAndUpdateInertia([Ref] PxRigidBody body, [Ref] PxRealPtr shapeMasses, unsigned long shapeMassCount, optional PxVec3 massLocalPose, optional boolean includeNonSimShapes);
+    static boolean setMassAndUpdateInertia([Ref] PxRigidBody body, float mass, optional PxVec3 massLocalPose, optional boolean includeNonSimShapes);
+
+    static void addForceAtPos([Ref] PxRigidBody body, [Const, Ref] PxVec3 force, [Const, Ref] PxVec3 pos, optional PxForceModeEnum mode, optional boolean wakeup);
+    static void addForceAtLocalPos([Ref] PxRigidBody body, [Const, Ref] PxVec3 force, [Const, Ref] PxVec3 pos, optional PxForceModeEnum mode, optional boolean wakeup);
+    static void addLocalForceAtPos([Ref] PxRigidBody body, [Const, Ref] PxVec3 force, [Const, Ref] PxVec3 pos, optional PxForceModeEnum mode, optional boolean wakeup);
+    static void addLocalForceAtLocalPos([Ref] PxRigidBody body, [Const, Ref] PxVec3 force, [Const, Ref] PxVec3 pos, optional PxForceModeEnum mode, optional boolean wakeup);
+
+    [Value] static PxVec3 getVelocityAtPos([Const, Ref] PxRigidBody body, [Const, Ref] PxVec3 pos);
+    [Value] static PxVec3 getLocalVelocityAtLocalPos([Const, Ref] PxRigidBody body, [Const, Ref] PxVec3 pos);
+    [Value] static PxVec3 getVelocityAtOffset([Const, Ref] PxRigidBody body, [Const, Ref] PxVec3 pos);
+
+    static void computeVelocityDeltaFromImpulse([Const, Ref] PxRigidBody body, [Const, Ref] PxVec3 impulsiveForce,
+                [Const, Ref] PxVec3 impulsiveTorque, [Ref] PxVec3 deltaLinearVelocity, [Ref] PxVec3 deltaAngularVelocity);
+    static void computeVelocityDeltaFromImpulse([Const, Ref] PxRigidBody body, [Const, Ref] PxTransform globalPose, [Const, Ref] PxVec3 point,
+                [Const, Ref] PxVec3 impulse, float invMassScale, float invInertiaScale,
+                [Ref] PxVec3 deltaLinearVelocity, [Ref] PxVec3 deltaAngularVelocity);
+    static void computeLinearAngularImpulse([Const, Ref] PxRigidBody body, [Const, Ref] PxTransform globalPose, [Const, Ref] PxVec3 point,
+                [Const, Ref] PxVec3 impulse, float invMassScale, float invInertiaScale,
+                [Ref] PxVec3 linearImpulse, [Ref] PxVec3 angularImpulse);
 };
 
 [Prefix="physx::"]

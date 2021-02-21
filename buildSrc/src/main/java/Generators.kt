@@ -74,7 +74,6 @@ open class GenerateJavaBindings : DefaultTask() {
             nullableAttributes += "PxBatchQueryDesc.preFilterShader"
             nullableAttributes += "PxBatchQueryDesc.postFilterShader"
         }.generate(model)
-        println("Generated JNI classes: " + (model.interfaces.size + model.enums.size) + " classes")
     }
 }
 
@@ -94,7 +93,6 @@ open class GenerateNativeGlueCode : DefaultTask() {
         if (!idlFile.exists()) {
             throw FileNotFoundException("PhysX WebIDL definition not found!")
         }
-        println("generator out: $generatorOutput")
 
         val model = WebIdlParser().parse(idlFile.path)
         JniNativeGenerator().apply {
