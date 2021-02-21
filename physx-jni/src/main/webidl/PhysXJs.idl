@@ -15,7 +15,13 @@ interface PxTopLevelFunctions {
     static PxPhysics CreatePhysics(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxTolerancesScale params);
     static PxDefaultCpuDispatcher DefaultCpuDispatcherCreate(unsigned long numThreads);
     static boolean InitExtensions([Ref] PxPhysics physics);
+
+    static PxD6Joint D6JointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
+    static PxDistanceJoint DistanceJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
+    static PxFixedJoint FixedJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
+    static PxPrismaticJoint PrismaticJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
     static PxRevoluteJoint RevoluteJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
+    static PxSphericalJoint SphericalJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
 };
 
 /****************************************
@@ -1520,6 +1526,83 @@ interface PxVec3 {
  * [package=extensions]
  ****************************************/
 
+enum PxD6AxisEnum {
+    "PxD6AxisEnum::eX",
+    "PxD6AxisEnum::eY",
+    "PxD6AxisEnum::eZ",
+    "PxD6AxisEnum::eTWIST",
+    "PxD6AxisEnum::eSWING1",
+    "PxD6AxisEnum::eSWING2",
+    "PxD6AxisEnum::eCOUNT"
+};
+
+enum PxD6DriveEnum {
+    "PxD6DriveEnum::eX",
+    "PxD6DriveEnum::eY",
+    "PxD6DriveEnum::eZ",
+    "PxD6DriveEnum::eSWING",
+    "PxD6DriveEnum::eTWIST",
+    "PxD6DriveEnum::eSLERP",
+    "PxD6DriveEnum::eCOUNT"
+};
+
+[Prefix="physx::"]
+interface PxD6Joint {
+    void setMotion(PxD6AxisEnum axis, PxD6MotionEnum type);
+    PxD6MotionEnum getMotion(PxD6AxisEnum axis);
+    float getTwistAngle();
+    float getSwingYAngle();
+    float getSwingZAngle();
+    void setDistanceLimit([Const, Ref] PxJointLinearLimit limit);
+    //[Value] PxJointLinearLimit getDistanceLimit();
+    void setLinearLimit(PxD6AxisEnum axis, [Const, Ref] PxJointLinearLimitPair limit);
+    //[Value] PxJointLinearLimitPair getLinearLimit(PxD6AxisEnum axis);
+    void setTwistLimit([Const, Ref] PxJointAngularLimitPair limit);
+    //[Value] PxJointAngularLimitPair getTwistLimit();
+    void setSwingLimit([Const, Ref] PxJointLimitCone limit);
+    //[Value] PxJointLimitCone getSwingLimit();
+    void setPyramidSwingLimit([Const, Ref] PxJointLimitPyramid limit);
+    //[Value] PxJointLimitPyramid getPyramidSwingLimit();
+    void setDrive(PxD6DriveEnum index, [Const, Ref] PxD6JointDrive drive);
+    [Value] PxD6JointDrive getDrive(PxD6DriveEnum index);
+    void setDrivePosition([Const, Ref] PxTransform pose, optional boolean autowake);
+    [Value] PxTransform getDrivePosition();
+    void setDriveVelocity([Const, Ref] PxVec3 linear, [Const, Ref] PxVec3 angular);
+    void getDriveVelocity([Ref] PxVec3 linear, [Ref] PxVec3 angular);
+    void setProjectionLinearTolerance(float tolerance);
+    float getProjectionLinearTolerance();
+    void setProjectionAngularTolerance(float tolerance);
+    float getProjectionAngularTolerance();
+};
+
+[Prefix="physx::"]
+interface PxD6JointDrive {
+    void PxD6JointDrive();
+    void PxD6JointDrive(float driveStiffness, float driveDamping, float driveForceLimit, optional boolean isAcceleration);
+
+    attribute float forceLimit;
+    [Value] attribute PxD6JointDriveFlags flags;
+};
+PxD6JointDrive implements PxSpring;
+
+enum PxD6JointDriveFlagEnum {
+    "PxD6JointDriveFlagEnum::eACCELERATION"
+};
+
+[Prefix="physx::"]
+interface PxD6JointDriveFlags {
+    void PxD6JointDriveFlags(unsigned long flags);
+    boolean isSet(PxD6JointDriveFlagEnum flag);
+    void set(PxD6JointDriveFlagEnum flag);
+    void clear(PxD6JointDriveFlagEnum flag);
+};
+
+enum PxD6MotionEnum {
+    "PxD6MotionEnum::eLOCKED",
+    "PxD6MotionEnum::eLIMITED",
+    "PxD6MotionEnum::eFREE"
+};
+
 [Prefix="physx::"]
 interface PxDefaultAllocator {
     void PxDefaultAllocator();
@@ -1529,24 +1612,192 @@ interface PxDefaultAllocator {
 interface PxDefaultCpuDispatcher { };
 PxDefaultCpuDispatcher implements PxCpuDispatcher;
 
+[Prefix="physx::"]
+interface PxDistanceJoint {
+    float getDistance();
+    void setMinDistance(float distance);
+    float getMinDistance();
+    void setMaxDistance(float distance);
+    float getMaxDistance();
+    void setTolerance(float tolerance);
+    float getTolerance();
+    void setStiffness(float stiffness);
+    float getStiffness();
+    void setDamping(float damping);
+    float getDamping();
+    void setDistanceJointFlags([Ref] PxDistanceJointFlags flags);
+    void setDistanceJointFlag(PxDistanceJointFlagEnum flag, boolean value);
+    [Value] PxDistanceJointFlags getDistanceJointFlags();
+};
+PxDistanceJoint implements PxJoint;
+
+enum PxDistanceJointFlagEnum {
+    "PxDistanceJointFlagEnum::eMAX_DISTANCE_ENABLED",
+    "PxDistanceJointFlagEnum::eMIN_DISTANCE_ENABLED",
+    "PxDistanceJointFlagEnum::eSPRING_ENABLED"
+};
+
+[Prefix="physx::"]
+interface PxDistanceJointFlags {
+    void PxDistanceJointFlags(unsigned short flags);
+    boolean isSet(PxDistanceJointFlagEnum flag);
+    void set(PxDistanceJointFlagEnum flag);
+    void clear(PxDistanceJointFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxFixedJoint {
+    void setProjectionLinearTolerance(float tolerance);
+    float getProjectionLinearTolerance();
+    void setProjectionAngularTolerance(float tolerance);
+    float getProjectionAngularTolerance();
+};
+PxFixedJoint implements PxJoint;
+
 [Prefix="physx::", NoDelete]
-interface PxJoint { };
+interface PxJoint {
+    void setActors(PxRigidActor actor0, PxRigidActor actor1);
+    //void getActors(PxRigidActor actor0, PxRigidActor actor1);
+    void setLocalPose(PxJointActorIndexEnum actor, [Const, Ref] PxTransform localPose);
+    [Value] PxTransform getLocalPose(PxJointActorIndexEnum actor);
+    [Value] PxTransform getRelativeTransform();
+    [Value] PxVec3 getRelativeLinearVelocity();
+    [Value] PxVec3 getRelativeAngularVelocity();
+    void setBreakForce(float force, float torque);
+    //void getBreakForce(float force, float torque);
+    void setConstraintFlags([Ref] PxConstraintFlags flags);
+    void setConstraintFlag(PxConstraintFlagEnum flag, boolean value);
+    [Value] PxConstraintFlags getConstraintFlags();
+    void setInvMassScale0(float invMassScale);
+    float getInvMassScale0();
+    void setInvMassScale1(float invMassScale);
+    float getInvMassScale1();
+    PxConstraint getConstraint();
+    void setName([Const] DOMString name);
+    [Const] DOMString getName();
+    void release();
+    PxScene getScene();
+};
 PxJoint implements PxBase;
+
+enum PxJointActorIndexEnum {
+    "PxJointActorIndexEnum::eACTOR0",
+    "PxJointActorIndexEnum::eACTOR1",
+    "PxJointActorIndexEnum::COUNT"
+};
+
+[Prefix="physx::"]
+interface PxJointAngularLimitPair {
+    void PxJointAngularLimitPair(float lowerLimit, float upperLimit, optional float contactDist);
+    void PxJointAngularLimitPair(float lowerLimit, float upperLimit, [Const, Ref] PxSpring spring);
+
+    attribute float upper;
+    attribute float lower;
+};
+PxJointAngularLimitPair implements PxJointLimitParameters;
+
+[Prefix="physx::"]
+interface PxJointLimitCone {
+    void PxJointLimitCone(float yLimitAngle, float zLimitAngle, optional float contactDist);
+    void PxJointLimitCone(float yLimitAngle, float zLimitAngle, [Const, Ref] PxSpring spring);
+
+    attribute float yAngle;
+    attribute float zAngle;
+};
+PxJointLimitCone implements PxJointLimitParameters;
+
+[Prefix="physx::", NoDelete]
+interface PxJointLimitParameters {
+    //void PxJointLimitParameters();
+    //void PxJointLimitParameters([Const, Ref] PxJointLimitParameters p);
+    boolean isValid();
+    boolean isSoft();
+
+    attribute float restitution;
+    attribute float bounceThreshold;
+    attribute float stiffness;
+    attribute float damping;
+    attribute float contactDistance;
+};
+
+[Prefix="physx::"]
+interface PxJointLimitPyramid {
+    void PxJointLimitPyramid(float yLimitAngleMin, float yLimitAngleMax, float zLimitAngleMin, float zLimitAngleMax, optional float contactDist);
+    void PxJointLimitPyramid(float yLimitAngleMin, float yLimitAngleMax, float zLimitAngleMin, float zLimitAngleMax, [Const, Ref] PxSpring spring);
+
+    attribute float yAngleMin;
+    attribute float yAngleMax;
+    attribute float zAngleMin;
+    attribute float zAngleMax;
+};
+PxJointLimitPyramid implements PxJointLimitParameters;
+
+[Prefix="physx::"]
+interface PxJointLinearLimit {
+    void PxJointLinearLimit([Const, Ref] PxTolerancesScale scale, float extent, optional float contactDist);
+    void PxJointLinearLimit(float extent, [Const, Ref] PxSpring spring);
+
+    attribute float value;
+};
+PxJointLinearLimitPair implements PxJointLimitParameters;
+
+[Prefix="physx::"]
+interface PxJointLinearLimitPair {
+    void PxJointLinearLimitPair([Const, Ref] PxTolerancesScale scale, optional float lowerLimit, optional float upperLimit, optional float contactDist);
+    void PxJointLinearLimitPair(float lowerLimit, float upperLimit, [Const, Ref] PxSpring spring);
+
+    attribute float upper;
+    attribute float lower;
+};
+PxJointLinearLimitPair implements PxJointLimitParameters;
+
+[Prefix="physx::"]
+interface PxPrismaticJoint {
+    float getPosition();
+    float getVelocity();
+    void setLimit([Const, Ref] PxJointLinearLimitPair limit);
+    //[Value] PxJointLinearLimitPair getLimit();
+    void setPrismaticJointFlags([Ref] PxPrismaticJointFlags flags);
+    void setPrismaticJointFlag(PxPrismaticJointFlagEnum flag, boolean value);
+    [Value] PxPrismaticJointFlags getPrismaticJointFlags();
+    void setProjectionLinearTolerance(float tolerance);
+    float getProjectionLinearTolerance();
+    void setProjectionAngularTolerance(float tolerance);
+    float getProjectionAngularTolerance();
+};
+PxPrismaticJoint implements PxJoint;
+
+enum PxPrismaticJointFlagEnum {
+    "PxPrismaticJointFlagEnum::eLIMIT_ENABLED"
+};
+
+[Prefix="physx::"]
+interface PxPrismaticJointFlags {
+    void PxPrismaticJointFlags(unsigned short flags);
+    boolean isSet(PxPrismaticJointFlagEnum flag);
+    void set(PxPrismaticJointFlagEnum flag);
+    void clear(PxPrismaticJointFlagEnum flag);
+};
 
 [Prefix="physx::"]
 interface PxRevoluteJoint {
+    float getAngle();
+    float getVelocity();
+    void setLimit([Const, Ref] PxJointAngularLimitPair limits);
+    //[Value] PxJointAngularLimitPair getLimit();
     void setDriveVelocity(float velocity, optional boolean autowake);
     float getDriveVelocity();
-
     void setDriveForceLimit(float limit);
     float getDriveForceLimit();
-
     void setDriveGearRatio(float ratio);
     float getDriveGearRatio();
-
     void setRevoluteJointFlags([Ref] PxRevoluteJointFlags flags);
     void setRevoluteJointFlag(PxRevoluteJointFlagEnum flag, boolean value);
     [Value] PxRevoluteJointFlags getRevoluteJointFlags();
+    void setProjectionLinearTolerance(float tolerance);
+    float getProjectionLinearTolerance();
+    void setProjectionAngularTolerance(float tolerance);
+    float getProjectionAngularTolerance();
 };
 PxRevoluteJoint implements PxJoint;
 
@@ -1562,6 +1813,39 @@ interface PxRevoluteJointFlags {
     boolean isSet(PxRevoluteJointFlagEnum flag);
     void set(PxRevoluteJointFlagEnum flag);
     void clear(PxRevoluteJointFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxSphericalJoint {
+    //[Value] PxJointLimitCone getLimitCone();
+    void setLimitCone([Const, Ref] PxJointLimitCone limitCone);
+    float getSwingYAngle();
+    float getSwingZAngle();
+    void setSphericalJointFlags([Ref] PxSphericalJointFlags flags);
+    void setSphericalJointFlag(PxSphericalJointFlagEnum flag, boolean value);
+    [Value] PxSphericalJointFlags getSphericalJointFlags();
+    void setProjectionLinearTolerance(float tolerance);
+    float getProjectionLinearTolerance();
+};
+PxSphericalJoint implements PxJoint;
+
+enum PxSphericalJointFlagEnum {
+    "PxSphericalJointFlagEnum::eLIMIT_ENABLED"
+};
+
+[Prefix="physx::"]
+interface PxSphericalJointFlags {
+    void PxSphericalJointFlags(unsigned short flags);
+    boolean isSet(PxSphericalJointFlagEnum flag);
+    void set(PxSphericalJointFlagEnum flag);
+    void clear(PxSphericalJointFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxSpring {
+    void PxSpring(float stiffness, float damping);
+    attribute float stiffness;
+    attribute float damping;
 };
 
 /****************************************
