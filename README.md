@@ -121,7 +121,7 @@ classes are located under `physx-jni/src/main/generated`.
 ## What's next?
 - [x] Triangle mesh shape
 - [x] Callbacks from native to Java (e.g. collision callbacks)
-- [ ] More joint types
+- [x] More joint types
 - [ ] Character controllers
 - [ ] Include API docs
 
