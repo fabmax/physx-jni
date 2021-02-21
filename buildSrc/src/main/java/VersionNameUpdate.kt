@@ -5,7 +5,6 @@ import java.io.FileReader
 import java.io.FileWriter
 
 open class VersionNameUpdate : DefaultTask() {
-
     @Input
     var versionName = "0.0.0"
 
@@ -33,7 +32,7 @@ open class VersionNameUpdate : DefaultTask() {
             if (updated) {
                 FileWriter(file).use {
                     text.forEach { line ->
-                        it.append(line).append("\n")
+                        it.append(line).append(System.lineSeparator())
                     }
                 }
             } else {
