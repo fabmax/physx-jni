@@ -5,7 +5,7 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "de.fabmax"
-    version = "0.4.2"
+    version = "0.4.3-SNAPSHOT"
 
     repositories {
         jcenter()

@@ -452,7 +452,7 @@ interface PxContactPairFlags {
 [Prefix="physx::"]
 interface PxContactPairHeader {
     attribute PxRigidActor[] actors;
-    //attribute PxU8Ptr extraDataStream;
+    //attribute PxU8ConstPtr extraDataStream;
     //attribute short extraDataStreamSize;
     [Value] attribute PxContactPairHeaderFlags flags;
     [Const] attribute PxContactPair pairs;
@@ -787,6 +787,37 @@ interface PxSceneFlags {
 
 [Prefix="physx::", NoDelete]
 interface PxShape {
+    unsigned long getReferenceCount();
+    void acquireReference();
+    PxGeometryTypeEnum getGeometryType();
+    void setGeometry([Const, Ref] PxGeometry geometry);
+    [Value] PxGeometryHolder getGeometry();
+    boolean getBoxGeometry([Ref] PxBoxGeometry geometry);
+    boolean getSphereGeometry([Ref] PxSphereGeometry geometry);
+    boolean getCapsuleGeometry([Ref] PxCapsuleGeometry geometry);
+    boolean getPlaneGeometry([Ref] PxPlaneGeometry geometry);
+    boolean getConvexMeshGeometry([Ref] PxConvexMeshGeometry geometry);
+    boolean getTriangleMeshGeometry([Ref] PxTriangleMeshGeometry geometry);
+    boolean getHeightFieldGeometry([Ref] PxHeightFieldGeometry geometry);
+    PxRigidActor getActor();
+    void setMaterials(PxMaterialPtr materials, unsigned short materialCount);
+    unsigned short getNbMaterials();
+    unsigned long getMaterials(PxMaterialPtr userBuffer, unsigned long bufferSize, unsigned long startIndex);
+    PxMaterial getMaterialFromInternalFaceIndex(unsigned long faceIndex);
+    void setContactOffset(float contactOffset);
+    float getContactOffset();
+    void setRestOffset(float restOffset);
+    float getRestOffset();
+    void setTorsionalPatchRadius(float radius);
+    float getTorsionalPatchRadius();
+    void setMinTorsionalPatchRadius(float radius);
+    float getMinTorsionalPatchRadius();
+    void setFlag(PxShapeFlagEnum flag, boolean value);
+    void setFlags([Ref] PxShapeFlags inFlags);
+    [Value] PxShapeFlags getFlags();
+    boolean isExclusive();
+    void setName([Const] DOMString name);
+    [Const] DOMString getName();
     // Pose Manipulation
     void setLocalPose([Const, Ref] PxTransform pose);
     [Value] PxTransform getLocalPose(); 
@@ -795,6 +826,7 @@ interface PxShape {
     [Value] PxFilterData getSimulationFilterData();
     void setQueryFilterData([Const, Ref] PxFilterData data);
     [Value] PxFilterData getQueryFilterData();
+    attribute VoidPtr userData;
 };
 PxShape implements PxBase;
 
@@ -978,7 +1010,7 @@ enum PxVehicleDifferential4WDataEnum {
 [Prefix="physx::", NoDelete]
 interface PxVehicleDrivableSurfaceToTireFrictionPairs {
     static PxVehicleDrivableSurfaceToTireFrictionPairs allocate(unsigned long maxNbTireTypes, unsigned long maxNbSurfaceTypes);
-    void setup(unsigned long nbTireTypes, unsigned long nbSurfaceTypes, PxMaterialPtr drivableSurfaceMaterials, [Const] PxVehicleDrivableSurfaceType drivableSurfaceTypes);
+    void setup(unsigned long nbTireTypes, unsigned long nbSurfaceTypes, PxMaterialConstPtr drivableSurfaceMaterials, [Const] PxVehicleDrivableSurfaceType drivableSurfaceTypes);
     void release();
     void setTypePairFriction(unsigned long surfaceType, unsigned long tireType, float value);
     float getTypePairFriction(unsigned long surfaceType, unsigned long tireType);
@@ -1378,7 +1410,7 @@ PxCapsuleGeometry implements PxGeometry;
 interface PxConvexMesh {
     unsigned long getNbVertices();
     [Const] PxVec3 getVertices();
-    [Value] PxU8Ptr getIndexBuffer();
+    [Value] PxU8ConstPtr getIndexBuffer();
     unsigned long getNbPolygons();
     boolean getPolygonData(unsigned long index, [Ref] PxHullPolygon data);
     unsigned long getReferenceCount();
@@ -1407,7 +1439,104 @@ interface PxConvexMeshGeometryFlags {
 };
 
 [Prefix="physx::"]
-interface PxGeometry { };
+interface PxGeometry {
+    PxGeometryTypeEnum getType();
+};
+
+[Prefix="physx::"]
+interface PxGeometryHolder {
+    void PxGeometryHolder();
+    void PxGeometryHolder([Const, Ref] PxGeometry geometry);
+    PxGeometryTypeEnum getType();
+    //[Ref] PxGeometry any();       // does not work: any is a keyword
+    [Ref] PxSphereGeometry sphere();
+    [Ref] PxPlaneGeometry plane();
+    [Ref] PxCapsuleGeometry capsule();
+    [Ref] PxBoxGeometry box();
+    [Ref] PxConvexMeshGeometry convexMesh();
+    [Ref] PxTriangleMeshGeometry triangleMesh();
+    [Ref] PxHeightFieldGeometry heightField();
+    void storeAny([Const, Ref] PxGeometry geometry);
+};
+
+enum PxGeometryTypeEnum {
+    "PxGeometryTypeEnum::eSPHERE",
+    "PxGeometryTypeEnum::ePLANE",
+    "PxGeometryTypeEnum::eCAPSULE",
+    "PxGeometryTypeEnum::eBOX",
+    "PxGeometryTypeEnum::eCONVEXMESH",
+    "PxGeometryTypeEnum::eTRIANGLEMESH",
+    "PxGeometryTypeEnum::eHEIGHTFIELD"
+};
+
+[Prefix="physx::", NoDelete]
+interface PxHeightField {
+    unsigned long saveCells(VoidPtr destBuffer, unsigned long destBufferSize);
+    boolean modifySamples(long startCol, long startRow, [Const, Ref] PxHeightFieldDesc subfieldDesc, optional boolean shrinkBounds);
+    unsigned long getNbRows();
+    unsigned long getNbColumns();
+    PxHeightFieldFormatEnum getFormat();
+    unsigned long getSampleStride();
+    float getConvexEdgeThreshold();
+    [Value] PxHeightFieldFlags getFlags();
+    float getHeight(float x, float z);
+    unsigned long getReferenceCount();
+    void acquireReference();
+    unsigned short getTriangleMaterialIndex(unsigned long triangleIndex);
+    [Value] PxVec3 getTriangleNormal(unsigned long triangleIndex);
+    [Const, Ref] PxHeightFieldSample getSample(unsigned long row, unsigned long column);
+    unsigned long getTimestamp();
+};
+PxHeightField implements PxBase;
+
+[Prefix="physx::"]
+interface PxHeightFieldDesc {
+    void PxHeightFieldDesc();
+    void setToDefault();
+    boolean isValid();
+    attribute unsigned long nbRows;
+    attribute unsigned long nbColumns;
+    attribute PxHeightFieldFormatEnum format;
+    [Value] attribute PxStridedData samples;
+    attribute float convexEdgeThreshold;
+    [Value] attribute PxHeightFieldFlags flags;
+};
+
+[Prefix="physx::"]
+interface PxHeightFieldFlags {
+    void PxHeightFieldFlags(unsigned short flags);
+    boolean isSet(PxHeightFieldFlagEnum flag);
+    void set(PxHeightFieldFlagEnum flag);
+    void clear(PxHeightFieldFlagEnum flag);
+};
+
+enum PxHeightFieldFlagEnum {
+    "PxHeightFieldFlagEnum::eNO_BOUNDARY_EDGES"
+};
+
+enum PxHeightFieldFormatEnum {
+    "PxHeightFieldFormatEnum::eS16_TM"
+};
+
+[Prefix="physx::"]
+interface PxHeightFieldGeometry {
+    void PxHeightFieldGeometry();
+    void PxHeightFieldGeometry(PxHeightField hf, [Ref] PxMeshGeometryFlags flags, float heightScale, float rowScale, float columnScale);
+    boolean isValid();
+    attribute PxHeightField heightField;
+    attribute float heightScale;
+    attribute float rowScale;
+    attribute float columnScale;
+    [Value] attribute PxMeshGeometryFlags heightFieldFlags;
+};
+PxHeightFieldGeometry implements PxGeometry;
+
+[Prefix="physx::"]
+interface PxHeightFieldSample {
+    attribute short height;
+    attribute octet materialIndex0;
+    attribute octet materialIndex1;
+};
 
 [Prefix="physx::"]
 interface PxHullPolygon {
@@ -1480,7 +1609,7 @@ interface PxTriangleMesh {
     unsigned long getNbTriangles();
     [Const] VoidPtr getTriangles();
     [Value] PxTriangleMeshFlags getTriangleMeshFlags();
-    [Const, Value] PxU32Ptr getTrianglesRemap();
+    [Const, Value] PxU32ConstPtr getTrianglesRemap();
     unsigned short getTriangleMaterialIndex(unsigned long triangleIndex);
     [Value] PxBounds3 getLocalBounds();
     unsigned long getReferenceCount();
@@ -1762,9 +1891,15 @@ interface PxTransform {
     [Value] attribute PxVec3 p;
 };
 
+[Prefix="physx::"]
+interface PxStridedData {
+    attribute unsigned long stride;
+    [Const] attribute VoidPtr data;
+};
+
 interface PxU16StridedData {
     attribute unsigned long stride;
-    [Const, Value] attribute PxU16Ptr data;
+    [Const, Value] attribute PxU16ConstPtr data;
 };
 
 [Prefix="physx::"]
@@ -2144,38 +2279,40 @@ interface PxActorPtr { };
 
 interface PxMaterialPtr { };
 
+interface PxMaterialConstPtr { };
+
 interface PxVehicleWheelsPtr { };
 
 interface PxRealPtr { };
 
-interface PxU8Ptr { };
+interface PxU8ConstPtr { };
 
-interface PxU16Ptr { };
+interface PxU16ConstPtr { };
 
-interface PxU32Ptr { };
+interface PxU32ConstPtr { };
 
 interface TypeHelpers {
-    static octet getU8At([Ref] PxU8Ptr base, long index);
-    static unsigned short getU16At([Ref] PxU16Ptr base, long index);
-    static unsigned long getU32At([Ref] PxU32Ptr base, long index);
+    static octet getU8At([Ref] PxU8ConstPtr base, long index);
+    static unsigned short getU16At([Ref] PxU16ConstPtr base, long index);
+    static unsigned long getU32At([Ref] PxU32ConstPtr base, long index);
     static float getRealAt([Ref] PxRealPtr base, long index);
     static PxContactPair getContactPairAt(PxContactPair base, long index);
     static PxTriggerPair getTriggerPairAt(PxTriggerPair base, long index);
     static PxVec3 getVec3At(PxVec3 base, long index);
 
-    [Value] static PxU8Ptr voidToU8Ptr(VoidPtr voidPtr);
-    [Value] static PxU16Ptr voidToU16Ptr(VoidPtr voidPtr);
-    [Value] static PxU32Ptr voidToU32Ptr(VoidPtr voidPtr);
+    [Value] static PxU8ConstPtr voidToU8ConstPtr(VoidPtr voidPtr);
+    [Value] static PxU16ConstPtr voidToU16ConstPtr(VoidPtr voidPtr);
+    [Value] static PxU32ConstPtr voidToU32ConstPtr(VoidPtr voidPtr);
     [Value] static PxRealPtr voidToRealPtr(VoidPtr voidPtr);
 };
 
-interface Vector_PxMaterial {
-    void Vector_PxMaterial();
-    void Vector_PxMaterial(unsigned long size);
+interface Vector_PxMaterialConst {
+    void Vector_PxMaterialConst();
+    void Vector_PxMaterialConst(unsigned long size);
     [Const] PxMaterial at(unsigned long index);
-    PxMaterialPtr data();
+    PxMaterialConstPtr data();
     unsigned long size();
-    void push_back(PxMaterial value);
+    void push_back([Const] PxMaterial value);
 };
 
 interface Vector_PxReal {
