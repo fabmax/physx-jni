@@ -26,8 +26,10 @@ private object CommonGeneratorSettings {
         "PxTriangleMeshGeometry",
 
         "PxSceneDesc",
+        "PxSceneLimits",
         "PxBatchQueryDesc",
         "PxConvexMeshDesc",
+        "PxHeightFieldDesc",
         "PxTriangleMeshDesc",
         "PxVehicleAntiRollBarData",
         "PxVehicleDriveSimData4W",
@@ -73,6 +75,7 @@ open class GenerateJavaBindings : DefaultTask() {
             externallyAllocatableClasses += CommonGeneratorSettings.externallyAllocatableClasses
             nullableAttributes += "PxBatchQueryDesc.preFilterShader"
             nullableAttributes += "PxBatchQueryDesc.postFilterShader"
+            nullableParameters += "PxArticulationBase.createLink" to "parent"
         }.generate(model)
     }
 }
