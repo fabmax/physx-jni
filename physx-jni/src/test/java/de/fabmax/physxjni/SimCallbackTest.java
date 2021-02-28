@@ -7,6 +7,7 @@ import physx.PxTopLevelFunctions;
 import physx.common.PxVec3;
 import physx.geomutils.PxBoxGeometry;
 import physx.physics.*;
+import physx.support.TypeHelpers;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -95,35 +96,41 @@ public class SimCallbackTest {
             String name0 = actorNames.get(actor0);
             String name1 = actorNames.get(actor1);
 
-            PxPairFlags events = pairs.getEvents();
-            String event = "OTHER";
-            if (events.isSet(PxPairFlagEnum.eNOTIFY_TOUCH_FOUND)) {
-                event = "TOUCH_FOUND";
-            } else if (events.isSet(PxPairFlagEnum.eNOTIFY_TOUCH_LOST)) {
-                event = "TOUCH_LOST";
+            for (int i = 0; i < nbPairs; i++) {
+                PxContactPair pair = TypeHelpers.getContactPairAt(pairs, i);
+                PxPairFlags events = pair.getEvents();
+                String event = "OTHER";
+                if (events.isSet(PxPairFlagEnum.eNOTIFY_TOUCH_FOUND)) {
+                    event = "TOUCH_FOUND";
+                } else if (events.isSet(PxPairFlagEnum.eNOTIFY_TOUCH_LOST)) {
+                    event = "TOUCH_LOST";
+                }
+                System.out.println("onContact: " + name0 + " and " + name1 + ": " + event);
             }
-            System.out.println("onContact: " + name0 + " and " + name1 + ": " + event);
         }
 
         @Override
         public void onTrigger(PxTriggerPair pairs, int count) {
-            PxActor actor0 = pairs.getTriggerActor();
-            PxActor actor1 = pairs.getOtherActor();
-            triggerBodies.add(actor0);
-            triggerBodies.add(actor1);
-            Assert.assertTrue(actorNames.containsKey(actor0));
-            Assert.assertTrue(actorNames.containsKey(actor1));
-            String name0 = actorNames.get(actor0);
-            String name1 = actorNames.get(actor1);
+            for (int i = 0; i < count; i++) {
+                PxTriggerPair pair = TypeHelpers.getTriggerPairAt(pairs, i);
+                PxActor actor0 = pair.getTriggerActor();
+                PxActor actor1 = pair.getOtherActor();
+                triggerBodies.add(actor0);
+                triggerBodies.add(actor1);
+                Assert.assertTrue(actorNames.containsKey(actor0));
+                Assert.assertTrue(actorNames.containsKey(actor1));
+                String name0 = actorNames.get(actor0);
+                String name1 = actorNames.get(actor1);
 
-            int status = pairs.getStatus();
-            String event = "OTHER";
-            if (status == PxPairFlagEnum.eNOTIFY_TOUCH_FOUND) {
-                event = "TRIGGER_ENTER";
-            } else if (status == PxPairFlagEnum.eNOTIFY_TOUCH_LOST) {
-                event = "TRIGGER_EXIT";
+                int status = pair.getStatus();
+                String event = "OTHER";
+                if (status == PxPairFlagEnum.eNOTIFY_TOUCH_FOUND) {
+                    event = "TRIGGER_ENTER";
+                } else if (status == PxPairFlagEnum.eNOTIFY_TOUCH_LOST) {
+                    event = "TRIGGER_EXIT";
+                }
+                System.out.println("onTrigger: " + name0 + " and " + name1 + ": " + event);
             }
-            System.out.println("onTrigger: " + name0 + " and " + name1 + ": " + event);
         }
     }
 }

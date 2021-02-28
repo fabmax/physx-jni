@@ -26,6 +26,7 @@ private object CommonGeneratorSettings {
         "PxTriangleMeshGeometry",
 
         "PxSceneDesc",
+        "PxSceneLimits",
         "PxBatchQueryDesc",
         "PxConvexMeshDesc",
         "PxHeightFieldDesc",
