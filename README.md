@@ -4,23 +4,45 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni)
 ![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
 
-Java JNI bindings for Nvidia PhysX
-
-This is the Java counterpart to the PhysX bindings for javascript/webassembly provided by
-[physx-js-webidl](https://github.com/fabmax/physx-js-webidl).
+Java JNI bindings for Nvidia PhysX 4.1.
 
 ## How to use
 The library is available on maven central, so you can easily add this to your build.gradle:
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.4.2")
+    implementation("de.fabmax:physx-jni:0.4.3")
     
     // native libraries, you can add the one matching your system or both
-    runtimeOnly("de.fabmax:physx-jni:0.4.2:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.2:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.3:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.3:native-linux64")
 }
 ```
+
+## Library Coverage
+
+The bindings include most major parts of the PhysX SDK:
+- Basics
+    - Static and dynamic actors
+    - All geometry types (box, capsule, sphere, plane, convex mesh, triangle mesh and height field)
+- All joint types (revolute, spherical, prismatic, fixed, distance and D6)
+- Articulations (reduced and maximal)
+- Vehicles
+- Character controllers
+
+The detailed list of mapped functions is given by the interface definition file
+[PhysXJs.idl](physx-jni/src/main/webidl/PhysXJs.idl). The Java classes containing the
+actual bindings are generated from that file during build.
+
+After build (or after running the corresponding gradle task `generateJniBindings`) the generated Java
+classes are located under `physx-jni/src/main/generated`.
+
+### Supported platforms:
+- Windows (64-bit)
+- Linux (64-bit x86)
+ 
+Moreover, there is also a version for javascript/webassembly:
+[physx-js-webidl](https://github.com/fabmax/physx-js-webidl).
 
 ### Examples
 You can take a look at [HelloPhysX.java](physx-jni/src/test/java/de/fabmax/physxjni/HelloPhysX.java) for a
@@ -104,25 +126,11 @@ CustomErrorCallback errorCb = new CustomErrorCallback();
 PxFoundation foundation = PxTopLevelFunctions.CreateFoundation(PX_PHYSICS_VERSION, new PxDefaultAllocator(), errorCb);
 ```
 
-## What's included in the bindings?
-For now only the basic stuff + vehicle physics.
-
-The detailed list of mapped functions is given by the interface definition file 
-[PhysXJs.idl](physx-jni/src/main/webidl/PhysXJs.idl). The Java classes containing the
-actual bindings are generated from that file during build.
-
-After build (or after running the corresponding gradle task `generateJniBindings`) the generated Java
-classes are located under `physx-jni/src/main/generated`.
-
-### Supported platforms:
-- Windows (64-bit)
-- Linux (64-bit x86)
-
 ## What's next?
 - [x] Triangle mesh shape
 - [x] Callbacks from native to Java (e.g. collision callbacks)
 - [x] More joint types
-- [ ] Character controllers
+- [x] Character controllers
 - [ ] Include API docs
 
 ## Building

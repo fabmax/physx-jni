@@ -10,6 +10,7 @@ interface PxTopLevelFunctions {
     [Value] static PxBatchQueryPreFilterShader DefaultWheelSceneQueryPreFilterBlocking();
     [Value] static PxBatchQueryPostFilterShader DefaultWheelSceneQueryPostFilterBlocking();
 
+    static PxControllerManager CreateControllerManager([Ref] PxScene scene, optional boolean lockingEnabled);
     static PxCooking CreateCooking(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxCookingParams scale);
     static PxFoundation CreateFoundation(unsigned long version, [Ref] PxDefaultAllocator allocator, [Ref] PxErrorCallback errorCallback);
     static PxPhysics CreatePhysics(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxTolerancesScale params);
@@ -1990,6 +1991,16 @@ interface PxSphereGeometry {
 };
 PxSphereGeometry implements PxGeometry;
 
+[Prefix="physx::"]
+interface PxTriangle {
+    void PxTriangle();
+    void PxTriangle([Const, Ref] PxVec3 p0, [Const, Ref] PxVec3 p1, [Const, Ref] PxVec3 p2);
+    void normal([Ref] PxVec3 normal);
+    void denormalizedNormal([Ref] PxVec3 normal);
+    float area();
+    [Value] PxVec3 pointFromUV(float u, float v);
+};
+
 [Prefix="physx::", NoDelete]
 interface PxTriangleMesh {
     unsigned long getNbVertices();
@@ -2666,6 +2677,273 @@ interface PxSpring {
 };
 
 /****************************************
+ * [package=character]
+ ****************************************/
+
+[Prefix="physx::", NoDelete]
+interface PxBoxController {
+    float getHalfHeight();
+    float getHalfSideExtent();
+    float getHalfForwardExtent();
+    void setHalfHeight(float halfHeight);
+    void setHalfSideExtent(float halfSideExtent);
+    void setHalfForwardExtent(float halfForwardExtent);
+};
+PxBoxController implements PxController;
+
+[Prefix="physx::"]
+interface PxBoxControllerDesc {
+    void PxBoxControllerDesc();
+    void setToDefault();
+    boolean isValid();
+    attribute float halfHeight;
+    attribute float halfSideExtent;
+    attribute float halfForwardExtent;
+};
+PxBoxControllerDesc implements PxControllerDesc;
+
+[Prefix="physx::"]
+interface PxBoxObstacle {
+    void PxBoxObstacle();
+    [Value] attribute PxVec3 mHalfExtents;
+};
+PxBoxObstacle implements PxObstacle;
+
+enum PxCapsuleClimbingModeEnum {
+    "PxCapsuleClimbingModeEnum::eEASY",
+    "PxCapsuleClimbingModeEnum::eCONSTRAINED"
+};
+
+[Prefix="physx::", NoDelete]
+interface PxCapsuleController {
+    float getRadius();
+    void setRadius(float radius);
+    float getHeight();
+    void setHeight(float height);
+    PxCapsuleClimbingModeEnum getClimbingMode();
+    boolean setClimbingMode(PxCapsuleClimbingModeEnum mode);
+};
+PxCapsuleController implements PxController;
+
+[Prefix="physx::"]
+interface PxCapsuleControllerDesc {
+    void PxCapsuleControllerDesc();
+    void setToDefault();
+    boolean isValid();
+    attribute float radius;
+    attribute float height;
+    attribute PxCapsuleClimbingModeEnum climbingMode;
+};
+PxCapsuleControllerDesc implements PxControllerDesc;
+
+[Prefix="physx::"]
+interface PxCapsuleObstacle {
+    void PxCapsuleObstacle();
+    attribute float mHalfHeight;
+    attribute float mRadius;
+};
+PxCapsuleObstacle implements PxObstacle;
+
+[Prefix="physx::", NoDelete]
+interface PxController {
+    PxControllerShapeTypeEnum getType();
+    void release();
+    [Value] PxControllerCollisionFlags move([Const, Ref] PxVec3 disp, float minDist, float elapsedTime, [Const, Ref] PxControllerFilters filters, [Const] optional PxObstacleContext obstacles);
+    boolean setPosition([Const, Ref] PxExtendedVec3 position);
+    [Const, Ref] PxExtendedVec3 getPosition();
+    boolean setFootPosition([Const, Ref] PxExtendedVec3 position);
+    [Value] PxExtendedVec3 getFootPosition();
+    PxRigidDynamic getActor();
+    void setStepOffset(float offset);
+    float getStepOffset();
+    void setNonWalkableMode(PxControllerNonWalkableModeEnum flag);
+    PxControllerNonWalkableModeEnum getNonWalkableMode();
+    float getContactOffset();
+    void setContactOffset(float offset);
+    [Value] PxVec3 getUpDirection();
+    void setUpDirection([Const, Ref] PxVec3 up);
+    float getSlopeLimit();
+    void setSlopeLimit(float slopeLimit);
+    void invalidateCache();
+    PxScene getScene();
+    VoidPtr getUserData();
+    void setUserData(VoidPtr userData);
+    void getState([Ref] PxControllerState state);
+    void getStats([Ref] PxControllerStats stats);
+    void resize(float height);
+};
+
+enum PxControllerCollisionFlagEnum {
+    "PxControllerCollisionFlagEnum::eCOLLISION_SIDES",
+    "PxControllerCollisionFlagEnum::eCOLLISION_UP",
+    "PxControllerCollisionFlagEnum::eCOLLISION_DOWN"
+};
+
+[Prefix="physx::"]
+interface PxControllerCollisionFlags {
+    void PxControllerCollisionFlags(octet flags);
+    boolean isSet(PxControllerCollisionFlagEnum flag);
+    void set(PxControllerCollisionFlagEnum flag);
+    void clear(PxControllerCollisionFlagEnum flag);
+};
+
+[Prefix="physx::", NoDelete]
+interface PxControllerDesc {
+    boolean isValid();
+    PxControllerShapeTypeEnum getType();
+    [Value] attribute PxExtendedVec3 position;
+    [Value] attribute PxVec3 upDirection;
+    attribute float slopeLimit;
+    attribute float invisibleWallHeight;
+    attribute float maxJumpHeight;
+    attribute float contactOffset;
+    attribute float stepOffset;
+    attribute float density;
+    attribute float scaleCoeff;
+    attribute float volumeGrowth;
+    attribute PxUserControllerHitReport reportCallback;
+    //attribute PxControllerBehaviorCallback behaviorCallback;
+    attribute PxControllerNonWalkableModeEnum nonWalkableMode;
+    attribute PxMaterial material;
+    attribute boolean registerDeletionListener;
+    attribute VoidPtr userData;
+};
+
+[Prefix="physx::"]
+interface PxControllerFilters {
+    void PxControllerFilters([Const] PxFilterData filterData);
+    [Const] attribute PxFilterData mFilterData;
+    // PxQueryFilterCallback mFilterCallback;
+    [Value] attribute PxQueryFlags mFilterFlags;
+    // PxControllerFilterCallback mCCTFilterCallback;
+};
+
+[Prefix="physx::"]
+interface PxControllerHit {
+    attribute PxController controller;
+    [Value] attribute PxExtendedVec3 worldPos;
+    [Value] attribute PxVec3 worldNormal;
+    [Value] attribute PxVec3 dir;
+    attribute float length;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxControllerManager {
+    void release();
+    [Ref] PxScene getScene();
+    unsigned long getNbControllers();
+    PxController getController(unsigned long index);
+    PxController createController([Const, Ref] PxControllerDesc desc);
+    void purgeControllers();
+    // [Ref] RenderBuffer getRenderBuffer();
+    // void setDebugRenderingFlags(...);
+    unsigned long getNbObstacleContexts();
+    PxObstacleContext getObstacleContext(unsigned long index);
+    PxObstacleContext createObstacleContext();
+    void computeInteractions(float elapsedTime);
+    void setTessellation(boolean flag, float maxEdgeLength);
+    void setOverlapRecoveryModule(boolean flag);
+    void setPreciseSweeps(boolean flags);
+    void setPreventVerticalSlidingAgainstCeiling(boolean flag);
+    void shiftOrigin([Const, Ref] PxVec3 shift);
+};
+
+enum PxControllerNonWalkableModeEnum {
+    "PxControllerNonWalkableModeEnum::ePREVENT_CLIMBING",
+    "PxControllerNonWalkableModeEnum::ePREVENT_CLIMBING_AND_FORCE_SLIDING"
+};
+
+[Prefix="physx::"]
+interface PxControllerObstacleHit {
+    [Const] attribute VoidPtr userData;
+};
+PxControllerObstacleHit implements PxControllerHit;
+
+[Prefix="physx::"]
+interface PxControllerShapeHit {
+    attribute PxShape shape;
+    attribute PxRigidActor actor;
+    attribute unsigned long triangleIndex;
+};
+PxControllerShapeHit implements PxControllerHit;
+
+[Prefix="physx::"]
+interface PxControllersHit {
+    attribute PxController other;
+};
+PxControllersHit implements PxControllerHit;
+
+enum PxControllerShapeTypeEnum {
+    "PxControllerShapeTypeEnum::eBOX",
+    "PxControllerShapeTypeEnum::eCAPSULE"
+};
+
+[Prefix="physx::"]
+interface PxControllerState {
+    void PxControllerState();
+    [Value] attribute PxVec3 deltaXP;
+    attribute PxShape touchedShape;
+    attribute PxRigidActor touchedActor;
+    attribute unsigned long touchedObstacleHandle;
+    attribute unsigned long collisionFlags;
+    attribute boolean standOnAnotherCCT;
+    attribute boolean standOnObstacle;
+    attribute boolean isMovingUp;
+};
+
+[Prefix="physx::"]
+interface PxControllerStats {
+    attribute unsigned short nbIterations;
+    attribute unsigned short nbFullUpdates;
+    attribute unsigned short nbPartialUpdates;
+    attribute unsigned short nbTessellation;
+};
+
+[Prefix="physx::"]
+interface PxExtendedVec3 {
+    void PxExtendedVec3();
+    void PxExtendedVec3(double x, double y, double z);
+    attribute double x;
+    attribute double y;
+    attribute double z;
+};
+
+[Prefix="physx::"]
+interface PxObstacle {
+    PxGeometryTypeEnum getType();
+    attribute VoidPtr mUserData;
+    [Value] attribute PxExtendedVec3 mPos;
+    [Value] attribute PxQuat mRot;
+};
+
+[Prefix="physx::"]
+interface PxObstacleContext {
+    void release();
+    [Ref] PxControllerManager getControllerManager();
+    unsigned long addObstacle([Const, Ref] PxObstacle obstacle);
+    boolean removeObstacle(unsigned long handle);
+    boolean updateObstacle(unsigned long handle, [Const, Ref] PxObstacle obstacle);
+    unsigned long getNbObstacles();
+    [Const] PxObstacle getObstacle(unsigned long i);
+    [Const] PxObstacle getObstacleByHandle(unsigned long handle);
+};
+
+[Prefix="physx::", NoDelete]
+interface PxUserControllerHitReport {
+    void onShapeHit([Const, Ref] PxControllerShapeHit hit);
+    void onControllerHit([Const, Ref] PxControllersHit hit);
+    void onObstacleHit([Const, Ref] PxControllerObstacleHit hit);
+};
+
+[JSImplementation="PxUserControllerHitReport"]
+interface JavaUserControllerHitReport {
+    void JavaUserControllerHitReport();
+    void onShapeHit([Const, Ref] PxControllerShapeHit hit);
+    void onControllerHit([Const, Ref] PxControllersHit hit);
+    void onObstacleHit([Const, Ref] PxControllerObstacleHit hit);
+};
+
+/****************************************
  * [package=support]
  ****************************************/
 
@@ -2679,9 +2957,15 @@ interface PxVehicleWheelsPtr { };
 
 interface PxRealPtr { };
 
+interface PxU8Ptr { };
+
 interface PxU8ConstPtr { };
 
+interface PxU16Ptr { };
+
 interface PxU16ConstPtr { };
+
+interface PxU32Ptr { };
 
 interface PxU32ConstPtr { };
 
