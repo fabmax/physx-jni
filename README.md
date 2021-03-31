@@ -4,18 +4,18 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni)
 ![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
 
-Java JNI bindings for Nvidia PhysX 4.1.
+Java JNI bindings for Nvidia [PhysX 4.1](https://github.com/NVIDIAGameWorks/PhysX).
 
 ## How to use
 The library is available on maven central, so you can easily add this to your build.gradle:
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.4.3")
+    implementation("de.fabmax:physx-jni:0.4.4")
     
     // native libraries, you can add the one matching your system or both
-    runtimeOnly("de.fabmax:physx-jni:0.4.3:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.3:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.4:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.4:native-linux64")
 }
 ```
 
@@ -56,7 +56,8 @@ To get a feeling of what can be done with this you can take a look at my [kool](
 > above. However, the two are functionally identical, so it shouldn't matter too much. The JNI version is much faster
 > though.*
 
-- [Vehicle](https://fabmax.github.io/kool/kool-js/?demo=phys-vehicle): Basic vehicle demo with a few obstacles.
+- [Ragdolls](https://fabmax.github.io/kool/kool-js/?demo=phys-ragdoll): Simple Ragdoll demo.
+- [Vehicle](https://fabmax.github.io/kool/kool-js/?demo=phys-vehicle): Vehicle demo with a ray track and a few obstacles.
 - [Joints](https://fabmax.github.io/kool/kool-js/?demo=phys-joints): A chain running over two gears.
 - [Collision](https://fabmax.github.io/kool/kool-js/?demo=physics): Various collision shapes.
 
