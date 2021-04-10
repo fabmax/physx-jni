@@ -29,6 +29,7 @@ private object CommonGeneratorSettings {
         "PxSceneLimits",
         "PxBatchQueryDesc",
         "PxConvexMeshDesc",
+        "PxCudaContextManagerDesc",
         "PxHeightFieldDesc",
         "PxTriangleMeshDesc",
         "PxVehicleAntiRollBarData",

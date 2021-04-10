@@ -16,6 +16,7 @@ interface PxTopLevelFunctions {
     static PxPhysics CreatePhysics(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxTolerancesScale params);
     static PxDefaultCpuDispatcher DefaultCpuDispatcherCreate(unsigned long numThreads);
     static boolean InitExtensions([Ref] PxPhysics physics);
+    static PxCudaContextManager CreateCudaContextManager([Ref] PxFoundation foundation, [Const, Ref] PxCudaContextManagerDesc desc);
 
     static PxD6Joint D6JointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
     static PxDistanceJoint DistanceJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
@@ -2229,7 +2230,56 @@ interface PxBounds3 {
 interface PxCpuDispatcher { };
 
 [Prefix="physx::", NoDelete]
-interface PxCudaContextManager { };
+interface PxCudaContextManager {
+    boolean contextIsValid();
+    boolean supportsArchSM10();
+    boolean supportsArchSM11();
+    boolean supportsArchSM12();
+    boolean supportsArchSM13();
+    boolean supportsArchSM20();
+    boolean supportsArchSM30();
+    boolean supportsArchSM35();
+    boolean supportsArchSM50();
+    boolean supportsArchSM52();
+    boolean isIntegrated();
+    boolean canMapHostMemory();
+    long getDriverVersion();
+    unsigned long long getDeviceTotalMemBytes();
+    long getMultiprocessorCount();
+    unsigned long getClockRate();
+    long getSharedMemPerBlock();
+    long getMaxThreadsPerBlock();
+    DOMString getDeviceName();
+    PxCudaInteropModeEnum getInteropMode();
+    void setUsingConcurrentStreams(boolean flag);
+    boolean getUsingConcurrentStreams();
+    long usingDedicatedGPU();
+    void release();
+};
+
+[Prefix="physx::"]
+interface PxCudaContextManagerDesc {
+    void PxCudaContextManagerDesc();
+    attribute VoidPtr graphicsDevice;
+    attribute PxCudaInteropModeEnum interopMode;
+    attribute unsigned long[] maxMemorySize;
+    attribute unsigned long[] memoryBaseSize;
+    attribute unsigned long[] memoryPageSize;
+};
+
+enum PxCudaBufferMemorySpaceEnum {
+    "PxCudaBufferMemorySpaceEnum::T_GPU",
+    "PxCudaBufferMemorySpaceEnum::T_PINNED_HOST",
+    "PxCudaBufferMemorySpaceEnum::T_WRITE_COMBINED",
+    "PxCudaBufferMemorySpaceEnum::T_HOST",
+};
+
+enum PxCudaInteropModeEnum {
+    "PxCudaInteropModeEnum::NO_INTEROP",
+    "PxCudaInteropModeEnum::D3D10_INTEROP",
+    "PxCudaInteropModeEnum::D3D11_INTEROP",
+    "PxCudaInteropModeEnum::OGL_INTEROP"
+};
 
 [Prefix="physx::"]
 interface PxDefaultErrorCallback {

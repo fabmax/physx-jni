@@ -27,9 +27,9 @@ java {
 tasks.register<VersionNameUpdate>("updateVersionNames") {
     versionName = "$version"
     filesToUpdate = listOf(
-        "physx-jni/src/main/java/de/fabmax/physxjni/Loader.java",
-        "physx-jni-native-win64/src/main/java/de/fabmax/physxjni/NativeMetaWin64.java",
-        "physx-jni-native-linux64/src/main/java/de/fabmax/physxjni/NativeMetaLinux64.java"
+        "${rootDir}/physx-jni/src/main/java/de/fabmax/physxjni/Loader.java",
+        "${rootDir}/physx-jni-native-win64/src/main/java/de/fabmax/physxjni/NativeMetaWin64.java",
+        "${rootDir}/physx-jni-native-linux64/src/main/java/de/fabmax/physxjni/NativeMetaLinux64.java"
     )
 }
 
@@ -44,7 +44,7 @@ val compileJava by tasks.existing {
 
 dependencies {
     testImplementation("junit:junit:4.12")
-    testRuntimeOnly(project(":physx-jni-native-win64"))
+    testRuntimeOnly(project(":physx-jni-native-win64cuda"))
     testRuntimeOnly(project(":physx-jni-native-linux64"))
 
     testImplementation("org.lwjgl:lwjgl:3.2.3")
