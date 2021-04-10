@@ -29,7 +29,9 @@ tasks.register<VersionNameUpdate>("updateVersionNames") {
     filesToUpdate = listOf(
         "${rootDir}/physx-jni/src/main/java/de/fabmax/physxjni/Loader.java",
         "${rootDir}/physx-jni-native-win64/src/main/java/de/fabmax/physxjni/NativeMetaWin64.java",
-        "${rootDir}/physx-jni-native-linux64/src/main/java/de/fabmax/physxjni/NativeMetaLinux64.java"
+        "${rootDir}/physx-jni-native-win64cuda/src/main/java/de/fabmax/physxjni/NativeMetaWin64.java",
+        "${rootDir}/physx-jni-native-linux64/src/main/java/de/fabmax/physxjni/NativeMetaLinux64.java",
+        "${rootDir}/physx-jni-native-linux64cuda/src/main/java/de/fabmax/physxjni/NativeMetaLinux64.java"
     )
 }
 
