@@ -47,7 +47,7 @@ val compileJava by tasks.existing {
 dependencies {
     testImplementation("junit:junit:4.12")
     testRuntimeOnly(project(":physx-jni-native-win64cuda"))
-    testRuntimeOnly(project(":physx-jni-native-linux64"))
+    testRuntimeOnly(project(":physx-jni-native-linux64cuda"))
 
     testImplementation("org.lwjgl:lwjgl:3.2.3")
 

@@ -11,11 +11,15 @@ The library is available on maven central, so you can easily add this to your bu
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.4.4")
+    implementation("de.fabmax:physx-jni:0.4.5")
     
     // native libraries, you can add the one matching your system or both
-    runtimeOnly("de.fabmax:physx-jni:0.4.4:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.4:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.5:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.5:native-linux64")
+    
+    // or with CUDA support (see notes below):
+    runtimeOnly("de.fabmax:physx-jni:0.4.5:native-win64cuda")
+    runtimeOnly("de.fabmax:physx-jni:0.4.5:native-linux64cuda")
 }
 ```
 
@@ -29,6 +33,7 @@ The bindings include most major parts of the PhysX SDK:
 - Articulations (reduced and maximal)
 - Vehicles
 - Character controllers
+- CUDA support
 
 The detailed list of mapped functions is given by the interface definition file
 [PhysXJs.idl](physx-jni/src/main/webidl/PhysXJs.idl). The Java classes containing the
@@ -127,12 +132,54 @@ CustomErrorCallback errorCb = new CustomErrorCallback();
 PxFoundation foundation = PxTopLevelFunctions.CreateFoundation(PX_PHYSICS_VERSION, new PxDefaultAllocator(), errorCb);
 ```
 
-## What's next?
-- [x] Triangle mesh shape
-- [x] Callbacks from native to Java (e.g. collision callbacks)
-- [x] More joint types
-- [x] Character controllers
-- [ ] Include API docs
+### CUDA Support
+
+PhysX supports accelerating physics simulation with CUDA (this, of course, requires an Nvidia GPU). Enabling
+CUDA for a scene is pretty simple:
+
+```java
+// Setup your scene as usual
+PxSceneDesc sceneDesc = new PxSceneDesc(physics.getTolerancesScale());
+sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(8));
+sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
+
+// Create the PxCudaContextManager
+PxCudaContextManagerDesc desc = new PxCudaContextManagerDesc();
+desc.setInteropMode(PxCudaInteropModeEnum.NO_INTEROP);
+PxCudaContextManager cudaMgr = PxTopLevelFunctions.CreateCudaContextManager(foundation, desc);
+
+// Check if CUDA context is valid / CUDA support is available
+if (cudaMgr != null && cudaMgr.contextIsValid()) {
+    // enable CUDA!
+    sceneDesc.setCudaContextManager(cudaMgr);
+    sceneDesc.getFlags().set(PxSceneFlagEnum.eENABLE_GPU_DYNAMICS);
+    sceneDesc.setBroadPhaseType(PxBroadPhaseTypeEnum.eGPU);
+    sceneDesc.setGpuMaxNumPartitions(8);
+    
+    // optionally fine tune amount of allocated CUDA memory
+    // PxgDynamicsMemoryConfig memCfg = new PxgDynamicsMemoryConfig();
+    // memCfg.setStuff...
+    // sceneDesc.setGpuDynamicsConfig(memCfg);
+} else {
+    System.err.println("No CUDA support!");
+}
+
+// Create scene as usual
+PxScene scene = physics.createScene(sceneDesc);
+```
+
+Using CUDA comes with a few implications:
+
+The CUDA enabled native libraries are quite big (~25 MB), and I therefore decided to build a separate
+set of runtime jars for them (suffixed with `cuda`, so use `de.fabmax:physx-jni:0.4.5:native-win64cuda` instead of
+`de.fabmax:physx-jni:0.4.5:native-win64`).
+
+Moreover, CUDA comes with some additional overhead (a lot of data has to be copied around between CPU and GPU). For
+smaller scenes this overhead outweighs the benefits and physics computation might actually be slower than with CPU only.
+I wrote a simple [CudaTest](physx-jni/src/test/java/de/fabmax/physxjni/CudaTest.java), which runs a few simulations
+with an increasing number of bodies. According to this the break even point is around 5k bodies. At 20k boxes the CUDA
+version runs about 3 times faster than the CPU Version (with an RTX 2080 / Ryzen 2700X). The results may be different
+when using other body shapes (the test uses boxes), joints, etc.
 
 ## Building
 You can build the bindings yourself:

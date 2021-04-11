@@ -34,20 +34,35 @@ public class CudaTest {
 
             System.out.println("CUDA device: " + cudaMgr.getDeviceName() + ", mem: " + (cudaMgr.getDeviceTotalMemBytes() / 1024.0 / 1024.0) + " MB");
 
-            System.out.println("Running CPU simulation...");
-            double cpuTime = simulateScene(null);
-            System.out.println("Running GPU simulation...");
-            double gpuTime = simulateScene(cudaMgr);
+            int[] numBodies1000 = new int[] { 1, 5, 10, 20 };
+            double[] cpuTimes = new double[numBodies1000.length];
+            double[] gpuTimes = new double[numBodies1000.length];
 
-            System.out.printf(Locale.ENGLISH, "GPU speed up: %.2f x\n", cpuTime / gpuTime);
+            for (int i = 0; i < numBodies1000.length; i++) {
+                System.out.println("Running CPU simulation...");
+                cpuTimes[i] = simulateScene(null, numBodies1000[i]);
+                System.out.println("Running GPU simulation...");
+                gpuTimes[i] = simulateScene(cudaMgr, numBodies1000[i]);
+            }
+
+            System.out.println();
+            System.out.println("# Bodies | CPU Time | GPU Time | GPU speed up");
+            System.out.println("---------+----------+----------+-------------");
+            for (int i = 0; i < numBodies1000.length; i++) {
+                int n = numBodies1000[i] * 1000;
+                double cpuTime = cpuTimes[i];
+                double gpuTime = gpuTimes[i];
+                System.out.printf(Locale.ENGLISH, " %7d |%7.3f s |%7.3f s | %.2f x\n",
+                        n, cpuTime, gpuTime, cpuTime / gpuTime);
+            }
         }
     }
 
-    private double simulateScene(PxCudaContextManager cudaMgr) {
+    private double simulateScene(PxCudaContextManager cudaMgr, int numBodies1000) {
         try (MemoryStack mem = MemoryStack.stackPush()) {
             PxSceneDesc sceneDesc = PxSceneDesc.createAt(mem, MemoryStack::nmalloc, physics.getTolerancesScale());
             sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
-            sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(16));
+            sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(8));
             sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
 
             if (cudaMgr != null) {
@@ -59,11 +74,11 @@ public class CudaTest {
             }
 
             PxScene scene = physics.createScene(sceneDesc);
-            return simulate10kBodies(scene);
+            return simulateBodies(scene, numBodies1000);
         }
     }
 
-    private double simulate10kBodies(PxScene scene) {
+    private double simulateBodies(PxScene scene, int numBodies1000) {
         List<PxActor> actors = new ArrayList<>();
 
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -85,10 +100,9 @@ public class CudaTest {
             actors.add(wall4);
         }
 
-        // create 25 x 25 x 32 boxes = 20k bodies
         PxRigidDynamic printBox = null;
-        for (int h = 0; h < 32; h++) {
-            for (int x = -12; x <= 12; x++) {
+        for (int h = 0; h < 2 * numBodies1000; h++) {
+            for (int x = -10; x < 10; x++) {
                 for (int z = -12; z <= 12; z++) {
                     PxRigidDynamic box = PhysXTestEnv.createDefaultBox(x * 2f + x % 2 * 0.5f, 5f + h * 2f, z * 2f + z % 2 * 0.5f);
                     printBox = box;
@@ -99,9 +113,14 @@ public class CudaTest {
 
         actors.forEach(scene::addActor);
 
-        System.out.println("Simulating " + actors.size() + " actors for 15 secs...");
+        // do initial sim step before starting the timer
+        scene.simulate(1f / 60f);
+        scene.fetchResults(true);
+
+        float tSim = 15f;
+        System.out.printf(Locale.ENGLISH, "Simulating %d actors for %.0f secs...\n", actors.size(), tSim);
         long t = System.nanoTime();
-        PhysXTestEnv.simulateScene(scene, 15f, printBox);
+        PhysXTestEnv.simulateScene(scene, tSim, printBox);
         t = System.nanoTime() - t;
         System.out.printf(Locale.ENGLISH, "Done, took: %.3f s\n", t / 1e9);
 
