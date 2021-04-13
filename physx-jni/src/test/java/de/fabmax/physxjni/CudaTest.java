@@ -34,7 +34,7 @@ public class CudaTest {
 
             System.out.println("CUDA device: " + cudaMgr.getDeviceName() + ", mem: " + (cudaMgr.getDeviceTotalMemBytes() / 1024.0 / 1024.0) + " MB");
 
-            int[] numBodies1000 = new int[] { 1, 5, 10, 20 };
+            int[] numBodies1000 = new int[] { 1, 5, 10 };
             double[] cpuTimes = new double[numBodies1000.length];
             double[] gpuTimes = new double[numBodies1000.length];
 
@@ -64,6 +64,7 @@ public class CudaTest {
             sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
             sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(8));
             sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
+            sceneDesc.getFlags().clear(PxSceneFlagEnum.eENABLE_PCM);
 
             if (cudaMgr != null) {
                 // cuda related scene settings
@@ -117,7 +118,7 @@ public class CudaTest {
         scene.simulate(1f / 60f);
         scene.fetchResults(true);
 
-        float tSim = 15f;
+        float tSim = 10f;
         System.out.printf(Locale.ENGLISH, "Simulating %d actors for %.0f secs...\n", actors.size(), tSim);
         long t = System.nanoTime();
         PhysXTestEnv.simulateScene(scene, tSim, printBox);

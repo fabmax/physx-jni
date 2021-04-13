@@ -70,8 +70,16 @@ publishing {
                 classifier = "native-win64"
             }
 
+            artifact(project(":physx-jni-native-win64cuda").tasks["jar"]).apply {
+                classifier = "native-win64cuda"
+            }
+
             artifact(project(":physx-jni-native-linux64").tasks["jar"]).apply {
                 classifier = "native-linux64"
+            }
+
+            artifact(project(":physx-jni-native-linux64cuda").tasks["jar"]).apply {
+                classifier = "native-linux64cuda"
             }
 
             pom {

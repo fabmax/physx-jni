@@ -1611,7 +1611,7 @@ enum PxVehicleGearEnum {
 
 [Prefix="physx::", NoDelete]
 interface PxVehicleNoDrive {
-    static PxVehicleDrive allocate(unsigned long nbWheels);
+    static PxVehicleNoDrive allocate(unsigned long nbWheels);
     void free();
     void setup(PxPhysics physics, PxRigidDynamic vehActor, [Const, Ref] PxVehicleWheelsSimData wheelsData);
     void setToRestState();
@@ -2314,7 +2314,7 @@ interface PxCudaContextManager {
     unsigned long getClockRate();
     long getSharedMemPerBlock();
     long getMaxThreadsPerBlock();
-    DOMString getDeviceName();
+    [Const] DOMString getDeviceName();
     PxCudaInteropModeEnum getInteropMode();
     void setUsingConcurrentStreams(boolean flag);
     boolean getUsingConcurrentStreams();
@@ -2789,6 +2789,30 @@ interface PxSpring {
     void PxSpring(float stiffness, float damping);
     attribute float stiffness;
     attribute float damping;
+};
+
+interface BatchVehicleUpdateDesc {
+    void BatchVehicleUpdateDesc();
+    attribute PxFoundation foundation;
+    attribute PxScene scene;
+    attribute PxVehicleDrivableSurfaceToTireFrictionPairs frictionPairs;
+    attribute unsigned long maxNbVehicles;
+    attribute unsigned long maxNbWheelsPerVehicle;
+    attribute unsigned long maxNbHitPointsPerWheel;
+    attribute unsigned long numWorkers;
+    attribute unsigned long batchSize;
+    [Value] attribute PxBatchQueryPreFilterShader preFilterShader;
+    [Value] attribute PxBatchQueryPostFilterShader postFilterShader;
+};
+
+interface BatchVehicleUpdate {
+    void BatchVehicleUpdate([Ref] BatchVehicleUpdateDesc desc);
+    void addVehicle(PxVehicleWheels vehicle);
+    void removeVehicle(PxVehicleWheels vehicle);
+    void removeAllVehicles();
+    long indexOf(PxVehicleWheels vehicle);
+    void batchUpdate(float timestep);
+    PxWheelQueryResult getWheelQueryResult(unsigned long vehicleId, unsigned long wheelId);
 };
 
 /****************************************

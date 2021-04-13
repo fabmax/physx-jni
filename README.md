@@ -135,7 +135,7 @@ PxFoundation foundation = PxTopLevelFunctions.CreateFoundation(PX_PHYSICS_VERSIO
 ### CUDA Support
 
 PhysX supports accelerating physics simulation with CUDA (this, of course, requires an Nvidia GPU). Enabling
-CUDA for a scene is pretty simple:
+CUDA for a scene is pretty simple (but experimental!):
 
 ```java
 // Setup your scene as usual
@@ -171,8 +171,8 @@ PxScene scene = physics.createScene(sceneDesc);
 Using CUDA comes with a few implications:
 
 The CUDA enabled native libraries are quite big (~25 MB), and I therefore decided to build a separate
-set of runtime jars for them (suffixed with `cuda`, so use `de.fabmax:physx-jni:0.4.5:native-win64cuda` instead of
-`de.fabmax:physx-jni:0.4.5:native-win64`).
+set of runtime jars for them (suffixed with `cuda`, so use `de.fabmax:physx-jni:[version]:native-win64cuda` instead of
+`de.fabmax:physx-jni:[version]:native-win64`).
 
 Moreover, CUDA comes with some additional overhead (a lot of data has to be copied around between CPU and GPU). For
 smaller scenes this overhead outweighs the benefits and physics computation might actually be slower than with CPU only.
