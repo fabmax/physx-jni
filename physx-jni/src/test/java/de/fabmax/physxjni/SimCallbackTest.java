@@ -29,7 +29,7 @@ public class SimCallbackTest {
             sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
             sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(1));
             sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
-            sceneDesc.getFlags().set(PxSceneFlagEnum.eENABLE_CCD);
+            sceneDesc.getFlags().clear(PxSceneFlagEnum.eENABLE_PCM);
             PxScene scene = physics.createScene(sceneDesc);
 
             // create a box with contact reporting enabled
