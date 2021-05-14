@@ -109,9 +109,9 @@ publishing {
         }
     }
 
-    if (File("publishingCredentials.properties").exists()) {
+    if (File("${rootDir}/publishingCredentials.properties").exists()) {
         val props = Properties()
-        props.load(FileInputStream("publishingCredentials.properties"))
+        props.load(FileInputStream("${rootDir}/publishingCredentials.properties"))
 
         repositories {
             maven {

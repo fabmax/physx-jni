@@ -28,6 +28,8 @@ private object CommonGeneratorSettings {
         "PxSceneDesc",
         "PxSceneLimits",
         "PxBatchQueryDesc",
+        "PxBoxControllerDesc",
+        "PxCapsuleControllerDesc",
         "PxConvexMeshDesc",
         "PxCudaContextManagerDesc",
         "PxHeightFieldDesc",
