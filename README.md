@@ -11,15 +11,15 @@ The library is available on maven central, so you can easily add this to your bu
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.4.5")
+    implementation("de.fabmax:physx-jni:0.4.9")
     
     // native libraries, you can add the one matching your system or both
-    runtimeOnly("de.fabmax:physx-jni:0.4.5:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.5:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.9:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.9:native-linux64")
     
     // or with CUDA support (see notes below):
-    runtimeOnly("de.fabmax:physx-jni:0.4.5:native-win64cuda")
-    runtimeOnly("de.fabmax:physx-jni:0.4.5:native-linux64cuda")
+    runtimeOnly("de.fabmax:physx-jni:0.4.9:native-win64cuda")
+    runtimeOnly("de.fabmax:physx-jni:0.4.9:native-linux64cuda")
 }
 ```
 
@@ -207,3 +207,11 @@ git submodule update --init
 # Build PhysX
 ./gradlew buildNativeProject
 ```
+
+To make sure that the native libraries built by the instructions above are actually loaded when using the library you
+should also increment the version number in the `build.gradle.kts`. By default, the library-loader code copies the
+native libraries to a system temp directory and loads them from there (because, if this library is distributed as
+a jar file, the native libraries inside the jar can't be directly loaded by the system). However, to avoid copying
+the native libs every time, the loader checks if they already exist in the current version. Therefore, without changing
+the version number, the loader might not update the native libs that are actually loaded by the system. Copying the
+native libs everytime on library initialization can be forced by using a version number ending with `-SNAPSHOT`.
