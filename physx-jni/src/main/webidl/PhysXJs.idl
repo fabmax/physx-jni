@@ -842,6 +842,8 @@ interface PxRigidBodyFlags {
 
 [Prefix="physx::", NoDelete]
 interface PxRigidDynamic {
+    void setKinematicTarget([Const, Ref] PxTransform destination);
+    boolean getKinematicTarget([Ref] PxTransform target);
     boolean isSleeping();
     void setSleepThreshold(float threshold);
     float getSleepThreshold();
