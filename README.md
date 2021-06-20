@@ -11,15 +11,15 @@ The library is available on maven central, so you can easily add this to your bu
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.4.9")
+    implementation("de.fabmax:physx-jni:0.4.10")
     
     // native libraries, you can add the one matching your system or both
-    runtimeOnly("de.fabmax:physx-jni:0.4.9:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.9:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.10:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.10:native-linux64")
     
     // or with CUDA support (see notes below):
-    runtimeOnly("de.fabmax:physx-jni:0.4.9:native-win64cuda")
-    runtimeOnly("de.fabmax:physx-jni:0.4.9:native-linux64cuda")
+    runtimeOnly("de.fabmax:physx-jni:0.4.10:native-win64cuda")
+    runtimeOnly("de.fabmax:physx-jni:0.4.10:native-linux64cuda")
 }
 ```
 
@@ -107,12 +107,12 @@ try (MemoryStack mem = MemoryStack.stackPush()) {
     // no explicit destroy needed, memory is released when we leave the scope
 }
 ```
-While the `PxVec3.malloc()` call looks a bit more complicated, this approach is much faster and comes without the
-risk of leaking memory.
+While the `PxVec3.createAt()` call looks a bit more complicated, this approach is much faster and comes without the
+risk of leaking memory, so it should be preferred whenever possible.
 
 ### Java Callbacks
 
-At a few places it is possible to register callbacks. For now the only supported callbacks are `PxErrorCallback` and
+At a few places it is possible to register callbacks, e.g., `PxErrorCallback` or
 `PxSimulationEventCallback`. In order to implement a callback, the corresponding Java callback class has to be
 extended. The implementing class can then be passed into the corresponding PhysX API.
 
