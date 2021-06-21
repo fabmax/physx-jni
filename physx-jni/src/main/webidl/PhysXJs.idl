@@ -11,10 +11,11 @@ interface PxTopLevelFunctions {
     static PxControllerManager CreateControllerManager([Ref] PxScene scene, optional boolean lockingEnabled);
     static PxCooking CreateCooking(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxCookingParams scale);
     static PxFoundation CreateFoundation(unsigned long version, [Ref] PxDefaultAllocator allocator, [Ref] PxErrorCallback errorCallback);
-    static PxPhysics CreatePhysics(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxTolerancesScale params);
+    static PxPhysics CreatePhysics(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxTolerancesScale params, optional PxPvd pvd);
     static PxDefaultCpuDispatcher DefaultCpuDispatcherCreate(unsigned long numThreads);
     static boolean InitExtensions([Ref] PxPhysics physics);
     static PxCudaContextManager CreateCudaContextManager([Ref] PxFoundation foundation, [Const, Ref] PxCudaContextManagerDesc desc);
+    static PxPvd CreatePvd([Ref] PxFoundation foundation);
 
     static PxD6Joint D6JointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
     static PxDistanceJoint DistanceJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
@@ -3249,4 +3250,44 @@ interface Vector_PxVehicleWheels {
     PxVehicleWheelsPtr data();
     unsigned long size();
     void push_back(PxVehicleWheels value);
+};
+
+[Prefix="physx::", NoDelete]
+interface PxPvdTransport {
+    boolean connect();
+    void disconnect();
+    boolean isConnected();
+};
+
+interface SimplePvdTransport {
+    boolean connect();
+    void send(any inBytes, unsigned long inLength);
+};
+SimplePvdTransport implements PxPvdTransport;
+
+[JSImplementation="SimplePvdTransport"]
+interface JSPvdTransport {
+    void JSPvdTransport();
+    boolean connect();
+    void send(any inBytes, unsigned long inLength);
+};
+
+enum PxPvdInstrumentationFlagEnum {
+    "PxPvdInstrumentationFlagEnum::eDEBUG",
+    "PxPvdInstrumentationFlagEnum::ePROFILE",
+    "PxPvdInstrumentationFlagEnum::eMEMORY",
+    "PxPvdInstrumentationFlagEnum::eALL"
+};
+
+[Prefix="physx::"]
+interface PxPvdInstrumentationFlags {
+    void PxPvdInstrumentationFlags(octet flags);
+    boolean isSet(PxPvdInstrumentationFlagEnum flag);
+    void set(PxPvdInstrumentationFlagEnum flag);
+    void clear(PxPvdInstrumentationFlagEnum flag);
+};
+
+[Prefix="physx::", NoDelete]
+interface PxPvd {
+    boolean connect([Ref] PxPvdTransport transport, [Ref] PxPvdInstrumentationFlags flags);
 };
