@@ -57,6 +57,34 @@ private object CommonGeneratorSettings {
     )
 }
 
+open class CheckWebIdlConsistency : DefaultTask() {
+    @Input
+    var idlSource1 = ""
+    @Input
+    var idlSource2 = ""
+
+    @TaskAction
+    fun checkConsistency() {
+        val idlFile1 = File(idlSource1)
+        val idlFile2 = File(idlSource2)
+
+        if (idlFile2.exists()) {
+            val lines1 = idlFile1.readLines()
+            val lines2 = idlFile2.readLines()
+
+            if (lines1.size != lines2.size) {
+                throw IllegalStateException("WebIDL files differ in length: $idlSource1: ${lines1.size}, $idlSource2: ${lines2.size}")
+            }
+
+            for (i in lines1.indices) {
+                if (lines1[i] != lines2[i]) {
+                    throw IllegalStateException("WebIDL files inconsistent (line $i): \"${lines1[i]}\" != \"${lines2[i]}\"")
+                }
+            }
+        }
+    }
+}
+
 open class GenerateJavaBindings : DefaultTask() {
     @Input
     var idlSource = ""

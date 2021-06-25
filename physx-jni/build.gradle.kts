@@ -39,7 +39,14 @@ tasks.register<GenerateJavaBindings>("generateJniBindings") {
     idlSource = File("${projectDir}/src/main/webidl/PhysXJs.idl").absolutePath
     generatorOutput = File("${projectDir}/src/main/generated/physx").absolutePath
 }
+
+tasks.register<CheckWebIdlConsistency>("checkWebIdlConsistency") {
+    idlSource1 = File("${projectDir}/src/main/webidl/PhysXJs.idl").absolutePath
+    idlSource2 = File("${rootDir}/Physx/physx/source/physxwebbindings/src/PhysXJs.idl").absolutePath
+}
+
 val compileJava by tasks.existing {
+    dependsOn("checkWebIdlConsistency")
     dependsOn("generateJniBindings")
     dependsOn("updateVersionNames")
 }

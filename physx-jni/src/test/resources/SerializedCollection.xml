@@ -1,0 +1,64 @@
+<PhysXCollection version="4.1.2" >
+    <UpVector >0 0 0</UpVector>
+    <Scale >
+        <Length >0</Length>
+        <Speed >10</Speed>
+    </Scale>
+    <PxMaterial >
+        <Id >1925468155632</Id>
+        <DynamicFriction >0.5</DynamicFriction>
+        <StaticFriction >0.5</StaticFriction>
+        <Restitution >0.5</Restitution>
+        <FrictionCombineMode >eAVERAGE</FrictionCombineMode>
+        <RestitutionCombineMode >eAVERAGE</RestitutionCombineMode>
+    </PxMaterial>
+    <PxRigidDynamic >
+        <Id >1925470053728</Id>
+        <Name />
+        <ActorFlags >eVISUALIZATION</ActorFlags>
+        <DominanceGroup >0</DominanceGroup>
+        <OwnerClient >0</OwnerClient>
+        <GlobalPose >0 0 0 1 0 0 0</GlobalPose>
+        <Shapes >
+            <PxShape >
+                <Geometry >
+                    <PxBoxGeometry >
+                        <HalfExtents >0.5 0.5 0.5</HalfExtents>
+                    </PxBoxGeometry>
+                </Geometry>
+                <LocalPose >0 0 0 1 0 0 0</LocalPose>
+                <SimulationFilterData >1 4294967295 0 0</SimulationFilterData>
+                <QueryFilterData >0 0 0 0</QueryFilterData>
+                <Materials >
+                    <PxMaterialRef >1925468155632</PxMaterialRef>
+                </Materials>
+                <ContactOffset >0.02</ContactOffset>
+                <RestOffset >0</RestOffset>
+                <TorsionalPatchRadius >0</TorsionalPatchRadius>
+                <MinTorsionalPatchRadius >0</MinTorsionalPatchRadius>
+                <Flags >eSIMULATION_SHAPE|eSCENE_QUERY_SHAPE|eVISUALIZATION</Flags>
+                <Name />
+            </PxShape>
+        </Shapes>
+        <CMassLocalPose >0 0 0 1 0 0 0</CMassLocalPose>
+        <Mass >1</Mass>
+        <MassSpaceInertiaTensor >1 1 1</MassSpaceInertiaTensor>
+        <LinearDamping >0</LinearDamping>
+        <AngularDamping >0.05</AngularDamping>
+        <LinearVelocity >0 0 0</LinearVelocity>
+        <AngularVelocity >0 0 0</AngularVelocity>
+        <MaxAngularVelocity >100</MaxAngularVelocity>
+        <MaxLinearVelocity >1e+16</MaxLinearVelocity>
+        <MinCCDAdvanceCoefficient >0.15</MinCCDAdvanceCoefficient>
+        <MaxDepenetrationVelocity >1e+32</MaxDepenetrationVelocity>
+        <MaxContactImpulse >1e+32</MaxContactImpulse>
+        <SleepThreshold >0.005</SleepThreshold>
+        <StabilizationThreshold >0.0025</StabilizationThreshold>
+        <WakeCounter >0.4</WakeCounter>
+        <SolverIterationCounts >
+            <minPositionIters >4</minPositionIters>
+            <minVelocityIters >1</minVelocityIters>
+        </SolverIterationCounts>
+        <ContactReportThreshold >3.40282e+38</ContactReportThreshold>
+    </PxRigidDynamic>
+</PhysXCollection>
