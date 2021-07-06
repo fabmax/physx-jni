@@ -70,7 +70,6 @@ public class PhysXTestEnv {
             sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
             sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(numThreads));
             sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
-            sceneDesc.getFlags().clear(PxSceneFlagEnum.eENABLE_PCM);
             return physics.createScene(sceneDesc);
         }
     }
