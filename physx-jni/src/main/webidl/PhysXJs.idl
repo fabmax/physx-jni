@@ -409,6 +409,13 @@ enum PxBroadPhaseTypeEnum {
     "PxBroadPhaseTypeEnum::eLAST"
 };
 
+enum PxCombineModeEnum {
+    "PxCombineModeEnum::eAVERAGE",
+    "PxCombineModeEnum::eMIN",
+    "PxCombineModeEnum::eMULTIPLY",
+    "PxCombineModeEnum::eMAX"
+};
+
 [Prefix="physx::", NoDelete]
 interface PxConstraint {
     void release();
@@ -620,9 +627,39 @@ interface PxOverlapQueryResult {
 
 [Prefix="physx::", NoDelete]
 interface PxMaterial {
+    unsigned long getReferenceCount();
+    void acquireReference();
+    void setDynamicFriction(float coef);
+    float getDynamicFriction();
+    void setStaticFriction(float coef);
+    float getStaticFriction();
+    void setRestitution(float coef);
+    float getRestitution();
+    void setFlag(PxMaterialFlagEnum flag, boolean b);
+    void setFlags(PxMaterialFlags flags);
+    [Value] PxMaterialFlags getFlags();
+    void setFrictionCombineMode(PxCombineModeEnum combMode);
+    PxCombineModeEnum getFrictionCombineMode();
+    void setRestitutionCombineMode(PxCombineModeEnum combMode);
+    PxCombineModeEnum getRestitutionCombineMode();
+
     attribute VoidPtr userData;
 };
 PxMaterial implements PxBase;
+
+enum PxMaterialFlagEnum {
+    "PxMaterialFlagEnum::eDISABLE_FRICTION",
+    "PxMaterialFlagEnum::eDISABLE_STRONG_FRICTION",
+    "PxMaterialFlagEnum::eIMPROVED_PATCH_FRICTION",
+};
+
+[Prefix="physx::"]
+interface PxMaterialFlags {
+    void PxMaterialFlags(unsigned short flags);
+    boolean isSet(PxMaterialFlagEnum flag);
+    void set(PxMaterialFlagEnum flag);
+    void clear(PxMaterialFlagEnum flag);
+};
 
 enum PxPairFilteringModeEnum {
     "PxPairFilteringModeEnum::eKEEP",
