@@ -2456,6 +2456,7 @@ interface PxPhysicsInsertionCallback { };
 [Prefix="physx::"]
 interface PxQuat {
     void PxQuat();
+    void PxQuat(PxIDENTITYEnum r);
     void PxQuat(float x, float y, float z, float w);
     attribute float x;
     attribute float y;
@@ -2470,6 +2471,7 @@ interface PxTolerancesScale {
 
 [Prefix="physx::"]
 interface PxTransform {
+    void PxTransform();
     void PxTransform(PxIDENTITYEnum r);
     void PxTransform([Const, Ref] PxVec3 p0, [Const, Ref] PxQuat q0);
     [Value] attribute PxQuat q;
