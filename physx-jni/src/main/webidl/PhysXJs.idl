@@ -14,6 +14,7 @@ interface PxTopLevelFunctions {
     static PxPhysics CreatePhysics(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxTolerancesScale params, optional PxPvd pvd);
     static PxDefaultCpuDispatcher DefaultCpuDispatcherCreate(unsigned long numThreads);
     static boolean InitExtensions([Ref] PxPhysics physics);
+    static void CloseExtensions();
     static PxCudaContextManager CreateCudaContextManager([Ref] PxFoundation foundation, [Const, Ref] PxCudaContextManagerDesc desc);
     static PxPvd CreatePvd([Ref] PxFoundation foundation);
 
