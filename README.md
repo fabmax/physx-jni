@@ -11,15 +11,12 @@ The library is available on maven central, so you can easily add this to your bu
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.4.12")
+    implementation("de.fabmax:physx-jni:0.4.13")
     
-    // native libraries, you can add the one matching your system or both
-    runtimeOnly("de.fabmax:physx-jni:0.4.12:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.12:native-linux64")
-    
-    // or with CUDA support (see notes below):
-    runtimeOnly("de.fabmax:physx-jni:0.4.12:native-win64cuda")
-    runtimeOnly("de.fabmax:physx-jni:0.4.12:native-linux64cuda")
+    // native libraries, you can add the one matching your system or all
+    runtimeOnly("de.fabmax:physx-jni:0.4.13:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.13:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.13:native-mac64")
 }
 ```
 
@@ -46,6 +43,7 @@ classes are located under `physx-jni/src/main/generated`.
 ### Supported platforms:
 - Windows (64-bit)
 - Linux (64-bit x86)
+- macOS (64-bit x86, no native support for Apple Silicon yet)
  
 Moreover, there is also a version for javascript/webassembly:
 [physx-js-webidl](https://github.com/fabmax/physx-js-webidl).

@@ -91,6 +91,10 @@ publishing {
                 classifier = "native-linux64cuda"
             }
 
+            artifact(project(":physx-jni-native-mac64").tasks["jar"]).apply {
+                classifier = "native-mac64"
+            }
+
             pom {
                 name.set("physx-jni")
                 description.set("JNI bindings for Nvidia PhysX.")
