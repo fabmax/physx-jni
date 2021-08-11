@@ -3,3 +3,5 @@
 build
 generated
 /publishingCredentials.properties
+.DS_Store
+
