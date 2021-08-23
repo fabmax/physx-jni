@@ -22,7 +22,7 @@ public enum Platform {
             return WIN64;
         } else if (osName.contains("linux")) {
             return LINUX64;
-        } else if (osName.contains("mac")) {
+        } else if (osName.contains("mac os x") || osName.contains("darwin") || osName.contains("osx")) {
             return MAC64;
         } else {
             throw new IllegalStateException("Unsupported OS: " + osName);

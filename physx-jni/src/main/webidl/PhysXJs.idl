@@ -3200,6 +3200,7 @@ interface JavaUserControllerHitReport {
 
 interface SupportFunctions {
     static PxShape PxActor_getShape([Ref] PxRigidActor actor, long index);
+    [Ref] static Vector_PxActorPtr PxScene_getActiveActors(PxScene scene);
 };
 
 interface PxActorPtr { };
@@ -3313,6 +3314,16 @@ interface Vector_PxVec3 {
     PxVec3 data();
     unsigned long size();
     void push_back([Ref] PxVec3 value);
+    void clear();
+};
+
+interface Vector_PxActorPtr {
+    void Vector_PxActorPtr();
+    void Vector_PxActorPtr(unsigned long size);
+    PxActor at(unsigned long index);
+    PxActorPtr data();
+    unsigned long size();
+    void push_back(PxActor value);
     void clear();
 };
 

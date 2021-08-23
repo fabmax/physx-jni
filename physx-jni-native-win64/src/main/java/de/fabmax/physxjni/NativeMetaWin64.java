@@ -5,7 +5,7 @@ import java.util.List;
 
 public class NativeMetaWin64 implements NativeMeta {
 
-    private static final String version = "0.4.13";
+    private static final String version = "0.4.14-SNAPSHOT";
 
     private static final List<String> libraries = new ArrayList<String>() {{
         add("win64/PhysX_64.dll");
