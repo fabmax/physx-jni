@@ -11,12 +11,12 @@ The library is available on maven central, so you can easily add this to your bu
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.4.13")
+    implementation("de.fabmax:physx-jni:0.4.14")
     
     // native libraries, you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:0.4.13:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.13:native-linux64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.13:native-mac64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.14:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.14:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.14:native-mac64")
 }
 ```
 
