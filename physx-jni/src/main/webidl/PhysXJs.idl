@@ -154,6 +154,8 @@ interface PxArticulationBase {
     [Const] DOMString getName();
     [Value] PxBounds3 getWorldBounds();
     PxAggregate getAggregate();
+
+    attribute VoidPtr userData;
 };
 PxArticulationBase implements PxBase;
 
@@ -939,7 +941,7 @@ interface PxScene {
     // Contained Object Retrieval
     unsigned long getNbActors([Ref] PxActorTypeFlags types);
     // unsigned long getActors(...)
-    // PxActorPtr getActiveActors();
+    // PxActorPtr getActiveActors();    -> SupportFunctions.PxScene_getActiveActors();
     unsigned long getNbArticulations();
     // unsigned long getArticulations(...);
     unsigned long getNbConstraints();
@@ -2559,6 +2561,7 @@ interface PxD6Joint {
     void setProjectionAngularTolerance(float tolerance);
     float getProjectionAngularTolerance();
 };
+PxD6Joint implements PxJoint;
 
 [Prefix="physx::"]
 interface PxD6JointDrive {
@@ -2681,6 +2684,8 @@ interface PxJoint {
     [Const] DOMString getName();
     void release();
     PxScene getScene();
+
+    attribute VoidPtr userData;
 };
 PxJoint implements PxBase;
 
