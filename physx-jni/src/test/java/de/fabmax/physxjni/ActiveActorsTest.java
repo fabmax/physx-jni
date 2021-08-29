@@ -41,6 +41,10 @@ public class ActiveActorsTest {
             // there should be exactly one activbe actor (the falling box)
             Assert.assertEquals(activeActors.size(), 1);
             Assert.assertEquals(activeActors.at(0), activeBox);
+
+            // note: the Vector_PxActorPtr returned by PxScene_getActiveActors() is internally stored as a static
+            // field, DO NOT DESTROY IT!
+            //   activeActors.destroy(); NO NO NO!
         }
     }
 
