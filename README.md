@@ -11,12 +11,12 @@ The library is available on maven central, so you can easily add this to your bu
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.4.13")
+    implementation("de.fabmax:physx-jni:0.4.14")
     
     // native libraries, you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:0.4.13:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.13:native-linux64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.13:native-mac64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.14:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.14:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.14:native-mac64")
 }
 ```
 
@@ -129,6 +129,23 @@ public class CustomErrorCallback extends JavaErrorCallback {
 // register / use callback
 CustomErrorCallback errorCb = new CustomErrorCallback();
 PxFoundation foundation = PxTopLevelFunctions.CreateFoundation(PX_PHYSICS_VERSION, new PxDefaultAllocator(), errorCb);
+```
+
+### User Data
+
+Several PhysX classes (e.g. `PxActor`, `PxMaterial`, ...) have a userData field, which can be used to store an arbitrary
+object reference. Since the native userData field is a void pointer, a wrapper class `JavaNativeRef` is needed to store
+a java object reference in it:
+
+```java
+PxRigidDynamic myActor = ...
+
+// set user data, can be any java object, here we use a String:
+myActor.setUserData(new JavaNativeRef<>("Arbitrary data"));
+
+// get user data, here we expect it to be a String:
+JavaNativeRef<String> userData = JavaNativeRef.fromNativeObject(myActor.getUserData());
+System.out.println(userData.get());
 ```
 
 ### CUDA Support

@@ -32,7 +32,7 @@ open class VersionNameUpdate : DefaultTask() {
             if (updated) {
                 FileWriter(file).use {
                     text.forEach { line ->
-                        it.append(line).append(System.lineSeparator())
+                        it.append(line).append("\n")
                     }
                 }
             } else {
