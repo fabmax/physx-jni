@@ -8,11 +8,9 @@ import physx.common.PxVec3;
 import physx.geomutils.PxBoxGeometry;
 import physx.physics.*;
 import physx.support.TypeHelpers;
+import physx.support.Vector_PxContactPairPoint;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SimCallbackTest {
 
@@ -33,7 +31,7 @@ public class SimCallbackTest {
 
             // create a box with contact reporting enabled
             // the corresponding flags are encoded in word2 of simulation filter data
-            int reportContactFlags = PxPairFlagEnum.eNOTIFY_TOUCH_FOUND | PxPairFlagEnum.eNOTIFY_TOUCH_LOST;
+            int reportContactFlags = PxPairFlagEnum.eNOTIFY_TOUCH_FOUND | PxPairFlagEnum.eNOTIFY_TOUCH_LOST | PxPairFlagEnum.eNOTIFY_CONTACT_POINTS;
             PxFilterData boxFilterData = PxFilterData.createAt(mem, MemoryStack::nmalloc, 1, -1, reportContactFlags, 0);
             PxRigidDynamic box = PhysXTestEnv.createDefaultBox(0f, 5f, 0f, boxFilterData);
             scene.addActor(box);
@@ -84,6 +82,12 @@ public class SimCallbackTest {
         Set<PxActor> contactBodies = new HashSet<>();
         Set<PxActor> triggerBodies = new HashSet<>();
 
+        Vector_PxContactPairPoint contacts = new Vector_PxContactPairPoint(64);
+
+        private String vec3ToString(PxVec3 vec3) {
+            return String.format(Locale.ENGLISH, "(%.3f, %.3f, %.3f)", vec3.getX(), vec3.getY(), vec3.getZ());
+        }
+
         @Override
         public void onContact(PxContactPairHeader pairHeader, PxContactPair pairs, int nbPairs) {
             PxActor actor0 = pairHeader.getActors(0);
@@ -104,7 +108,14 @@ public class SimCallbackTest {
                 } else if (events.isSet(PxPairFlagEnum.eNOTIFY_TOUCH_LOST)) {
                     event = "TOUCH_LOST";
                 }
-                System.out.println("onContact: " + name0 + " and " + name1 + ": " + event);
+
+                int contactPoints = pair.extractContacts(contacts.data(), 64);
+                System.out.println("onContact: " + name0 + " and " + name1 + ": " + event + ", " + contactPoints + " contact points");
+                for (int j = 0; j < contactPoints; j++) {
+                    PxContactPairPoint cp = contacts.at(j);
+                    System.out.println("  pos: " + vec3ToString(cp.getPosition()) + ", nrm: " + vec3ToString(cp.getNormal())
+                            + ", imp: " + vec3ToString(cp.getImpulse()) + ", sep: " + cp.getSeparation());
+                }
             }
         }
 

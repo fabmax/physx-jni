@@ -11,12 +11,12 @@ The library is available on maven central, so you can easily add this to your bu
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.4.14")
+    implementation("de.fabmax:physx-jni:0.4.15")
     
     // native libraries, you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:0.4.14:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.14:native-linux64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.14:native-mac64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.15:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.15:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.15:native-mac64")
 }
 ```
 
@@ -41,7 +41,7 @@ After build (or after running the corresponding gradle task `generateJniBindings
 classes are located under `physx-jni/src/main/generated`.
 
 ### Supported platforms:
-- Windows (64-bit)
+- Windows (64-bit x86)
 - Linux (64-bit x86)
 - macOS (64-bit x86, no native support for Apple Silicon yet)
  

@@ -1,14 +1,20 @@
 import org.gradle.internal.os.OperatingSystem
+import org.gradle.jvm.tasks.Jar
 
 subprojects {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
 
     group = "de.fabmax"
-    version = "0.4.14"
+    version = "0.4.15"
 
     repositories {
         mavenCentral()
+    }
+
+    tasks["jar"].apply {
+        this as Jar
+        from("$rootDir/LICENSE", "$rootDir/NOTICE.md")
     }
 }
 
