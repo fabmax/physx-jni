@@ -7,6 +7,7 @@ interface PxTopLevelFunctions {
     static readonly attribute unsigned long PHYSICS_VERSION;
     
     [Value] static PxSimulationFilterShader DefaultFilterShader();
+    static void setupPassThroughFilterShader(PxSceneDesc sceneDesc, PassThroughFilterShader filterShader);
 
     static PxControllerManager CreateControllerManager([Ref] PxScene scene, optional boolean lockingEnabled);
     static PxCooking CreateCooking(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxCookingParams scale);
@@ -559,6 +560,19 @@ interface PxFilterData {
     attribute unsigned long word3;
 };
 
+enum PxFilterFlagEnum {
+    "PxFilterFlagEnum::eKILL",
+    "PxFilterFlagEnum::eSUPPRESS",
+    "PxFilterFlagEnum::eCALLBACK",
+    "PxFilterFlagEnum::eNOTIFY",
+    "PxFilterFlagEnum::eDEFAULT"
+};
+
+enum PxFilterObjectFlagEnum {
+    "PxFilterObjectFlagEnum::eKINEMATIC",
+    "PxFilterObjectFlagEnum::eTRIGGER"
+};
+
 enum PxForceModeEnum {
     "PxForceModeEnum::eFORCE",
     "PxForceModeEnum::eIMPULSE",
@@ -699,7 +713,8 @@ enum PxPairFlagEnum {
     "PxPairFlagEnum::ePOST_SOLVER_VELOCITY",
     "PxPairFlagEnum::eCONTACT_EVENT_POSE",
     "PxPairFlagEnum::eNEXT_FREE",
-    "PxPairFlagEnum::eCONTACT_DEFAULT"
+    "PxPairFlagEnum::eCONTACT_DEFAULT",
+    "PxPairFlagEnum::eTRIGGER_DEFAULT"
 };
 
 [Prefix="physx::"]
@@ -3461,4 +3476,22 @@ interface PxPvdInstrumentationFlags {
 [Prefix="physx::", NoDelete]
 interface PxPvd {
     boolean connect([Ref] PxPvdTransport transport, [Ref] PxPvdInstrumentationFlags flags);
+};
+
+interface PassThroughFilterShader {
+    unsigned long filterShader(unsigned long attributes0,
+                               unsigned long filterData0w0, unsigned long filterData0w1, unsigned long filterData0w2, unsigned long filterData0w3,
+                               unsigned long attributes1,
+                               unsigned long filterData1w0, unsigned long filterData1w1, unsigned long filterData1w2, unsigned long filterData1w3);
+
+    attribute unsigned long outputPairFlags;
+};
+
+[JSImplementation="PassThroughFilterShader"]
+interface JavaPassThroughFilterShader {
+    void JavaPassThroughFilterShader();
+    unsigned long filterShader(unsigned long attributes0,
+                               unsigned long filterData0w0, unsigned long filterData0w1, unsigned long filterData0w2, unsigned long filterData0w3,
+                               unsigned long attributes1,
+                               unsigned long filterData1w0, unsigned long filterData1w1, unsigned long filterData1w2, unsigned long filterData1w3);
 };
