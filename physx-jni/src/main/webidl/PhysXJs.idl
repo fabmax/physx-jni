@@ -2790,6 +2790,14 @@ interface PxJointLinearLimitPair {
 PxJointLinearLimitPair implements PxJointLimitParameters;
 
 [Prefix="physx::"]
+interface PxMeshOverlapUtil {
+    void PxMeshOverlapUtil();
+    unsigned long findOverlap([Const, Ref] PxGeometry geom, [Const, Ref] PxTransform geomPose, [Const, Ref] PxTriangleMeshGeometry meshGeom, [Const, Ref] PxTransform meshPose);
+    [Value] PxU32ConstPtr getResults();
+    unsigned long getNbResults();
+};
+
+[Prefix="physx::"]
 interface PxPrismaticJoint {
     float getPosition();
     float getVelocity();
@@ -3055,6 +3063,38 @@ interface PxController {
     void resize(float height);
 };
 
+[Prefix="physx::", NoDelete]
+interface PxControllerBehaviorCallback { };
+
+interface SimpleControllerBehaviorCallback {
+    unsigned long getShapeBehaviorFlags([Const, Ref] PxShape shape, [Const, Ref] PxActor actor);
+    unsigned long getControllerBehaviorFlags([Const, Ref] PxController controller);
+    unsigned long getObstacleBehaviorFlags([Const, Ref] PxObstacle obstacle);
+};
+SimpleControllerBehaviorCallback implements PxControllerBehaviorCallback;
+
+[JSImplementation="SimpleControllerBehaviorCallback"]
+interface JavaControllerBehaviorCallback {
+    void JavaControllerBehaviorCallback();
+    unsigned long getShapeBehaviorFlags([Const, Ref] PxShape shape, [Const, Ref] PxActor actor);
+    unsigned long getControllerBehaviorFlags([Const, Ref] PxController controller);
+    unsigned long getObstacleBehaviorFlags([Const, Ref] PxObstacle obstacle);
+};
+
+enum PxControllerBehaviorFlagEnum {
+    "PxControllerBehaviorFlagEnum::eCCT_CAN_RIDE_ON_OBJECT",
+    "PxControllerBehaviorFlagEnum::eCCT_SLIDE",
+    "PxControllerBehaviorFlagEnum::eCCT_USER_DEFINED_RIDE"
+};
+
+[Prefix="physx::"]
+interface PxControllerBehaviorFlags {
+    void PxControllerBehaviorFlags(octet flags);
+    boolean isSet(PxControllerBehaviorFlagEnum flag);
+    void set(PxControllerBehaviorFlagEnum flag);
+    void clear(PxControllerBehaviorFlagEnum flag);
+};
+
 enum PxControllerCollisionFlagEnum {
     "PxControllerCollisionFlagEnum::eCOLLISION_SIDES",
     "PxControllerCollisionFlagEnum::eCOLLISION_UP",
@@ -3084,7 +3124,7 @@ interface PxControllerDesc {
     attribute float scaleCoeff;
     attribute float volumeGrowth;
     attribute PxUserControllerHitReport reportCallback;
-    //attribute PxControllerBehaviorCallback behaviorCallback;
+    attribute PxControllerBehaviorCallback behaviorCallback;
     attribute PxControllerNonWalkableModeEnum nonWalkableMode;
     attribute PxMaterial material;
     attribute boolean registerDeletionListener;
@@ -3231,6 +3271,7 @@ interface JavaUserControllerHitReport {
 
 interface SupportFunctions {
     static PxShape PxActor_getShape([Ref] PxRigidActor actor, long index);
+    static PxActor PxContactPairHeader_getActor([Ref] PxContactPairHeader pairHeader, long index);
     [Ref] static Vector_PxActorPtr PxScene_getActiveActors(PxScene scene);
 };
 
@@ -3264,7 +3305,13 @@ interface TypeHelpers {
     static unsigned short getU16At([Ref] PxU16ConstPtr base, long index);
     static unsigned long getU32At([Ref] PxU32ConstPtr base, long index);
     static float getRealAt([Ref] PxRealPtr base, long index);
+
+    static PxActor getActorAt(PxActor base, long index);
     static PxContactPair getContactPairAt(PxContactPair base, long index);
+    static PxContactPairHeader getContactPairHeaderAt(PxContactPairHeader base, long index);
+    static PxController getControllerAt(PxController base, long index);
+    static PxObstacle getObstacleAt(PxObstacle base, long index);
+    static PxShape getShapeAt(PxShape base, long index);
     static PxTriggerPair getTriggerPairAt(PxTriggerPair base, long index);
     static PxVec3 getVec3At(PxVec3 base, long index);
 
@@ -3486,6 +3533,7 @@ interface PassThroughFilterShader {
 
     attribute unsigned long outputPairFlags;
 };
+PassThroughFilterShader implements PxSimulationFilterShader;
 
 [JSImplementation="PassThroughFilterShader"]
 interface JavaPassThroughFilterShader {
