@@ -8,6 +8,7 @@ import physx.cooking.PxCookingParams;
 import physx.extensions.PxDefaultAllocator;
 import physx.geomutils.PxBoxGeometry;
 import physx.geomutils.PxGeometry;
+import physx.geomutils.PxPlaneGeometry;
 import physx.physics.*;
 
 import java.util.HashMap;
@@ -62,6 +63,8 @@ public class PhysXTestEnv {
 
         PxCookingParams cookingParams = new PxCookingParams(tolerances);
         cooking = PxTopLevelFunctions.CreateCooking(PX_PHYSICS_VERSION, foundation, cookingParams);
+
+        PxTopLevelFunctions.InitExtensions(physics);
     }
 
     public static PxScene createEmptyScene(int numThreads) {
@@ -89,6 +92,19 @@ public class PhysXTestEnv {
             shape.setSimulationFilterData(simFilterData);
             body.attachShape(shape);
             return body;
+        }
+    }
+
+    public static PxRigidStatic createGroundPlane() {
+        try (MemoryStack mem = MemoryStack.stackPush()) {
+            PxPlaneGeometry plane = PxPlaneGeometry.createAt(mem, MemoryStack::nmalloc);
+            PxShape shape = physics.createShape(plane, defaultMaterial, true);
+
+            float r = 1f / (float) Math.sqrt(2f);
+            PxQuat q = PxQuat.createAt(mem, MemoryStack::nmalloc, 0f, 0f, r, r);
+            PxVec3 p = PxVec3.createAt(mem, MemoryStack::nmalloc, 0f, 0f, 0f);
+            shape.setLocalPose(PxTransform.createAt(mem, MemoryStack::nmalloc, p, q));
+            return createStaticBody(shape, 0f, 0f, 0f);
         }
     }
 

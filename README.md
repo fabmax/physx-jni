@@ -11,12 +11,12 @@ The library is available on maven central, so you can easily add this to your bu
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.4.15")
+    implementation("de.fabmax:physx-jni:0.4.16")
     
     // native libraries, you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:0.4.15:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.15:native-linux64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.15:native-mac64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.16:native-win64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.16:native-linux64")
+    runtimeOnly("de.fabmax:physx-jni:0.4.16:native-mac64")
 }
 ```
 
@@ -52,7 +52,7 @@ Moreover, there is also a version for javascript/webassembly:
 You can take a look at [HelloPhysX.java](physx-jni/src/test/java/de/fabmax/physxjni/HelloPhysX.java) for a
 hello world example of how to use the library. There also are a few
 [tests](https://github.com/fabmax/physx-jni/tree/main/physx-jni/src/test/java/de/fabmax/physxjni) with slightly
-more advanced examples (custom simulation callbacks, triangle mesh collision, etc.).
+more advanced examples (custom simulation callbacks, triangle mesh collision, custom filter shader, etc.).
 
 To get a feeling of what can be done with this you can take a look at my [kool](https://github.com/fabmax/kool) demos:
 

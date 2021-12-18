@@ -17,6 +17,7 @@ private object CommonGeneratorSettings {
         "PxQuat",
         "PxTransform",
         "PxVec3",
+        "PxExtendedVec3",
 
         "PxBoxGeometry",
         "PxCapsuleGeometry",
