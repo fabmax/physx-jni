@@ -28,11 +28,11 @@ public class HelloPhysX {
 
         // create a physics scene
         int numThreads = 4;
+        PxVec3 tmpVec = new PxVec3(0f, -9.81f, 0f);
         PxSceneDesc sceneDesc = new PxSceneDesc(tolerances);
-        sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
+        sceneDesc.setGravity(tmpVec);
         sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(numThreads));
         sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
-        sceneDesc.getFlags().clear(PxSceneFlagEnum.eENABLE_PCM);
         PxScene scene = physics.createScene(sceneDesc);
 
         // create a default material
@@ -41,7 +41,6 @@ public class HelloPhysX {
         PxShapeFlags shapeFlags = new PxShapeFlags((byte) (PxShapeFlagEnum.eSCENE_QUERY_SHAPE | PxShapeFlagEnum.eSIMULATION_SHAPE));
 
         // create a few temporary objects used during setup
-        PxVec3 tmpVec = new PxVec3(0f, 0f, 0f);
         PxTransform tmpPose = new PxTransform(PxIDENTITYEnum.PxIdentity);
         PxFilterData tmpFilterData = new PxFilterData(1, 1, 0, 0);
 

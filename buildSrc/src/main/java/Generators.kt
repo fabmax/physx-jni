@@ -106,11 +106,25 @@ open class GenerateJavaBindings : DefaultTask() {
             onClassLoad = "de.fabmax.physxjni.Loader.load();"
 
             externallyAllocatableClasses += CommonGeneratorSettings.externallyAllocatableClasses
+
             nullableAttributes += "PxBatchQueryDesc.preFilterShader"
             nullableAttributes += "PxBatchQueryDesc.postFilterShader"
             nullableAttributes += "BatchVehicleUpdateDesc.preFilterShader"
             nullableAttributes += "BatchVehicleUpdateDesc.postFilterShader"
+
             nullableParameters += "PxArticulationBase.createLink" to "parent"
+            nullableParameters += "PxTopLevelFunctions.D6JointCreate" to "actor0"
+            nullableParameters += "PxTopLevelFunctions.D6JointCreate" to "actor1"
+            nullableParameters += "PxTopLevelFunctions.DistanceJointCreate" to "actor0"
+            nullableParameters += "PxTopLevelFunctions.DistanceJointCreate" to "actor1"
+            nullableParameters += "PxTopLevelFunctions.FixedJointCreate" to "actor0"
+            nullableParameters += "PxTopLevelFunctions.FixedJointCreate" to "actor1"
+            nullableParameters += "PxTopLevelFunctions.PrismaticJointCreate" to "actor0"
+            nullableParameters += "PxTopLevelFunctions.PrismaticJointCreate" to "actor1"
+            nullableParameters += "PxTopLevelFunctions.RevoluteJointCreate" to "actor0"
+            nullableParameters += "PxTopLevelFunctions.RevoluteJointCreate" to "actor1"
+            nullableParameters += "PxTopLevelFunctions.SphericalJointCreate" to "actor0"
+            nullableParameters += "PxTopLevelFunctions.SphericalJointCreate" to "actor1"
         }.generate(model)
     }
 }
