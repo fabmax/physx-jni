@@ -46,6 +46,12 @@ tasks.register<CheckWebIdlConsistency>("checkWebIdlConsistency") {
     idlSource2 = File("${rootDir}/Physx/physx/source/physxwebbindings/src/PhysXJs.idl").absolutePath
 }
 
+tasks.withType<Test> {
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
 val compileJava by tasks.existing {
     dependsOn("checkWebIdlConsistency")
     dependsOn("generateJniBindings")
