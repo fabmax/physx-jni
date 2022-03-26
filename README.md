@@ -4,22 +4,25 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni)
 ![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
 
-Java JNI bindings for Nvidia [PhysX 4.1](https://github.com/NVIDIAGameWorks/PhysX).
+Java JNI bindings for Nvidia [PhysX 4.1.2](https://github.com/NVIDIAGameWorks/PhysX).
 
 ## How to use
 The library is available on maven central, so you can easily add this to your build.gradle:
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:0.4.18")
+    implementation("de.fabmax:physx-jni:1.0.0")
     
     // native libraries, you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:0.4.18:native-win64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.18:native-linux64")
-    runtimeOnly("de.fabmax:physx-jni:0.4.18:native-mac64")
+    runtimeOnly("de.fabmax:physx-jni:1.0.0:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:1.0.0:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:1.0.0:natives-macos")
 }
 ```
 
+> *__Note:__ With version 1.0.0, the native library names changed to align with the lwjgl platform names (`native-win64`
+> became `natives-windows` and so on). So, in case you are updating from 0.4.x, make sure to adjust your runtime
+> dependencies accordingly.*
 ## Library Coverage
 
 The bindings include most major parts of the PhysX SDK:
@@ -60,13 +63,13 @@ To get a feeling of what can be done with this you can take a look at my [kool](
 > above. However, the two are functionally identical, so it shouldn't matter too much. The JNI version is much faster
 > though.*
 
+- [Vehicle](https://fabmax.github.io/kool/kool-js/?demo=phys-vehicle): Vehicle demo with a racetrack and a few obstacles.
 - [Ragdolls](https://fabmax.github.io/kool/kool-js/?demo=phys-ragdoll): Simple Ragdoll demo.
-- [Vehicle](https://fabmax.github.io/kool/kool-js/?demo=phys-vehicle): Vehicle demo with a ray track and a few obstacles.
 - [Joints](https://fabmax.github.io/kool/kool-js/?demo=phys-joints): A chain running over two gears.
 - [Collision](https://fabmax.github.io/kool/kool-js/?demo=physics): Various collision shapes.
 
 ### Documentation
-Unfortunately, the generated bindings currently don't include any javadoc. However, the Java API
+Unfortunately, the generated bindings currently don't include much javadoc. However, the Java API
 is very close to the original PhysX C++ API, so you can simply use the official
 [PhysX API documentation](https://gameworksdocs.nvidia.com/PhysX/4.1/documentation/physxapi/files/index.html) and
 [PhysX User's Guide](https://gameworksdocs.nvidia.com/PhysX/4.1/documentation/physxguide/Manual/Index.html).
@@ -187,8 +190,8 @@ PxScene scene = physics.createScene(sceneDesc);
 Using CUDA comes with a few implications:
 
 The CUDA enabled native libraries are quite big (~25 MB), and I therefore decided to build a separate
-set of runtime jars for them (suffixed with `cuda`, so use `de.fabmax:physx-jni:[version]:native-win64cuda` instead of
-`de.fabmax:physx-jni:[version]:native-win64`).
+set of runtime jars for them (suffixed with `-cuda`, so use `de.fabmax:physx-jni:[version]:natives-windows-cuda` instead of
+`de.fabmax:physx-jni:[version]:natives-windows`).
 
 Moreover, CUDA comes with some additional overhead (a lot of data has to be copied around between CPU and GPU). For
 smaller scenes this overhead outweighs the benefits and physics computation might actually be slower than with CPU only.
