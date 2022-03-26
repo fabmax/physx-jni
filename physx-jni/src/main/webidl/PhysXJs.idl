@@ -2105,6 +2105,10 @@ PxHeightFieldGeometry implements PxGeometry;
 
 [Prefix="physx::"]
 interface PxHeightFieldSample {
+    void PxHeightFieldSample();
+    octet tessFlag();
+    void clearTessFlag();
+    void setTessFlag();
     attribute short height;
     attribute octet materialIndex0;
     attribute octet materialIndex1;

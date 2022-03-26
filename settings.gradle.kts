@@ -1,8 +1,8 @@
 rootProject.name = "physx-jni"
 
 include("physx-jni")
-include("physx-jni-native-win64")
-include("physx-jni-native-win64cuda")
-include("physx-jni-native-linux64")
-include("physx-jni-native-linux64cuda")
-include("physx-jni-native-mac64")
+include("physx-jni-natives-windows")
+include("physx-jni-natives-windows-cuda")
+include("physx-jni-natives-linux")
+include("physx-jni-natives-linux-cuda")
+include("physx-jni-natives-macos")

@@ -6,7 +6,7 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "de.fabmax"
-    version = "0.4.18"
+    version = "1.0.0"
 
     repositories {
         mavenCentral()
@@ -45,9 +45,9 @@ tasks.register<Exec>("buildNativeProject") {
 
     commandLine = OperatingSystem.current().let {
         when {
-            it.isWindows -> listOf("cmd", "/c", "build_physx_win64.bat")
+            it.isWindows -> listOf("cmd", "/c", "build_physx_windows.bat")
             it.isLinux -> listOf("./build_physx_linux.sh")
-            else -> listOf("./build_physx_mac.sh")
+            else -> listOf("./build_physx_macos.sh")
         }
     }
 }

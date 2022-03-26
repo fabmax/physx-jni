@@ -28,11 +28,11 @@ tasks.register<VersionNameUpdate>("updateVersionNames") {
     versionName = "$version"
     filesToUpdate = listOf(
         "${rootDir}/physx-jni/src/main/java/de/fabmax/physxjni/Loader.java",
-        "${rootDir}/physx-jni-native-win64/src/main/java/de/fabmax/physxjni/NativeMetaWin64.java",
-        "${rootDir}/physx-jni-native-win64cuda/src/main/java/de/fabmax/physxjni/NativeMetaWin64.java",
-        "${rootDir}/physx-jni-native-linux64/src/main/java/de/fabmax/physxjni/NativeMetaLinux64.java",
-        "${rootDir}/physx-jni-native-linux64cuda/src/main/java/de/fabmax/physxjni/NativeMetaLinux64.java",
-        "${rootDir}/physx-jni-native-mac64/src/main/java/de/fabmax/physxjni/NativeMetaMac64.java"
+        "${rootDir}/physx-jni-natives-windows/src/main/java/de/fabmax/physxjni/NativeMetaWindows.java",
+        "${rootDir}/physx-jni-natives-windows-cuda/src/main/java/de/fabmax/physxjni/NativeMetaWindows.java",
+        "${rootDir}/physx-jni-natives-linux/src/main/java/de/fabmax/physxjni/NativeMetaLinux.java",
+        "${rootDir}/physx-jni-natives-linux-cuda/src/main/java/de/fabmax/physxjni/NativeMetaLinux.java",
+        "${rootDir}/physx-jni-natives-macos/src/main/java/de/fabmax/physxjni/NativeMetaMacos.java"
     )
 }
 
@@ -60,11 +60,11 @@ val compileJava by tasks.existing {
 
 dependencies {
     testImplementation("junit:junit:4.12")
-    testRuntimeOnly(project(":physx-jni-native-win64cuda"))
-    testRuntimeOnly(project(":physx-jni-native-linux64cuda"))
-    testRuntimeOnly(project(":physx-jni-native-mac64"))
+    testRuntimeOnly(project(":physx-jni-natives-windows-cuda"))
+    testRuntimeOnly(project(":physx-jni-natives-linux-cuda"))
+    testRuntimeOnly(project(":physx-jni-natives-macos"))
 
-    testImplementation("org.lwjgl:lwjgl:3.2.3")
+    testImplementation("org.lwjgl:lwjgl:3.3.1")
 
     val lwjglNatives = org.gradle.internal.os.OperatingSystem.current().let {
         when {
@@ -73,7 +73,7 @@ dependencies {
             else -> "natives-windows"
         }
     }
-    testRuntimeOnly("org.lwjgl:lwjgl:3.2.3:$lwjglNatives")
+    testRuntimeOnly("org.lwjgl:lwjgl:3.3.1:$lwjglNatives")
 }
 
 publishing {
@@ -81,24 +81,24 @@ publishing {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
 
-            artifact(project(":physx-jni-native-win64").tasks["jar"]).apply {
-                classifier = "native-win64"
+            artifact(project(":physx-jni-natives-windows").tasks["jar"]).apply {
+                classifier = "natives-windows"
             }
 
-            artifact(project(":physx-jni-native-win64cuda").tasks["jar"]).apply {
-                classifier = "native-win64cuda"
+            artifact(project(":physx-jni-natives-windows-cuda").tasks["jar"]).apply {
+                classifier = "natives-windows-cuda"
             }
 
-            artifact(project(":physx-jni-native-linux64").tasks["jar"]).apply {
-                classifier = "native-linux64"
+            artifact(project(":physx-jni-natives-linux").tasks["jar"]).apply {
+                classifier = "natives-linux"
             }
 
-            artifact(project(":physx-jni-native-linux64cuda").tasks["jar"]).apply {
-                classifier = "native-linux64cuda"
+            artifact(project(":physx-jni-natives-linux-cuda").tasks["jar"]).apply {
+                classifier = "natives-linux-cuda"
             }
 
-            artifact(project(":physx-jni-native-mac64").tasks["jar"]).apply {
-                classifier = "native-mac64"
+            artifact(project(":physx-jni-natives-macos").tasks["jar"]).apply {
+                classifier = "natives-macos"
             }
 
             pom {

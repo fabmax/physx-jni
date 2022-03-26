@@ -2,9 +2,9 @@ package de.fabmax.physxjni;
 
 public enum Platform {
 
-    LINUX64("de.fabmax.physxjni.NativeMetaLinux64"),
-    WIN64("de.fabmax.physxjni.NativeMetaWin64"),
-    MAC64("de.fabmax.physxjni.NativeMetaMac64");
+    LINUX("de.fabmax.physxjni.NativeMetaLinux"),
+    WINDOWS("de.fabmax.physxjni.NativeMetaWindows"),
+    MACOS("de.fabmax.physxjni.NativeMetaMacos");
 
     private final String metaClassName;
 
@@ -19,11 +19,11 @@ public enum Platform {
     public static Platform getPlatform() {
         String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("windows")) {
-            return WIN64;
+            return WINDOWS;
         } else if (osName.contains("linux")) {
-            return LINUX64;
+            return LINUX;
         } else if (osName.contains("mac os x") || osName.contains("darwin") || osName.contains("osx")) {
-            return MAC64;
+            return MACOS;
         } else {
             throw new IllegalStateException("Unsupported OS: " + osName);
         }
