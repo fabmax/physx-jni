@@ -5,7 +5,7 @@ import java.util.List;
 
 public class NativeMetaMacos implements NativeMeta {
 
-    private static final String version = "1.1.0-SNAPSHOT";
+    private static final String version = "1.1.0";
 
     private static final List<String> libraries = new ArrayList<String>() {{
         add("macos/libPhysXJniBindings_64.dylib");
