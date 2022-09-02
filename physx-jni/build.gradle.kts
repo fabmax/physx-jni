@@ -1,17 +1,21 @@
+import me.champeau.mrjar.MultiReleaseExtension
 import java.io.FileInputStream
 import java.util.*
 
 plugins {
+    id("me.champeau.mrjar") version "0.1"
     signing
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+fun Project.multiReleaseJar(configure: Action<MultiReleaseExtension>): Unit =
+    (this as ExtensionAware).extensions.configure("multiRelease", configure)
 
-    @Suppress("UnstableApiUsage")
+multiReleaseJar {
+    targetVersions(8, 9)
+}
+
+java {
     withSourcesJar()
-    @Suppress("UnstableApiUsage")
     withJavadocJar()
 
     sourceSets {

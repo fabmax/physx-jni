@@ -38,6 +38,7 @@ interface PxActor {
     void setName(DOMString name);
     [Const] DOMString getName();
     [Value] PxBounds3 getWorldBounds(optional float inflation);
+    void setActorFlag(PxActorFlagEnum flag, boolean value);
     void setActorFlags([Ref] PxActorFlags flags);
     [Value] PxActorFlags getActorFlags();
     void setDominanceGroup(octet dominanceGroup);
@@ -1368,7 +1369,9 @@ interface PxSweepCallback {
 };
 
 [Prefix="physx::"]
-interface PxSweepHit { };
+interface PxSweepHit {
+    void PxSweepHit();
+};
 PxSweepHit implements PxLocationHit;
 
 [Prefix="physx::"]
@@ -3369,6 +3372,9 @@ interface TypeHelpers {
     static PxContactPair getContactPairAt(PxContactPair base, long index);
     static PxContactPairHeader getContactPairHeaderAt(PxContactPairHeader base, long index);
     static PxController getControllerAt(PxController base, long index);
+    static PxControllerShapeHit getControllerShapeHitAt(PxControllerShapeHit base, long index);
+    static PxControllersHit getControllersHitAt(PxControllersHit base, long index);
+    static PxControllerObstacleHit getControllerObstacleHitAt(PxControllerObstacleHit base, long index);
     static PxObstacle getObstacleAt(PxObstacle base, long index);
     static PxShape getShapeAt(PxShape base, long index);
     static PxTriggerPair getTriggerPairAt(PxTriggerPair base, long index);

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class NativeMetaLinux implements NativeMeta {
 
-    private static final String version = "1.0.0";
+    private static final String version = "1.1.0";
 
     private static final List<String> libraries = new ArrayList<String>() {{
         add("linux/libPhysXJniBindings_64.so");
