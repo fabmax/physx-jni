@@ -15,6 +15,7 @@ private object CommonGeneratorSettings {
         "PxHullPolygon",
         "PxMeshScale",
         "PxQuat",
+        "PxRaycastHit",
         "PxSweepHit",
         "PxTransform",
         "PxVec3",

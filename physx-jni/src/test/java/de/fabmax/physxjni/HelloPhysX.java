@@ -88,7 +88,7 @@ public class HelloPhysX {
         }
 
         // box should rest on the ground
-        Assert.assertEquals(boxHeight, 1f, 0.0001f);
+        Assert.assertEquals(1f, boxHeight, 0.0001f);
 
         // cleanup stuff
         scene.removeActor(ground);

@@ -38,6 +38,7 @@ interface PxActor {
     void setName(DOMString name);
     [Const] DOMString getName();
     [Value] PxBounds3 getWorldBounds(optional float inflation);
+    void setActorFlag(PxActorFlagEnum flag, boolean value);
     void setActorFlags([Ref] PxActorFlags flags);
     [Value] PxActorFlags getActorFlags();
     void setDominanceGroup(octet dominanceGroup);
