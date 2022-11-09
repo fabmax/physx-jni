@@ -1,5 +1,5 @@
 @echo off
-cd PhysX/physx
+cd PhysX4/physx
 cmake --build .\compiler\jni_vc16win64\ --config release
 
 copy .\bin\jni.win64\release\PhysX_64.dll ..\..\physx-jni-natives-windows\src\main\resources\windows\
