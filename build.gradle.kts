@@ -6,7 +6,7 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "de.fabmax"
-    version = "1.1.0"
+    version = "2.0.0-SNAPSHOT"
 
     repositories {
         mavenCentral()
@@ -26,7 +26,7 @@ tasks.register<Exec>("generateNativeProject") {
         when {
             it.isWindows -> listOf("cmd", "/c", "generate_physx_win64.bat")
             it.isLinux -> listOf("./generate_physx_linux.sh")
-            else -> listOf("./generate_physx_mac.sh")
+            else -> throw IllegalStateException("Unsupported OS: $it; for now, only Windows and Linux are supported")
         }
     }
 }
@@ -34,7 +34,7 @@ tasks.register<Exec>("generateNativeProject") {
 // generates native glue code based on PhysXJs.idl
 tasks.register<GenerateNativeGlueCode>("generateNativeGlueCode") {
     idlSource = File("${projectDir}/physx-jni/src/main/webidl/PhysXJs.idl").absolutePath
-    generatorOutput = File("${projectDir}/PhysX/physx/source/physxjnibindings/src/").absolutePath
+    generatorOutput = File("${projectDir}/PhysX/physx/source/webidlbindings/src/jni/").absolutePath
 }
 
 // builds the windows platform native libraries (requires cmake, Visual Studio 2019 (community) and a
@@ -47,7 +47,7 @@ tasks.register<Exec>("buildNativeProject") {
         when {
             it.isWindows -> listOf("cmd", "/c", "build_physx_windows.bat")
             it.isLinux -> listOf("./build_physx_linux.sh")
-            else -> listOf("./build_physx_macos.sh")
+            else -> throw IllegalStateException("Unsupported OS: $it; for now, only Windows and Linux are supported")
         }
     }
 }
