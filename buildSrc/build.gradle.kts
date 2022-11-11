@@ -3,9 +3,8 @@ plugins {
 }
 
 repositories {
-    maven {
-        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
-    }
+    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
+    //mavenLocal()
     mavenCentral()
 }
 

@@ -1,7 +1,18 @@
 package de.fabmax.physxjni;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.lwjgl.system.MemoryStack;
+import physx.PxTopLevelFunctions;
+import physx.common.PxDefaultCpuDispatcher;
+import physx.common.PxVec3;
+import physx.geometry.PxBoxGeometry;
+import physx.physics.*;
+import physx.support.PassThroughFilterShaderImpl;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class PassThroughFilterShaderTest {
-/*
     @Test
     public void passThroughShaderTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -27,7 +38,7 @@ public class PassThroughFilterShaderTest {
             PhysXTestEnv.simulateScene(scene, 5f, box);
 
             System.out.println("Filter shader was called " + shader.shaderCalls.get() + " times");
-            Assert.assertTrue(shader.shaderCalls.get() > 0);
+            Assertions.assertTrue(shader.shaderCalls.get() > 0);
 
             scene.release();
             ground.release();
@@ -36,13 +47,13 @@ public class PassThroughFilterShaderTest {
         }
     }
 
-    static class TestFilterShader extends JavaPassThroughFilterShader {
+    static class TestFilterShader extends PassThroughFilterShaderImpl {
         final AtomicInteger shaderCalls = new AtomicInteger();
-*/
+
         /**
          * This is the Java equivalent to the native DefaultFilterShader
          */
-/*        @Override
+        @Override
         public int filterShader(int attributes0, int filterData0w0, int filterData0w1, int filterData0w2, int filterData0w3,
                                 int attributes1, int filterData1w0, int filterData1w1, int filterData1w2, int filterData1w3) {
             shaderCalls.incrementAndGet();
@@ -61,5 +72,5 @@ public class PassThroughFilterShaderTest {
 
             return PxFilterFlagEnum.eDEFAULT;
         }
-    }*/
+    }
 }

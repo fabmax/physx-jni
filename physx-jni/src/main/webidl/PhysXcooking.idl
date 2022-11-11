@@ -1,0 +1,123 @@
+/****************************************
+ * [package=cooking]
+ ****************************************/
+
+[Prefix="physx::"]
+interface PxBVH33MidphaseDesc {
+    void setToDefault();
+    boolean isValid();
+
+    attribute float meshSizePerformanceTradeOff;
+    attribute PxMeshCookingHintEnum meshCookingHint;
+};
+
+[Prefix="physx::"]
+interface PxBVH34MidphaseDesc {
+    void setToDefault();
+    boolean isValid();
+
+    attribute unsigned long numPrimsPerLeaf;
+};
+
+enum PxConvexFlagEnum {
+    "PxConvexFlagEnum::e16_BIT_INDICES",
+    "PxConvexFlagEnum::eCOMPUTE_CONVEX",
+    "PxConvexFlagEnum::eCHECK_ZERO_AREA_TRIANGLES",
+    "PxConvexFlagEnum::eQUANTIZE_INPUT",
+    "PxConvexFlagEnum::eDISABLE_MESH_VALIDATION",
+    "PxConvexFlagEnum::ePLANE_SHIFTING",
+    "PxConvexFlagEnum::eFAST_INERTIA_COMPUTATION",
+    "PxConvexFlagEnum::eGPU_COMPATIBLE",
+    "PxConvexFlagEnum::eSHIFT_VERTICES"
+};
+
+[Prefix="physx::"]
+interface PxConvexFlags {
+    void PxConvexFlags(unsigned short flags);
+    boolean isSet(PxConvexFlagEnum flag);
+    void raise(PxConvexFlagEnum flag);
+    void clear(PxConvexFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxConvexMeshDesc {
+    void PxConvexMeshDesc();
+    [Value] attribute PxBoundedData points;
+    [Value] attribute PxConvexFlags flags;
+};
+
+enum PxConvexMeshCookingTypeEnum {
+    "PxConvexMeshCookingTypeEnum::eQUICKHULL"
+};
+
+//
+// PxCooking is deprecated, use PxTopLevelFunctions instead; however, PxSerialization needs PxCooking
+[Prefix="physx::", NoDelete]
+interface PxCooking {
+    void release();
+    PxConvexMesh createConvexMesh([Const, Ref] PxConvexMeshDesc desc, [Ref] PxInsertionCallback insertionCallback);
+    PxTriangleMesh createTriangleMesh([Const, Ref] PxTriangleMeshDesc desc, [Ref] PxInsertionCallback insertionCallback);
+    PxHeightField createHeightField([Const, Ref] PxHeightFieldDesc desc, [Ref] PxInsertionCallback insertionCallback);
+};
+
+[Prefix="physx::"]
+interface PxCookingParams {
+    void PxCookingParams([Const, Ref] PxTolerancesScale sc);
+    attribute float areaTestEpsilon;
+    attribute float planeTolerance;
+    attribute PxConvexMeshCookingTypeEnum convexMeshCookingType;
+    attribute boolean suppressTriangleMeshRemapTable;
+    attribute boolean buildTriangleAdjacencies;
+    attribute boolean buildGPUData;
+    [Value] attribute PxTolerancesScale scale;
+    [Value] attribute PxMeshPreprocessingFlags meshPreprocessParams;
+    attribute float meshWeldTolerance;
+    [Value] attribute PxMidphaseDesc midphaseDesc;
+    attribute unsigned long gaussMapLimit;
+};
+
+enum PxMeshCookingHintEnum {
+    "PxMeshCookingHintEnum::eSIM_PERFORMANCE",
+    "PxMeshCookingHintEnum::eCOOKING_PERFORMANCE"
+};
+
+enum PxMeshPreprocessingFlagEnum {
+    "PxMeshPreprocessingFlagEnum::eWELD_VERTICES",
+    "PxMeshPreprocessingFlagEnum::eDISABLE_CLEAN_MESH",
+    "PxMeshPreprocessingFlagEnum::eDISABLE_ACTIVE_EDGES_PRECOMPUTE",
+    "PxMeshPreprocessingFlagEnum::eFORCE_32BIT_INDICES"
+};
+
+[Prefix="physx::"]
+interface PxMeshPreprocessingFlags {
+    void PxMeshPreprocessingFlags(unsigned long flags);
+    boolean isSet(PxMeshPreprocessingFlagEnum flag);
+    void raise(PxMeshPreprocessingFlagEnum flag);
+    void clear(PxMeshPreprocessingFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxMidphaseDesc {
+    void PxMidphaseDesc();
+    PxMeshMidPhaseEnum getType();
+    void setToDefault(PxMeshMidPhaseEnum type);
+    boolean isValid();
+
+    [Value] attribute PxBVH33MidphaseDesc mBVH33Desc;
+    [Value] attribute PxBVH34MidphaseDesc mBVH34Desc;
+};
+
+enum PxMeshMidPhaseEnum {
+    "PxMeshMidPhaseEnum::eBVH33",
+    "PxMeshMidPhaseEnum::eBVH34"
+};
+
+[Prefix="physx::"]
+interface PxTriangleMeshDesc {
+    void PxTriangleMeshDesc();
+    void setToDefault();
+    boolean isValid();
+
+    [Value] attribute PxU16StridedData materialIndices;
+};
+PxTriangleMeshDesc implements PxSimpleTriangleMesh;

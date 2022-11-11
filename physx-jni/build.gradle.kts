@@ -70,6 +70,10 @@ dependencies {
     testRuntimeOnly("org.lwjgl:lwjgl:3.3.1:$lwjglNatives")
 }
 
+tasks.test {
+    useJUnitPlatform()
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {

@@ -1,0 +1,47 @@
+/****************************************
+ * [package=extensions]
+ ****************************************/
+
+[Prefix="physx::"]
+interface PxCollectionExt {
+    static void releaseObjects([Ref] PxCollection collection, optional boolean releaseExclusiveShapes);
+    static void remove([Ref] PxCollection collection, unsigned short concreteType, optional PxCollection to);
+    //static PxCollection createCollection([Ref] PxPhysics physics);    // clashes with createCollection(scene)
+    static PxCollection createCollection([Ref] PxScene scene);
+};
+
+[Prefix="physx::"]
+interface PxDefaultMemoryInputData {
+    void PxDefaultMemoryInputData([Ref] PxU8Ptr data, unsigned long length);
+    unsigned long read(VoidPtr dest, unsigned long count);
+    unsigned long getLength();
+    void seek(unsigned long pos);
+    unsigned long tell();
+};
+PxDefaultMemoryInputData implements PxInputData;
+
+[Prefix="physx::"]
+interface PxDefaultMemoryOutputStream {
+    void PxDefaultMemoryOutputStream();
+    void write(VoidPtr src, unsigned long count);
+    unsigned long getSize();
+    VoidPtr getData();
+};
+PxDefaultMemoryOutputStream implements PxOutputStream;
+
+[Prefix="physx::"]
+interface PxSerialization {
+    static boolean isSerializable([Ref] PxCollection collection, [Ref] PxSerializationRegistry sr, [Const] optional PxCollection externalReferences);
+    static void complete([Ref] PxCollection collection, [Ref] PxSerializationRegistry sr, [Const] optional PxCollection exceptFor, optional boolean followJoints);
+    static void createSerialObjectIds([Ref] PxCollection collection, unsigned long long base);
+    static PxCollection createCollectionFromXml([Ref] PxInputData inputData, [Ref] PxCooking cooking, [Ref] PxSerializationRegistry sr, [Const] optional PxCollection externalRefs);
+    static PxCollection createCollectionFromBinary(VoidPtr memBlock, [Ref] PxSerializationRegistry sr, [Const] optional PxCollection externalRefs);
+    static boolean serializeCollectionToXml([Ref] PxOutputStream outputStream, [Ref] PxCollection collection, [Ref] PxSerializationRegistry sr, optional PxCooking cooking, [Const] optional PxCollection externalRefs);
+    static boolean serializeCollectionToBinary([Ref] PxOutputStream outputStream, [Ref] PxCollection collection, [Ref] PxSerializationRegistry sr, [Const] optional PxCollection externalRefs, optional boolean exportNames);
+    static PxSerializationRegistry createSerializationRegistry([Ref] PxPhysics physics);
+};
+
+[Prefix="physx::", NoDelete]
+interface PxSerializationRegistry {
+    void release();
+};

@@ -3,7 +3,7 @@ package de.fabmax.physxjni;
 import org.junit.jupiter.api.Assertions;
 import physx.PxTopLevelFunctions;
 import physx.common.*;
-import physx.geomutils.PxBoxGeometry;
+import physx.geometry.PxBoxGeometry;
 import physx.physics.*;
 
 public class HelloPhysX {

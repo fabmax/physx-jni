@@ -2,7 +2,278 @@
  * [package=support]
  ****************************************/
 
+interface SupportFunctions {
+    static PxShape PxActor_getShape([Ref] PxRigidActor actor, long index);
+    static PxActor PxContactPairHeader_getActor([Ref] PxContactPairHeader pairHeader, long index);
+    [Ref] static Vector_PxActorPtr PxScene_getActiveActors(PxScene scene);
+};
+
+interface PxU8Ptr { };
+PxU8Ptr implements PxU8ConstPtr;
+
+interface PxU8ConstPtr { };
+
+interface PxU16Ptr { };
+PxU16Ptr implements PxU16ConstPtr;
+
+interface PxU16ConstPtr { };
+
+interface PxU32Ptr { };
+PxU32Ptr implements PxU32ConstPtr;
+
+interface PxU32ConstPtr { };
+
+interface PxRealPtr { };
+
+
+interface PxActorPtr { };
+
+interface PxMaterialPtr { };
+
+interface PxMaterialConstPtr { };
+
+interface PxVehicleWheelsPtr { };
+
+interface TypeHelpers {
+    static octet getU8At([Ref] PxU8ConstPtr base, long index);
+    static unsigned short getU16At([Ref] PxU16ConstPtr base, long index);
+    static unsigned long getU32At([Ref] PxU32ConstPtr base, long index);
+    static float getRealAt([Ref] PxRealPtr base, long index);
+
+    static PxActor getActorAt(PxActor base, long index);
+    static PxBounds3 getBounds3At(PxBounds3 base, long index);
+    static PxContactPair getContactPairAt(PxContactPair base, long index);
+    static PxContactPairHeader getContactPairHeaderAt(PxContactPairHeader base, long index);
+    //static PxController getControllerAt(PxController base, long index);
+    //static PxControllerShapeHit getControllerShapeHitAt(PxControllerShapeHit base, long index);
+    //static PxControllersHit getControllersHitAt(PxControllersHit base, long index);
+    //static PxControllerObstacleHit getControllerObstacleHitAt(PxControllerObstacleHit base, long index);
+    //static PxObstacle getObstacleAt(PxObstacle base, long index);
+    static PxShape getShapeAt(PxShape base, long index);
+    static PxTriggerPair getTriggerPairAt(PxTriggerPair base, long index);
+    static PxVec3 getVec3At(PxVec3 base, long index);
+
+    [Value] static PxU8Ptr voidToU8Ptr(VoidPtr voidPtr);
+    [Value] static PxU16Ptr voidToU16Ptr(VoidPtr voidPtr);
+    [Value] static PxU32Ptr voidToU32Ptr(VoidPtr voidPtr);
+    [Value] static PxRealPtr voidToRealPtr(VoidPtr voidPtr);
+
+    //static PxArticulationJoint articulationBaseJointToJoint(PxArticulationJointBase baseJoint);
+    //static PxArticulationJointReducedCoordinate articulationBaseJointToJointReducedCoordinate(PxArticulationJointBase baseJoint);
+
+    static any voidToAny(VoidPtr voidPtr);
+};
+
+interface Vector_PxMaterialConst {
+    void Vector_PxMaterialConst();
+    void Vector_PxMaterialConst(unsigned long size);
+    [Const] PxMaterial at(unsigned long index);
+    PxMaterialConstPtr data();
+    unsigned long size();
+    void push_back([Const] PxMaterial value);
+    void clear();
+};
+
+interface Vector_PxHeightFieldSample {
+    void Vector_PxHeightFieldSample();
+    void Vector_PxHeightFieldSample(unsigned long size);
+    [Ref] PxHeightFieldSample at(unsigned long index);
+    PxHeightFieldSample data();
+    unsigned long size();
+    void push_back([Ref] PxHeightFieldSample value);
+    void clear();
+};
+
+interface Vector_PxReal {
+    void Vector_PxReal();
+    void Vector_PxReal(unsigned long size);
+    float at(unsigned long index);
+    VoidPtr data();
+    unsigned long size();
+    void push_back(float value);
+    void clear();
+};
+
+interface Vector_PxU8 {
+    void Vector_PxU8();
+    void Vector_PxU8(unsigned long size);
+    octet at(unsigned long index);
+    VoidPtr data();
+    unsigned long size();
+    void push_back(octet value);
+    void clear();
+};
+
+interface Vector_PxU16 {
+    void Vector_PxU16();
+    void Vector_PxU16(unsigned long size);
+    unsigned short at(unsigned long index);
+    VoidPtr data();
+    unsigned long size();
+    void push_back(unsigned short value);
+    void clear();
+};
+
+interface Vector_PxU32 {
+    void Vector_PxU32();
+    void Vector_PxU32(unsigned long size);
+    unsigned long at(unsigned long index);
+    VoidPtr data();
+    unsigned long size();
+    void push_back(unsigned long value);
+    void clear();
+};
+
+interface Vector_PxVec3 {
+    void Vector_PxVec3();
+    void Vector_PxVec3(unsigned long size);
+    [Ref] PxVec3 at(unsigned long index);
+    PxVec3 data();
+    unsigned long size();
+    void push_back([Ref] PxVec3 value);
+    void clear();
+};
+
+interface Vector_PxActorPtr {
+    void Vector_PxActorPtr();
+    void Vector_PxActorPtr(unsigned long size);
+    PxActor at(unsigned long index);
+    PxActorPtr data();
+    unsigned long size();
+    void push_back(PxActor value);
+    void clear();
+};
+
+interface Vector_PxContactPairPoint {
+    void Vector_PxContactPairPoint();
+    void Vector_PxContactPairPoint(unsigned long size);
+    [Ref] PxContactPairPoint at(unsigned long index);
+    PxContactPairPoint data();
+    unsigned long size();
+    void push_back([Ref] PxContactPairPoint value);
+    void clear();
+};
+
+//interface Vector_PxRaycastQueryResult {
+//    void Vector_PxRaycastQueryResult();
+//    void Vector_PxRaycastQueryResult(unsigned long size);
+//    [Ref] PxRaycastQueryResult at(unsigned long index);
+//    PxRaycastQueryResult data();
+//    unsigned long size();
+//    void push_back([Ref] PxRaycastQueryResult value);
+//    void clear();
+//};
+//
+//interface Vector_PxSweepQueryResult {
+//    void Vector_PxSweepQueryResult();
+//    void Vector_PxSweepQueryResult(unsigned long size);
+//    [Ref] PxSweepQueryResult at(unsigned long index);
+//    PxSweepQueryResult data();
+//    unsigned long size();
+//    void push_back([Ref] PxSweepQueryResult value);
+//    void clear();
+//};
+
+interface Vector_PxRaycastHit {
+    void Vector_PxRaycastHit();
+    void Vector_PxRaycastHit(unsigned long size);
+    [Ref] PxRaycastHit at(unsigned long index);
+    PxRaycastHit data();
+    unsigned long size();
+    void push_back([Ref] PxRaycastHit value);
+    void clear();
+};
+
+interface Vector_PxSweepHit {
+    void Vector_PxSweepHit();
+    void Vector_PxSweepHit(unsigned long size);
+    [Ref] PxSweepHit at(unsigned long index);
+    PxSweepHit data();
+    unsigned long size();
+    void push_back([Ref] PxSweepHit value);
+    void clear();
+};
+
+//interface Vector_PxVehicleDrivableSurfaceType {
+//    void Vector_PxVehicleDrivableSurfaceType();
+//    void Vector_PxVehicleDrivableSurfaceType(unsigned long size);
+//    [Ref] PxVehicleDrivableSurfaceType at(unsigned long index);
+//    PxVehicleDrivableSurfaceType data();
+//    unsigned long size();
+//    void push_back([Ref] PxVehicleDrivableSurfaceType value);
+//    void clear();
+//};
+//
+//interface Vector_PxWheelQueryResult {
+//    void Vector_PxWheelQueryResult();
+//    void Vector_PxWheelQueryResult(unsigned long size);
+//    [Ref] PxWheelQueryResult at(unsigned long index);
+//    PxWheelQueryResult data();
+//    unsigned long size();
+//    void push_back([Ref] PxWheelQueryResult value);
+//    void clear();
+//};
+//
+//interface Vector_PxVehicleWheels {
+//    void Vector_PxVehicleWheels();
+//    void Vector_PxVehicleWheels(unsigned long size);
+//    PxVehicleWheels at(unsigned long index);
+//    PxVehicleWheelsPtr data();
+//    unsigned long size();
+//    void push_back(PxVehicleWheels value);
+//    void clear();
+//};
+
+interface PassThroughFilterShader {
+    unsigned long filterShader(unsigned long attributes0,
+                               unsigned long filterData0w0, unsigned long filterData0w1, unsigned long filterData0w2, unsigned long filterData0w3,
+                               unsigned long attributes1,
+                               unsigned long filterData1w0, unsigned long filterData1w1, unsigned long filterData1w2, unsigned long filterData1w3);
+
+    attribute unsigned long outputPairFlags;
+};
+PassThroughFilterShader implements PxSimulationFilterShader;
+
+[JSImplementation="PassThroughFilterShader"]
+interface PassThroughFilterShaderImpl {
+    void PassThroughFilterShaderImpl();
+    unsigned long filterShader(unsigned long attributes0,
+                               unsigned long filterData0w0, unsigned long filterData0w1, unsigned long filterData0w2, unsigned long filterData0w3,
+                               unsigned long attributes1,
+                               unsigned long filterData1w0, unsigned long filterData1w1, unsigned long filterData1w2, unsigned long filterData1w3);
+};
+
 [Prefix="physx::", NoDelete]
 interface PxPvd {
     //boolean connect([Ref] PxPvdTransport transport, [Ref] PxPvdInstrumentationFlags flags);
+};
+
+enum PxVisualizationParameterEnum {
+    "PxVisualizationParameterEnum::eSCALE",
+    "PxVisualizationParameterEnum::eWORLD_AXES",
+    "PxVisualizationParameterEnum::eBODY_AXES",
+    "PxVisualizationParameterEnum::eBODY_MASS_AXES",
+    "PxVisualizationParameterEnum::eBODY_LIN_VELOCITY",
+    "PxVisualizationParameterEnum::eBODY_ANG_VELOCITY",
+    "PxVisualizationParameterEnum::eCONTACT_POINT",
+    "PxVisualizationParameterEnum::eCONTACT_NORMAL",
+    "PxVisualizationParameterEnum::eCONTACT_ERROR",
+    "PxVisualizationParameterEnum::eCONTACT_FORCE",
+    "PxVisualizationParameterEnum::eACTOR_AXES",
+    "PxVisualizationParameterEnum::eCOLLISION_AABBS",
+    "PxVisualizationParameterEnum::eCOLLISION_SHAPES",
+    "PxVisualizationParameterEnum::eCOLLISION_AXES",
+    "PxVisualizationParameterEnum::eCOLLISION_COMPOUNDS",
+    "PxVisualizationParameterEnum::eCOLLISION_FNORMALS",
+    "PxVisualizationParameterEnum::eCOLLISION_EDGES",
+    "PxVisualizationParameterEnum::eCOLLISION_STATIC",
+    "PxVisualizationParameterEnum::eCOLLISION_DYNAMIC",
+    "PxVisualizationParameterEnum::eJOINT_LOCAL_FRAMES",
+    "PxVisualizationParameterEnum::eJOINT_LIMITS",
+    "PxVisualizationParameterEnum::eCULL_BOX",
+    "PxVisualizationParameterEnum::eMBP_REGIONS",
+    "PxVisualizationParameterEnum::eSIMULATION_MESH",
+    "PxVisualizationParameterEnum::eSDF",
+    "PxVisualizationParameterEnum::eNUM_VALUES",
+    "PxVisualizationParameterEnum::eFORCE_DWORD"
 };

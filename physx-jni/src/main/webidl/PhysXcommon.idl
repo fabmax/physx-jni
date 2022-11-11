@@ -30,6 +30,14 @@ interface PxBaseFlags {
 interface PxBaseTask { };
 
 [Prefix="physx::"]
+interface PxBoundedData {
+    void PxBoundedData();
+    attribute unsigned long count;
+    attribute unsigned long stride;
+    [Const] attribute VoidPtr data;
+};
+
+[Prefix="physx::"]
 interface PxBounds3 {
     void PxBounds3();
     void PxBounds3([Const, Ref] PxVec3 minimum, [Const, Ref] PxVec3 maximum);
@@ -52,6 +60,23 @@ interface PxBounds3 {
     boolean isValid();
     [Value] attribute PxVec3 minimum;
     [Value] attribute PxVec3 maximum;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxCollection {
+    void add([Ref] PxBase obj, optional unsigned long long id);
+    void remove([Ref] PxBase obj);
+    boolean contains([Ref] PxBase obj);
+    void addId([Ref] PxBase obj, unsigned long long id);
+    void removeId(unsigned long long id);
+    //void add([Ref] PxCollection collection);      clashes with void add([Ref] PxBase object)
+    //void remove([Ref] PxCollection collection);   clashes with void remove([Ref] PxBase object)
+    unsigned long getNbObjects();
+    [Ref] PxBase getObject(unsigned long index);
+    PxBase find(unsigned long long id);
+    unsigned long getNbIds();
+    unsigned long long getId([Const, Ref] PxBase obj);
+    void release();
 };
 
 [Prefix="physx::"]
@@ -106,6 +131,15 @@ enum PxIDENTITYEnum {
 };
 
 [Prefix="physx::"]
+interface PxInputData { };
+
+[Prefix="physx::"]
+interface PxOutputStream { };
+
+[Prefix="physx::", NoDelete]
+interface PxInsertionCallback { };
+
+[Prefix="physx::"]
 interface PxQuat {
     void PxQuat();
     void PxQuat(PxIDENTITYEnum r);
@@ -114,6 +148,12 @@ interface PxQuat {
     attribute float y;
     attribute float z;
     attribute float w;
+};
+
+[Prefix="physx::"]
+interface PxStridedData {
+    attribute unsigned long stride;
+    [Const] attribute VoidPtr data;
 };
 
 [Prefix="physx::"]
@@ -128,6 +168,11 @@ interface PxTransform {
     void PxTransform([Const, Ref] PxVec3 p0, [Const, Ref] PxQuat q0);
     [Value] attribute PxQuat q;
     [Value] attribute PxVec3 p;
+};
+
+interface PxU16StridedData {
+    attribute unsigned long stride;
+    [Const, Value] attribute PxU16ConstPtr data;
 };
 
 [Prefix="physx::"]

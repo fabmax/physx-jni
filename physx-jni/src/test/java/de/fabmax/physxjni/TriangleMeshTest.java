@@ -1,7 +1,21 @@
 package de.fabmax.physxjni;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.lwjgl.system.MemoryStack;
+import physx.PxTopLevelFunctions;
+import physx.common.PxBoundedData;
+import physx.common.PxVec3;
+import physx.cooking.PxTriangleMeshDesc;
+import physx.geometry.PxTriangleMesh;
+import physx.geometry.PxTriangleMeshGeometry;
+import physx.physics.PxRigidDynamic;
+import physx.physics.PxRigidStatic;
+import physx.physics.PxScene;
+import physx.support.Vector_PxU32;
+import physx.support.Vector_PxVec3;
+
 public class TriangleMeshTest {
-/*
     @Test
     public void triangleMeshTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -41,7 +55,7 @@ public class TriangleMeshTest {
             desc.setTriangles(triangles);
 
             // cook mesh and delete input data afterwards (no need to keep them around anymore)
-            PxTriangleMesh mesh = PhysXTestEnv.cooking.createTriangleMesh(desc, PhysXTestEnv.physics.getPhysicsInsertionCallback());
+            PxTriangleMesh mesh = PxTopLevelFunctions.CreateTriangleMesh(PhysXTestEnv.cookingParams, desc);
             pointVector.destroy();
             indexVector.destroy();
 
@@ -57,7 +71,7 @@ public class TriangleMeshTest {
             PhysXTestEnv.simulateScene(scene, 5, box);
 
             // box should rest on our tri mesh
-            Assert.assertTrue(box.getGlobalPose().getP().getY() > 0);
+            Assertions.assertTrue(box.getGlobalPose().getP().getY() > 0);
 
             // clean up
             scene.release();
@@ -66,5 +80,4 @@ public class TriangleMeshTest {
             mesh.release();
         }
     }
-*/
 }

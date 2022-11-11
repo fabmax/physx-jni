@@ -5,10 +5,9 @@ interface PxTopLevelFunctions {
     static readonly attribute unsigned long PHYSICS_VERSION;
 
     [Value] static PxSimulationFilterShader DefaultFilterShader();
-    //static void setupPassThroughFilterShader(PxSceneDesc sceneDesc, PassThroughFilterShader filterShader);
+    static void setupPassThroughFilterShader(PxSceneDesc sceneDesc, PassThroughFilterShader filterShader);
 
     //static PxControllerManager CreateControllerManager([Ref] PxScene scene, optional boolean lockingEnabled);
-    //static PxCooking CreateCooking(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxCookingParams scale);
     static PxFoundation CreateFoundation(unsigned long version, [Ref] PxDefaultAllocator allocator, [Ref] PxErrorCallback errorCallback);
     static PxPhysics CreatePhysics(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxTolerancesScale params, optional PxPvd pvd);
     static PxDefaultCpuDispatcher DefaultCpuDispatcherCreate(unsigned long numThreads);
@@ -23,4 +22,11 @@ interface PxTopLevelFunctions {
 //    static PxPrismaticJoint PrismaticJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
 //    static PxRevoluteJoint RevoluteJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
 //    static PxSphericalJoint SphericalJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
+
+    static PxConvexMesh CreateConvexMesh([Const, Ref] PxCookingParams params, [Const, Ref] PxConvexMeshDesc desc);
+    static PxTriangleMesh CreateTriangleMesh([Const, Ref] PxCookingParams params, [Const, Ref] PxTriangleMeshDesc desc);
+    static PxHeightField CreateHeightField([Const, Ref] PxHeightFieldDesc desc);
+
+    // PxCooking is deprecated, only needed for scene serialization
+    static PxCooking CreateCooking(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxCookingParams scale);
 };

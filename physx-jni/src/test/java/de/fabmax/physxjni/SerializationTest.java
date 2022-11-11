@@ -1,11 +1,27 @@
 package de.fabmax.physxjni;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import physx.common.PxCollection;
+import physx.extensions.*;
+import physx.physics.PxScene;
+import physx.support.PxU8ConstPtr;
+import physx.support.TypeHelpers;
+import physx.support.Vector_PxU8;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
 public class SerializationTest {
-/*
+
     private InputStream getTestXml() {
         InputStream testXml = getClass().getClassLoader().getResourceAsStream("SerializedCollection.xml");
         if (testXml == null) {
-            Assert.fail("SerializedCollection.xml not found in resources");
+            Assertions.fail("SerializedCollection.xml not found in resources");
         }
         return testXml;
     }
@@ -35,13 +51,16 @@ public class SerializationTest {
             bin[i] = TypeHelpers.getU8At(serData, i);
         }
         String[] actual = new String(bin).trim().split("\n");
+        for (String s : actual) {
+            System.out.println(s);
+        }
 
         sr.release();
         memOut.destroy();
         sceneCollection.release();
         scene.release();
 
-        Assert.assertEquals(expected.size(), actual.length);
+        Assertions.assertEquals(expected.size(), actual.length);
         for (int i = 0; i < actual.length; i++) {
             String expLine = expected.get(i).trim();
 
@@ -50,7 +69,7 @@ public class SerializationTest {
                     || expLine.startsWith("<Speed >");          // For some reason, Speed scale differs between windows and linux
 
             if (!ignoreLine) {
-                Assert.assertEquals(expLine, actual[i].trim());
+                Assertions.assertEquals(expLine, actual[i].trim());
             }
         }
     }
@@ -71,12 +90,11 @@ public class SerializationTest {
         PxDefaultMemoryInputData memIn = new PxDefaultMemoryInputData(TypeHelpers.voidToU8Ptr(data.data()), data.size());
         PxSerializationRegistry sr = PxSerialization.createSerializationRegistry(PhysXTestEnv.physics);
         PxCollection loadedCollection = PxSerialization.createCollectionFromXml(memIn, PhysXTestEnv.cooking, sr);
-        Assert.assertEquals(3, loadedCollection.getNbObjects());
+        Assertions.assertEquals(3, loadedCollection.getNbObjects());
 
         loadedCollection.release();
         sr.release();
         memIn.destroy();
         data.destroy();
     }
-*/
 }

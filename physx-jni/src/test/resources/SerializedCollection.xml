@@ -1,19 +1,21 @@
-<PhysXCollection version="4.1.2" >
+<PhysXCollection version="5.1.0" >
     <UpVector >0 0 0</UpVector>
     <Scale >
         <Length >0</Length>
-        <Speed >10</Speed>
+        <Speed >0</Speed>
     </Scale>
     <PxMaterial >
-        <Id >1925468155632</Id>
+        <Id >2510227220176</Id>
         <DynamicFriction >0.5</DynamicFriction>
         <StaticFriction >0.5</StaticFriction>
         <Restitution >0.5</Restitution>
+        <Damping >0</Damping>
+        <Flags >eIMPROVED_PATCH_FRICTION</Flags>
         <FrictionCombineMode >eAVERAGE</FrictionCombineMode>
         <RestitutionCombineMode >eAVERAGE</RestitutionCombineMode>
     </PxMaterial>
     <PxRigidDynamic >
-        <Id >1925470053728</Id>
+        <Id >2510228169904</Id>
         <Name />
         <ActorFlags >eVISUALIZATION</ActorFlags>
         <DominanceGroup >0</DominanceGroup>
@@ -21,23 +23,24 @@
         <GlobalPose >0 0 0 1 0 0 0</GlobalPose>
         <Shapes >
             <PxShape >
+                <LocalPose >0 0 0 1 0 0 0</LocalPose>
+                <SimulationFilterData >1 4294967295 0 0</SimulationFilterData>
+                <QueryFilterData >0 0 0 0</QueryFilterData>
+                <Materials >
+                    <PxMaterialRef >2510227220176</PxMaterialRef>
+                </Materials>
+                <ContactOffset >0.02</ContactOffset>
+                <RestOffset >0</RestOffset>
+                <DensityForFluid >800</DensityForFluid>
+                <TorsionalPatchRadius >0</TorsionalPatchRadius>
+                <MinTorsionalPatchRadius >0</MinTorsionalPatchRadius>
+                <Flags >eSIMULATION_SHAPE|eSCENE_QUERY_SHAPE|eVISUALIZATION</Flags>
+                <Name />
                 <Geometry >
                     <PxBoxGeometry >
                         <HalfExtents >0.5 0.5 0.5</HalfExtents>
                     </PxBoxGeometry>
                 </Geometry>
-                <LocalPose >0 0 0 1 0 0 0</LocalPose>
-                <SimulationFilterData >1 4294967295 0 0</SimulationFilterData>
-                <QueryFilterData >0 0 0 0</QueryFilterData>
-                <Materials >
-                    <PxMaterialRef >1925468155632</PxMaterialRef>
-                </Materials>
-                <ContactOffset >0.02</ContactOffset>
-                <RestOffset >0</RestOffset>
-                <TorsionalPatchRadius >0</TorsionalPatchRadius>
-                <MinTorsionalPatchRadius >0</MinTorsionalPatchRadius>
-                <Flags >eSIMULATION_SHAPE|eSCENE_QUERY_SHAPE|eVISUALIZATION</Flags>
-                <Name />
             </PxShape>
         </Shapes>
         <CMassLocalPose >0 0 0 1 0 0 0</CMassLocalPose>
@@ -45,15 +48,18 @@
         <MassSpaceInertiaTensor >1 1 1</MassSpaceInertiaTensor>
         <LinearDamping >0</LinearDamping>
         <AngularDamping >0.05</AngularDamping>
-        <LinearVelocity >0 0 0</LinearVelocity>
-        <AngularVelocity >0 0 0</AngularVelocity>
-        <MaxAngularVelocity >100</MaxAngularVelocity>
         <MaxLinearVelocity >1e+16</MaxLinearVelocity>
+        <MaxAngularVelocity >100</MaxAngularVelocity>
+        <RigidBodyFlags >0</RigidBodyFlags>
         <MinCCDAdvanceCoefficient >0.15</MinCCDAdvanceCoefficient>
         <MaxDepenetrationVelocity >1e+32</MaxDepenetrationVelocity>
         <MaxContactImpulse >1e+32</MaxContactImpulse>
+        <ContactSlopCoefficient >0</ContactSlopCoefficient>
         <SleepThreshold >0.005</SleepThreshold>
         <StabilizationThreshold >0.0025</StabilizationThreshold>
+        <RigidDynamicLockFlags >0</RigidDynamicLockFlags>
+        <LinearVelocity >0 0 0</LinearVelocity>
+        <AngularVelocity >0 0 0</AngularVelocity>
         <WakeCounter >0.4</WakeCounter>
         <SolverIterationCounts >
             <minPositionIters >4</minPositionIters>

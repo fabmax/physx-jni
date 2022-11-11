@@ -1,0 +1,282 @@
+/****************************************
+ * [package=geometry]
+ ****************************************/
+
+[Prefix="physx::"]
+interface PxBoxGeometry {
+    void PxBoxGeometry(float hx, float hy, float hz);
+};
+PxBoxGeometry implements PxGeometry;
+
+[Prefix="physx::", NoDelete]
+interface PxBVHStructure { };
+PxBVHStructure implements PxBase;
+
+[Prefix="physx::"]
+interface PxCapsuleGeometry {
+    void PxCapsuleGeometry(float radius, float halfHeight);
+};
+PxCapsuleGeometry implements PxGeometry;
+
+[Prefix="physx::", NoDelete]
+interface PxConvexMesh {
+    unsigned long getNbVertices();
+    [Const] PxVec3 getVertices();
+    [Value] PxU8ConstPtr getIndexBuffer();
+    unsigned long getNbPolygons();
+    boolean getPolygonData(unsigned long index, [Ref] PxHullPolygon data);
+    unsigned long getReferenceCount();
+    void acquireReference();
+    [Value] PxBounds3 getLocalBounds();
+    boolean isGpuCompatible();
+};
+PxConvexMesh implements PxBase;
+
+[Prefix="physx::"]
+interface PxConvexMeshGeometry {
+    void PxConvexMeshGeometry(PxConvexMesh mesh, [Const, Ref] optional PxMeshScale scaling, [Ref] optional PxConvexMeshGeometryFlags flags);
+};
+PxConvexMeshGeometry implements PxGeometry;
+
+enum PxConvexMeshGeometryFlagEnum {
+    "PxConvexMeshGeometryFlagEnum::eTIGHT_BOUNDS"
+};
+
+[Prefix="physx::"]
+interface PxConvexMeshGeometryFlags {
+    void PxConvexMeshGeometryFlags(octet flags);
+    boolean isSet(PxConvexMeshGeometryFlagEnum flag);
+    void raise(PxConvexMeshGeometryFlagEnum flag);
+    void clear(PxConvexMeshGeometryFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxGeometry {
+    PxGeometryTypeEnum getType();
+};
+
+[Prefix="physx::"]
+interface PxGeometryHolder {
+    void PxGeometryHolder();
+    void PxGeometryHolder([Const, Ref] PxGeometry geometry);
+    PxGeometryTypeEnum getType();
+    //[Ref] PxGeometry any();       // does not work: any is a keyword
+    [Ref] PxSphereGeometry sphere();
+    [Ref] PxPlaneGeometry plane();
+    [Ref] PxCapsuleGeometry capsule();
+    [Ref] PxBoxGeometry box();
+    [Ref] PxConvexMeshGeometry convexMesh();
+    [Ref] PxTriangleMeshGeometry triangleMesh();
+    [Ref] PxHeightFieldGeometry heightField();
+    void storeAny([Const, Ref] PxGeometry geometry);
+};
+
+[Prefix="physx::"]
+interface PxGeometryQuery {
+    static boolean sweep([Const, Ref] PxVec3 unitDir, float maxDist, [Const, Ref] PxGeometry geom0, [Const, Ref] PxTransform pose0,
+                         [Const, Ref] PxGeometry geom1, [Const, Ref] PxTransform pose1, [Ref] PxSweepHit sweepHit,
+                         [Ref] optional PxHitFlags hitFlags, optional float inflation);
+    static boolean overlap([Const, Ref] PxGeometry geom0, [Const, Ref] PxTransform pose0,
+                           [Const, Ref] PxGeometry geom1, [Const, Ref] PxTransform pose1);
+    static unsigned long raycast([Const, Ref] PxVec3 origin, [Const, Ref] PxVec3 unitDir, [Const, Ref] PxGeometry geom,
+                           [Const, Ref] PxTransform pose, float maxDist, [Ref] PxHitFlags hitFlags,
+                           unsigned long maxHits, PxRaycastHit rayHits);
+//    static boolean computePenetration([Ref] PxVec3 direction, [Ref] float depth, [Const, Ref] PxGeometry geom0,
+//                        [Const, Ref] PxTransform pose0, [Const, Ref] PxGeometry geom1, [Const, Ref] PxTransform pose1);
+    static float pointDistance([Const, Ref] PxVec3 point, [Const, Ref] PxGeometry geom, [Const, Ref] PxTransform pose, optional PxVec3 closestPoint);
+    [Value] static PxBounds3 getWorldBounds([Const, Ref] PxGeometry geom, [Const, Ref] PxTransform pose, optional float inflation);
+    static boolean isValid([Const, Ref] PxGeometry geom);
+};
+
+enum PxGeometryTypeEnum {
+    "PxGeometryTypeEnum::eSPHERE",
+    "PxGeometryTypeEnum::ePLANE",
+    "PxGeometryTypeEnum::eCAPSULE",
+    "PxGeometryTypeEnum::eBOX",
+    "PxGeometryTypeEnum::eCONVEXMESH",
+    "PxGeometryTypeEnum::eTRIANGLEMESH",
+    "PxGeometryTypeEnum::eHEIGHTFIELD"
+};
+
+[Prefix="physx::", NoDelete]
+interface PxHeightField {
+    unsigned long saveCells(VoidPtr destBuffer, unsigned long destBufferSize);
+    boolean modifySamples(long startCol, long startRow, [Const, Ref] PxHeightFieldDesc subfieldDesc, optional boolean shrinkBounds);
+    unsigned long getNbRows();
+    unsigned long getNbColumns();
+    PxHeightFieldFormatEnum getFormat();
+    unsigned long getSampleStride();
+    float getConvexEdgeThreshold();
+    [Value] PxHeightFieldFlags getFlags();
+    float getHeight(float x, float z);
+    unsigned long getReferenceCount();
+    void acquireReference();
+    unsigned short getTriangleMaterialIndex(unsigned long triangleIndex);
+    [Value] PxVec3 getTriangleNormal(unsigned long triangleIndex);
+    [Const, Ref] PxHeightFieldSample getSample(unsigned long row, unsigned long column);
+    unsigned long getTimestamp();
+};
+PxHeightField implements PxBase;
+
+[Prefix="physx::"]
+interface PxHeightFieldDesc {
+    void PxHeightFieldDesc();
+    void setToDefault();
+    boolean isValid();
+    attribute unsigned long nbRows;
+    attribute unsigned long nbColumns;
+    attribute PxHeightFieldFormatEnum format;
+    [Value] attribute PxStridedData samples;
+    attribute float convexEdgeThreshold;
+    [Value] attribute PxHeightFieldFlags flags;
+};
+
+[Prefix="physx::"]
+interface PxHeightFieldFlags {
+    void PxHeightFieldFlags(unsigned short flags);
+    boolean isSet(PxHeightFieldFlagEnum flag);
+    void raise(PxHeightFieldFlagEnum flag);
+    void clear(PxHeightFieldFlagEnum flag);
+};
+
+enum PxHeightFieldFlagEnum {
+    "PxHeightFieldFlagEnum::eNO_BOUNDARY_EDGES"
+};
+
+enum PxHeightFieldFormatEnum {
+    "PxHeightFieldFormatEnum::eS16_TM"
+};
+
+[Prefix="physx::"]
+interface PxHeightFieldGeometry {
+    void PxHeightFieldGeometry();
+    void PxHeightFieldGeometry(PxHeightField hf, [Ref] PxMeshGeometryFlags flags, float heightScale, float rowScale, float columnScale);
+    boolean isValid();
+    attribute PxHeightField heightField;
+    attribute float heightScale;
+    attribute float rowScale;
+    attribute float columnScale;
+    [Value] attribute PxMeshGeometryFlags heightFieldFlags;
+};
+PxHeightFieldGeometry implements PxGeometry;
+
+[Prefix="physx::"]
+interface PxHeightFieldSample {
+    void PxHeightFieldSample();
+    octet tessFlag();
+    void clearTessFlag();
+    void setTessFlag();
+    attribute short height;
+    attribute octet materialIndex0;
+    attribute octet materialIndex1;
+};
+
+[Prefix="physx::"]
+interface PxHullPolygon {
+    void PxHullPolygon();
+    attribute float[] mPlane;
+    attribute short mNbVerts;
+    attribute short mIndexBase;
+};
+
+enum PxMeshFlagEnum {
+    "PxMeshFlagEnum::eFLIPNORMALS",
+    "PxMeshFlagEnum::e16_BIT_INDICES"
+};
+
+[Prefix="physx::"]
+interface PxMeshFlags {
+    void PxMeshFlags(octet flags);
+    boolean isSet(PxMeshFlagEnum flag);
+    void raise(PxMeshFlagEnum flag);
+    void clear(PxMeshFlagEnum flag);
+};
+
+enum PxMeshGeometryFlagEnum {
+    "PxMeshGeometryFlagEnum::eDOUBLE_SIDED"
+};
+
+[Prefix="physx::"]
+interface PxMeshGeometryFlags {
+    void PxMeshGeometryFlags(octet flags);
+    boolean isSet(PxMeshGeometryFlagEnum flag);
+    void raise(PxMeshGeometryFlagEnum flag);
+    void clear(PxMeshGeometryFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxMeshScale {
+    void PxMeshScale();
+    void PxMeshScale(float r);
+    void PxMeshScale([Const, Ref] PxVec3 s, [Const, Ref] PxQuat r);
+};
+
+[Prefix="physx::"]
+interface PxPlaneGeometry {
+    void PxPlaneGeometry();
+};
+PxPlaneGeometry implements PxGeometry;
+
+[Prefix="physx::"]
+interface PxSimpleTriangleMesh {
+    void PxSimpleTriangleMesh();
+    void setToDefault();
+    boolean isValid();
+    [Value] attribute PxBoundedData points;
+    [Value] attribute PxBoundedData triangles;
+    [Value] attribute PxMeshFlags flags;
+};
+
+[Prefix="physx::"]
+interface PxSphereGeometry {
+    void PxSphereGeometry(float ir);
+};
+PxSphereGeometry implements PxGeometry;
+
+[Prefix="physx::"]
+interface PxTriangle {
+    void PxTriangle();
+    void PxTriangle([Const, Ref] PxVec3 p0, [Const, Ref] PxVec3 p1, [Const, Ref] PxVec3 p2);
+    void normal([Ref] PxVec3 normal);
+    void denormalizedNormal([Ref] PxVec3 normal);
+    float area();
+    [Value] PxVec3 pointFromUV(float u, float v);
+};
+
+[Prefix="physx::", NoDelete]
+interface PxTriangleMesh {
+    unsigned long getNbVertices();
+    [Const] PxVec3 getVertices();
+    PxVec3 getVerticesForModification();
+    [Value] PxBounds3 refitBVH();
+    unsigned long getNbTriangles();
+    [Const] VoidPtr getTriangles();
+    [Value] PxTriangleMeshFlags getTriangleMeshFlags();
+    [Const, Value] PxU32ConstPtr getTrianglesRemap();
+    unsigned short getTriangleMaterialIndex(unsigned long triangleIndex);
+    [Value] PxBounds3 getLocalBounds();
+    unsigned long getReferenceCount();
+    void acquireReference();
+
+};
+PxTriangleMesh implements PxBase;
+
+enum PxTriangleMeshFlagEnum {
+    "PxTriangleMeshFlagEnum::e16_BIT_INDICES",
+    "PxTriangleMeshFlagEnum::eADJACENCY_INFO"
+};
+
+[Prefix="physx::"]
+interface PxTriangleMeshFlags {
+    void PxTriangleMeshFlags(octet flags);
+    boolean isSet(PxTriangleMeshFlagEnum flag);
+    void raise(PxTriangleMeshFlagEnum flag);
+    void clear(PxTriangleMeshFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxTriangleMeshGeometry {
+    void PxTriangleMeshGeometry(PxTriangleMesh mesh, [Const, Ref] optional PxMeshScale scaling, [Ref] optional PxMeshGeometryFlags flags);
+    boolean isValid();
+};
+PxTriangleMeshGeometry implements PxGeometry;

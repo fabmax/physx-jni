@@ -1,7 +1,16 @@
 package de.fabmax.physxjni;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.lwjgl.system.MemoryStack;
+import physx.PxTopLevelFunctions;
+import physx.common.PxVec3;
+import physx.geometry.PxBoxGeometry;
+import physx.physics.*;
+import physx.support.SupportFunctions;
+import physx.support.Vector_PxActorPtr;
+
 public class ActiveActorsTest {
-/*
     @Test
     public void activeActorsTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -12,7 +21,7 @@ public class ActiveActorsTest {
             sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
             sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(1));
             sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
-            sceneDesc.getFlags().set(PxSceneFlagEnum.eENABLE_ACTIVE_ACTORS);
+            sceneDesc.getFlags().raise(PxSceneFlagEnum.eENABLE_ACTIVE_ACTORS);
             PxScene scene = physics.createScene(sceneDesc);
 
             // create a falling box (will be the active actor)
@@ -29,13 +38,12 @@ public class ActiveActorsTest {
             Vector_PxActorPtr activeActors = SupportFunctions.PxScene_getActiveActors(scene);
 
             // there should be exactly one activbe actor (the falling box)
-            Assert.assertEquals(activeActors.size(), 1);
-            Assert.assertEquals(activeActors.at(0), activeBox);
+            Assertions.assertEquals(activeActors.size(), 1);
+            Assertions.assertEquals(activeActors.at(0), activeBox);
 
             // note: the Vector_PxActorPtr returned by PxScene_getActiveActors() is internally stored as a static
             // field, DO NOT DESTROY IT!
             //   activeActors.destroy(); NO NO NO!
         }
     }
-*/
 }
