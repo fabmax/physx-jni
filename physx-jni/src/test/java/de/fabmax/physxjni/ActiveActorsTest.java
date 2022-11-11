@@ -1,17 +1,7 @@
 package de.fabmax.physxjni;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.lwjgl.system.MemoryStack;
-import physx.PxTopLevelFunctions;
-import physx.common.PxVec3;
-import physx.geomutils.PxBoxGeometry;
-import physx.physics.*;
-import physx.support.SupportFunctions;
-import physx.support.Vector_PxActorPtr;
-
 public class ActiveActorsTest {
-
+/*
     @Test
     public void activeActorsTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -47,5 +37,5 @@ public class ActiveActorsTest {
             //   activeActors.destroy(); NO NO NO!
         }
     }
-
+*/
 }

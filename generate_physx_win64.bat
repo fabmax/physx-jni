@@ -1,3 +1,3 @@
 @echo off
-cd PhysX4/physx
-generate_projects.bat jni_vc16win64
+cd PhysX/physx
+generate_projects.bat jni-vc16win64

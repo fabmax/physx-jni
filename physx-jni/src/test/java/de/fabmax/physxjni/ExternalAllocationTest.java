@@ -1,11 +1,7 @@
 package de.fabmax.physxjni;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.lwjgl.system.MemoryStack;
-import physx.common.PxVec3;
-
 public class ExternalAllocationTest {
+    /*
     @Test
     public void externalAllocTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -36,5 +32,5 @@ public class ExternalAllocationTest {
             Assert.assertEquals(2f, vec.getY(), 0.0);
             Assert.assertEquals(1f, vec.getZ(), 0.0);
         }
-    }
+    }*/
 }

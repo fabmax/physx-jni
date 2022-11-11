@@ -1,23 +1,7 @@
 package de.fabmax.physxjni;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.lwjgl.system.MemoryStack;
-import physx.PxTopLevelFunctions;
-import physx.character.*;
-import physx.common.PxBoundedData;
-import physx.common.PxVec3;
-import physx.cooking.PxTriangleMeshDesc;
-import physx.geomutils.PxTriangleMesh;
-import physx.geomutils.PxTriangleMeshGeometry;
-import physx.physics.PxActor;
-import physx.physics.PxRigidStatic;
-import physx.physics.PxScene;
-import physx.physics.PxShape;
-import physx.support.Vector_PxU32;
-import physx.support.Vector_PxVec3;
-
 public class ControllerBehaviorCallbackTest {
+    /*
     @Test
     public void controllerBehaviorCallbackTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -114,5 +98,5 @@ public class ControllerBehaviorCallbackTest {
         public int getObstacleBehaviorFlags(PxObstacle obstacle) {
             return 0;
         }
-    }
+    }*/
 }

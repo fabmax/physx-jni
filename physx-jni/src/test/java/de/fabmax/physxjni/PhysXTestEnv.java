@@ -1,22 +1,7 @@
 package de.fabmax.physxjni;
 
-import org.lwjgl.system.MemoryStack;
-import physx.PxTopLevelFunctions;
-import physx.common.*;
-import physx.cooking.PxCooking;
-import physx.cooking.PxCookingParams;
-import physx.extensions.PxDefaultAllocator;
-import physx.geomutils.PxBoxGeometry;
-import physx.geomutils.PxGeometry;
-import physx.geomutils.PxPlaneGeometry;
-import physx.physics.*;
-
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
 public class PhysXTestEnv {
-
+    /*
     public static final int PX_PHYSICS_VERSION = PxTopLevelFunctions.getPHYSICS_VERSION();
 
     public static final PxFoundation foundation;
@@ -138,5 +123,5 @@ public class PhysXTestEnv {
             scene.fetchResults(true);
             t += step;
         }
-    }
+    }*/
 }

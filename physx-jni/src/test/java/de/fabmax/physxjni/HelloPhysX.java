@@ -1,21 +1,25 @@
 package de.fabmax.physxjni;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import physx.PxTopLevelFunctions;
 import physx.common.*;
-import physx.extensions.PxDefaultAllocator;
 import physx.geomutils.PxBoxGeometry;
 import physx.physics.*;
 
 public class HelloPhysX {
 
     /**
-     * Self contained test / example running the whole chain from setting up PhysX to running the simulation
+     * Self-contained test / example running the whole chain from setting up PhysX to running the simulation
      * to final clean up.
      */
     public static void main(String[] args) {
         // get PhysX library version
         int version = PxTopLevelFunctions.getPHYSICS_VERSION();
+
+        int versionMajor = version >> 24;
+        int versionMinor = (version >> 16) & 0xff;
+        int versionMicro = (version >> 8) & 0xff;
+        System.out.printf("PhysX loaded, version: %d.%d.%d\n", versionMajor, versionMinor, versionMicro);
 
         // create PhysX foundation object
         PxDefaultAllocator allocator = new PxDefaultAllocator();
@@ -26,12 +30,15 @@ public class HelloPhysX {
         PxTolerancesScale tolerances = new PxTolerancesScale();
         PxPhysics physics = PxTopLevelFunctions.CreatePhysics(version, foundation, tolerances);
 
-        // create a physics scene
+        // create the CPU dispatcher, can be shared among multiple scenes
         int numThreads = 4;
+        PxDefaultCpuDispatcher cpuDispatcher = PxTopLevelFunctions.DefaultCpuDispatcherCreate(numThreads);
+
+        // create a physics scene
         PxVec3 tmpVec = new PxVec3(0f, -9.81f, 0f);
         PxSceneDesc sceneDesc = new PxSceneDesc(tolerances);
         sceneDesc.setGravity(tmpVec);
-        sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(numThreads));
+        sceneDesc.setCpuDispatcher(cpuDispatcher);
         sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
         PxScene scene = physics.createScene(sceneDesc);
 
@@ -74,7 +81,7 @@ public class HelloPhysX {
 
         // box starts at a height of 5
         float boxHeight = box.getGlobalPose().getP().getY();
-        Assert.assertEquals(boxHeight, 5f, 0.0001f);
+        Assertions.assertEquals(boxHeight, 5f, 0.0001f);
 
         // run physics simulation
         for (int i = 0; i <= 500; i++) {
@@ -88,7 +95,7 @@ public class HelloPhysX {
         }
 
         // box should rest on the ground
-        Assert.assertEquals(1f, boxHeight, 0.0001f);
+        Assertions.assertEquals(1f, boxHeight, 0.0001f);
 
         // cleanup stuff
         scene.removeActor(ground);

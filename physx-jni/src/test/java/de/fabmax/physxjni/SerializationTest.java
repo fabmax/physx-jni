@@ -1,23 +1,7 @@
 package de.fabmax.physxjni;
 
-import org.junit.Assert;
-import org.junit.Test;
-import physx.common.PxCollection;
-import physx.extensions.*;
-import physx.physics.PxScene;
-import physx.support.PxU8ConstPtr;
-import physx.support.TypeHelpers;
-import physx.support.Vector_PxU8;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
 public class SerializationTest {
-
+/*
     private InputStream getTestXml() {
         InputStream testXml = getClass().getClassLoader().getResourceAsStream("SerializedCollection.xml");
         if (testXml == null) {
@@ -94,5 +78,5 @@ public class SerializationTest {
         memIn.destroy();
         data.destroy();
     }
-
+*/
 }

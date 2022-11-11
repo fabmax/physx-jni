@@ -1,24 +1,7 @@
 package de.fabmax.physxjni;
 
-import org.junit.Test;
-import org.lwjgl.system.MemoryStack;
-import physx.PxTopLevelFunctions;
-import physx.common.PxCudaContextManager;
-import physx.common.PxCudaContextManagerDesc;
-import physx.common.PxCudaInteropModeEnum;
-import physx.common.PxVec3;
-import physx.geomutils.PxBoxGeometry;
-import physx.physics.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import static de.fabmax.physxjni.PhysXTestEnv.foundation;
-import static de.fabmax.physxjni.PhysXTestEnv.physics;
-
 public class CudaTest {
-
+/*
     @Test
     public void createCudaContextTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -128,5 +111,5 @@ public class CudaTest {
         scene.release();
         actors.forEach(PxActor::release);
         return t / 1e9;
-    }
+    }*/
 }

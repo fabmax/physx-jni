@@ -1,0 +1,8 @@
+/****************************************
+ * [package=support]
+ ****************************************/
+
+[Prefix="physx::", NoDelete]
+interface PxPvd {
+    //boolean connect([Ref] PxPvdTransport transport, [Ref] PxPvdInstrumentationFlags flags);
+};

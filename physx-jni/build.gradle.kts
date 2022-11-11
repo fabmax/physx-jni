@@ -34,7 +34,8 @@ tasks.register<VersionNameUpdate>("updateVersionNames") {
 }
 
 tasks.register<GenerateJavaBindings>("generateJniBindings") {
-    idlSource = File("${projectDir}/src/main/webidl/PhysXJs.idl").absolutePath
+    idlModelName = "PhysXJni"
+    idlSource = File("${projectDir}/src/main/webidl/").absolutePath
     generatorOutput = File("${projectDir}/src/main/generated/physx").absolutePath
 }
 
@@ -50,9 +51,12 @@ val compileJava by tasks.existing {
 }
 
 dependencies {
-    testImplementation("junit:junit:4.12")
-    testRuntimeOnly(project(":physx-jni-natives-windows-cuda"))
-    testRuntimeOnly(project(":physx-jni-natives-linux-cuda"))
+    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+
+    testRuntimeOnly(project(":physx-jni-natives-windows"))
+    //testRuntimeOnly(project(":physx-jni-natives-windows-cuda"))
+    //testRuntimeOnly(project(":physx-jni-natives-linux-cuda"))
 
     testImplementation("org.lwjgl:lwjgl:3.3.1")
 
@@ -75,17 +79,17 @@ publishing {
                 classifier = "natives-windows"
             }
 
-            artifact(project(":physx-jni-natives-windows-cuda").tasks["jar"]).apply {
-                classifier = "natives-windows-cuda"
-            }
-
-            artifact(project(":physx-jni-natives-linux").tasks["jar"]).apply {
-                classifier = "natives-linux"
-            }
-
-            artifact(project(":physx-jni-natives-linux-cuda").tasks["jar"]).apply {
-                classifier = "natives-linux-cuda"
-            }
+//            artifact(project(":physx-jni-natives-windows-cuda").tasks["jar"]).apply {
+//                classifier = "natives-windows-cuda"
+//            }
+//
+//            artifact(project(":physx-jni-natives-linux").tasks["jar"]).apply {
+//                classifier = "natives-linux"
+//            }
+//
+//            artifact(project(":physx-jni-natives-linux-cuda").tasks["jar"]).apply {
+//                classifier = "natives-linux-cuda"
+//            }
 
             pom {
                 name.set("physx-jni")

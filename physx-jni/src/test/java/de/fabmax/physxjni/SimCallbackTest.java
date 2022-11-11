@@ -1,19 +1,7 @@
 package de.fabmax.physxjni;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.lwjgl.system.MemoryStack;
-import physx.PxTopLevelFunctions;
-import physx.common.PxVec3;
-import physx.geomutils.PxBoxGeometry;
-import physx.physics.*;
-import physx.support.TypeHelpers;
-import physx.support.Vector_PxContactPairPoint;
-
-import java.util.*;
-
 public class SimCallbackTest {
-
+/*
     @Test
     public void simCallbackTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -142,5 +130,5 @@ public class SimCallbackTest {
                 System.out.println("onTrigger: " + name0 + " and " + name1 + ": " + event);
             }
         }
-    }
+    }*/
 }

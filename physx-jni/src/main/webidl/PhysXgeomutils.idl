@@ -1,0 +1,28 @@
+/****************************************
+ * [package=geomutils]
+ ****************************************/
+
+[Prefix="physx::"]
+interface PxBoxGeometry {
+    void PxBoxGeometry(float hx, float hy, float hz);
+};
+PxBoxGeometry implements PxGeometry;
+
+[Prefix="physx::", NoDelete]
+interface PxBVHStructure { };
+PxBVHStructure implements PxBase;
+
+[Prefix="physx::"]
+interface PxGeometry {
+    PxGeometryTypeEnum getType();
+};
+
+enum PxGeometryTypeEnum {
+    "PxGeometryTypeEnum::eSPHERE",
+    "PxGeometryTypeEnum::ePLANE",
+    "PxGeometryTypeEnum::eCAPSULE",
+    "PxGeometryTypeEnum::eBOX",
+    "PxGeometryTypeEnum::eCONVEXMESH",
+    "PxGeometryTypeEnum::eTRIANGLEMESH",
+    "PxGeometryTypeEnum::eHEIGHTFIELD"
+};

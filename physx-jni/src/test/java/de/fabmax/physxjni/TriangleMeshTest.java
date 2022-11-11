@@ -1,21 +1,7 @@
 package de.fabmax.physxjni;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.lwjgl.system.MemoryStack;
-import physx.common.PxBoundedData;
-import physx.common.PxVec3;
-import physx.cooking.PxTriangleMeshDesc;
-import physx.geomutils.PxTriangleMesh;
-import physx.geomutils.PxTriangleMeshGeometry;
-import physx.physics.PxRigidDynamic;
-import physx.physics.PxRigidStatic;
-import physx.physics.PxScene;
-import physx.support.Vector_PxU32;
-import physx.support.Vector_PxVec3;
-
 public class TriangleMeshTest {
-
+/*
     @Test
     public void triangleMeshTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -80,5 +66,5 @@ public class TriangleMeshTest {
             mesh.release();
         }
     }
-
+*/
 }

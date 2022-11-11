@@ -3,6 +3,7 @@ import de.fabmax.webidl.generator.jni.nat.JniNativeGenerator
 import de.fabmax.webidl.parser.WebIdlParser
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.io.FileNotFoundException
@@ -94,6 +95,9 @@ open class CheckWebIdlConsistency : DefaultTask() {
 
 open class GenerateJavaBindings : DefaultTask() {
     @Input
+    @Optional
+    var idlModelName: String? = null
+    @Input
     var idlSource = ""
     @Input
     var generatorOutput = "./generated"
@@ -105,7 +109,12 @@ open class GenerateJavaBindings : DefaultTask() {
             throw FileNotFoundException("PhysX WebIDL definition not found!")
         }
 
-        val model = WebIdlParser().parse(idlFile.path)
+        val model = if (idlFile.isDirectory) {
+            WebIdlParser.parseDirectory(idlFile.path, idlModelName)
+        } else {
+            WebIdlParser.parseSingleFile(idlFile.path, idlModelName)
+        }
+
         JniJavaGenerator().apply {
             outputDirectory = generatorOutput
             packagePrefix = "physx"
@@ -143,6 +152,9 @@ open class GenerateNativeGlueCode : DefaultTask() {
     @Input
     var idlSource = ""
     @Input
+    @Optional
+    var idlModelName: String? = null
+    @Input
     var generatorOutput = "./generated"
 
     @TaskAction
@@ -152,9 +164,15 @@ open class GenerateNativeGlueCode : DefaultTask() {
             throw FileNotFoundException("PhysX WebIDL definition not found!")
         }
 
-        val model = WebIdlParser().parse(idlFile.path)
+        val model = if (idlFile.isDirectory) {
+            WebIdlParser.parseDirectory(idlFile.path, idlModelName)
+        } else {
+            WebIdlParser.parseSingleFile(idlFile.path, idlModelName)
+        }
+
         JniNativeGenerator().apply {
             outputDirectory = generatorOutput
+            glueFileName = "PhysXJniGlue.h"
             packagePrefix = "physx"
 
             externallyAllocatableClasses += CommonGeneratorSettings.externallyAllocatableClasses

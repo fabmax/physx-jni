@@ -12,8 +12,9 @@ public enum Platform {
         this.metaClassName = metaClassName;
     }
 
-    public String getMetaClassName() {
-        return metaClassName;
+    public NativeMeta getMeta() throws ReflectiveOperationException {
+        Class<?> metaClass =  Loader.class.getClassLoader().loadClass(metaClassName);
+        return (NativeMeta) metaClass.getConstructor().newInstance();
     }
 
     public static Platform getPlatform() {
