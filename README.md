@@ -4,7 +4,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni)
 ![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
 
-Java JNI bindings for Nvidia [PhysX 4.1.2](https://github.com/NVIDIAGameWorks/PhysX).
+Java JNI bindings for Nvidia [PhysX 5.1](https://github.com/NVIDIA-Omniverse/PhysX).
 
 ## How to use
 The library is available on maven central, so you can easily add this to your build.gradle:

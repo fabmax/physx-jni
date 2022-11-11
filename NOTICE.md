@@ -9,12 +9,12 @@ of the **MIT License** which is available at https://opensource.org/licenses/MIT
 
 ## Third-party Content
 
-This software includes a binary distribution of [NVIDIA PhysX 4.1](https://github.com/NVIDIAGameWorks/PhysX).
+This software includes a binary distribution of [NVIDIA PhysX 5.1](https://github.com/NVIDIA-Omniverse/PhysX).
 
 NVIDIA PhysX comes under the following license:
 
 ```
-Copyright (c) 2021 NVIDIA Corporation. All rights reserved.
+Copyright (c) 2022 NVIDIA Corporation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -28,7 +28,7 @@ are met:
    contributors may be used to endorse or promote products derived
    from this software without specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
 EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
 PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
