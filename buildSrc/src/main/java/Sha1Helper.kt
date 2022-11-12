@@ -8,7 +8,7 @@ import java.util.*
 object Sha1Helper {
 
     fun writeHashes(forFilesInDirectory: File) {
-        forFilesInDirectory.listFiles { dir, name -> !name.endsWith(".sha1", true) }?.forEach { writeHash(it) }
+        forFilesInDirectory.listFiles { _, name -> !name.endsWith(".sha1", true) }?.forEach { writeHash(it) }
     }
 
     fun writeHash(forFile: File) {

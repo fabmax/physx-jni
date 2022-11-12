@@ -359,7 +359,7 @@ interface PxPhysics {
     // Basics
     void release();
     [Ref] PxFoundation getFoundation();
-//    PxAggregate createAggregate(unsigned long size, boolean enableSelfCollision);
+    PxAggregate createAggregate(unsigned long size, boolean enableSelfCollision);
     [Const, Ref] PxTolerancesScale getTolerancesScale();
     // Scenes
     PxScene createScene([Const, Ref] PxSceneDesc sceneDesc);
@@ -375,16 +375,13 @@ interface PxPhysics {
     // Materials
     PxMaterial createMaterial(float staticFriction, float dynamicFriction, float restitution);
     // Deletion Listeners
-//    [Ref] PxPhysicsInsertionCallback getPhysicsInsertionCallback();
+    [Ref] PxInsertionCallback getPhysicsInsertionCallback();
 };
 
-[Prefix="physx::"]
-interface PxQueryFilterData {
-    void PxQueryFilterData();
-    void PxQueryFilterData([Const, Ref] PxFilterData fd, [Ref] PxQueryFlags f);
-    void PxQueryFilterData([Ref] PxQueryFlags f);
-    [Value] attribute PxFilterData data;
-    [Value] attribute PxQueryFlags flags;
+enum PxPruningStructureTypeEnum {
+    "PxPruningStructureTypeEnum::eNONE",
+    "PxPruningStructureTypeEnum::eDYNAMIC_AABB_TREE",
+    "PxPruningStructureTypeEnum::eSTATIC_AABB_TREE"
 };
 
 [Prefix="physx::"]
@@ -401,6 +398,15 @@ interface QueryFilterCallbackImpl {
     void QueryFilterCallbackImpl();
     unsigned long simplePreFilter([Const, Ref] PxFilterData filterData, [Const] PxShape shape, [Const] PxRigidActor actor, [Ref] PxHitFlags queryFlags);
     unsigned long simplePostFilter([Const, Ref] PxFilterData filterData, [Const, Ref] PxQueryHit hit);
+};
+
+[Prefix="physx::"]
+interface PxQueryFilterData {
+    void PxQueryFilterData();
+    void PxQueryFilterData([Const, Ref] PxFilterData fd, [Ref] PxQueryFlags f);
+    void PxQueryFilterData([Ref] PxQueryFlags f);
+    [Value] attribute PxFilterData data;
+    [Value] attribute PxQueryFlags flags;
 };
 
 enum PxQueryFlagEnum {
@@ -425,12 +431,6 @@ interface PxQueryHit {
     attribute unsigned long faceIndex;
 };
 PxQueryHit implements PxActorShape;
-
-enum PxPruningStructureTypeEnum {
-    "PxPruningStructureTypeEnum::eNONE",
-    "PxPruningStructureTypeEnum::eDYNAMIC_AABB_TREE",
-    "PxPruningStructureTypeEnum::eSTATIC_AABB_TREE"
-};
 
 interface PxRaycastBuffer10 {
     void PxRaycastBuffer10();

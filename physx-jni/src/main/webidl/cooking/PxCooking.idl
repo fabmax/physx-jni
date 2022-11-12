@@ -50,7 +50,6 @@ enum PxConvexMeshCookingTypeEnum {
     "PxConvexMeshCookingTypeEnum::eQUICKHULL"
 };
 
-//
 // PxCooking is deprecated, use PxTopLevelFunctions instead; however, PxSerialization needs PxCooking
 [Prefix="physx::", NoDelete]
 interface PxCooking {

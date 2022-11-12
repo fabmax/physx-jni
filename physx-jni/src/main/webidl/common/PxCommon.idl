@@ -133,11 +133,11 @@ enum PxIDENTITYEnum {
 [Prefix="physx::"]
 interface PxInputData { };
 
-[Prefix="physx::"]
-interface PxOutputStream { };
-
 [Prefix="physx::", NoDelete]
 interface PxInsertionCallback { };
+
+[Prefix="physx::"]
+interface PxOutputStream { };
 
 [Prefix="physx::"]
 interface PxQuat {
