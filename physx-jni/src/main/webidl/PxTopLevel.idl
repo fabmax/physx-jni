@@ -16,12 +16,12 @@ interface PxTopLevelFunctions {
     //static PxCudaContextManager CreateCudaContextManager([Ref] PxFoundation foundation, [Const, Ref] PxCudaContextManagerDesc desc);
     //static PxPvd CreatePvd([Ref] PxFoundation foundation);
 
-//    static PxD6Joint D6JointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
-//    static PxDistanceJoint DistanceJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
-//    static PxFixedJoint FixedJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
-//    static PxPrismaticJoint PrismaticJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
-//    static PxRevoluteJoint RevoluteJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
-//    static PxSphericalJoint SphericalJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
+    static PxD6Joint D6JointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
+    static PxDistanceJoint DistanceJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
+    static PxFixedJoint FixedJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
+    static PxPrismaticJoint PrismaticJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
+    static PxRevoluteJoint RevoluteJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
+    static PxSphericalJoint SphericalJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
 
     static PxConvexMesh CreateConvexMesh([Const, Ref] PxCookingParams params, [Const, Ref] PxConvexMeshDesc desc);
     static PxTriangleMesh CreateTriangleMesh([Const, Ref] PxCookingParams params, [Const, Ref] PxTriangleMeshDesc desc);

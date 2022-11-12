@@ -1,0 +1,63 @@
+/****************************************
+ * [package=physics]
+ ****************************************/
+
+[Prefix="physx::", NoDelete]
+interface PxShape {
+    unsigned long getReferenceCount();
+    void acquireReference();
+    PxGeometryTypeEnum getGeometryType();
+    void setGeometry([Const, Ref] PxGeometry geometry);
+    [Const, Ref] PxGeometry getGeometry();
+    boolean getBoxGeometry([Ref] PxBoxGeometry geometry);
+    boolean getSphereGeometry([Ref] PxSphereGeometry geometry);
+    boolean getCapsuleGeometry([Ref] PxCapsuleGeometry geometry);
+    boolean getPlaneGeometry([Ref] PxPlaneGeometry geometry);
+    boolean getConvexMeshGeometry([Ref] PxConvexMeshGeometry geometry);
+    boolean getTriangleMeshGeometry([Ref] PxTriangleMeshGeometry geometry);
+    boolean getHeightFieldGeometry([Ref] PxHeightFieldGeometry geometry);
+    PxRigidActor getActor();
+    void setMaterials(PxMaterialPtr materials, unsigned short materialCount);
+    unsigned short getNbMaterials();
+    unsigned long getMaterials(PxMaterialPtr userBuffer, unsigned long bufferSize, unsigned long startIndex);
+    PxMaterial getMaterialFromInternalFaceIndex(unsigned long faceIndex);
+    void setContactOffset(float contactOffset);
+    float getContactOffset();
+    void setRestOffset(float restOffset);
+    float getRestOffset();
+    void setTorsionalPatchRadius(float radius);
+    float getTorsionalPatchRadius();
+    void setMinTorsionalPatchRadius(float radius);
+    float getMinTorsionalPatchRadius();
+    void setFlag(PxShapeFlagEnum flag, boolean value);
+    void setFlags([Ref] PxShapeFlags inFlags);
+    [Value] PxShapeFlags getFlags();
+    boolean isExclusive();
+    void setName([Const] DOMString name);
+    [Const] DOMString getName();
+    // Pose Manipulation
+    void setLocalPose([Const, Ref] PxTransform pose);
+    [Value] PxTransform getLocalPose();
+    // Collision Filtering
+    void setSimulationFilterData([Const, Ref] PxFilterData data);
+    [Value] PxFilterData getSimulationFilterData();
+    void setQueryFilterData([Const, Ref] PxFilterData data);
+    [Value] PxFilterData getQueryFilterData();
+    attribute VoidPtr userData;
+};
+PxShape implements PxBase;
+
+enum PxShapeFlagEnum {
+    "PxShapeFlagEnum::eSIMULATION_SHAPE",
+    "PxShapeFlagEnum::eSCENE_QUERY_SHAPE",
+    "PxShapeFlagEnum::eTRIGGER_SHAPE",
+    "PxShapeFlagEnum::eVISUALIZATION"
+};
+
+[Prefix="physx::"]
+interface PxShapeFlags {
+    void PxShapeFlags(octet flags);
+    boolean isSet(PxShapeFlagEnum flag);
+    void raise(PxShapeFlagEnum flag);
+    void clear(PxShapeFlagEnum flag);
+};

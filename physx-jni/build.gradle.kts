@@ -39,15 +39,16 @@ tasks.register<GenerateJavaBindings>("generateJniBindings") {
     generatorOutput = File("${projectDir}/src/main/generated/physx").absolutePath
 }
 
-tasks.withType<Test> {
+tasks.compileJava {
+    dependsOn("generateJniBindings")
+    dependsOn("updateVersionNames")
+}
+
+tasks.test {
+    useJUnitPlatform()
     testLogging {
         showStandardStreams = true
     }
-}
-
-val compileJava by tasks.existing {
-    dependsOn("generateJniBindings")
-    dependsOn("updateVersionNames")
 }
 
 dependencies {
@@ -68,10 +69,6 @@ dependencies {
         }
     }
     testRuntimeOnly("org.lwjgl:lwjgl:3.3.1:$lwjglNatives")
-}
-
-tasks.test {
-    useJUnitPlatform()
 }
 
 publishing {

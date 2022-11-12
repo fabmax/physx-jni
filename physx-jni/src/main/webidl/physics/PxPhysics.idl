@@ -1,0 +1,552 @@
+/****************************************
+ * [package=physics]
+ ****************************************/
+
+[Prefix="physx::", NoDelete]
+interface PxAggregate {
+    boolean addActor([Ref] PxActor actor, [Const] optional PxBVHStructure bvhStructure);
+    boolean removeActor([Ref] PxActor actor);
+//    boolean addArticulation([Ref] PxArticulationBase articulation);
+//    boolean removeArticulation([Ref] PxArticulationBase articulation);
+    unsigned long getNbActors();
+    unsigned long getMaxNbActors();
+    // unsigned long getActors();
+    PxScene getScene();
+    boolean getSelfCollision();
+};
+PxAggregate implements PxBase;
+
+[Prefix="physx::"]
+interface PxBroadPhaseCaps {
+    void PxBroadPhaseCaps();
+    attribute unsigned long mMaxNbRegions;
+};
+
+[Prefix="physx::"]
+interface PxBroadPhaseRegion {
+    void PxBroadPhaseRegion();
+    [Value] attribute PxBounds3 mBounds;
+    attribute VoidPtr mUserData;
+};
+
+[Prefix="physx::"]
+interface PxBroadPhaseRegionInfo {
+    void PxBroadPhaseRegionInfo();
+    [Value] attribute PxBroadPhaseRegion mRegion;
+    attribute unsigned long mNbStaticObjects;
+    attribute unsigned long mNbDynamicObjects;
+    attribute boolean mActive;
+    attribute boolean mOverlap;
+};
+
+enum PxBroadPhaseTypeEnum {
+    "PxBroadPhaseTypeEnum::eSAP",
+    "PxBroadPhaseTypeEnum::eMBP",
+    "PxBroadPhaseTypeEnum::eABP",
+    "PxBroadPhaseTypeEnum::ePABP",
+    "PxBroadPhaseTypeEnum::eGPU"
+};
+
+enum PxBVHBuildStrategyEnum {
+    "PxBVHBuildStrategyEnum::eFAST",
+    "PxBVHBuildStrategyEnum::eDEFAULT",
+    "PxBVHBuildStrategyEnum::eSAH"
+};
+
+enum PxCombineModeEnum {
+    "PxCombineModeEnum::eAVERAGE",
+    "PxCombineModeEnum::eMIN",
+    "PxCombineModeEnum::eMULTIPLY",
+    "PxCombineModeEnum::eMAX"
+};
+
+[Prefix="physx::", NoDelete]
+interface PxConstraint {
+    void release();
+    PxScene getScene();
+    //void getActors();
+    void setActors(PxRigidActor actor0, PxRigidActor actor1);
+    void markDirty();
+    void setFlags([Ref] PxConstraintFlags flags);
+    [Value] PxConstraintFlags getFlags();
+    void setFlag(PxConstraintFlagEnum flag, boolean value);
+    void getForce([Ref] PxVec3 linear, [Ref] PxVec3 angular);
+    boolean isValid();
+    void setBreakForce(float linear, float angular);
+    //void getBreakForce
+    void setMinResponseThreshold(float threshold);
+    float getMinResponseThreshold();
+    //VoidPtr getExternalReference
+    //void setConstraintFunctions
+};
+PxConstraint implements PxBase;
+
+enum PxConstraintFlagEnum {
+    "PxConstraintFlagEnum::eBROKEN",
+    "PxConstraintFlagEnum::ePROJECT_TO_ACTOR0",
+    "PxConstraintFlagEnum::ePROJECT_TO_ACTOR1",
+    "PxConstraintFlagEnum::ePROJECTION",
+    "PxConstraintFlagEnum::eCOLLISION_ENABLED",
+    "PxConstraintFlagEnum::eVISUALIZATION",
+    "PxConstraintFlagEnum::eDRIVE_LIMITS_ARE_FORCES",
+    "PxConstraintFlagEnum::eIMPROVED_SLERP",
+    "PxConstraintFlagEnum::eDISABLE_PREPROCESSING",
+    "PxConstraintFlagEnum::eENABLE_EXTENDED_LIMITS",
+    "PxConstraintFlagEnum::eGPU_COMPATIBLE"
+};
+
+[Prefix="physx::"]
+interface PxConstraintFlags {
+    void PxConstraintFlags(unsigned short flags);
+    boolean isSet(PxConstraintFlagEnum flag);
+    void raise(PxConstraintFlagEnum flag);
+    void clear(PxConstraintFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxConstraintInfo {
+    attribute PxConstraint constraint;
+    attribute VoidPtr externalReference;
+    attribute unsigned long type;
+};
+
+enum PxContactPairHeaderFlagEnum {
+    "PxContactPairHeaderFlagEnum::eREMOVED_ACTOR_0",
+    "PxContactPairHeaderFlagEnum::eREMOVED_ACTOR_1"
+};
+
+[Prefix="physx::"]
+interface PxContactPairHeaderFlags {
+    void PxContactPairHeaderFlags(unsigned short flags);
+    boolean isSet(PxContactPairHeaderFlagEnum flag);
+    void raise(PxContactPairHeaderFlagEnum flag);
+    void clear(PxContactPairHeaderFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxContactPair {
+    unsigned long extractContacts(PxContactPairPoint userBuffer, unsigned long bufferSize);
+    attribute PxShape[] shapes;
+    attribute octet contactCount;
+    attribute octet patchCount;
+    [Value] attribute PxContactPairFlags flags;
+    [Value] attribute PxPairFlags events;
+};
+
+enum PxContactPairFlagEnum {
+    "PxContactPairFlagEnum::eREMOVED_SHAPE_0",
+    "PxContactPairFlagEnum::eREMOVED_SHAPE_1",
+    "PxContactPairFlagEnum::eACTOR_PAIR_HAS_FIRST_TOUCH",
+    "PxContactPairFlagEnum::eACTOR_PAIR_LOST_TOUCH",
+    "PxContactPairFlagEnum::eINTERNAL_HAS_IMPULSES",
+    "PxContactPairFlagEnum::eINTERNAL_CONTACTS_ARE_FLIPPED"
+};
+
+[Prefix="physx::"]
+interface PxContactPairFlags {
+    void PxContactPairFlags(unsigned short flags);
+    boolean isSet(PxContactPairFlagEnum flag);
+    void raise(PxContactPairFlagEnum flag);
+    void clear(PxContactPairFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxContactPairHeader {
+    attribute PxRigidActor[] actors;
+    //attribute PxU8ConstPtr extraDataStream;
+    //attribute short extraDataStreamSize;
+    [Value] attribute PxContactPairHeaderFlags flags;
+    [Const] attribute PxContactPair pairs;
+    attribute unsigned long nbPairs;
+};
+
+[Prefix="physx::"]
+interface PxContactPairPoint {
+    [Value] attribute PxVec3 position;
+    attribute float separation;
+    [Value] attribute PxVec3 normal;
+    attribute unsigned long internalFaceIndex0;
+    [Value] attribute PxVec3 impulse;
+    attribute unsigned long internalFaceIndex1;
+};
+
+[Prefix="physx::"]
+interface PxDominanceGroupPair {
+    void PxDominanceGroupPair(octet a, octet b);
+    attribute octet dominance0;
+    attribute octet dominance1;
+};
+
+enum PxDynamicTreeSecondaryPrunerEnum {
+    "PxDynamicTreeSecondaryPrunerEnum::eNONE",
+    "PxDynamicTreeSecondaryPrunerEnum::eBUCKET",
+    "PxDynamicTreeSecondaryPrunerEnum::eINCREMENTAL",
+    "PxDynamicTreeSecondaryPrunerEnum::eBVH"
+};
+
+[Prefix="physx::"]
+interface PxFilterData {
+    void PxFilterData();
+    void PxFilterData(unsigned long w0, unsigned long w1, unsigned long w2, unsigned long w3);
+    attribute unsigned long word0;
+    attribute unsigned long word1;
+    attribute unsigned long word2;
+    attribute unsigned long word3;
+};
+
+enum PxFilterFlagEnum {
+    "PxFilterFlagEnum::eKILL",
+    "PxFilterFlagEnum::eSUPPRESS",
+    "PxFilterFlagEnum::eCALLBACK",
+    "PxFilterFlagEnum::eNOTIFY",
+    "PxFilterFlagEnum::eDEFAULT"
+};
+
+enum PxFilterObjectFlagEnum {
+    "PxFilterObjectFlagEnum::eKINEMATIC",
+    "PxFilterObjectFlagEnum::eTRIGGER"
+};
+
+enum PxForceModeEnum {
+    "PxForceModeEnum::eFORCE",
+    "PxForceModeEnum::eIMPULSE",
+    "PxForceModeEnum::eVELOCITY_CHANGE",
+    "PxForceModeEnum::eACCELERATION"
+};
+
+enum PxFrictionTypeEnum {
+    "PxFrictionTypeEnum::ePATCH",
+    "PxFrictionTypeEnum::eONE_DIRECTIONAL",
+    "PxFrictionTypeEnum::eTWO_DIRECTIONAL",
+    "PxFrictionTypeEnum::eFRICTION_COUNT"
+};
+
+enum PxHitFlagEnum {
+    "PxHitFlagEnum::ePOSITION",
+    "PxHitFlagEnum::eNORMAL",
+    "PxHitFlagEnum::eUV",
+    "PxHitFlagEnum::eASSUME_NO_INITIAL_OVERLAP",
+    "PxHitFlagEnum::eMESH_MULTIPLE",
+    "PxHitFlagEnum::eMESH_ANY",
+    "PxHitFlagEnum::eMESH_BOTH_SIDES",
+    "PxHitFlagEnum::ePRECISE_SWEEP",
+    "PxHitFlagEnum::eMTD",
+    "PxHitFlagEnum::eFACE_INDEX",
+    "PxHitFlagEnum::eDEFAULT",
+    "PxHitFlagEnum::eMODIFIABLE_FLAGS"
+};
+
+[Prefix="physx::"]
+interface PxHitFlags {
+    void PxHitFlags(unsigned short flags);
+    boolean isSet(PxHitFlagEnum flag);
+    void raise(PxHitFlagEnum flag);
+    void clear(PxHitFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxLocationHit {
+    [Value] attribute PxHitFlags flags;
+    [Value] attribute PxVec3 position;
+    [Value] attribute PxVec3 normal;
+    attribute float distance;
+};
+PxLocationHit implements PxQueryHit;
+
+[Prefix="physx::", NoDelete]
+interface PxMaterial {
+    unsigned long getReferenceCount();
+    void acquireReference();
+    void setDynamicFriction(float coef);
+    float getDynamicFriction();
+    void setStaticFriction(float coef);
+    float getStaticFriction();
+    void setRestitution(float coef);
+    float getRestitution();
+    void setFlag(PxMaterialFlagEnum flag, boolean b);
+    void setFlags([Ref] PxMaterialFlags flags);
+    [Value] PxMaterialFlags getFlags();
+    void setFrictionCombineMode(PxCombineModeEnum combMode);
+    PxCombineModeEnum getFrictionCombineMode();
+    void setRestitutionCombineMode(PxCombineModeEnum combMode);
+    PxCombineModeEnum getRestitutionCombineMode();
+
+    attribute VoidPtr userData;
+};
+PxMaterial implements PxBase;
+
+enum PxMaterialFlagEnum {
+    "PxMaterialFlagEnum::eDISABLE_FRICTION",
+    "PxMaterialFlagEnum::eDISABLE_STRONG_FRICTION",
+    "PxMaterialFlagEnum::eIMPROVED_PATCH_FRICTION"
+};
+
+[Prefix="physx::"]
+interface PxMaterialFlags {
+    void PxMaterialFlags(unsigned short flags);
+    boolean isSet(PxMaterialFlagEnum flag);
+    void raise(PxMaterialFlagEnum flag);
+    void clear(PxMaterialFlagEnum flag);
+};
+
+interface PxOverlapBuffer10 {
+    void PxOverlapBuffer10();
+    unsigned long getNbAnyHits();
+    [Const, Ref] PxOverlapHit getAnyHit(unsigned long index);
+    unsigned long getNbTouches();
+    [Const] PxOverlapHit getTouches();
+    [Const, Ref] PxOverlapHit getTouch(unsigned long index);
+    unsigned long getMaxNbTouches();
+    [Value] attribute PxOverlapHit block;
+    attribute boolean hasBlock;
+};
+PxOverlapBuffer10 implements PxOverlapCallback;
+
+[Prefix="physx::"]
+interface PxOverlapCallback {
+    boolean hasAnyHits();
+};
+
+[Prefix="physx::"]
+interface PxOverlapHit { };
+PxOverlapHit implements PxQueryHit;
+
+enum PxPairFilteringModeEnum {
+    "PxPairFilteringModeEnum::eKEEP",
+    "PxPairFilteringModeEnum::eSUPPRESS",
+    "PxPairFilteringModeEnum::eKILL",
+    "PxPairFilteringModeEnum::eDEFAULT",
+};
+
+enum PxPairFlagEnum {
+    "PxPairFlagEnum::eSOLVE_CONTACT",
+    "PxPairFlagEnum::eMODIFY_CONTACTS",
+    "PxPairFlagEnum::eNOTIFY_TOUCH_FOUND",
+    "PxPairFlagEnum::eNOTIFY_TOUCH_PERSISTS",
+    "PxPairFlagEnum::eNOTIFY_TOUCH_LOST",
+    "PxPairFlagEnum::eNOTIFY_TOUCH_CCD",
+    "PxPairFlagEnum::eNOTIFY_THRESHOLD_FORCE_FOUND",
+    "PxPairFlagEnum::eNOTIFY_THRESHOLD_FORCE_PERSISTS",
+    "PxPairFlagEnum::eNOTIFY_THRESHOLD_FORCE_LOST",
+    "PxPairFlagEnum::eNOTIFY_CONTACT_POINTS",
+    "PxPairFlagEnum::eDETECT_DISCRETE_CONTACT",
+    "PxPairFlagEnum::eDETECT_CCD_CONTACT",
+    "PxPairFlagEnum::ePRE_SOLVER_VELOCITY",
+    "PxPairFlagEnum::ePOST_SOLVER_VELOCITY",
+    "PxPairFlagEnum::eCONTACT_EVENT_POSE",
+    "PxPairFlagEnum::eNEXT_FREE",
+    "PxPairFlagEnum::eCONTACT_DEFAULT",
+    "PxPairFlagEnum::eTRIGGER_DEFAULT"
+};
+
+[Prefix="physx::"]
+interface PxPairFlags {
+    void PxPairFlags(unsigned short flags);
+    boolean isSet(PxPairFlagEnum flag);
+    void raise(PxPairFlagEnum flag);
+    void clear(PxPairFlagEnum flag);
+};
+
+enum PxParticleSolverTypeEnum {
+    "PxParticleSolverTypeEnum::ePBD",
+    "PxParticleSolverTypeEnum::eFLIP",
+    "PxParticleSolverTypeEnum::eMPM",
+    "PxParticleSolverTypeEnum::eCUSTOM"
+};
+
+[Prefix="physx::"]
+interface PxPhysics {
+    // Basics
+    void release();
+    [Ref] PxFoundation getFoundation();
+//    PxAggregate createAggregate(unsigned long size, boolean enableSelfCollision);
+    [Const, Ref] PxTolerancesScale getTolerancesScale();
+    // Scenes
+    PxScene createScene([Const, Ref] PxSceneDesc sceneDesc);
+    // Actors
+    PxRigidStatic createRigidStatic([Const, Ref] PxTransform pose);
+    PxRigidDynamic createRigidDynamic([Const, Ref] PxTransform pose);
+    // Shapes
+    PxShape createShape([Const, Ref] PxGeometry geometry, [Const, Ref] PxMaterial material, optional boolean isExclusive, [Ref] optional PxShapeFlags shapeFlags);
+    long getNbShapes();
+    // Constraints and Articulations
+//    PxArticulation createArticulation();
+//    PxArticulationReducedCoordinate createArticulationReducedCoordinate();
+    // Materials
+    PxMaterial createMaterial(float staticFriction, float dynamicFriction, float restitution);
+    // Deletion Listeners
+//    [Ref] PxPhysicsInsertionCallback getPhysicsInsertionCallback();
+};
+
+[Prefix="physx::"]
+interface PxQueryFilterData {
+    void PxQueryFilterData();
+    void PxQueryFilterData([Const, Ref] PxFilterData fd, [Ref] PxQueryFlags f);
+    void PxQueryFilterData([Ref] PxQueryFlags f);
+    [Value] attribute PxFilterData data;
+    [Value] attribute PxQueryFlags flags;
+};
+
+enum PxQueryFlagEnum {
+    "PxQueryFlagEnum::eSTATIC",
+    "PxQueryFlagEnum::eDYNAMIC",
+    "PxQueryFlagEnum::ePREFILTER",
+    "PxQueryFlagEnum::ePOSTFILTER",
+    "PxQueryFlagEnum::eANY_HIT",
+    "PxQueryFlagEnum::eNO_BLOCK"
+};
+
+[Prefix="physx::"]
+interface PxQueryFlags {
+    void PxQueryFlags(unsigned short flags);
+    boolean isSet(PxQueryFlagEnum flag);
+    void raise(PxQueryFlagEnum flag);
+    void clear(PxQueryFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxQueryHit {
+    attribute unsigned long faceIndex;
+};
+PxQueryHit implements PxActorShape;
+
+enum PxPruningStructureTypeEnum {
+    "PxPruningStructureTypeEnum::eNONE",
+    "PxPruningStructureTypeEnum::eDYNAMIC_AABB_TREE",
+    "PxPruningStructureTypeEnum::eSTATIC_AABB_TREE"
+};
+
+interface PxRaycastBuffer10 {
+    void PxRaycastBuffer10();
+    unsigned long getNbAnyHits();
+    [Const, Ref] PxRaycastHit getAnyHit(unsigned long index);
+    unsigned long getNbTouches();
+    [Const] PxRaycastHit getTouches();
+    [Const, Ref] PxRaycastHit getTouch(unsigned long index);
+    unsigned long getMaxNbTouches();
+    [Value] attribute PxRaycastHit block;
+    attribute boolean hasBlock;
+};
+PxRaycastBuffer10 implements PxRaycastCallback;
+
+[Prefix="physx::"]
+interface PxRaycastCallback {
+    boolean hasAnyHits();
+};
+
+[Prefix="physx::"]
+interface PxRaycastHit {
+    void PxRaycastHit();
+    attribute float u;
+    attribute float v;
+};
+PxRaycastHit implements PxLocationHit;
+
+[Prefix="physx::"]
+interface PxSimulationEventCallback { };
+
+interface SimpleSimulationEventCallback {
+    void onConstraintBreak(PxConstraintInfo constraints, unsigned long count);
+    void onWake(PxActorPtr actors, unsigned long count);
+    void onSleep(PxActorPtr actors, unsigned long count);
+    void onContact([Const, Ref] PxContactPairHeader pairHeader, [Const] PxContactPair pairs, unsigned long nbPairs);
+    void onTrigger(PxTriggerPair pairs, unsigned long count);
+};
+SimpleSimulationEventCallback implements PxSimulationEventCallback;
+
+[JSImplementation="SimpleSimulationEventCallback"]
+interface SimulationEventCallbackImpl {
+    void SimulationEventCallbackImpl();
+    void onConstraintBreak(PxConstraintInfo constraints, unsigned long count);
+    void onWake(PxActorPtr actors, unsigned long count);
+    void onSleep(PxActorPtr actors, unsigned long count);
+    void onContact([Const, Ref] PxContactPairHeader pairHeader, [Const] PxContactPair pairs, unsigned long nbPairs);
+    void onTrigger(PxTriggerPair pairs, unsigned long count);
+};
+
+[Prefix="physx::"]
+interface PxSimulationFilterShader { };
+
+[Prefix="physx::"]
+interface PxSimulationStatistics {
+    attribute unsigned long nbActiveConstraints;
+    attribute unsigned long nbActiveDynamicBodies;
+    attribute unsigned long nbActiveKinematicBodies;
+    attribute unsigned long nbStaticBodies;
+    attribute unsigned long nbDynamicBodies;
+    attribute unsigned long nbKinematicBodies;
+    attribute unsigned long[] nbShapes;
+    attribute unsigned long nbAggregates;
+    attribute unsigned long nbArticulations;
+    attribute unsigned long nbAxisSolverConstraints;
+    attribute unsigned long compressedContactSize;
+    attribute unsigned long requiredContactConstraintMemory;
+    attribute unsigned long peakConstraintMemory;
+    attribute unsigned long nbDiscreteContactPairsTotal;
+    attribute unsigned long nbDiscreteContactPairsWithCacheHits;
+    attribute unsigned long nbDiscreteContactPairsWithContacts;
+    attribute unsigned long nbNewPairs;
+    attribute unsigned long nbLostPairs;
+    attribute unsigned long nbNewTouches;
+    attribute unsigned long nbLostTouches;
+    attribute unsigned long nbPartitions;
+    attribute unsigned long nbBroadPhaseAdds;
+    attribute unsigned long nbBroadPhaseRemoves;
+    //attribute unsigned long[][] nbDiscreteContactPairs;
+    //attribute unsigned long[][] nbCCDPairs;
+    //attribute unsigned long[][] nbModifiedContactPairs;
+    //attribute unsigned long[][] nbTriggerPairs;
+};
+
+enum PxSolverTypeEnum {
+    "PxSolverTypeEnum::ePGS",
+    "PxSolverTypeEnum::eTGS",
+};
+
+interface PxSweepBuffer10 {
+    void PxSweepBuffer10();
+    unsigned long getNbAnyHits();
+    [Const, Ref] PxSweepHit getAnyHit(unsigned long index);
+    unsigned long getNbTouches();
+    [Const] PxSweepHit getTouches();
+    [Const, Ref] PxSweepHit getTouch(unsigned long index);
+    unsigned long getMaxNbTouches();
+    [Value] attribute PxSweepHit block;
+    attribute boolean hasBlock;
+};
+PxSweepBuffer10 implements PxSweepCallback;
+
+[Prefix="physx::"]
+interface PxSweepCallback {
+    boolean hasAnyHits();
+};
+
+[Prefix="physx::"]
+interface PxSweepHit {
+    void PxSweepHit();
+};
+PxSweepHit implements PxLocationHit;
+
+[Prefix="physx::"]
+interface PxTriggerPair {
+    attribute PxShape triggerShape;
+    attribute PxRigidActor triggerActor;
+    attribute PxShape otherShape;
+    attribute PxRigidActor otherActor;
+    attribute PxPairFlagEnum status;
+    [Value] attribute PxTriggerPairFlags flags;
+};
+
+enum PxTriggerPairFlagEnum {
+    "PxTriggerPairFlagEnum::eREMOVED_SHAPE_TRIGGER",
+    "PxTriggerPairFlagEnum::eREMOVED_SHAPE_OTHER",
+    "PxTriggerPairFlagEnum::eNEXT_FREE"
+};
+
+[Prefix="physx::"]
+interface PxTriggerPairFlags {
+    void PxTriggerPairFlags(octet flags);
+    boolean isSet(PxTriggerPairFlagEnum flag);
+    void raise(PxTriggerPairFlagEnum flag);
+    void clear(PxTriggerPairFlagEnum flag);
+};
