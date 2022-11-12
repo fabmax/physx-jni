@@ -212,12 +212,6 @@ interface PxArticulationRootLinkData {
     [Value] attribute PxVec3 worldAngAccel;
 };
 
-enum PxArticulationSensorFlagEnum {
-    "PxArticulationSensorFlagEnum::eFORWARD_DYNAMICS_FORCES",
-    "PxArticulationSensorFlagEnum::eCONSTRAINT_SOLVER_FORCES",
-    "PxArticulationSensorFlagEnum::eWORLD_FRAME"
-};
-
 [Prefix="physx::"]
 interface PxArticulationReducedCoordinate {
     PxScene getScene();
@@ -291,6 +285,35 @@ interface PxArticulationReducedCoordinate {
     void updateKinematic([Ref] PxArticulationKinematicFlags flags);
 };
 PxArticulationReducedCoordinate implements PxBase;
+
+[Prefix="physx::"]
+interface PxArticulationSensor {
+    void release();
+    [Value] PxSpatialForce getForces();
+    [Value] PxTransform getRelativePose();
+    void setRelativePose([Const, Ref] PxTransform pose);
+    PxArticulationLink getLink();
+    unsigned long getIndex();
+    PxArticulationReducedCoordinate getArticulation();
+    [Value] PxArticulationSensorFlags getFlags();
+    void setFlag(PxArticulationSensorFlagEnum flag, boolean enabled);
+    attribute VoidPtr userData;
+};
+PxArticulationSensor implements PxBase;
+
+enum PxArticulationSensorFlagEnum {
+    "PxArticulationSensorFlagEnum::eFORWARD_DYNAMICS_FORCES",
+    "PxArticulationSensorFlagEnum::eCONSTRAINT_SOLVER_FORCES",
+    "PxArticulationSensorFlagEnum::eWORLD_FRAME"
+};
+
+[Prefix="physx::"]
+interface PxArticulationSensorFlags {
+    void PxArticulationSensorFlags(octet flags);
+    boolean isSet(PxArticulationSensorFlagEnum flag);
+    void raise(PxArticulationSensorFlagEnum flag);
+    void clear(PxArticulationSensorFlagEnum flag);
+};
 
 [Prefix="physx::"]
 interface PxArticulationSpatialTendon {
