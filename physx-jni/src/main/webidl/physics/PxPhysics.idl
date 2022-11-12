@@ -387,6 +387,22 @@ interface PxQueryFilterData {
     [Value] attribute PxQueryFlags flags;
 };
 
+[Prefix="physx::"]
+interface PxQueryFilterCallback { };
+
+interface SimpleQueryFilterCallback {
+    unsigned long simplePreFilter([Const, Ref] PxFilterData filterData, [Const] PxShape shape, [Const] PxRigidActor actor, [Ref] PxHitFlags queryFlags);
+    unsigned long simplePostFilter([Const, Ref] PxFilterData filterData, [Const, Ref] PxQueryHit hit);
+};
+SimpleQueryFilterCallback implements PxQueryFilterCallback;
+
+[JSImplementation="SimpleQueryFilterCallback"]
+interface QueryFilterCallbackImpl {
+    void QueryFilterCallbackImpl();
+    unsigned long simplePreFilter([Const, Ref] PxFilterData filterData, [Const] PxShape shape, [Const] PxRigidActor actor, [Ref] PxHitFlags queryFlags);
+    unsigned long simplePostFilter([Const, Ref] PxFilterData filterData, [Const, Ref] PxQueryHit hit);
+};
+
 enum PxQueryFlagEnum {
     "PxQueryFlagEnum::eSTATIC",
     "PxQueryFlagEnum::eDYNAMIC",

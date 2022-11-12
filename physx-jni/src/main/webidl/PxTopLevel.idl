@@ -14,7 +14,7 @@ interface PxTopLevelFunctions {
     static boolean InitExtensions([Ref] PxPhysics physics);
     static void CloseExtensions();
     //static PxCudaContextManager CreateCudaContextManager([Ref] PxFoundation foundation, [Const, Ref] PxCudaContextManagerDesc desc);
-    //static PxPvd CreatePvd([Ref] PxFoundation foundation);
+    static PxPvd CreatePvd([Ref] PxFoundation foundation);
 
     static PxD6Joint D6JointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
     static PxDistanceJoint DistanceJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
