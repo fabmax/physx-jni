@@ -106,8 +106,8 @@ interface SimpleControllerBehaviorCallback {
 SimpleControllerBehaviorCallback implements PxControllerBehaviorCallback;
 
 [JSImplementation="SimpleControllerBehaviorCallback"]
-interface ControllerBehaviorCallbackImpl {
-    void ControllerBehaviorCallbackImpl();
+interface PxControllerBehaviorCallbackImpl {
+    void PxControllerBehaviorCallbackImpl();
     unsigned long getShapeBehaviorFlags([Const, Ref] PxShape shape, [Const, Ref] PxActor actor);
     unsigned long getControllerBehaviorFlags([Const, Ref] PxController controller);
     unsigned long getObstacleBehaviorFlags([Const, Ref] PxObstacle obstacle);
@@ -178,8 +178,8 @@ interface PxControllerFilterCallback {
 };
 
 [JSImplementation="PxControllerFilterCallback"]
-interface ControllerFilterCallbackImpl {
-    void ControllerFilterCallbackImpl();
+interface PxControllerFilterCallbackImpl {
+    void PxControllerFilterCallbackImpl();
     boolean filter([Const, Ref] PxController a, [Const, Ref] PxController b);
 };
 
@@ -301,8 +301,8 @@ interface PxUserControllerHitReport {
 };
 
 [JSImplementation="PxUserControllerHitReport"]
-interface UserControllerHitReportImpl {
-    void UserControllerHitReportImpl();
+interface PxUserControllerHitReportImpl {
+    void PxUserControllerHitReportImpl();
     void onShapeHit([Const, Ref] PxControllerShapeHit hit);
     void onControllerHit([Const, Ref] PxControllersHit hit);
     void onObstacleHit([Const, Ref] PxControllerObstacleHit hit);

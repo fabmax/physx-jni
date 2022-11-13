@@ -85,17 +85,17 @@ publishing {
                 classifier = "natives-windows"
             }
 
-            artifact(project(":physx-jni-natives-windows-cuda").tasks["jar"]).apply {
-                classifier = "natives-windows-cuda"
-            }
+//            artifact(project(":physx-jni-natives-windows-cuda").tasks["jar"]).apply {
+//                classifier = "natives-windows-cuda"
+//            }
 
             artifact(project(":physx-jni-natives-linux").tasks["jar"]).apply {
                 classifier = "natives-linux"
             }
 
-            artifact(project(":physx-jni-natives-linux-cuda").tasks["jar"]).apply {
-                classifier = "natives-linux-cuda"
-            }
+//            artifact(project(":physx-jni-natives-linux-cuda").tasks["jar"]).apply {
+//                classifier = "natives-linux-cuda"
+//            }
 
             pom {
                 name.set("physx-jni")

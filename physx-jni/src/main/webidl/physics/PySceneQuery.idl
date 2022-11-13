@@ -66,8 +66,8 @@ interface SimpleQueryFilterCallback {
 SimpleQueryFilterCallback implements PxQueryFilterCallback;
 
 [JSImplementation="SimpleQueryFilterCallback"]
-interface QueryFilterCallbackImpl {
-    void QueryFilterCallbackImpl();
+interface PxQueryFilterCallbackImpl {
+    void PxQueryFilterCallbackImpl();
     unsigned long simplePreFilter([Const, Ref] PxFilterData filterData, [Const] PxShape shape, [Const] PxRigidActor actor, [Ref] PxHitFlags queryFlags);
     unsigned long simplePostFilter([Const, Ref] PxFilterData filterData, [Const, Ref] PxQueryHit hit);
 };

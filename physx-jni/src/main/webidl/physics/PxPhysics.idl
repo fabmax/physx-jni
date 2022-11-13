@@ -342,8 +342,8 @@ interface SimpleSimulationEventCallback {
 SimpleSimulationEventCallback implements PxSimulationEventCallback;
 
 [JSImplementation="SimpleSimulationEventCallback"]
-interface SimulationEventCallbackImpl {
-    void SimulationEventCallbackImpl();
+interface PxSimulationEventCallbackImpl {
+    void PxSimulationEventCallbackImpl();
     void onConstraintBreak(PxConstraintInfo constraints, unsigned long count);
     void onWake(PxActorPtr actors, unsigned long count);
     void onSleep(PxActorPtr actors, unsigned long count);
