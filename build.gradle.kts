@@ -1,5 +1,6 @@
 import org.gradle.internal.os.OperatingSystem
 import org.gradle.jvm.tasks.Jar
+import kotlin.math.min
 
 subprojects {
     apply(plugin = "java-library")
@@ -22,11 +23,33 @@ subprojects {
 tasks.register<Exec>("generateNativeProject") {
     group = "native build"
 
+    workingDir = File("$projectDir/PhysX/physx")
     commandLine = OperatingSystem.current().let {
         when {
-            it.isWindows -> listOf("cmd", "/c", "generate_physx_win64.bat")
-            it.isLinux -> listOf("./generate_physx_linux.sh")
+            it.isWindows -> listOf("$projectDir/PhysX/physx/generate_projects.bat", "jni-vc16win64")
+            it.isLinux -> listOf("$projectDir/PhysX/physx/generate_projects.sh", "jni-linux")
             else -> throw IllegalStateException("Unsupported OS: $it; for now, only Windows and Linux are supported")
+        }
+    }
+
+    doFirst {
+        if (!File("$projectDir/PhysX/physx").exists()) {
+            throw IllegalStateException("Native PhysX project dir does not exist. Run 'git submodule update --init' first")
+        }
+
+        OperatingSystem.current().let {
+            when {
+                it.isWindows -> {
+                    delete("$projectDir/PhysX/physx/compiler/jni-vc16win64")
+                }
+                it.isLinux -> {
+                    delete("$projectDir/PhysX/physx/compiler/jni-linux-checked")
+                    delete("$projectDir/PhysX/physx/compiler/jni-linux-debug")
+                    delete("$projectDir/PhysX/physx/compiler/jni-linux-profile")
+                    delete("$projectDir/PhysX/physx/compiler/jni-linux-release")
+                }
+                else -> throw IllegalStateException("Unsupported OS: $it; for now, only Windows and Linux are supported")
+            }
         }
     }
 }
@@ -45,20 +68,77 @@ tasks.register<Exec>("buildNativeProject") {
     dependsOn("generateNativeGlueCode")
 
     val os = OperatingSystem.current()
-    commandLine = when {
-        os.isWindows -> listOf("cmd", "/c", "build_physx_windows.bat")
-        os.isLinux -> listOf("./build_physx_linux.sh")
+    when {
+        os.isWindows -> {
+            workingDir = File("$projectDir/PhysX/physx")
+            commandLine = listOf("cmake", "--build", "./compiler/jni-vc16win64/", "--config", "release")
+        }
+        os.isLinux -> {
+            val makeWorkers = min(32, Runtime.getRuntime().availableProcessors())
+            workingDir = File("$projectDir/PhysX/physx/compiler/jni-linux-release/")
+            commandLine = listOf("make", "-j${makeWorkers}")
+        }
         else -> throw IllegalStateException("Unsupported OS: $os; for now, only Windows and Linux are supported")
     }
 
-    doLast {
-        // generate native library file hashes
+    val nativeProjectDir = when {
+        os.isWindows -> File("$projectDir/PhysX/physx/compiler/jni-vc16win64")
+        os.isLinux -> File("$projectDir/PhysX/physx/compiler/jni-linux-release")
+        else -> throw IllegalStateException("Unsupported OS: $os; for now, only Windows and Linux are supported")
+    }
+    if (!nativeProjectDir.exists()) {
+        dependsOn("generateNativeProject")
+    }
+
+    doFirst {
         when {
             os.isWindows -> {
+                delete("${projectDir}/physx-jni-natives-windows/src/main/resources/windows/")
+                delete("${projectDir}/physx-jni-natives-windows-cuda/src/main/resources/windows/")
+            }
+            os.isLinux -> {
+                delete("${projectDir}/physx-jni-natives-linux/src/main/resources/windows/")
+                delete("${projectDir}/physx-jni-natives-linux-cuda/src/main/resources/windows/")
+            }
+        }
+    }
+
+    doLast {
+        // copy native libs from build output dir to project resources
+        when {
+            os.isWindows -> {
+                // copy non-cuda libs to regular windows natives subproject
+                copy {
+                    from("$projectDir/PhysX/physx/bin/jni-windows.x86_64/release")
+                    include("*.dll")
+                    exclude("freeglut.dll", "PhysXDevice64.dll", "PhysXGpu_64.dll")
+                    into("${projectDir}/physx-jni-natives-windows/src/main/resources/windows/")
+                }
+                // copy cuda libs to cuda windows natives sub-project
+                copy {
+                    from("$projectDir/PhysX/physx/bin/jni-windows.x86_64/release")
+                    include("*.dll")
+                    exclude("freeglut.dll")
+                    into("${projectDir}/physx-jni-natives-windows-cuda/src/main/resources/windows/")
+                }
                 Sha1Helper.writeHashes(File("${projectDir}/physx-jni-natives-windows/src/main/resources/windows/"))
                 Sha1Helper.writeHashes(File("${projectDir}/physx-jni-natives-windows-cuda/src/main/resources/windows/"))
             }
+
             os.isLinux -> {
+                // copy non-cuda libs to regular linux natives subproject
+                copy {
+                    from("$projectDir/PhysX/physx/bin/jni-linux.x86_64/release")
+                    include("*.so")
+                    exclude("libPhysXGpu_64.so")
+                    into("${projectDir}/physx-jni-natives-linux/src/main/resources/linux/")
+                }
+                // copy cuda libs to cuda windows linux sub-project
+                copy {
+                    from("$projectDir/PhysX/physx/bin/jni-linux.x86_64/release")
+                    include("*.so")
+                    into("${projectDir}/physx-jni-natives-linux-cuda/src/main/resources/linux/")
+                }
                 Sha1Helper.writeHashes(File("${projectDir}/physx-jni-natives-linux/src/main/resources/linux/"))
                 Sha1Helper.writeHashes(File("${projectDir}/physx-jni-natives-linux-cuda/src/main/resources/linux/"))
             }
