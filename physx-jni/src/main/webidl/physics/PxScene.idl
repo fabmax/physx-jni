@@ -5,16 +5,16 @@
 [Prefix="physx::", NoDelete]
 interface PxScene {
     // Add/Remove Actors
-    void addActor([Ref] PxActor actor, [Const] optional PxBVHStructure bvhStructure);
+    boolean addActor([Ref] PxActor actor, [Const] optional PxBVHStructure bvhStructure);
     void removeActor([Ref] PxActor actor, optional boolean wakeOnLostTouch);
-    void addAggregate([Ref] PxAggregate aggregate);
+    boolean addAggregate([Ref] PxAggregate aggregate);
     void removeAggregate([Ref] PxAggregate aggregate, optional boolean wakeOnLostTouch);
-    void addCollection([Const, Ref] PxCollection collection);
+    boolean addCollection([Const, Ref] PxCollection collection);
     float getWakeCounterResetValue();
     void shiftOrigin([Const, Ref] PxVec3 shift);
 
     // Add/Remove Articulations
-    void addArticulation([Ref] PxArticulationReducedCoordinate articulation);
+    boolean addArticulation([Ref] PxArticulationReducedCoordinate articulation);
     void removeArticulation([Ref] PxArticulationReducedCoordinate articulation, optional boolean wakeOnLostTouch);
 
     // Contained Object Retrieval
@@ -62,9 +62,9 @@ interface PxScene {
     PxPairFilteringModeEnum getStaticKinematicFilteringMode();
 
     // Simulation
-    void simulate(float elapsedTime, optional PxBaseTask completionTask, optional VoidPtr scratchMemBlock, optional unsigned long scratchMemBlockSize, optional boolean controlSimulation);
-    void advance(optional PxBaseTask completionTask);
-    void collide(float elapsedTime, optional PxBaseTask completionTask, optional VoidPtr scratchMemBlock, optional unsigned long scratchMemBlockSize, optional boolean controlSimulation);
+    boolean simulate(float elapsedTime, optional PxBaseTask completionTask, optional VoidPtr scratchMemBlock, optional unsigned long scratchMemBlockSize, optional boolean controlSimulation);
+    boolean advance(optional PxBaseTask completionTask);
+    boolean collide(float elapsedTime, optional PxBaseTask completionTask, optional VoidPtr scratchMemBlock, optional unsigned long scratchMemBlockSize, optional boolean controlSimulation);
     boolean checkResults(optional boolean block);
     boolean fetchCollision(optional boolean block);
     boolean fetchResults(optional boolean block);

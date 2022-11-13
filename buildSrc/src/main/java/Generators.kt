@@ -76,6 +76,7 @@ open class GenerateJavaBindings : DefaultTask() {
             outputDirectory = generatorOutput
             packagePrefix = "physx"
             onClassLoad = "de.fabmax.physxjni.Loader.load();"
+            parseCommentsFromDirectories += "../Physx/physx/include"
         }.generate(model)
     }
 }

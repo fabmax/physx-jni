@@ -7,9 +7,9 @@ interface PxBoxController {
     float getHalfHeight();
     float getHalfSideExtent();
     float getHalfForwardExtent();
-    void setHalfHeight(float halfHeight);
-    void setHalfSideExtent(float halfSideExtent);
-    void setHalfForwardExtent(float halfForwardExtent);
+    boolean setHalfHeight(float halfHeight);
+    boolean setHalfSideExtent(float halfSideExtent);
+    boolean setHalfForwardExtent(float halfForwardExtent);
 };
 PxBoxController implements PxController;
 
@@ -39,9 +39,9 @@ enum PxCapsuleClimbingModeEnum {
 [Prefix="physx::", NoDelete]
 interface PxCapsuleController {
     float getRadius();
-    void setRadius(float radius);
+    boolean setRadius(float radius);
     float getHeight();
-    void setHeight(float height);
+    boolean setHeight(float height);
     PxCapsuleClimbingModeEnum getClimbingMode();
     boolean setClimbingMode(PxCapsuleClimbingModeEnum mode);
 };

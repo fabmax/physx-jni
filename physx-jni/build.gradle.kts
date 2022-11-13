@@ -21,6 +21,11 @@ java {
     }
 }
 
+tasks.javadoc {
+    val opts = options as StandardJavadocDocletOptions
+    opts.addStringOption("Xdoclint:none", "-quiet")
+}
+
 // make sure version string constants in main project and platform projects match the gradle project version
 tasks.register<VersionNameUpdate>("updateVersionNames") {
     versionName = "$version"
