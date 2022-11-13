@@ -13,9 +13,9 @@ interface PxScene {
     float getWakeCounterResetValue();
     void shiftOrigin([Const, Ref] PxVec3 shift);
 
-//    // Add/Remove Articulations
-//    void addArticulation([Ref] PxArticulationBase articulation);
-//    void removeArticulation([Ref] PxArticulationBase articulation, optional boolean wakeOnLostTouch);
+    // Add/Remove Articulations
+    void addArticulation([Ref] PxArticulationReducedCoordinate articulation);
+    void removeArticulation([Ref] PxArticulationReducedCoordinate articulation, optional boolean wakeOnLostTouch);
 
     // Contained Object Retrieval
     unsigned long getNbActors([Ref] PxActorTypeFlags types);

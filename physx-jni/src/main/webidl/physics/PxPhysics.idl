@@ -289,28 +289,6 @@ interface PxMaterialFlags {
     void clear(PxMaterialFlagEnum flag);
 };
 
-interface PxOverlapBuffer10 {
-    void PxOverlapBuffer10();
-    unsigned long getNbAnyHits();
-    [Const, Ref] PxOverlapHit getAnyHit(unsigned long index);
-    unsigned long getNbTouches();
-    [Const] PxOverlapHit getTouches();
-    [Const, Ref] PxOverlapHit getTouch(unsigned long index);
-    unsigned long getMaxNbTouches();
-    [Value] attribute PxOverlapHit block;
-    attribute boolean hasBlock;
-};
-PxOverlapBuffer10 implements PxOverlapCallback;
-
-[Prefix="physx::"]
-interface PxOverlapCallback {
-    boolean hasAnyHits();
-};
-
-[Prefix="physx::"]
-interface PxOverlapHit { };
-PxOverlapHit implements PxQueryHit;
-
 enum PxPairFilteringModeEnum {
     "PxPairFilteringModeEnum::eKEEP",
     "PxPairFilteringModeEnum::eSUPPRESS",
@@ -370,8 +348,7 @@ interface PxPhysics {
     PxShape createShape([Const, Ref] PxGeometry geometry, [Const, Ref] PxMaterial material, optional boolean isExclusive, [Ref] optional PxShapeFlags shapeFlags);
     long getNbShapes();
     // Constraints and Articulations
-//    PxArticulation createArticulation();
-//    PxArticulationReducedCoordinate createArticulationReducedCoordinate();
+    PxArticulationReducedCoordinate createArticulationReducedCoordinate();
     // Materials
     PxMaterial createMaterial(float staticFriction, float dynamicFriction, float restitution);
     // Deletion Listeners
@@ -383,80 +360,6 @@ enum PxPruningStructureTypeEnum {
     "PxPruningStructureTypeEnum::eDYNAMIC_AABB_TREE",
     "PxPruningStructureTypeEnum::eSTATIC_AABB_TREE"
 };
-
-[Prefix="physx::"]
-interface PxQueryFilterCallback { };
-
-interface SimpleQueryFilterCallback {
-    unsigned long simplePreFilter([Const, Ref] PxFilterData filterData, [Const] PxShape shape, [Const] PxRigidActor actor, [Ref] PxHitFlags queryFlags);
-    unsigned long simplePostFilter([Const, Ref] PxFilterData filterData, [Const, Ref] PxQueryHit hit);
-};
-SimpleQueryFilterCallback implements PxQueryFilterCallback;
-
-[JSImplementation="SimpleQueryFilterCallback"]
-interface QueryFilterCallbackImpl {
-    void QueryFilterCallbackImpl();
-    unsigned long simplePreFilter([Const, Ref] PxFilterData filterData, [Const] PxShape shape, [Const] PxRigidActor actor, [Ref] PxHitFlags queryFlags);
-    unsigned long simplePostFilter([Const, Ref] PxFilterData filterData, [Const, Ref] PxQueryHit hit);
-};
-
-[Prefix="physx::"]
-interface PxQueryFilterData {
-    void PxQueryFilterData();
-    void PxQueryFilterData([Const, Ref] PxFilterData fd, [Ref] PxQueryFlags f);
-    void PxQueryFilterData([Ref] PxQueryFlags f);
-    [Value] attribute PxFilterData data;
-    [Value] attribute PxQueryFlags flags;
-};
-
-enum PxQueryFlagEnum {
-    "PxQueryFlagEnum::eSTATIC",
-    "PxQueryFlagEnum::eDYNAMIC",
-    "PxQueryFlagEnum::ePREFILTER",
-    "PxQueryFlagEnum::ePOSTFILTER",
-    "PxQueryFlagEnum::eANY_HIT",
-    "PxQueryFlagEnum::eNO_BLOCK"
-};
-
-[Prefix="physx::"]
-interface PxQueryFlags {
-    void PxQueryFlags(unsigned short flags);
-    boolean isSet(PxQueryFlagEnum flag);
-    void raise(PxQueryFlagEnum flag);
-    void clear(PxQueryFlagEnum flag);
-};
-
-[Prefix="physx::"]
-interface PxQueryHit {
-    attribute unsigned long faceIndex;
-};
-PxQueryHit implements PxActorShape;
-
-interface PxRaycastBuffer10 {
-    void PxRaycastBuffer10();
-    unsigned long getNbAnyHits();
-    [Const, Ref] PxRaycastHit getAnyHit(unsigned long index);
-    unsigned long getNbTouches();
-    [Const] PxRaycastHit getTouches();
-    [Const, Ref] PxRaycastHit getTouch(unsigned long index);
-    unsigned long getMaxNbTouches();
-    [Value] attribute PxRaycastHit block;
-    attribute boolean hasBlock;
-};
-PxRaycastBuffer10 implements PxRaycastCallback;
-
-[Prefix="physx::"]
-interface PxRaycastCallback {
-    boolean hasAnyHits();
-};
-
-[Prefix="physx::"]
-interface PxRaycastHit {
-    void PxRaycastHit();
-    attribute float u;
-    attribute float v;
-};
-PxRaycastHit implements PxLocationHit;
 
 [Prefix="physx::"]
 interface PxSimulationEventCallback { };
@@ -518,30 +421,6 @@ enum PxSolverTypeEnum {
     "PxSolverTypeEnum::ePGS",
     "PxSolverTypeEnum::eTGS",
 };
-
-interface PxSweepBuffer10 {
-    void PxSweepBuffer10();
-    unsigned long getNbAnyHits();
-    [Const, Ref] PxSweepHit getAnyHit(unsigned long index);
-    unsigned long getNbTouches();
-    [Const] PxSweepHit getTouches();
-    [Const, Ref] PxSweepHit getTouch(unsigned long index);
-    unsigned long getMaxNbTouches();
-    [Value] attribute PxSweepHit block;
-    attribute boolean hasBlock;
-};
-PxSweepBuffer10 implements PxSweepCallback;
-
-[Prefix="physx::"]
-interface PxSweepCallback {
-    boolean hasAnyHits();
-};
-
-[Prefix="physx::"]
-interface PxSweepHit {
-    void PxSweepHit();
-};
-PxSweepHit implements PxLocationHit;
 
 [Prefix="physx::"]
 interface PxTriggerPair {

@@ -127,7 +127,7 @@ open class GenerateJavaBindings : DefaultTask() {
             nullableAttributes += "BatchVehicleUpdateDesc.preFilterShader"
             nullableAttributes += "BatchVehicleUpdateDesc.postFilterShader"
 
-            nullableParameters += "PxArticulationBase.createLink" to "parent"
+            nullableParameters += "PxArticulationReducedCoordinate.createLink" to "parent"
             nullableParameters += "PxTopLevelFunctions.D6JointCreate" to "actor0"
             nullableParameters += "PxTopLevelFunctions.D6JointCreate" to "actor1"
             nullableParameters += "PxTopLevelFunctions.DistanceJointCreate" to "actor0"

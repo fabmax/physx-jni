@@ -1,5 +1,5 @@
 #!/bin/sh
 
-cd ./PhysX4/physx
-rm -rf compiler/jni_linux-*
-./generate_projects.sh jni_linux
+cd ./PhysX/physx
+rm -rf compiler/jni-linux-*
+./generate_projects.sh jni-linux

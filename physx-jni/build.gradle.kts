@@ -56,8 +56,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     testRuntimeOnly(project(":physx-jni-natives-windows"))
-    //testRuntimeOnly(project(":physx-jni-natives-windows-cuda"))
-    //testRuntimeOnly(project(":physx-jni-natives-linux-cuda"))
+    testRuntimeOnly(project(":physx-jni-natives-windows-cuda"))
+    testRuntimeOnly(project(":physx-jni-natives-linux-cuda"))
 
     testImplementation("org.lwjgl:lwjgl:3.3.1")
 

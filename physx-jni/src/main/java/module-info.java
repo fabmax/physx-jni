@@ -6,8 +6,8 @@ module de.fabmax.physxjni {
     exports physx.common;
     exports physx.cooking;
     exports physx.extensions;
-    exports physx.geomutils;
+    exports physx.geometry;
     exports physx.physics;
     exports physx.support;
-    exports physx.vehicle;
+    //exports physx.vehicle;
 }

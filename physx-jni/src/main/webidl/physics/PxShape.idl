@@ -47,6 +47,15 @@ interface PxShape {
 };
 PxShape implements PxBase;
 
+[Prefix="physx::"]
+interface PxShapeExt {
+    [Value] static PxTransform getGlobalPose([Const, Ref] PxShape shape, [Const, Ref] PxRigidActor actor);
+    static unsigned long raycast([Const, Ref] PxShape shape, [Const, Ref] PxRigidActor actor, [Const, Ref] PxVec3 rayOrigin, [Const, Ref] PxVec3 rayDir, float maxDist, [Ref] PxHitFlags hitFlags, unsigned long maxHits, PxRaycastHit rayHits);
+    static boolean overlap([Const, Ref] PxShape shape, [Const, Ref] PxRigidActor actor, [Const, Ref] PxGeometry otherGeom, [Const, Ref] PxTransform otherGeomPose);
+    static boolean sweep([Const, Ref] PxShape shape, [Const, Ref] PxRigidActor actor, [Const, Ref] PxVec3 unitDir, float distance, [Const, Ref] PxGeometry otherGeom, [Const, Ref] PxTransform otherGeomPose, [Ref] PxSweepHit sweepHit, [Ref] PxHitFlags hitFlags);
+    [Value] static PxBounds3 getWorldBounds([Const, Ref] PxShape shape, [Const, Ref] PxRigidActor actor, optional float inflation);
+};
+
 enum PxShapeFlagEnum {
     "PxShapeFlagEnum::eSIMULATION_SHAPE",
     "PxShapeFlagEnum::eSCENE_QUERY_SHAPE",

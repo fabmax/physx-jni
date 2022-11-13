@@ -51,9 +51,7 @@ public class SerializationTest {
             bin[i] = TypeHelpers.getU8At(serData, i);
         }
         String[] actual = new String(bin).trim().split("\n");
-        for (String s : actual) {
-            System.out.println(s);
-        }
+        //Arrays.stream(actual).forEach(System.out::println);
 
         sr.release();
         memOut.destroy();
