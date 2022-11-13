@@ -18,7 +18,7 @@ enum PxBaseFlagEnum {
     "PxBaseFlagEnum::eIS_RELEASABLE"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxBaseFlags {
     void PxBaseFlags(unsigned short flags);
     boolean isSet(PxBaseFlagEnum flag);
@@ -29,7 +29,7 @@ interface PxBaseFlags {
 [Prefix="physx::"]
 interface PxBaseTask { };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxBoundedData {
     void PxBoundedData();
     attribute unsigned long count;
@@ -37,7 +37,7 @@ interface PxBoundedData {
     [Const] attribute VoidPtr data;
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxBounds3 {
     void PxBounds3();
     void PxBounds3([Const, Ref] PxVec3 minimum, [Const, Ref] PxVec3 maximum);
@@ -139,7 +139,7 @@ interface PxInsertionCallback { };
 [Prefix="physx::"]
 interface PxOutputStream { };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxQuat {
     void PxQuat();
     void PxQuat(PxIDENTITYEnum r);
@@ -161,7 +161,7 @@ interface PxTolerancesScale {
     void PxTolerancesScale();
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxTransform {
     void PxTransform();
     void PxTransform(PxIDENTITYEnum r);
@@ -175,7 +175,7 @@ interface PxU16StridedData {
     [Const, Value] attribute PxU16ConstPtr data;
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxVec3 {
     void PxVec3();
     void PxVec3(float x, float y, float z);

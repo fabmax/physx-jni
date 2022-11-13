@@ -28,7 +28,7 @@ enum PxActorFlagEnum {
     "PxActorFlagEnum::eDISABLE_SIMULATION"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxActorFlags {
     void PxActorFlags(octet flags);
     boolean isSet(PxActorFlagEnum flag);
@@ -42,7 +42,7 @@ interface PxActorShape {
     attribute PxShape shape;
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxActorTypeFlags {
     void PxActorTypeFlags(unsigned short flags);
     boolean isSet(PxActorTypeFlagEnum flag);
@@ -137,7 +137,7 @@ enum PxRigidBodyFlagEnum {
     "PxRigidBodyFlagEnum::eRETAIN_ACCELERATIONS"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxRigidBodyFlags {
     void PxRigidBodyFlags(octet flags);
     boolean isSet(PxRigidBodyFlagEnum flag);
@@ -178,7 +178,7 @@ enum PxRigidDynamicLockFlagEnum {
     "PxRigidDynamicLockFlagEnum::eLOCK_ANGULAR_Z",
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxRigidDynamicLockFlags {
     void PxRigidDynamicLockFlags(octet flags);
     boolean isSet(PxRigidDynamicLockFlagEnum flag);

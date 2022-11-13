@@ -31,7 +31,7 @@ enum PxConvexFlagEnum {
     "PxConvexFlagEnum::eSHIFT_VERTICES"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxConvexFlags {
     void PxConvexFlags(unsigned short flags);
     boolean isSet(PxConvexFlagEnum flag);
@@ -39,7 +39,7 @@ interface PxConvexFlags {
     void clear(PxConvexFlagEnum flag);
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxConvexMeshDesc {
     void PxConvexMeshDesc();
     [Value] attribute PxBoundedData points;
@@ -87,7 +87,7 @@ enum PxMeshPreprocessingFlagEnum {
     "PxMeshPreprocessingFlagEnum::eFORCE_32BIT_INDICES"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxMeshPreprocessingFlags {
     void PxMeshPreprocessingFlags(unsigned long flags);
     boolean isSet(PxMeshPreprocessingFlagEnum flag);
@@ -111,7 +111,7 @@ enum PxMeshMidPhaseEnum {
     "PxMeshMidPhaseEnum::eBVH34"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxTriangleMeshDesc {
     void PxTriangleMeshDesc();
     void setToDefault();

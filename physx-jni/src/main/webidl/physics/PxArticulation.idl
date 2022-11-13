@@ -64,7 +64,7 @@ enum PxArticulationCacheFlagEnum {
     "PxArticulationCacheFlagEnum::eALL"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxArticulationCacheFlags {
     void PxArticulationCacheFlags(unsigned long flags);
     boolean isSet(PxArticulationCacheFlagEnum flag);
@@ -109,7 +109,7 @@ enum PxArticulationFlagEnum {
     "PxArticulationFlagEnum::eCOMPUTE_JOINT_FORCES"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxArticulationFlags {
     void PxArticulationFlags(octet flags);
     boolean isSet(PxArticulationFlagEnum flag);
@@ -167,7 +167,7 @@ enum PxArticulationKinematicFlagEnum {
     "PxArticulationKinematicFlagEnum::eVELOCITY"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxArticulationKinematicFlags {
     void PxArticulationKinematicFlags(octet flags);
     boolean isSet(PxArticulationKinematicFlagEnum flag);
@@ -230,7 +230,7 @@ interface PxArticulationReducedCoordinate {
     float getMaxCOMLinearVelocity();
     void setMaxCOMAngularVelocity(float maxAngularVelocity);
     float getMaxCOMAngularVelocity();
-    PxArticulationLink createLink(PxArticulationLink parent, [Const, Ref] PxTransform pose);
+    PxArticulationLink createLink([Nullable] PxArticulationLink parent, [Const, Ref] PxTransform pose);
     void release();
     unsigned long getNbLinks();
     // getLinks();
@@ -307,7 +307,7 @@ enum PxArticulationSensorFlagEnum {
     "PxArticulationSensorFlagEnum::eWORLD_FRAME"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxArticulationSensorFlags {
     void PxArticulationSensorFlags(octet flags);
     boolean isSet(PxArticulationSensorFlagEnum flag);

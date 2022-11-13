@@ -2,7 +2,7 @@
  * [package=geometry]
  ****************************************/
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxBoxGeometry {
     void PxBoxGeometry(float hx, float hy, float hz);
 };
@@ -12,7 +12,7 @@ PxBoxGeometry implements PxGeometry;
 interface PxBVHStructure { };
 PxBVHStructure implements PxBase;
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxCapsuleGeometry {
     void PxCapsuleGeometry(float radius, float halfHeight);
 };
@@ -32,7 +32,7 @@ interface PxConvexMesh {
 };
 PxConvexMesh implements PxBase;
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxConvexMeshGeometry {
     void PxConvexMeshGeometry(PxConvexMesh mesh, [Const, Ref] optional PxMeshScale scaling, [Ref] optional PxConvexMeshGeometryFlags flags);
 };
@@ -42,7 +42,7 @@ enum PxConvexMeshGeometryFlagEnum {
     "PxConvexMeshGeometryFlagEnum::eTIGHT_BOUNDS"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxConvexMeshGeometryFlags {
     void PxConvexMeshGeometryFlags(octet flags);
     boolean isSet(PxConvexMeshGeometryFlagEnum flag);
@@ -118,7 +118,7 @@ interface PxHeightField {
 };
 PxHeightField implements PxBase;
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxHeightFieldDesc {
     void PxHeightFieldDesc();
     void setToDefault();
@@ -131,7 +131,7 @@ interface PxHeightFieldDesc {
     [Value] attribute PxHeightFieldFlags flags;
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxHeightFieldFlags {
     void PxHeightFieldFlags(unsigned short flags);
     boolean isSet(PxHeightFieldFlagEnum flag);
@@ -147,7 +147,7 @@ enum PxHeightFieldFormatEnum {
     "PxHeightFieldFormatEnum::eS16_TM"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxHeightFieldGeometry {
     void PxHeightFieldGeometry();
     void PxHeightFieldGeometry(PxHeightField hf, [Ref] PxMeshGeometryFlags flags, float heightScale, float rowScale, float columnScale);
@@ -160,7 +160,7 @@ interface PxHeightFieldGeometry {
 };
 PxHeightFieldGeometry implements PxGeometry;
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxHeightFieldSample {
     void PxHeightFieldSample();
     octet tessFlag();
@@ -171,7 +171,7 @@ interface PxHeightFieldSample {
     attribute octet materialIndex1;
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxHullPolygon {
     void PxHullPolygon();
     attribute float[] mPlane;
@@ -184,7 +184,7 @@ enum PxMeshFlagEnum {
     "PxMeshFlagEnum::e16_BIT_INDICES"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxMeshFlags {
     void PxMeshFlags(octet flags);
     boolean isSet(PxMeshFlagEnum flag);
@@ -196,7 +196,7 @@ enum PxMeshGeometryFlagEnum {
     "PxMeshGeometryFlagEnum::eDOUBLE_SIDED"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxMeshGeometryFlags {
     void PxMeshGeometryFlags(octet flags);
     boolean isSet(PxMeshGeometryFlagEnum flag);
@@ -204,14 +204,14 @@ interface PxMeshGeometryFlags {
     void clear(PxMeshGeometryFlagEnum flag);
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxMeshScale {
     void PxMeshScale();
     void PxMeshScale(float r);
     void PxMeshScale([Const, Ref] PxVec3 s, [Const, Ref] PxQuat r);
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxPlaneGeometry {
     void PxPlaneGeometry();
 };
@@ -227,7 +227,7 @@ interface PxSimpleTriangleMesh {
     [Value] attribute PxMeshFlags flags;
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxSphereGeometry {
     void PxSphereGeometry(float ir);
 };
@@ -266,7 +266,7 @@ enum PxTriangleMeshFlagEnum {
     "PxTriangleMeshFlagEnum::eADJACENCY_INFO"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxTriangleMeshFlags {
     void PxTriangleMeshFlags(octet flags);
     boolean isSet(PxTriangleMeshFlagEnum flag);
@@ -274,7 +274,7 @@ interface PxTriangleMeshFlags {
     void clear(PxTriangleMeshFlagEnum flag);
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxTriangleMeshGeometry {
     void PxTriangleMeshGeometry(PxTriangleMesh mesh, [Const, Ref] optional PxMeshScale scaling, [Ref] optional PxMeshGeometryFlags flags);
     boolean isValid();

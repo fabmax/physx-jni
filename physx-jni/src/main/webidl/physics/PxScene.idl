@@ -158,7 +158,7 @@ interface PxScene {
     attribute VoidPtr userData;
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxSceneDesc {
     void PxSceneDesc([Const, Ref] PxTolerancesScale scale);
     void setToDefault([Const, Ref] PxTolerancesScale scale);
@@ -233,7 +233,7 @@ enum PxSceneFlagEnum {
     "PxSceneFlagEnum::eMUTABLE_FLAGS"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxSceneFlags {
     void PxSceneFlags(unsigned long flags);
     boolean isSet(PxSceneFlagEnum flag);
@@ -241,7 +241,7 @@ interface PxSceneFlags {
     void clear(PxSceneFlagEnum flag);
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxSceneLimits {
     void PxSceneLimits();
     void setToDefault();

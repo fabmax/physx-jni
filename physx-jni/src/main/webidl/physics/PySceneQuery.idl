@@ -2,6 +2,38 @@
  * [package=physics]
  ****************************************/
 
+enum PxHitFlagEnum {
+    "PxHitFlagEnum::ePOSITION",
+    "PxHitFlagEnum::eNORMAL",
+    "PxHitFlagEnum::eUV",
+    "PxHitFlagEnum::eASSUME_NO_INITIAL_OVERLAP",
+    "PxHitFlagEnum::eMESH_MULTIPLE",
+    "PxHitFlagEnum::eMESH_ANY",
+    "PxHitFlagEnum::eMESH_BOTH_SIDES",
+    "PxHitFlagEnum::ePRECISE_SWEEP",
+    "PxHitFlagEnum::eMTD",
+    "PxHitFlagEnum::eFACE_INDEX",
+    "PxHitFlagEnum::eDEFAULT",
+    "PxHitFlagEnum::eMODIFIABLE_FLAGS"
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxHitFlags {
+    void PxHitFlags(unsigned short flags);
+    boolean isSet(PxHitFlagEnum flag);
+    void raise(PxHitFlagEnum flag);
+    void clear(PxHitFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxLocationHit {
+    [Value] attribute PxHitFlags flags;
+    [Value] attribute PxVec3 position;
+    [Value] attribute PxVec3 normal;
+    attribute float distance;
+};
+PxLocationHit implements PxQueryHit;
+
 interface PxOverlapBuffer10 {
     void PxOverlapBuffer10();
     unsigned long getNbAnyHits();
@@ -58,7 +90,7 @@ enum PxQueryFlagEnum {
     "PxQueryFlagEnum::eNO_BLOCK"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxQueryFlags {
     void PxQueryFlags(unsigned short flags);
     boolean isSet(PxQueryFlagEnum flag);
@@ -90,7 +122,7 @@ interface PxRaycastCallback {
     boolean hasAnyHits();
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxRaycastHit {
     void PxRaycastHit();
     attribute float u;
@@ -129,7 +161,7 @@ interface PxSweepCallback {
     boolean hasAnyHits();
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxSweepHit {
     void PxSweepHit();
 };

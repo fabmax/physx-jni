@@ -64,7 +64,7 @@ enum PxD6JointDriveFlagEnum {
     "PxD6JointDriveFlagEnum::eACCELERATION"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxD6JointDriveFlags {
     void PxD6JointDriveFlags(unsigned long flags);
     boolean isSet(PxD6JointDriveFlagEnum flag);
@@ -103,7 +103,7 @@ enum PxDistanceJointFlagEnum {
     "PxDistanceJointFlagEnum::eSPRING_ENABLED"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxDistanceJointFlags {
     void PxDistanceJointFlags(unsigned short flags);
     boolean isSet(PxDistanceJointFlagEnum flag);
@@ -240,7 +240,7 @@ enum PxPrismaticJointFlagEnum {
     "PxPrismaticJointFlagEnum::eLIMIT_ENABLED"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxPrismaticJointFlags {
     void PxPrismaticJointFlags(unsigned short flags);
     boolean isSet(PxPrismaticJointFlagEnum flag);
@@ -276,7 +276,7 @@ enum PxRevoluteJointFlagEnum {
     "PxRevoluteJointFlagEnum::eDRIVE_FREESPIN"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxRevoluteJointFlags {
     void PxRevoluteJointFlags(unsigned short flags);
     boolean isSet(PxRevoluteJointFlagEnum flag);
@@ -302,7 +302,7 @@ enum PxSphericalJointFlagEnum {
     "PxSphericalJointFlagEnum::eLIMIT_ENABLED"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxSphericalJointFlags {
     void PxSphericalJointFlags(unsigned short flags);
     boolean isSet(PxSphericalJointFlagEnum flag);

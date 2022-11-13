@@ -63,7 +63,7 @@ enum PxShapeFlagEnum {
     "PxShapeFlagEnum::eVISUALIZATION"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxShapeFlags {
     void PxShapeFlags(octet flags);
     boolean isSet(PxShapeFlagEnum flag);

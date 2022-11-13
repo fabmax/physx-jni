@@ -95,7 +95,7 @@ enum PxConstraintFlagEnum {
     "PxConstraintFlagEnum::eGPU_COMPATIBLE"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxConstraintFlags {
     void PxConstraintFlags(unsigned short flags);
     boolean isSet(PxConstraintFlagEnum flag);
@@ -115,7 +115,7 @@ enum PxContactPairHeaderFlagEnum {
     "PxContactPairHeaderFlagEnum::eREMOVED_ACTOR_1"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxContactPairHeaderFlags {
     void PxContactPairHeaderFlags(unsigned short flags);
     boolean isSet(PxContactPairHeaderFlagEnum flag);
@@ -142,7 +142,7 @@ enum PxContactPairFlagEnum {
     "PxContactPairFlagEnum::eINTERNAL_CONTACTS_ARE_FLIPPED"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxContactPairFlags {
     void PxContactPairFlags(unsigned short flags);
     boolean isSet(PxContactPairFlagEnum flag);
@@ -184,7 +184,7 @@ enum PxDynamicTreeSecondaryPrunerEnum {
     "PxDynamicTreeSecondaryPrunerEnum::eBVH"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxFilterData {
     void PxFilterData();
     void PxFilterData(unsigned long w0, unsigned long w1, unsigned long w2, unsigned long w3);
@@ -221,38 +221,6 @@ enum PxFrictionTypeEnum {
     "PxFrictionTypeEnum::eFRICTION_COUNT"
 };
 
-enum PxHitFlagEnum {
-    "PxHitFlagEnum::ePOSITION",
-    "PxHitFlagEnum::eNORMAL",
-    "PxHitFlagEnum::eUV",
-    "PxHitFlagEnum::eASSUME_NO_INITIAL_OVERLAP",
-    "PxHitFlagEnum::eMESH_MULTIPLE",
-    "PxHitFlagEnum::eMESH_ANY",
-    "PxHitFlagEnum::eMESH_BOTH_SIDES",
-    "PxHitFlagEnum::ePRECISE_SWEEP",
-    "PxHitFlagEnum::eMTD",
-    "PxHitFlagEnum::eFACE_INDEX",
-    "PxHitFlagEnum::eDEFAULT",
-    "PxHitFlagEnum::eMODIFIABLE_FLAGS"
-};
-
-[Prefix="physx::"]
-interface PxHitFlags {
-    void PxHitFlags(unsigned short flags);
-    boolean isSet(PxHitFlagEnum flag);
-    void raise(PxHitFlagEnum flag);
-    void clear(PxHitFlagEnum flag);
-};
-
-[Prefix="physx::"]
-interface PxLocationHit {
-    [Value] attribute PxHitFlags flags;
-    [Value] attribute PxVec3 position;
-    [Value] attribute PxVec3 normal;
-    attribute float distance;
-};
-PxLocationHit implements PxQueryHit;
-
 [Prefix="physx::", NoDelete]
 interface PxMaterial {
     unsigned long getReferenceCount();
@@ -281,7 +249,7 @@ enum PxMaterialFlagEnum {
     "PxMaterialFlagEnum::eIMPROVED_PATCH_FRICTION"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxMaterialFlags {
     void PxMaterialFlags(unsigned short flags);
     boolean isSet(PxMaterialFlagEnum flag);
@@ -317,7 +285,7 @@ enum PxPairFlagEnum {
     "PxPairFlagEnum::eTRIGGER_DEFAULT"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxPairFlags {
     void PxPairFlags(unsigned short flags);
     boolean isSet(PxPairFlagEnum flag);
@@ -438,7 +406,7 @@ enum PxTriggerPairFlagEnum {
     "PxTriggerPairFlagEnum::eNEXT_FREE"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxTriggerPairFlags {
     void PxTriggerPairFlags(octet flags);
     boolean isSet(PxTriggerPairFlagEnum flag);

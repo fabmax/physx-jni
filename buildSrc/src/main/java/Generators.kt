@@ -8,62 +8,19 @@ import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.io.FileNotFoundException
 
-private object CommonGeneratorSettings {
-    val externallyAllocatableClasses = setOf(
-        "PxBoundedData",
-        "PxBounds3",
-        "PxFilterData",
-        "PxHullPolygon",
-        "PxMeshScale",
-        "PxQuat",
-        "PxRaycastHit",
-        "PxSweepHit",
-        "PxTransform",
-        "PxVec3",
-        "PxExtendedVec3",
-        "PxHeightFieldSample",
-
-        "PxBoxGeometry",
-        "PxCapsuleGeometry",
-        "PxConvexMeshGeometry",
-        "PxHeightFieldGeometry",
-        "PxPlaneGeometry",
-        "PxSphereGeometry",
-        "PxTriangleMeshGeometry",
-
-        "PxSceneDesc",
-        "PxSceneLimits",
-        "PxBatchQueryDesc",
-        "PxBoxControllerDesc",
-        "PxCapsuleControllerDesc",
-        "PxConvexMeshDesc",
-        "PxCudaContextManagerDesc",
-        "PxHeightFieldDesc",
-        "PxTriangleMeshDesc",
-        "PxVehicleAntiRollBarData",
-        "PxVehicleDriveSimData4W",
-        "PxVehicleSuspensionData",
-        "PxVehicleTireData",
-        "PxVehicleWheelData",
-        "BatchVehicleUpdateDesc",
-
-        "PxActorFlags",
-        "PxBaseFlags",
-        "PxConvexFlags",
-        "PxConvexMeshGeometryFlags",
-        "PxHitFlags",
-        "PxMeshFlags",
-        "PxMeshGeometryFlags",
-        "PxQueryFlags",
-        "PxRevoluteJointFlags",
-        "PxRigidBodyFlags",
-        "PxRigidDynamicLockFlags",
-        "PxSceneFlags",
-        "PxShapeFlags",
-        "PxTriangleMeshFlags",
-        "PxVehicleWheelsSimFlags"
-    )
-}
+//private object CommonGeneratorSettings {
+//    val externallyAllocatableClasses = setOf(
+//        "PxCudaContextManagerDesc",
+//
+//        "PxVehicleAntiRollBarData",
+//        "PxVehicleDriveSimData4W",
+//        "PxVehicleSuspensionData",
+//        "PxVehicleTireData",
+//        "PxVehicleWheelData",
+//        "BatchVehicleUpdateDesc",
+//        "PxVehicleWheelsSimFlags"
+//    )
+//}
 
 open class CheckWebIdlConsistency : DefaultTask() {
     @Input
@@ -119,27 +76,6 @@ open class GenerateJavaBindings : DefaultTask() {
             outputDirectory = generatorOutput
             packagePrefix = "physx"
             onClassLoad = "de.fabmax.physxjni.Loader.load();"
-
-            externallyAllocatableClasses += CommonGeneratorSettings.externallyAllocatableClasses
-
-            nullableAttributes += "PxBatchQueryDesc.preFilterShader"
-            nullableAttributes += "PxBatchQueryDesc.postFilterShader"
-            nullableAttributes += "BatchVehicleUpdateDesc.preFilterShader"
-            nullableAttributes += "BatchVehicleUpdateDesc.postFilterShader"
-
-            nullableParameters += "PxArticulationReducedCoordinate.createLink" to "parent"
-            nullableParameters += "PxTopLevelFunctions.D6JointCreate" to "actor0"
-            nullableParameters += "PxTopLevelFunctions.D6JointCreate" to "actor1"
-            nullableParameters += "PxTopLevelFunctions.DistanceJointCreate" to "actor0"
-            nullableParameters += "PxTopLevelFunctions.DistanceJointCreate" to "actor1"
-            nullableParameters += "PxTopLevelFunctions.FixedJointCreate" to "actor0"
-            nullableParameters += "PxTopLevelFunctions.FixedJointCreate" to "actor1"
-            nullableParameters += "PxTopLevelFunctions.PrismaticJointCreate" to "actor0"
-            nullableParameters += "PxTopLevelFunctions.PrismaticJointCreate" to "actor1"
-            nullableParameters += "PxTopLevelFunctions.RevoluteJointCreate" to "actor0"
-            nullableParameters += "PxTopLevelFunctions.RevoluteJointCreate" to "actor1"
-            nullableParameters += "PxTopLevelFunctions.SphericalJointCreate" to "actor0"
-            nullableParameters += "PxTopLevelFunctions.SphericalJointCreate" to "actor1"
         }.generate(model)
     }
 }
@@ -174,8 +110,6 @@ open class GenerateNativeGlueCode : DefaultTask() {
             outputDirectory = generatorOutput
             glueFileName = "PhysXJniGlue.h"
             packagePrefix = "physx"
-
-            externallyAllocatableClasses += CommonGeneratorSettings.externallyAllocatableClasses
         }.generate(model)
     }
 }

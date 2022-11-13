@@ -7,7 +7,7 @@ java {
 
 tasks["sourcesJar"].apply {
     this as Jar
-    tasks.processResources.get().exclude("*")
+    exclude("**/windows")
 }
 
 dependencies {
