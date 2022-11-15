@@ -129,18 +129,37 @@ interface PxRaycastHit {
 };
 PxRaycastHit implements PxLocationHit;
 
-[Prefix="physx::"]
-interface PxSceneQueryExt {
-    // raycastMultiple and sweepMultiple do not work because of bool& parameter
-    static boolean raycastAny([Const, Ref] PxScene scene, [Const, Ref] PxVec3 origin, [Const, Ref] PxVec3 unitDir, [Const] float distance, [Ref] PxQueryHit hit, [Const, Ref] optional PxQueryFilterData filterData, optional PxQueryFilterCallback filterCall);
-    static boolean raycastSingle([Const, Ref] PxScene scene, [Const, Ref] PxVec3 origin, [Const, Ref] PxVec3 unitDir, [Const] float distance, [Ref] PxHitFlags outputFlags, [Ref] PxRaycastHit hit, [Const, Ref] optional PxQueryFilterData filterData, optional PxQueryFilterCallback filterCall);
-
-    static boolean sweepAny([Const, Ref] PxScene scene, [Const, Ref] PxGeometry geometry, [Const, Ref] PxTransform pose, [Const, Ref] PxVec3 unitDir, [Const] float distance, [Ref] PxHitFlags queryFlags, [Ref] PxQueryHit hit, [Const, Ref] optional PxQueryFilterData filterData, optional PxQueryFilterCallback filterCall);
-    static boolean sweepSingle([Const, Ref] PxScene scene, [Const, Ref] PxGeometry geometry, [Const, Ref] PxTransform pose, [Const, Ref] PxVec3 unitDir, [Const] float distance, [Ref] PxHitFlags outputFlags, [Ref] PxSweepHit hit, [Const, Ref] optional PxQueryFilterData filterData, optional PxQueryFilterCallback filterCall);
-
-    static long overlapMultiple([Const, Ref] PxScene scene, [Const, Ref] PxGeometry geometry, [Const, Ref] PxTransform pose, PxOverlapHit hitBuffer, unsigned long hitBufferSize, [Const, Ref] optional PxQueryFilterData filterData, optional PxQueryFilterCallback filterCall);
-    static boolean overlapAny([Const, Ref] PxScene scene, [Const, Ref] PxGeometry geometry, [Const, Ref] PxTransform pose, [Ref] PxOverlapHit hit, [Const, Ref] optional PxQueryFilterData filterData, optional PxQueryFilterCallback filterCall);
+[Prefix="physx::", NoDelete]
+interface PxSceneQuerySystemBase {
+    void setDynamicTreeRebuildRateHint(unsigned long dynamicTreeRebuildRateHint);
+    unsigned long getDynamicTreeRebuildRateHint();
+    void forceRebuildDynamicTree(unsigned long prunerIndex);
+    void setUpdateMode(PxSceneQueryUpdateModeEnum updateMode);
+    PxSceneQueryUpdateModeEnum getUpdateMode();
+    unsigned long getStaticTimestamp();
+    void flushUpdates();
+    boolean raycast([Const, Ref] PxVec3 origin, [Const, Ref] PxVec3 unitDir, float distance, [Ref] PxRaycastCallback hitCall,
+                    [Ref] optional PxHitFlags hitFlags, [Const, Ref] optional PxQueryFilterData filterData);
+    boolean sweep([Const, Ref] PxGeometry geometry, [Const, Ref] PxTransform pose, [Const, Ref] PxVec3 unitDir, float distance,
+                    [Ref] PxSweepCallback hitCall, [Ref] optional PxHitFlags hitFlags, [Const, Ref] optional PxQueryFilterData filterData);
+    boolean overlap([Const, Ref] PxGeometry geometry, [Const, Ref] PxTransform pose, [Ref] PxOverlapCallback hitCall,
+                    [Const, Ref] optional PxQueryFilterData filterData);
 };
+
+[Prefix="physx::", NoDelete]
+interface PxSceneSQSystem {
+    void setSceneQueryUpdateMode(PxSceneQueryUpdateModeEnum updateMode);
+    PxSceneQueryUpdateModeEnum getSceneQueryUpdateMode();
+    unsigned long getSceneQueryStaticTimestamp();
+    void flushQueryUpdates();
+    void forceDynamicTreeRebuild(boolean rebuildStaticStructure, boolean rebuildDynamicStructure);
+    PxPruningStructureTypeEnum getStaticStructure();
+    PxPruningStructureTypeEnum getDynamicStructure();
+    void sceneQueriesUpdate(optional PxBaseTask completionTask, optional boolean controlSimulation);
+    boolean checkQueries(optional boolean block);
+    boolean fetchQueries(optional boolean block);
+};
+PxSceneSQSystem implements PxSceneQuerySystemBase;
 
 interface PxSweepBuffer10 {
     void PxSweepBuffer10();

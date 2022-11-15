@@ -99,30 +99,6 @@ interface PxScene {
     [Value] PxBounds3 getVisualizationCullingBox();
     void getSimulationStatistics([Ref] PxSimulationStatistics stats);
 
-    // Scene Query
-    void setDynamicTreeRebuildRateHint(unsigned long dynamicTreeRebuildRateHint);
-    unsigned long getDynamicTreeRebuildRateHint();
-    void forceRebuildDynamicTree(unsigned long prunerIndex);
-    void setUpdateMode(PxSceneQueryUpdateModeEnum updateMode);
-    PxSceneQueryUpdateModeEnum getUpdateMode();
-    unsigned long getStaticTimestamp();
-    boolean raycast([Const, Ref] PxVec3 origin, [Const, Ref] PxVec3 unitDir, float distance, [Ref] PxRaycastCallback hitCall,
-                    [Ref] optional PxHitFlags hitFlags, [Const, Ref] optional PxQueryFilterData filterData);
-    boolean sweep([Const, Ref] PxGeometry geometry, [Const, Ref] PxTransform pose, [Const, Ref] PxVec3 unitDir, float distance,
-                    [Ref] PxSweepCallback hitCall, [Ref] optional PxHitFlags hitFlags, [Const, Ref] optional PxQueryFilterData filterData);
-    boolean overlap([Const, Ref] PxGeometry geometry, [Const, Ref] PxTransform pose, [Ref] PxOverlapCallback hitCall,
-                    [Const, Ref] optional PxQueryFilterData filterData);
-    void setSceneQueryUpdateMode(PxSceneQueryUpdateModeEnum updateMode);
-    PxSceneQueryUpdateModeEnum getSceneQueryUpdateMode();
-    unsigned long getSceneQueryStaticTimestamp();
-    void flushQueryUpdates();
-    void forceDynamicTreeRebuild(boolean rebuildStaticStructure, boolean rebuildDynamicStructure);
-    PxPruningStructureTypeEnum getStaticStructure();
-    PxPruningStructureTypeEnum getDynamicStructure();
-    void sceneQueriesUpdate(optional PxBaseTask completionTask, optional boolean controlSimulation);
-    boolean checkQueries(optional boolean block);
-    boolean fetchQueries(optional boolean block);
-
     // Broad-phase
     PxBroadPhaseTypeEnum getBroadPhaseType();
     boolean getBroadPhaseCaps([Ref] PxBroadPhaseCaps caps);
@@ -157,6 +133,7 @@ interface PxScene {
 
     attribute VoidPtr userData;
 };
+PxScene implements PxSceneSQSystem;
 
 [Prefix="physx::", StackAllocatable]
 interface PxSceneDesc {
