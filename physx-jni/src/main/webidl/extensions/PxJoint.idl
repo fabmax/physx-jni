@@ -141,7 +141,6 @@ interface PxJoint {
     PxConstraint getConstraint();
     void setName([Const] DOMString name);
     [Const] DOMString getName();
-    void release();
     PxScene getScene();
 
     attribute VoidPtr userData;
@@ -207,7 +206,7 @@ interface PxJointLinearLimit {
 
     attribute float value;
 };
-PxJointLinearLimitPair implements PxJointLimitParameters;
+PxJointLinearLimit implements PxJointLimitParameters;
 
 [Prefix="physx::"]
 interface PxJointLinearLimitPair {

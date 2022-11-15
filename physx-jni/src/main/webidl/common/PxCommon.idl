@@ -36,6 +36,7 @@ interface PxBoundedData {
     attribute unsigned long stride;
     [Const] attribute VoidPtr data;
 };
+PxBoundedData implements PxStridedData;
 
 [Prefix="physx::", StackAllocatable]
 interface PxBounds3 {
@@ -149,6 +150,13 @@ interface PxQuat {
     attribute float z;
     attribute float w;
 };
+
+[Prefix="physx::", NoDelete]
+interface PxRefCounted {
+    unsigned long getReferenceCount();
+    void acquireReference();
+};
+PxRefCounted implements PxBase;
 
 [Prefix="physx::"]
 interface PxStridedData {

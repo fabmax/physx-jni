@@ -17,6 +17,10 @@ interface PxAggregate {
 PxAggregate implements PxBase;
 
 [Prefix="physx::"]
+interface PxBaseMaterial { };
+PxBaseMaterial implements PxRefCounted;
+
+[Prefix="physx::"]
 interface PxBroadPhaseCaps {
     void PxBroadPhaseCaps();
     attribute unsigned long mMaxNbRegions;
@@ -62,7 +66,6 @@ enum PxCombineModeEnum {
 
 [Prefix="physx::", NoDelete]
 interface PxConstraint {
-    void release();
     PxScene getScene();
     //void getActors();
     void setActors(PxRigidActor actor0, PxRigidActor actor1);
@@ -223,8 +226,6 @@ enum PxFrictionTypeEnum {
 
 [Prefix="physx::", NoDelete]
 interface PxMaterial {
-    unsigned long getReferenceCount();
-    void acquireReference();
     void setDynamicFriction(float coef);
     float getDynamicFriction();
     void setStaticFriction(float coef);
@@ -241,7 +242,7 @@ interface PxMaterial {
 
     attribute VoidPtr userData;
 };
-PxMaterial implements PxBase;
+PxMaterial implements PxBaseMaterial;
 
 enum PxMaterialFlagEnum {
     "PxMaterialFlagEnum::eDISABLE_FRICTION",
@@ -305,7 +306,7 @@ interface PxPhysics {
     // Basics
     void release();
     [Ref] PxFoundation getFoundation();
-    PxAggregate createAggregate(unsigned long size, boolean enableSelfCollision);
+    PxAggregate createAggregate(unsigned long size, unsigned long maxShape, boolean enableSelfCollision);
     [Const, Ref] PxTolerancesScale getTolerancesScale();
     // Scenes
     PxScene createScene([Const, Ref] PxSceneDesc sceneDesc);

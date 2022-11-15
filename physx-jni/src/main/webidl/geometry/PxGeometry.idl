@@ -25,12 +25,10 @@ interface PxConvexMesh {
     [Value] PxU8ConstPtr getIndexBuffer();
     unsigned long getNbPolygons();
     boolean getPolygonData(unsigned long index, [Ref] PxHullPolygon data);
-    unsigned long getReferenceCount();
-    void acquireReference();
     [Value] PxBounds3 getLocalBounds();
     boolean isGpuCompatible();
 };
-PxConvexMesh implements PxBase;
+PxConvexMesh implements PxRefCounted;
 
 [Prefix="physx::", StackAllocatable]
 interface PxConvexMeshGeometry {
@@ -109,14 +107,12 @@ interface PxHeightField {
     float getConvexEdgeThreshold();
     [Value] PxHeightFieldFlags getFlags();
     float getHeight(float x, float z);
-    unsigned long getReferenceCount();
-    void acquireReference();
     unsigned short getTriangleMaterialIndex(unsigned long triangleIndex);
     [Value] PxVec3 getTriangleNormal(unsigned long triangleIndex);
     [Const, Ref] PxHeightFieldSample getSample(unsigned long row, unsigned long column);
     unsigned long getTimestamp();
 };
-PxHeightField implements PxBase;
+PxHeightField implements PxRefCounted;
 
 [Prefix="physx::", StackAllocatable]
 interface PxHeightFieldDesc {
@@ -255,11 +251,8 @@ interface PxTriangleMesh {
     [Const, Value] PxU32ConstPtr getTrianglesRemap();
     unsigned short getTriangleMaterialIndex(unsigned long triangleIndex);
     [Value] PxBounds3 getLocalBounds();
-    unsigned long getReferenceCount();
-    void acquireReference();
-
 };
-PxTriangleMesh implements PxBase;
+PxTriangleMesh implements PxRefCounted;
 
 enum PxTriangleMeshFlagEnum {
     "PxTriangleMeshFlagEnum::e16_BIT_INDICES",

@@ -129,12 +129,9 @@ interface PxArticulationJointReducedCoordinate {
     PxArticulationJointTypeEnum getJointType();
     void setMotion(PxArticulationAxisEnum axis, PxArticulationMotionEnum motion);
     PxArticulationMotionEnum getMotion(PxArticulationAxisEnum axis);
-    void setLimit(PxArticulationAxisEnum axis, float lowLimit, float highLimit);
     // getLimit()
     void setLimitParams(PxArticulationAxisEnum axis, [Const, Ref] PxArticulationLimit limit);
     [Value] PxArticulationLimit getLimitParams(PxArticulationAxisEnum axis);
-    void setDrive(PxArticulationAxisEnum axis, float stiffness, float damping, float maxForce, optional PxArticulationDriveTypeEnum driveType);
-    // getDrive()
     void setDriveParams(PxArticulationAxisEnum axis, [Const, Ref] PxArticulationDrive drive);
     // getDriveParams
     void setDriveTarget(PxArticulationAxisEnum axis, float target, optional boolean autowake);
@@ -231,7 +228,6 @@ interface PxArticulationReducedCoordinate {
     void setMaxCOMAngularVelocity(float maxAngularVelocity);
     float getMaxCOMAngularVelocity();
     PxArticulationLink createLink([Nullable] PxArticulationLink parent, [Const, Ref] PxTransform pose);
-    void release();
     unsigned long getNbLinks();
     // getLinks();
     unsigned long getNbShapes();
@@ -288,7 +284,6 @@ PxArticulationReducedCoordinate implements PxBase;
 
 [Prefix="physx::"]
 interface PxArticulationSensor {
-    void release();
     [Value] PxSpatialForce getForces();
     [Value] PxTransform getRelativePose();
     void setRelativePose([Const, Ref] PxTransform pose);
@@ -334,7 +329,6 @@ interface PxArticulationTendon {
     void setOffset(float offset, optional boolean autowake);
     float getOffset();
     PxArticulationReducedCoordinate getArticulation();
-    void release();
 };
 PxArticulationTendon implements PxBase;
 

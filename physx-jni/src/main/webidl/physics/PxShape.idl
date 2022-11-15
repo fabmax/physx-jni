@@ -4,18 +4,9 @@
 
 [Prefix="physx::", NoDelete]
 interface PxShape {
-    unsigned long getReferenceCount();
-    void acquireReference();
     PxGeometryTypeEnum getGeometryType();
     void setGeometry([Const, Ref] PxGeometry geometry);
     [Const, Ref] PxGeometry getGeometry();
-    boolean getBoxGeometry([Ref] PxBoxGeometry geometry);
-    boolean getSphereGeometry([Ref] PxSphereGeometry geometry);
-    boolean getCapsuleGeometry([Ref] PxCapsuleGeometry geometry);
-    boolean getPlaneGeometry([Ref] PxPlaneGeometry geometry);
-    boolean getConvexMeshGeometry([Ref] PxConvexMeshGeometry geometry);
-    boolean getTriangleMeshGeometry([Ref] PxTriangleMeshGeometry geometry);
-    boolean getHeightFieldGeometry([Ref] PxHeightFieldGeometry geometry);
     PxRigidActor getActor();
     void setMaterials(PxMaterialPtr materials, unsigned short materialCount);
     unsigned short getNbMaterials();
@@ -45,7 +36,7 @@ interface PxShape {
     [Value] PxFilterData getQueryFilterData();
     attribute VoidPtr userData;
 };
-PxShape implements PxBase;
+PxShape implements PxRefCounted;
 
 [Prefix="physx::"]
 interface PxShapeExt {

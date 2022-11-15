@@ -58,6 +58,8 @@ open class GenerateJavaBindings : DefaultTask() {
     var idlSource = ""
     @Input
     var generatorOutput = "./generated"
+    @Input
+    var physxIncludeDir = "../Physx/physx/include"
 
     @TaskAction
     fun generate() {
@@ -76,7 +78,7 @@ open class GenerateJavaBindings : DefaultTask() {
             outputDirectory = generatorOutput
             packagePrefix = "physx"
             onClassLoad = "de.fabmax.physxjni.Loader.load();"
-            parseCommentsFromDirectories += "../Physx/physx/include"
+            parseCommentsFromDirectories += physxIncludeDir
         }.generate(model)
     }
 }

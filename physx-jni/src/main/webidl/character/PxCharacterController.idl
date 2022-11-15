@@ -17,7 +17,6 @@ PxBoxController implements PxController;
 interface PxBoxControllerDesc {
     void PxBoxControllerDesc();
     void setToDefault();
-    boolean isValid();
     attribute float halfHeight;
     attribute float halfSideExtent;
     attribute float halfForwardExtent;
@@ -51,7 +50,6 @@ PxCapsuleController implements PxController;
 interface PxCapsuleControllerDesc {
     void PxCapsuleControllerDesc();
     void setToDefault();
-    boolean isValid();
     attribute float radius;
     attribute float height;
     attribute PxCapsuleClimbingModeEnum climbingMode;

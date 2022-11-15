@@ -75,7 +75,7 @@ public class SimCallbackTest {
         }
     }
 
-    private static class TestSimulationCallback extends SimulationEventCallbackImpl {
+    private static class TestSimulationCallback extends PxSimulationEventCallbackImpl {
         Map<PxActor, String> actorNames = new HashMap<>();
 
         Set<PxActor> contactBodies = new HashSet<>();

@@ -102,7 +102,6 @@ interface PxQueryFlags {
 interface PxQueryHit {
     attribute unsigned long faceIndex;
 };
-PxQueryHit implements PxActorShape;
 
 interface PxRaycastBuffer10 {
     void PxRaycastBuffer10();

@@ -56,7 +56,7 @@ interface PxScene {
     unsigned long getFilterShaderDataSize();
     [Value] PxSimulationFilterShader getFilterShader();
     //PxSimulationFilterCallback getFilterCallback();
-    void resetFiltering([Ref] PxActor actor);
+    boolean resetFiltering([Ref] PxActor actor);
     // void resetFiltering([Ref] PxActor actor, ...);
     PxPairFilteringModeEnum getKinematicKinematicFilteringMode();
     PxPairFilteringModeEnum getStaticKinematicFilteringMode();

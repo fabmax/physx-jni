@@ -114,8 +114,6 @@ enum PxMeshMidPhaseEnum {
 [Prefix="physx::", StackAllocatable]
 interface PxTriangleMeshDesc {
     void PxTriangleMeshDesc();
-    void setToDefault();
-    boolean isValid();
 
     [Value] attribute PxU16StridedData materialIndices;
 };
