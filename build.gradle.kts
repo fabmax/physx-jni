@@ -26,7 +26,7 @@ tasks.register<Exec>("generateNativeProject") {
     workingDir = File("$projectDir/PhysX/physx")
     commandLine = OperatingSystem.current().let {
         when {
-            it.isWindows -> listOf("$projectDir/PhysX/physx/generate_projects.bat", "jni-vc16win64")
+            it.isWindows -> listOf("$projectDir/PhysX/physx/generate_projects.bat", "jni-vc17win64")
             it.isLinux -> listOf("$projectDir/PhysX/physx/generate_projects.sh", "jni-linux")
             else -> throw IllegalStateException("Unsupported OS: $it; for now, only Windows and Linux are supported")
         }
@@ -71,7 +71,7 @@ tasks.register<Exec>("buildNativeProject") {
     when {
         os.isWindows -> {
             workingDir = File("$projectDir/PhysX/physx")
-            commandLine = listOf("cmake", "--build", "./compiler/jni-vc16win64/", "--config", "release")
+            commandLine = listOf("cmake", "--build", "./compiler/jni-vc17win64/", "--config", "release")
         }
         os.isLinux -> {
             val makeWorkers = min(32, Runtime.getRuntime().availableProcessors())
@@ -82,7 +82,7 @@ tasks.register<Exec>("buildNativeProject") {
     }
 
     val nativeProjectDir = when {
-        os.isWindows -> File("$projectDir/PhysX/physx/compiler/jni-vc16win64")
+        os.isWindows -> File("$projectDir/PhysX/physx/compiler/jni-vc17win64")
         os.isLinux -> File("$projectDir/PhysX/physx/compiler/jni-linux-release")
         else -> throw IllegalStateException("Unsupported OS: $os; for now, only Windows and Linux are supported")
     }

@@ -72,7 +72,7 @@ interface PxArticulationCacheFlags {
     void clear(PxArticulationCacheFlagEnum flag);
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxArticulationDrive {
     void PxArticulationDrive();
     void PxArticulationDrive(float stiffness, float damping, float maxForce, [Value] PxArticulationDriveTypeEnum driveType);
@@ -185,7 +185,7 @@ interface PxArticulationLink {
 };
 PxArticulationLink implements PxRigidBody;
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxArticulationLimit {
     void PxArticulationLimit();
     void PxArticulationLimit(float low, float high);

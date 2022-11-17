@@ -36,12 +36,6 @@ interface PxActorFlags {
     void clear(PxActorFlagEnum flag);
 };
 
-[Prefix="physx::"]
-interface PxActorShape {
-    attribute PxRigidActor actor;
-    attribute PxShape shape;
-};
-
 [Prefix="physx::", StackAllocatable]
 interface PxActorTypeFlags {
     void PxActorTypeFlags(unsigned short flags);

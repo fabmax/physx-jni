@@ -53,8 +53,13 @@ interface PxOverlapCallback {
 };
 
 [Prefix="physx::"]
-interface PxOverlapHit { };
+interface PxOverlapHit {
+    // actually part of PxActorShape
+    attribute PxRigidActor actor;
+    attribute PxShape shape;
+};
 PxOverlapHit implements PxQueryHit;
+//PxOverlapHit implements PxActorShape;
 
 [Prefix="physx::"]
 interface PxQueryFilterCallback { };
@@ -126,8 +131,13 @@ interface PxRaycastHit {
     void PxRaycastHit();
     attribute float u;
     attribute float v;
+
+    // actually part of PxActorShape
+    attribute PxRigidActor actor;
+    attribute PxShape shape;
 };
 PxRaycastHit implements PxLocationHit;
+//PxRaycastHit implements PxActorShape;
 
 [Prefix="physx::", NoDelete]
 interface PxSceneQuerySystemBase {
@@ -182,5 +192,10 @@ interface PxSweepCallback {
 [Prefix="physx::", StackAllocatable]
 interface PxSweepHit {
     void PxSweepHit();
+
+    // actually part of PxActorShape
+    attribute PxRigidActor actor;
+    attribute PxShape shape;
 };
 PxSweepHit implements PxLocationHit;
+//PxSweepHit implements PxActorShape;
