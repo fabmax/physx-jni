@@ -15,12 +15,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
     - name: Set up JDK 11
       uses: actions/setup-java@v1
       with:
         java-version: '11'
+    - uses: lukka/get-cmake@latest
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Build with Gradle
+    - name: Build native lib
+      run: ./gradlew buildNativeProject
+    - name: Build JNI bindings
       run: ./gradlew build

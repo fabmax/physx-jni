@@ -5,9 +5,9 @@ import java.util.List;
 
 public class NativeMetaWindows implements NativeMeta {
 
-    private static final String version = "1.1.0";
+    private static final String version = "2.0.2-SNAPSHOT";
 
-    private static final List<String> libraries = new ArrayList<String>() {{
+    private static final List<String> libraries = new ArrayList<>() {{
         add("windows/PhysX_64.dll");
         add("windows/PhysXCommon_64.dll");
         add("windows/PhysXCooking_64.dll");

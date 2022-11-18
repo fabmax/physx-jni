@@ -1,0 +1,366 @@
+/****************************************
+ * [package=physics]
+ ****************************************/
+
+[Prefix="physx::"]
+interface PxArticulationAttachment {
+    void setRestLength(float restLength);
+    float getRestLength();
+    void setLimitParameters([Const, Ref] PxArticulationTendonLimit parameters);
+    [Value] PxArticulationTendonLimit getLimitParameters();
+    void setRelativeOffset([Const, Ref] PxVec3 offset);
+    [Value] PxVec3 getRelativeOffset();
+    void setCoefficient(float coefficient);
+    float getCoefficient();
+    PxArticulationLink getLink();
+    PxArticulationAttachment getParent();
+    boolean isLeaf();
+    PxArticulationSpatialTendon getTendon();
+    void release();
+    attribute VoidPtr userData;
+};
+
+enum PxArticulationAxisEnum {
+    "PxArticulationAxisEnum::eTWIST",
+    "PxArticulationAxisEnum::eSWING1",
+    "PxArticulationAxisEnum::eSWING2",
+    "PxArticulationAxisEnum::eX",
+    "PxArticulationAxisEnum::eY",
+    "PxArticulationAxisEnum::eZ"
+};
+
+[Prefix="physx::"]
+interface PxArticulationCache {
+    void release();
+    attribute PxSpatialForce externalForces;
+    [Value] attribute PxRealPtr denseJacobian;
+    [Value] attribute PxRealPtr massMatrix;
+    [Value] attribute PxRealPtr jointVelocity;
+    [Value] attribute PxRealPtr jointAcceleration;
+    [Value] attribute PxRealPtr jointPosition;
+    [Value] attribute PxRealPtr jointForce;
+    attribute PxSpatialVelocity linkVelocity;
+    attribute PxSpatialVelocity linkAcceleration;
+    attribute PxArticulationRootLinkData rootLinkData;
+    attribute PxSpatialForce sensorForces;
+    [Value] attribute PxRealPtr coefficientMatrix;
+    [Value] attribute PxRealPtr lambda;
+    attribute VoidPtr scratchMemory;
+    attribute VoidPtr scratchAllocator;
+    attribute unsigned long version;
+};
+
+enum PxArticulationCacheFlagEnum {
+    "PxArticulationCacheFlagEnum::eVELOCITY",
+    "PxArticulationCacheFlagEnum::eACCELERATION",
+    "PxArticulationCacheFlagEnum::ePOSITION",
+    "PxArticulationCacheFlagEnum::eFORCE",
+    "PxArticulationCacheFlagEnum::eLINK_VELOCITY",
+    "PxArticulationCacheFlagEnum::eLINK_ACCELERATION",
+    "PxArticulationCacheFlagEnum::eROOT_TRANSFORM",
+    "PxArticulationCacheFlagEnum::eROOT_VELOCITIES",
+    "PxArticulationCacheFlagEnum::eSENSOR_FORCES",
+    "PxArticulationCacheFlagEnum::eJOINT_SOLVER_FORCES",
+    "PxArticulationCacheFlagEnum::eALL"
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxArticulationCacheFlags {
+    void PxArticulationCacheFlags(unsigned long flags);
+    boolean isSet(PxArticulationCacheFlagEnum flag);
+    void raise(PxArticulationCacheFlagEnum flag);
+    void clear(PxArticulationCacheFlagEnum flag);
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxArticulationDrive {
+    void PxArticulationDrive();
+    void PxArticulationDrive(float stiffness, float damping, float maxForce, [Value] PxArticulationDriveTypeEnum driveType);
+    attribute float stiffness;
+    attribute float damping;
+    attribute float maxForce;
+    [Value] attribute PxArticulationDriveTypeEnum driveType;
+};
+
+enum PxArticulationDriveTypeEnum {
+    "PxArticulationDriveTypeEnum::eFORCE",
+    "PxArticulationDriveTypeEnum::eACCELERATION",
+    "PxArticulationDriveTypeEnum::eTARGET",
+    "PxArticulationDriveTypeEnum::eVELOCITY",
+    "PxArticulationDriveTypeEnum::eNONE",
+};
+
+[Prefix="physx::"]
+interface PxArticulationFixedTendon {
+    PxArticulationTendonJoint createTendonJoint(PxArticulationTendonJoint parent, PxArticulationAxisEnum axis, float coefficient, float recipCoefficient, PxArticulationLink link);
+    // getTendonJointS()
+    unsigned long getNbTendonJoints();
+    void setRestLength(float restLength);
+    float getRestLength();
+    void setLimitParameters([Const, Ref] PxArticulationTendonLimit parameter);
+    [Value] PxArticulationTendonLimit getLimitParameters();
+};
+PxArticulationFixedTendon implements PxArticulationTendon;
+
+enum PxArticulationFlagEnum {
+    "PxArticulationFlagEnum::eFIX_BASE",
+    "PxArticulationFlagEnum::eDRIVE_LIMITS_ARE_FORCES",
+    "PxArticulationFlagEnum::eDISABLE_SELF_COLLISION",
+    "PxArticulationFlagEnum::eCOMPUTE_JOINT_FORCES"
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxArticulationFlags {
+    void PxArticulationFlags(octet flags);
+    boolean isSet(PxArticulationFlagEnum flag);
+    void raise(PxArticulationFlagEnum flag);
+    void clear(PxArticulationFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxArticulationJointReducedCoordinate {
+    [Ref] PxArticulationLink getParentArticulationLink();
+    void setParentPose([Const, Ref] PxTransform pose);
+    [Value] PxTransform getParentPose();
+    [Ref] PxArticulationLink getChildArticulationLink();
+    void setChildPose([Const, Ref] PxTransform pose);
+    [Value] PxTransform getChildPose();
+    void setJointType(PxArticulationJointTypeEnum jointType);
+    PxArticulationJointTypeEnum getJointType();
+    void setMotion(PxArticulationAxisEnum axis, PxArticulationMotionEnum motion);
+    PxArticulationMotionEnum getMotion(PxArticulationAxisEnum axis);
+    // getLimit()
+    void setLimitParams(PxArticulationAxisEnum axis, [Const, Ref] PxArticulationLimit limit);
+    [Value] PxArticulationLimit getLimitParams(PxArticulationAxisEnum axis);
+    void setDriveParams(PxArticulationAxisEnum axis, [Const, Ref] PxArticulationDrive drive);
+    // getDriveParams
+    void setDriveTarget(PxArticulationAxisEnum axis, float target, optional boolean autowake);
+    float getDriveTarget(PxArticulationAxisEnum axis);
+    void setDriveVelocity(PxArticulationAxisEnum axis, float targetVel, optional boolean autowake);
+    float getDriveVelocity(PxArticulationAxisEnum axis);
+    void setArmature(PxArticulationAxisEnum axis, float armature);
+    float getArmature(PxArticulationAxisEnum axis);
+    void setFrictionCoefficient(float coefficient);
+    float getFrictionCoefficient();
+    void setMaxJointVelocity(float maxJointV);
+    float getMaxJointVelocity();
+    void setJointPosition(PxArticulationAxisEnum axis, float jointPos);
+    float getJointPosition(PxArticulationAxisEnum axis);
+    void setJointVelocity(PxArticulationAxisEnum axis, float jointVel);
+    float getJointVelocity(PxArticulationAxisEnum axis);
+};
+PxArticulationJointReducedCoordinate implements PxBase;
+
+enum PxArticulationJointTypeEnum {
+    "PxArticulationJointTypeEnum::eFIX",
+    "PxArticulationJointTypeEnum::ePRISMATIC",
+    "PxArticulationJointTypeEnum::eREVOLUTE",
+    "PxArticulationJointTypeEnum::eSPHERICAL",
+    "PxArticulationJointTypeEnum::eUNDEFINED"
+};
+
+enum PxArticulationKinematicFlagEnum {
+    "PxArticulationKinematicFlagEnum::ePOSITION",
+    "PxArticulationKinematicFlagEnum::eVELOCITY"
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxArticulationKinematicFlags {
+    void PxArticulationKinematicFlags(octet flags);
+    boolean isSet(PxArticulationKinematicFlagEnum flag);
+    void raise(PxArticulationKinematicFlagEnum flag);
+    void clear(PxArticulationKinematicFlagEnum flag);
+};
+
+[Prefix="physx::", NoDelete]
+interface PxArticulationLink {
+    [Ref] PxArticulationReducedCoordinate getArticulation();
+    PxArticulationJointReducedCoordinate getInboundJoint();
+    unsigned long getInboundJointDof();
+    unsigned long getNbChildren();
+    unsigned long getLinkIndex();
+    // getChildren();
+    void setCfmScale(float cfm);
+    float getCfmScale();
+};
+PxArticulationLink implements PxRigidBody;
+
+[Prefix="physx::", StackAllocatable]
+interface PxArticulationLimit {
+    void PxArticulationLimit();
+    void PxArticulationLimit(float low, float high);
+    attribute float low;
+    attribute float high;
+};
+
+enum PxArticulationMotionEnum {
+    "PxArticulationMotionEnum::eLOCKED",
+    "PxArticulationMotionEnum::eLIMITED",
+    "PxArticulationMotionEnum::eFREE"
+};
+
+[Prefix="physx::"]
+interface PxArticulationRootLinkData {
+    void PxArticulationRootLinkData();
+    [Value] attribute PxTransform transform;
+    [Value] attribute PxVec3 worldLinVel;
+    [Value] attribute PxVec3 worldAngVel;
+    [Value] attribute PxVec3 worldLinAccel;
+    [Value] attribute PxVec3 worldAngAccel;
+};
+
+[Prefix="physx::"]
+interface PxArticulationReducedCoordinate {
+    PxScene getScene();
+    void setSolverIterationCounts(unsigned long minPositionIters, optional unsigned long minVelocityIters);
+    // void getSolverIterationCounts(out minPositionIters, out minVelocityIters);
+    boolean isSleeping();
+    void setSleepThreshold(float threshold);
+    float getSleepThreshold();
+    void setStabilizationThreshold(float threshold);
+    float getStabilizationThreshold();
+    void setWakeCounter(float wakeCounterValue);
+    float getWakeCounter();
+    void wakeUp();
+    void putToSleep();
+    void setMaxCOMLinearVelocity(float maxLinerVelocity);
+    float getMaxCOMLinearVelocity();
+    void setMaxCOMAngularVelocity(float maxAngularVelocity);
+    float getMaxCOMAngularVelocity();
+    PxArticulationLink createLink([Nullable] PxArticulationLink parent, [Const, Ref] PxTransform pose);
+    unsigned long getNbLinks();
+    // getLinks();
+    unsigned long getNbShapes();
+    void setName([Const] DOMString name);
+    [Const] DOMString getName();
+    [Value] PxBounds3 getWorldBounds(optional float inflation);
+    PxAggregate getAggregate();
+    void setArticulationFlags([Ref] PxArticulationFlags flags);
+    void setArticulationFlag(PxArticulationFlagEnum flag, boolean value);
+    [Value] PxArticulationFlags getArticulationFlags();
+    unsigned long getDofs();
+    PxArticulationCache createCache();
+    unsigned long getCacheDataSize();
+    void zeroCache([Ref] PxArticulationCache cache);
+    void applyCache([Ref] PxArticulationCache cache, [Ref] PxArticulationCacheFlags flags, optional boolean autowake);
+    void copyInternalStateToCache([Ref] PxArticulationCache cache, [Const, Ref] PxArticulationCacheFlags flags);
+    //void packJointData(out float maximum, out float reduced);
+    //void unpackJointData(out float reduced, out float maximum);
+    void commonInit();
+    void computeGeneralizedGravityForce([Ref] PxArticulationCache cache);
+    void computeCoriolisAndCentrifugalForce([Ref] PxArticulationCache cache);
+    void computeGeneralizedExternalForce([Ref] PxArticulationCache cache);
+    void computeJointAcceleration([Ref] PxArticulationCache cache);
+    void computeJointForce([Ref] PxArticulationCache cache);
+    //void computeDenseJacobian([Ref] PxArticulationCache cache, out unsigned long nRows, out unsigned long nCols);
+    void computeCoefficientMatrix([Ref] PxArticulationCache cache);
+    //void computeLambda()
+    void computeGeneralizedMassMatrix([Ref] PxArticulationCache cache);
+    void addLoopJoint(PxConstraint joint);
+    void removeLoopJoint(PxConstraint joint);
+    unsigned long getNbLoopJoints();
+    // void getLoopJoints();
+    unsigned long getCoefficientMatrixSize();
+    void setRootGlobalPose([Const, Ref] PxTransform pose, optional boolean autowake);
+    [Value] PxTransform getRootGlobalPose();
+    void setRootLinearVelocity([Const, Ref] PxVec3 linearVelocity, optional boolean autowake);
+    [Value] PxVec3 getRootLinearVelocity();
+    void setRootAngularVelocity([Const, Ref] PxVec3 angularVelocity, optional boolean autowake);
+    [Value] PxVec3 getRootAngularVelocity();
+    [Value] PxSpatialVelocity getLinkAcceleration(unsigned long linkId);
+    unsigned long getGpuArticulationIndex();
+    PxArticulationSpatialTendon createSpatialTendon();
+    PxArticulationFixedTendon createFixedTendon();
+    PxArticulationSensor createSensor(PxArticulationLink link, [Const, Ref] PxTransform relativePose);
+    //unsigned long getSpatialTendons();
+    unsigned long getNbSpatialTendons();
+    //unsigned long getFixedTendons();
+    unsigned long getNbFixedTendons();
+    //unsigned long getSensors();
+    unsigned long getNbSensors();
+    void updateKinematic([Ref] PxArticulationKinematicFlags flags);
+};
+PxArticulationReducedCoordinate implements PxBase;
+
+[Prefix="physx::"]
+interface PxArticulationSensor {
+    [Value] PxSpatialForce getForces();
+    [Value] PxTransform getRelativePose();
+    void setRelativePose([Const, Ref] PxTransform pose);
+    PxArticulationLink getLink();
+    unsigned long getIndex();
+    PxArticulationReducedCoordinate getArticulation();
+    [Value] PxArticulationSensorFlags getFlags();
+    void setFlag(PxArticulationSensorFlagEnum flag, boolean enabled);
+    attribute VoidPtr userData;
+};
+PxArticulationSensor implements PxBase;
+
+enum PxArticulationSensorFlagEnum {
+    "PxArticulationSensorFlagEnum::eFORWARD_DYNAMICS_FORCES",
+    "PxArticulationSensorFlagEnum::eCONSTRAINT_SOLVER_FORCES",
+    "PxArticulationSensorFlagEnum::eWORLD_FRAME"
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxArticulationSensorFlags {
+    void PxArticulationSensorFlags(octet flags);
+    boolean isSet(PxArticulationSensorFlagEnum flag);
+    void raise(PxArticulationSensorFlagEnum flag);
+    void clear(PxArticulationSensorFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxArticulationSpatialTendon {
+    PxArticulationAttachment createAttachment(PxArticulationAttachment parent, float coefficient, [Const, Ref] PxVec3 relativeOffset, PxArticulationLink link);
+    // getAttachments()
+    unsigned long getNbAttachments();
+};
+PxArticulationSpatialTendon implements PxArticulationTendon;
+
+[Prefix="physx::"]
+interface PxArticulationTendon {
+    void setStiffness(float stiffness);
+    float getStiffness();
+    void setDamping(float damping);
+    float getDamping();
+    void setLimitStiffness(float stiffness);
+    float getLimitStiffness();
+    void setOffset(float offset, optional boolean autowake);
+    float getOffset();
+    PxArticulationReducedCoordinate getArticulation();
+};
+PxArticulationTendon implements PxBase;
+
+[Prefix="physx::"]
+interface PxArticulationTendonJoint {
+    void setCoefficient(PxArticulationAxisEnum axis, float coefficient, float recipCoefficient);
+    // getCoefficient()
+    PxArticulationLink getLink();
+    PxArticulationTendonJoint getParent();
+    PxArticulationFixedTendon getTendon();
+    void release();
+    attribute VoidPtr userData;
+};
+
+[Prefix="physx::"]
+interface PxArticulationTendonLimit {
+    attribute float lowLimit;
+    attribute float highLimit;
+};
+
+[Prefix="physx::"]
+interface PxSpatialForce {
+    [Value] attribute PxVec3 force;
+    //attribute float pad0;
+    [Value] attribute PxVec3 torque;
+    //attribute float pad1;
+};
+
+[Prefix="physx::"]
+interface PxSpatialVelocity {
+    [Value] attribute PxVec3 linear;
+    //attribute float pad0;
+    [Value] attribute PxVec3 angular;
+    //attribute float pad1;
+};

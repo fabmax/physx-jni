@@ -4,41 +4,45 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni)
 ![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
 
-Java JNI bindings for Nvidia [PhysX 4.1.2](https://github.com/NVIDIAGameWorks/PhysX).
+Java JNI bindings for Nvidia [PhysX 5.1](https://github.com/NVIDIA-Omniverse/PhysX).
+
+The PhysX 5.1 bindings are still very much work in progress and not yet contain all parts of the SDK. You may
+want to use the [PhysX 4 bindings](https://github.com/fabmax/physx-jni/tree/physx4) instead. 
 
 ## How to use
-The library is available on maven central, so you can easily add this to your build.gradle:
+There is a SNAPSHOT build available on Sonatype, so you can easily add this to your build.gradle:
 ```
+repositories {
+    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
+}
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:1.1.0")
+    implementation("de.fabmax:physx-jni:2.0.2-SNAPSHOT")
     
     // native libraries, you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:1.1.0:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:1.1.0:natives-linux")
-    runtimeOnly("de.fabmax:physx-jni:1.1.0:natives-macos")
+    runtimeOnly("de.fabmax:physx-jni:2.0.2-SNAPSHOT:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.0.2-SNAPSHOT:natives-linux")
 }
 ```
 
-> *__Note:__ With version 1.0.0, the native library names changed to align with the lwjgl platform names (`native-win64`
-> became `natives-windows` and so on). So, in case you are updating from 0.4.x, make sure to adjust your runtime
-> dependencies accordingly.*
 ## Library Coverage
 
-The bindings include most major parts of the PhysX SDK:
-- Basics
+This is still work in progress, but the bindings already include many major parts of the PhysX SDK:
+- [x] Basics
     - Static and dynamic actors
     - All geometry types (box, capsule, sphere, plane, convex mesh, triangle mesh and height field)
-- All joint types (revolute, spherical, prismatic, fixed, distance and D6)
-- Articulations (reduced and maximal)
-- Vehicles
-- Character controllers
-- CUDA support
-- Scene serialization
+- [x] All joint types (revolute, spherical, prismatic, fixed, distance and D6)
+- [x] Articulations
+- [ ] Vehicles
+- [x] Character controllers
+- [ ] CUDA support
+    - [x] Rigid bodies 
+    - [ ] Soft bodies
+    - [ ] Particles
+- [x] Scene serialization
 
-The detailed list of mapped functions is given by the interface definition file
-[PhysXJs.idl](physx-jni/src/main/webidl/PhysXJs.idl). The Java classes containing the
-actual bindings are generated from that file during build.
+The detailed list of mapped functions is given by the [interface definition files](physx-jni/src/main/webidl).
+The Java classes containing the actual bindings are generated from these files during build.
 
 After build (or after running the corresponding gradle task `generateJniBindings`) the generated Java
 classes are located under `physx-jni/src/main/generated`.
@@ -46,33 +50,33 @@ classes are located under `physx-jni/src/main/generated`.
 ### Supported platforms:
 - Windows (64-bit x86)
 - Linux (64-bit x86)
-- macOS (64-bit x86, no native support for Apple Silicon yet)
+- ~~macOS (64-bit x86, no native support for Apple Silicon yet)~~
  
 Moreover, there is also a version for javascript/webassembly:
 [physx-js-webidl](https://github.com/fabmax/physx-js-webidl).
 
 ### Examples
 You can take a look at [HelloPhysX.java](physx-jni/src/test/java/de/fabmax/physxjni/HelloPhysX.java) for a
-hello world example of how to use the library. There also are a few
+hello world example on how to use the library. There also are a few
 [tests](https://github.com/fabmax/physx-jni/tree/main/physx-jni/src/test/java/de/fabmax/physxjni) with slightly
 more advanced examples (custom simulation callbacks, triangle mesh collision, custom filter shader, etc.).
 
-To get a feeling of what can be done with this you can take a look at my [kool](https://github.com/fabmax/kool) demos:
-
-> *__Note:__ These demos run directly in the browser and obviously don't use this library, but the webassembly version mentioned
-> above. However, the two are functionally identical, so it shouldn't matter too much. The JNI version is much faster
-> though.*
+To get a feeling of what can be done with this you can take a look at my [kool](https://github.com/fabmax/kool) demos
+(still on PhysX 4.1):
 
 - [Vehicle](https://fabmax.github.io/kool/kool-js/?demo=phys-vehicle): Vehicle demo with a racetrack and a few obstacles.
 - [Ragdolls](https://fabmax.github.io/kool/kool-js/?demo=phys-ragdoll): Simple Ragdoll demo.
 - [Joints](https://fabmax.github.io/kool/kool-js/?demo=phys-joints): A chain running over two gears.
 - [Collision](https://fabmax.github.io/kool/kool-js/?demo=physics): Various collision shapes.
 
+> *__Note:__ These demos run directly in the browser and obviously don't use this library, but the webassembly version mentioned
+> above. However, the two are functionally identical, so it shouldn't matter too much. The JNI version is much faster
+> though.*
+
 ### Documentation
-Unfortunately, the generated bindings currently don't include much javadoc. However, the Java API
-is very close to the original PhysX C++ API, so you can simply use the official
-[PhysX API documentation](https://gameworksdocs.nvidia.com/PhysX/4.1/documentation/physxapi/files/index.html) and
-[PhysX User's Guide](https://gameworksdocs.nvidia.com/PhysX/4.1/documentation/physxguide/Manual/Index.html).
+The generated bindings contain most of the original documentation converted to javadoc. For further reading
+there is also the official
+[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.1.0/index.html).
 
 ### Things to consider when working with native objects
 Whenever you create an instance of a wrapper class within this library, this also creates an object on the native
@@ -122,7 +126,7 @@ Here's an example how this might look:
 
 ```java
 // implement callback
-public class CustomErrorCallback extends JavaErrorCallback {
+public class CustomErrorCallback extends PxErrorCallbackImpl {
     @Override
     public void reportError(int code, String message, String file, int line) {
         System.out.println(code + ": " + message);
@@ -201,7 +205,8 @@ version runs about 3 times faster than the CPU Version (with an RTX 2080 / Ryzen
 when using other body shapes (the test uses boxes), joints, etc.
 
 ## Building
-You can build the bindings yourself:
+You can build the bindings yourself. However, this requires `python3` and the C++ compiler appropriate to your
+platform (Visual Studio 2019 (Community) on Windows / clang on Linux):
 ```
 # Clone this repo
 git clone https://github.com/fabmax/physx-jni.git
@@ -209,28 +214,12 @@ git clone https://github.com/fabmax/physx-jni.git
 # Enter that directory
 cd physx-jni
 
-# Generate Java/JNI code and build library
-./gradlew build
-```
-
-The above code doesn't compile the native libraries but relies on the pre-built libraries located in
-the platform subprojects. In order to build the native libs from source you need to clone the submodule containing
-the PhysX source code, and you need python3, cmake and Visual Studio 2019 Community (on Windows) or clang (on Linux):
-```
 # Download submodule containing the PhysX source code
 git submodule update --init
 
-# Generate PhysX cmake project files
-./gradlew generateNativeProject
-
-# Build PhysX
+# Build native PhysX (requires Visual Studio 2019 (Community) on Windows / clang on Linux)
 ./gradlew buildNativeProject
-```
 
-To make sure that the native libraries built by the instructions above are actually loaded when using the library you
-should also increment the version number in the `build.gradle.kts`. By default, the library-loader code copies the
-native libraries to a system temp directory and loads them from there (because, if this library is distributed as
-a jar file, the native libraries inside the jar can't be directly loaded by the system). However, to avoid copying
-the native libs every time, the loader checks if they already exist in the current version. Therefore, without changing
-the version number, the loader might not update the native libs that are actually loaded by the system. Copying the
-native libs everytime on library initialization can be forced by using a version number ending with `-SNAPSHOT`.
+# Generate Java/JNI code and build library
+./gradlew build
+```

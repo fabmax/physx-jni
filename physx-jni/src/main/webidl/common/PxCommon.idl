@@ -1,0 +1,193 @@
+/****************************************
+ * [package=common]
+ ****************************************/
+
+[Prefix="physx::", NoDelete]
+interface PxBase {
+    void release();
+    [Const] DOMString getConcreteTypeName();
+    long getConcreteType();
+    void setBaseFlag(PxBaseFlagEnum flag, boolean value);
+    void setBaseFlags([Ref] PxBaseFlags inFlags);
+    [Value] PxBaseFlags getBaseFlags();
+    boolean isReleasable();
+};
+
+enum PxBaseFlagEnum {
+    "PxBaseFlagEnum::eOWNS_MEMORY",
+    "PxBaseFlagEnum::eIS_RELEASABLE"
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxBaseFlags {
+    void PxBaseFlags(unsigned short flags);
+    boolean isSet(PxBaseFlagEnum flag);
+    void raise(PxBaseFlagEnum flag);
+    void clear(PxBaseFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxBaseTask { };
+
+[Prefix="physx::", StackAllocatable]
+interface PxBoundedData {
+    void PxBoundedData();
+    attribute unsigned long count;
+    attribute unsigned long stride;
+    [Const] attribute VoidPtr data;
+};
+PxBoundedData implements PxStridedData;
+
+[Prefix="physx::", StackAllocatable]
+interface PxBounds3 {
+    void PxBounds3();
+    void PxBounds3([Const, Ref] PxVec3 minimum, [Const, Ref] PxVec3 maximum);
+    void setEmpty();
+    void setMaximal();
+    void include([Const, Ref] PxVec3 v);
+    boolean isEmpty();
+    boolean intersects([Const, Ref] PxBounds3 b);
+    boolean intersects1D([Const, Ref] PxBounds3 b, unsigned long axis);
+    boolean contains([Const, Ref] PxVec3 v);
+    boolean isInside([Const, Ref] PxBounds3 box);
+    [Value] PxVec3 getCenter();
+    [Value] PxVec3 getDimensions();
+    [Value] PxVec3 getExtents();
+    void scaleSafe(float scale);
+    void scaleFast(float scale);
+    void fattenSafe(float distance);
+    void fattenFast(float distance);
+    boolean isFinite();
+    boolean isValid();
+    [Value] attribute PxVec3 minimum;
+    [Value] attribute PxVec3 maximum;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxCollection {
+    void add([Ref] PxBase obj, optional unsigned long long id);
+    void remove([Ref] PxBase obj);
+    boolean contains([Ref] PxBase obj);
+    void addId([Ref] PxBase obj, unsigned long long id);
+    void removeId(unsigned long long id);
+    //void add([Ref] PxCollection collection);      clashes with void add([Ref] PxBase object)
+    //void remove([Ref] PxCollection collection);   clashes with void remove([Ref] PxBase object)
+    unsigned long getNbObjects();
+    [Ref] PxBase getObject(unsigned long index);
+    PxBase find(unsigned long long id);
+    unsigned long getNbIds();
+    unsigned long long getId([Const, Ref] PxBase obj);
+    void release();
+};
+
+[Prefix="physx::"]
+interface PxCpuDispatcher { };
+
+[Prefix="physx::"]
+interface PxDefaultAllocator {
+    void PxDefaultAllocator();
+};
+
+[Prefix="physx::"]
+interface PxDefaultCpuDispatcher { };
+PxDefaultCpuDispatcher implements PxCpuDispatcher;
+
+[Prefix="physx::"]
+interface PxDefaultErrorCallback {
+    void PxDefaultErrorCallback();
+};
+PxDefaultErrorCallback implements PxErrorCallback;
+
+[Prefix="physx::"]
+interface PxErrorCallback {
+    void reportError(PxErrorCodeEnum code, [Const] DOMString message, [Const] DOMString file, long line);
+};
+
+[JSImplementation="PxErrorCallback"]
+interface PxErrorCallbackImpl {
+    void PxErrorCallbackImpl();
+    void reportError(PxErrorCodeEnum code, [Const] DOMString message, [Const] DOMString file, long line);
+};
+
+enum PxErrorCodeEnum {
+    "PxErrorCodeEnum::eNO_ERROR",
+    "PxErrorCodeEnum::eDEBUG_INFO",
+    "PxErrorCodeEnum::eDEBUG_WARNING",
+    "PxErrorCodeEnum::eINVALID_PARAMETER",
+    "PxErrorCodeEnum::eINVALID_OPERATION",
+    "PxErrorCodeEnum::eOUT_OF_MEMORY",
+    "PxErrorCodeEnum::eINTERNAL_ERROR",
+    "PxErrorCodeEnum::eABORT",
+    "PxErrorCodeEnum::ePERF_WARNING",
+    "PxErrorCodeEnum::eMASK_ALL"
+};
+
+[Prefix="physx::", NoDelete]
+interface PxFoundation {
+    void release();
+};
+
+enum PxIDENTITYEnum {
+    "PxIDENTITYEnum::PxIdentity"
+};
+
+[Prefix="physx::"]
+interface PxInputData { };
+
+[Prefix="physx::", NoDelete]
+interface PxInsertionCallback { };
+
+[Prefix="physx::"]
+interface PxOutputStream { };
+
+[Prefix="physx::", StackAllocatable]
+interface PxQuat {
+    void PxQuat();
+    void PxQuat(PxIDENTITYEnum r);
+    void PxQuat(float x, float y, float z, float w);
+    attribute float x;
+    attribute float y;
+    attribute float z;
+    attribute float w;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxRefCounted {
+    unsigned long getReferenceCount();
+    void acquireReference();
+};
+PxRefCounted implements PxBase;
+
+[Prefix="physx::"]
+interface PxStridedData {
+    attribute unsigned long stride;
+    [Const] attribute VoidPtr data;
+};
+
+[Prefix="physx::"]
+interface PxTolerancesScale {
+    void PxTolerancesScale();
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxTransform {
+    void PxTransform();
+    void PxTransform(PxIDENTITYEnum r);
+    void PxTransform([Const, Ref] PxVec3 p0, [Const, Ref] PxQuat q0);
+    [Value] attribute PxQuat q;
+    [Value] attribute PxVec3 p;
+};
+
+interface PxU16StridedData {
+    attribute unsigned long stride;
+    [Const, Value] attribute PxU16ConstPtr data;
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxVec3 {
+    void PxVec3();
+    void PxVec3(float x, float y, float z);
+    attribute float x;
+    attribute float y;
+    attribute float z;
+};

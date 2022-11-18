@@ -1,0 +1,240 @@
+/****************************************
+ * [package=physics]
+ ****************************************/
+
+[Prefix="physx::", NoDelete]
+interface PxScene {
+    // Add/Remove Actors
+    boolean addActor([Ref] PxActor actor, [Const] optional PxBVHStructure bvhStructure);
+    void removeActor([Ref] PxActor actor, optional boolean wakeOnLostTouch);
+    boolean addAggregate([Ref] PxAggregate aggregate);
+    void removeAggregate([Ref] PxAggregate aggregate, optional boolean wakeOnLostTouch);
+    boolean addCollection([Const, Ref] PxCollection collection);
+    float getWakeCounterResetValue();
+    void shiftOrigin([Const, Ref] PxVec3 shift);
+
+    // Add/Remove Articulations
+    boolean addArticulation([Ref] PxArticulationReducedCoordinate articulation);
+    void removeArticulation([Ref] PxArticulationReducedCoordinate articulation, optional boolean wakeOnLostTouch);
+
+    // Contained Object Retrieval
+    unsigned long getNbActors([Ref] PxActorTypeFlags types);
+    // unsigned long getActors(...)
+    // PxActorPtr getActiveActors();    -> SupportFunctions.PxScene_getActiveActors();
+    unsigned long getNbSoftBodies();
+    // unsigned long getSoftBodies(...);
+    unsigned long getNbParticleSystems(PxParticleSolverTypeEnum type);
+    // unsigned long getParticleSystems(...);
+    unsigned long getNbArticulations();
+    // unsigned long getArticulations(...);
+    unsigned long getNbConstraints();
+    // unsigned long getConstraints(...);
+    unsigned long getNbAggregates();
+    // unsigned long getAggregates(...);
+
+    // Dominance
+    void setDominanceGroupPair(octet group1, octet group2, [Const, Ref] PxDominanceGroupPair dominance);
+    [Value] PxDominanceGroupPair getDominanceGroupPair(octet group1, octet group2);
+
+    // Dispatcher
+    PxCpuDispatcher getCpuDispatcher();
+    PxCudaContextManager getCudaContextManager();
+
+    // Multiclient
+    octet createClient();
+
+    // Callbacks
+    void setSimulationEventCallback(PxSimulationEventCallback callback);
+    PxSimulationEventCallback getSimulationEventCallback();
+    // set/get contact modify callback
+    // set/get ccd contact modify callback
+    // set/get broad phase callback
+
+    // collision filtering
+    void setFilterShaderData([Const] VoidPtr data, unsigned long dataSize);
+    [Const] VoidPtr getFilterShaderData();
+    unsigned long getFilterShaderDataSize();
+    [Value] PxSimulationFilterShader getFilterShader();
+    //PxSimulationFilterCallback getFilterCallback();
+    boolean resetFiltering([Ref] PxActor actor);
+    // void resetFiltering([Ref] PxActor actor, ...);
+    PxPairFilteringModeEnum getKinematicKinematicFilteringMode();
+    PxPairFilteringModeEnum getStaticKinematicFilteringMode();
+
+    // Simulation
+    boolean simulate(float elapsedTime, optional PxBaseTask completionTask, optional VoidPtr scratchMemBlock, optional unsigned long scratchMemBlockSize, optional boolean controlSimulation);
+    boolean advance(optional PxBaseTask completionTask);
+    boolean collide(float elapsedTime, optional PxBaseTask completionTask, optional VoidPtr scratchMemBlock, optional unsigned long scratchMemBlockSize, optional boolean controlSimulation);
+    boolean checkResults(optional boolean block);
+    boolean fetchCollision(optional boolean block);
+    boolean fetchResults(optional boolean block);
+    // boolean fetchResultsStart();
+    void processCallbacks(PxBaseTask continuation);
+    // boolean fetchResultsFinish();
+    void fetchResultsParticleSystem();
+    void flushSimulation(optional boolean sendPendingReports);
+    void setGravity([Const, Ref] PxVec3 vec);
+    [Value] PxVec3 getGravity();
+    void setBounceThresholdVelocity(float t);
+    float getBounceThresholdVelocity();
+    void setCCDMaxPasses(unsigned long ccdMaxPasses);
+    unsigned long getCCDMaxPasses();
+    void setCCDMaxSeparation(float t);
+    float getCCDMaxSeparation();
+    void setCCDThreshold(float t);
+    float getCCDThreshold();
+    void setMaxBiasCoefficient(float t);
+    float getMaxBiasCoefficient();
+    void setFrictionOffsetThreshold(float t);
+    float getFrictionOffsetThreshold();
+    void setFrictionCorrelationDistance(float t);
+    float getFrictionCorrelationDistance();
+    PxFrictionTypeEnum getFrictionType();
+    PxSolverTypeEnum getSolverType();
+
+    // Visualization and Statistics
+    boolean setVisualizationParameter(PxVisualizationParameterEnum param, float value);
+    float getVisualizationParameter(PxVisualizationParameterEnum paramEnum);
+    void setVisualizationCullingBox([Const, Ref] PxBounds3 box);
+    [Value] PxBounds3 getVisualizationCullingBox();
+    void getSimulationStatistics([Ref] PxSimulationStatistics stats);
+
+    // Broad-phase
+    PxBroadPhaseTypeEnum getBroadPhaseType();
+    boolean getBroadPhaseCaps([Ref] PxBroadPhaseCaps caps);
+    unsigned long getNbBroadPhaseRegions();
+    unsigned long getBroadPhaseRegions(PxBroadPhaseRegionInfo userBuffer, unsigned long bufferSize, optional unsigned long startIndex);
+    unsigned long addBroadPhaseRegion([Const, Ref] PxBroadPhaseRegion region, optional boolean populateRegion);
+    boolean removeBroadPhaseRegion(unsigned long handle);
+
+    // Threads and Memory
+    //PxTaskManager getTaskManager();
+    void lockRead([Const] optional DOMString file, optional unsigned long line);
+    void unlockRead();
+    void lockWrite([Const] optional DOMString file, optional unsigned long line);
+    void unlockWrite();
+    void setNbContactDataBlocks(unsigned long numBlocks);
+    unsigned long getNbContactDataBlocksUsed();
+    unsigned long getMaxNbContactDataBlocksUsed();
+    unsigned long getContactReportStreamBufferSize();
+    void setSolverBatchSize(unsigned long solverBatchSize);
+    unsigned long getSolverBatchSize();
+    void setSolverArticulationBatchSize(unsigned long solverBatchSize);
+    unsigned long getSolverArticulationBatchSize();
+
+    // Basics
+    void release();
+    void setFlag([Value] PxSceneFlagEnum flag, boolean value);
+    [Value] PxSceneFlags getFlags();
+    void setLimits([Const, Ref] PxSceneLimits limits);
+    [Value] PxSceneLimits getLimits();
+    [Ref] PxPhysics getPhysics();
+    unsigned long getTimestamp();
+
+    attribute VoidPtr userData;
+};
+PxScene implements PxSceneSQSystem;
+
+[Prefix="physx::", StackAllocatable]
+interface PxSceneDesc {
+    void PxSceneDesc([Const, Ref] PxTolerancesScale scale);
+    void setToDefault([Const, Ref] PxTolerancesScale scale);
+    boolean isValid();
+
+    [Value] attribute PxVec3 gravity;
+    attribute PxSimulationEventCallback simulationEventCallback;
+    // [Value] attribute PxContactModifyCallback contactModifyCallback;
+    // [Value] attribute PxCCDContactModifyCallback ccdContactModifyCallback;
+    [Const] attribute VoidPtr filterShaderData;
+    attribute unsigned long filterShaderDataSize;
+    [Value] attribute PxSimulationFilterShader filterShader;
+    // [Value] attribute PxSimulationFilterCallback filterCallback;
+    attribute PxPairFilteringModeEnum kineKineFilteringMode;
+    attribute PxPairFilteringModeEnum staticKineFilteringMode;
+    attribute PxBroadPhaseTypeEnum broadPhaseType;
+    // [Value] PxBroadPhaseCallback broadPhaseCallback;
+    [Value] attribute PxSceneLimits limits;
+    attribute PxFrictionTypeEnum frictionType;
+    attribute PxSolverTypeEnum solverType;
+    attribute float bounceThresholdVelocity;
+    attribute float frictionOffsetThreshold;
+    attribute float frictionCorrelationDistance;
+    [Value] attribute PxSceneFlags flags;
+    attribute PxCpuDispatcher cpuDispatcher;
+    attribute PxCudaContextManager cudaContextManager;
+    attribute VoidPtr userData;
+    attribute unsigned long solverBatchSize;
+    attribute unsigned long solverArticulationBatchSize;
+    attribute unsigned long nbContactDataBlocks;
+    attribute unsigned long maxNbContactDataBlocks;
+    attribute float maxBiasCoefficient;
+    attribute unsigned long contactReportStreamBufferSize;
+    attribute unsigned long ccdMaxPasses;
+    attribute float ccdThreshold;
+    attribute float ccdMaxSeparation;
+    attribute float wakeCounterResetValue;
+    [Value] attribute PxBounds3 sanityBounds;
+    [Value] attribute PxgDynamicsMemoryConfig gpuDynamicsConfig;
+    attribute unsigned long gpuMaxNumPartitions;
+    attribute unsigned long gpuMaxNumStaticPartitions;
+    attribute unsigned long gpuComputeVersion;
+    attribute unsigned long contactPairSlabSize;
+    //attribute PxSceneQuerySystem *sceneQuerySystem
+    attribute PxPruningStructureTypeEnum staticStructure;
+    attribute PxPruningStructureTypeEnum dynamicStructure;
+    attribute unsigned long dynamicTreeRebuildRateHint;
+    attribute PxDynamicTreeSecondaryPrunerEnum dynamicTreeSecondaryPruner;
+    attribute PxBVHBuildStrategyEnum staticBVHBuildStrategy;
+    attribute PxBVHBuildStrategyEnum dynamicBVHBuildStrategy;
+    attribute unsigned long staticNbObjectsPerNode;
+    attribute unsigned long dynamicNbObjectsPerNode;
+    attribute PxSceneQueryUpdateModeEnum sceneQueryUpdateMode;
+};
+
+enum PxSceneFlagEnum {
+    "PxSceneFlagEnum::eENABLE_ACTIVE_ACTORS",
+    "PxSceneFlagEnum::eENABLE_CCD",
+    "PxSceneFlagEnum::eDISABLE_CCD_RESWEEP",
+    "PxSceneFlagEnum::eENABLE_PCM",
+    "PxSceneFlagEnum::eDISABLE_CONTACT_REPORT_BUFFER_RESIZE",
+    "PxSceneFlagEnum::eDISABLE_CONTACT_CACHE",
+    "PxSceneFlagEnum::eREQUIRE_RW_LOCK",
+    "PxSceneFlagEnum::eENABLE_STABILIZATION",
+    "PxSceneFlagEnum::eENABLE_AVERAGE_POINT",
+    "PxSceneFlagEnum::eEXCLUDE_KINEMATICS_FROM_ACTIVE_ACTORS",
+    "PxSceneFlagEnum::eENABLE_GPU_DYNAMICS",
+    "PxSceneFlagEnum::eENABLE_ENHANCED_DETERMINISM",
+    "PxSceneFlagEnum::eENABLE_FRICTION_EVERY_ITERATION",
+    "PxSceneFlagEnum::eSUPPRESS_READBACK",
+    "PxSceneFlagEnum::eFORCE_READBACK",
+    "PxSceneFlagEnum::eMUTABLE_FLAGS"
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxSceneFlags {
+    void PxSceneFlags(unsigned long flags);
+    boolean isSet(PxSceneFlagEnum flag);
+    void raise(PxSceneFlagEnum flag);
+    void clear(PxSceneFlagEnum flag);
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxSceneLimits {
+    void PxSceneLimits();
+    void setToDefault();
+    boolean isValid();
+    attribute unsigned long maxNbActors;
+    attribute unsigned long maxNbBodies;
+    attribute unsigned long maxNbStaticShapes;
+    attribute unsigned long maxNbDynamicShapes;
+    attribute unsigned long maxNbAggregates;
+    attribute unsigned long maxNbConstraints;
+    attribute unsigned long maxNbRegions;
+    attribute unsigned long maxNbBroadPhaseOverlaps;
+};
+
+enum PxSceneQueryUpdateModeEnum {
+    "PxSceneQueryUpdateModeEnum::eBUILD_ENABLED_COMMIT_ENABLED",
+    "PxSceneQueryUpdateModeEnum::eBUILD_ENABLED_COMMIT_DISABLED",
+    "PxSceneQueryUpdateModeEnum::eBUILD_DISABLED_COMMIT_DISABLED"
+};

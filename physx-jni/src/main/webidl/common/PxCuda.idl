@@ -1,0 +1,82 @@
+/****************************************
+ * [package=common]
+ ****************************************/
+
+interface CUcontext { };
+
+interface CUdevice { };
+
+interface CUmodule { };
+
+[Prefix="physx::", NoDelete]
+interface PxCudaContext { };
+
+[Prefix="physx::", NoDelete]
+interface PxCudaContextManager {
+    void acquireContext();
+    void releaseContext();
+    CUcontext getContext();
+    PxCudaContext getCudaContext();
+    boolean contextIsValid();
+    boolean supportsArchSM10();
+    boolean supportsArchSM11();
+    boolean supportsArchSM12();
+    boolean supportsArchSM13();
+    boolean supportsArchSM20();
+    boolean supportsArchSM30();
+    boolean supportsArchSM35();
+    boolean supportsArchSM50();
+    boolean supportsArchSM52();
+    boolean supportsArchSM60();
+    boolean isIntegrated();
+    boolean canMapHostMemory();
+    long getDriverVersion();
+    unsigned long long getDeviceTotalMemBytes();
+    long getMultiprocessorCount();
+    unsigned long getClockRate();
+    long getSharedMemPerBlock();
+    long getSharedMemPerMultiprocessor();
+    unsigned long getMaxThreadsPerBlock();
+    [Const] DOMString getDeviceName();
+    CUdevice getDevice();
+    PxCudaInteropModeEnum getInteropMode();
+    void setUsingConcurrentStreams(boolean flag);
+    boolean getUsingConcurrentStreams();
+    long usingDedicatedGPU();
+    CUmodule getCuModules();
+    void release();
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxCudaContextManagerDesc {
+    void PxCudaContextManagerDesc();
+    attribute CUcontext ctx;
+    attribute VoidPtr graphicsDevice;
+    attribute DOMString appGUID;
+    attribute PxCudaInteropModeEnum interopMode;
+};
+
+enum PxCudaInteropModeEnum {
+    "PxCudaInteropModeEnum::NO_INTEROP",
+    "PxCudaInteropModeEnum::D3D10_INTEROP",
+    "PxCudaInteropModeEnum::D3D11_INTEROP",
+    "PxCudaInteropModeEnum::OGL_INTEROP"
+};
+
+[Prefix="physx::"]
+interface PxgDynamicsMemoryConfig {
+    void PxgDynamicsMemoryConfig();
+    boolean isValid();
+    attribute unsigned long tempBufferCapacity;
+    attribute unsigned long maxRigidContactCount;
+    attribute unsigned long maxRigidPatchCount;
+    attribute unsigned long heapCapacity;
+    attribute unsigned long foundLostPairsCapacity;
+    attribute unsigned long foundLostAggregatePairsCapacity;
+    attribute unsigned long totalAggregatePairsCapacity;
+    attribute unsigned long maxSoftBodyContacts;
+    attribute unsigned long maxFemClothContacts;
+    attribute unsigned long maxParticleContacts;
+    attribute unsigned long collisionStackSize;
+    attribute unsigned long maxHairContacts;
+};

@@ -1,0 +1,63 @@
+/****************************************
+ * [package=physics]
+ ****************************************/
+
+[Prefix="physx::", NoDelete]
+interface PxShape {
+    PxGeometryTypeEnum getGeometryType();
+    void setGeometry([Const, Ref] PxGeometry geometry);
+    [Const, Ref] PxGeometry getGeometry();
+    PxRigidActor getActor();
+    void setMaterials(PxMaterialPtr materials, unsigned short materialCount);
+    unsigned short getNbMaterials();
+    unsigned long getMaterials(PxMaterialPtr userBuffer, unsigned long bufferSize, unsigned long startIndex);
+    PxMaterial getMaterialFromInternalFaceIndex(unsigned long faceIndex);
+    void setContactOffset(float contactOffset);
+    float getContactOffset();
+    void setRestOffset(float restOffset);
+    float getRestOffset();
+    void setTorsionalPatchRadius(float radius);
+    float getTorsionalPatchRadius();
+    void setMinTorsionalPatchRadius(float radius);
+    float getMinTorsionalPatchRadius();
+    void setFlag(PxShapeFlagEnum flag, boolean value);
+    void setFlags([Ref] PxShapeFlags inFlags);
+    [Value] PxShapeFlags getFlags();
+    boolean isExclusive();
+    void setName([Const] DOMString name);
+    [Const] DOMString getName();
+    // Pose Manipulation
+    void setLocalPose([Const, Ref] PxTransform pose);
+    [Value] PxTransform getLocalPose();
+    // Collision Filtering
+    void setSimulationFilterData([Const, Ref] PxFilterData data);
+    [Value] PxFilterData getSimulationFilterData();
+    void setQueryFilterData([Const, Ref] PxFilterData data);
+    [Value] PxFilterData getQueryFilterData();
+    attribute VoidPtr userData;
+};
+PxShape implements PxRefCounted;
+
+[Prefix="physx::"]
+interface PxShapeExt {
+    [Value] static PxTransform getGlobalPose([Const, Ref] PxShape shape, [Const, Ref] PxRigidActor actor);
+    static unsigned long raycast([Const, Ref] PxShape shape, [Const, Ref] PxRigidActor actor, [Const, Ref] PxVec3 rayOrigin, [Const, Ref] PxVec3 rayDir, float maxDist, [Ref] PxHitFlags hitFlags, unsigned long maxHits, PxRaycastHit rayHits);
+    static boolean overlap([Const, Ref] PxShape shape, [Const, Ref] PxRigidActor actor, [Const, Ref] PxGeometry otherGeom, [Const, Ref] PxTransform otherGeomPose);
+    static boolean sweep([Const, Ref] PxShape shape, [Const, Ref] PxRigidActor actor, [Const, Ref] PxVec3 unitDir, float distance, [Const, Ref] PxGeometry otherGeom, [Const, Ref] PxTransform otherGeomPose, [Ref] PxSweepHit sweepHit, [Ref] PxHitFlags hitFlags);
+    [Value] static PxBounds3 getWorldBounds([Const, Ref] PxShape shape, [Const, Ref] PxRigidActor actor, optional float inflation);
+};
+
+enum PxShapeFlagEnum {
+    "PxShapeFlagEnum::eSIMULATION_SHAPE",
+    "PxShapeFlagEnum::eSCENE_QUERY_SHAPE",
+    "PxShapeFlagEnum::eTRIGGER_SHAPE",
+    "PxShapeFlagEnum::eVISUALIZATION"
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxShapeFlags {
+    void PxShapeFlags(octet flags);
+    boolean isSet(PxShapeFlagEnum flag);
+    void raise(PxShapeFlagEnum flag);
+    void clear(PxShapeFlagEnum flag);
+};

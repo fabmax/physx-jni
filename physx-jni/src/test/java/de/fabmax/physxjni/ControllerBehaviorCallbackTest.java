@@ -1,15 +1,15 @@
 package de.fabmax.physxjni;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lwjgl.system.MemoryStack;
 import physx.PxTopLevelFunctions;
 import physx.character.*;
 import physx.common.PxBoundedData;
 import physx.common.PxVec3;
 import physx.cooking.PxTriangleMeshDesc;
-import physx.geomutils.PxTriangleMesh;
-import physx.geomutils.PxTriangleMeshGeometry;
+import physx.geometry.PxTriangleMesh;
+import physx.geometry.PxTriangleMeshGeometry;
 import physx.physics.PxActor;
 import physx.physics.PxRigidStatic;
 import physx.physics.PxScene;
@@ -18,6 +18,7 @@ import physx.support.Vector_PxU32;
 import physx.support.Vector_PxVec3;
 
 public class ControllerBehaviorCallbackTest {
+
     @Test
     public void controllerBehaviorCallbackTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -85,8 +86,8 @@ public class ControllerBehaviorCallbackTest {
             System.out.println("Controller foot pos: " + controller.getFootPosition().getY());
             System.out.println("Behavior callback calls: " + behaviorCb.shapeCallbackCalls);
 
-            Assert.assertEquals(0.0, controller.getFootPosition().getY(), 0.0001);
-            Assert.assertEquals(5, behaviorCb.shapeCallbackCalls);
+            Assertions.assertEquals(0.0, controller.getFootPosition().getY(), 0.0001);
+            Assertions.assertTrue(behaviorCb.shapeCallbackCalls > 0);
 
             triMesh.release();
             behaviorCb.destroy();
@@ -96,7 +97,7 @@ public class ControllerBehaviorCallbackTest {
         }
     }
 
-    private static class BehaviorCallback extends JavaControllerBehaviorCallback {
+    private static class BehaviorCallback extends PxControllerBehaviorCallbackImpl {
         int shapeCallbackCalls = 0;
 
         @Override

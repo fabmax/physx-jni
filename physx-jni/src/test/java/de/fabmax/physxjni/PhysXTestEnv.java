@@ -5,10 +5,9 @@ import physx.PxTopLevelFunctions;
 import physx.common.*;
 import physx.cooking.PxCooking;
 import physx.cooking.PxCookingParams;
-import physx.extensions.PxDefaultAllocator;
-import physx.geomutils.PxBoxGeometry;
-import physx.geomutils.PxGeometry;
-import physx.geomutils.PxPlaneGeometry;
+import physx.geometry.PxBoxGeometry;
+import physx.geometry.PxGeometry;
+import physx.geometry.PxPlaneGeometry;
 import physx.physics.*;
 
 import java.util.HashMap;
@@ -21,13 +20,14 @@ public class PhysXTestEnv {
 
     public static final PxFoundation foundation;
     public static final PxPhysics physics;
+    public static final PxCookingParams cookingParams;
     public static final PxCooking cooking;
 
     public static final PxMaterial defaultMaterial;
     public static final PxFilterData defaultFilterData;
 
-    static class CustomErrorCallback extends JavaErrorCallback {
-        private Map<Integer, String> codeNames = new HashMap<Integer, String>() {{
+    static class CustomErrorCallback extends PxErrorCallbackImpl {
+        private final Map<Integer, String> codeNames = new HashMap<>() {{
             put(PxErrorCodeEnum.eDEBUG_INFO, "DEBUG_INFO");
             put(PxErrorCodeEnum.eDEBUG_WARNING, "DEBUG_WARNING");
             put(PxErrorCodeEnum.eINVALID_PARAMETER, "INVALID_PARAMETER");
@@ -61,7 +61,7 @@ public class PhysXTestEnv {
         defaultFilterData.setWord2(0);          // no additional collision flags
         defaultFilterData.setWord3(0);          // word3 is currently not used
 
-        PxCookingParams cookingParams = new PxCookingParams(tolerances);
+        cookingParams = new PxCookingParams(tolerances);
         cooking = PxTopLevelFunctions.CreateCooking(PX_PHYSICS_VERSION, foundation, cookingParams);
 
         PxTopLevelFunctions.InitExtensions(physics);

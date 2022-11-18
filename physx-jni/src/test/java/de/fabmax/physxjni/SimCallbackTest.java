@@ -1,11 +1,11 @@
 package de.fabmax.physxjni;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.lwjgl.system.MemoryStack;
 import physx.PxTopLevelFunctions;
 import physx.common.PxVec3;
-import physx.geomutils.PxBoxGeometry;
+import physx.geometry.PxBoxGeometry;
 import physx.physics.*;
 import physx.support.TypeHelpers;
 import physx.support.Vector_PxContactPairPoint;
@@ -13,7 +13,6 @@ import physx.support.Vector_PxContactPairPoint;
 import java.util.*;
 
 public class SimCallbackTest {
-
     @Test
     public void simCallbackTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -59,13 +58,13 @@ public class SimCallbackTest {
 
             PhysXTestEnv.simulateScene(scene, 5f, box);
 
-            Assert.assertEquals(2, simCallback.contactBodies.size());
-            Assert.assertTrue(simCallback.contactBodies.contains(box));
-            Assert.assertTrue(simCallback.contactBodies.contains(ground));
+            Assertions.assertEquals(2, simCallback.contactBodies.size());
+            Assertions.assertTrue(simCallback.contactBodies.contains(box));
+            Assertions.assertTrue(simCallback.contactBodies.contains(ground));
 
-            Assert.assertEquals(2, simCallback.triggerBodies.size());
-            Assert.assertTrue(simCallback.triggerBodies.contains(box));
-            Assert.assertTrue(simCallback.triggerBodies.contains(trigger));
+            Assertions.assertEquals(2, simCallback.triggerBodies.size());
+            Assertions.assertTrue(simCallback.triggerBodies.contains(box));
+            Assertions.assertTrue(simCallback.triggerBodies.contains(trigger));
 
             // clean up
             scene.release();
@@ -76,7 +75,7 @@ public class SimCallbackTest {
         }
     }
 
-    private static class TestSimulationCallback extends JavaSimulationEventCallback {
+    private static class TestSimulationCallback extends PxSimulationEventCallbackImpl {
         Map<PxActor, String> actorNames = new HashMap<>();
 
         Set<PxActor> contactBodies = new HashSet<>();
@@ -94,8 +93,8 @@ public class SimCallbackTest {
             PxActor actor1 = pairHeader.getActors(1);
             contactBodies.add(actor0);
             contactBodies.add(actor1);
-            Assert.assertTrue(actorNames.containsKey(actor0));
-            Assert.assertTrue(actorNames.containsKey(actor1));
+            Assertions.assertTrue(actorNames.containsKey(actor0));
+            Assertions.assertTrue(actorNames.containsKey(actor1));
             String name0 = actorNames.get(actor0);
             String name1 = actorNames.get(actor1);
 
@@ -127,8 +126,8 @@ public class SimCallbackTest {
                 PxActor actor1 = pair.getOtherActor();
                 triggerBodies.add(actor0);
                 triggerBodies.add(actor1);
-                Assert.assertTrue(actorNames.containsKey(actor0));
-                Assert.assertTrue(actorNames.containsKey(actor1));
+                Assertions.assertTrue(actorNames.containsKey(actor0));
+                Assertions.assertTrue(actorNames.containsKey(actor1));
                 String name0 = actorNames.get(actor0);
                 String name1 = actorNames.get(actor1);
 

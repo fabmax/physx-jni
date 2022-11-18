@@ -1,0 +1,201 @@
+/****************************************
+ * [package=physics]
+ ****************************************/
+
+enum PxHitFlagEnum {
+    "PxHitFlagEnum::ePOSITION",
+    "PxHitFlagEnum::eNORMAL",
+    "PxHitFlagEnum::eUV",
+    "PxHitFlagEnum::eASSUME_NO_INITIAL_OVERLAP",
+    "PxHitFlagEnum::eMESH_MULTIPLE",
+    "PxHitFlagEnum::eMESH_ANY",
+    "PxHitFlagEnum::eMESH_BOTH_SIDES",
+    "PxHitFlagEnum::ePRECISE_SWEEP",
+    "PxHitFlagEnum::eMTD",
+    "PxHitFlagEnum::eFACE_INDEX",
+    "PxHitFlagEnum::eDEFAULT",
+    "PxHitFlagEnum::eMODIFIABLE_FLAGS"
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxHitFlags {
+    void PxHitFlags(unsigned short flags);
+    boolean isSet(PxHitFlagEnum flag);
+    void raise(PxHitFlagEnum flag);
+    void clear(PxHitFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxLocationHit {
+    [Value] attribute PxHitFlags flags;
+    [Value] attribute PxVec3 position;
+    [Value] attribute PxVec3 normal;
+    attribute float distance;
+};
+PxLocationHit implements PxQueryHit;
+
+interface PxOverlapBuffer10 {
+    void PxOverlapBuffer10();
+    unsigned long getNbAnyHits();
+    [Const, Ref] PxOverlapHit getAnyHit(unsigned long index);
+    unsigned long getNbTouches();
+    [Const] PxOverlapHit getTouches();
+    [Const, Ref] PxOverlapHit getTouch(unsigned long index);
+    unsigned long getMaxNbTouches();
+    [Value] attribute PxOverlapHit block;
+    attribute boolean hasBlock;
+};
+PxOverlapBuffer10 implements PxOverlapCallback;
+
+[Prefix="physx::"]
+interface PxOverlapCallback {
+    boolean hasAnyHits();
+};
+
+[Prefix="physx::"]
+interface PxOverlapHit {
+    // actually part of PxActorShape
+    attribute PxRigidActor actor;
+    attribute PxShape shape;
+};
+PxOverlapHit implements PxQueryHit;
+//PxOverlapHit implements PxActorShape;
+
+[Prefix="physx::"]
+interface PxQueryFilterCallback { };
+
+interface SimpleQueryFilterCallback {
+    unsigned long simplePreFilter([Const, Ref] PxFilterData filterData, [Const] PxShape shape, [Const] PxRigidActor actor, [Ref] PxHitFlags queryFlags);
+    unsigned long simplePostFilter([Const, Ref] PxFilterData filterData, [Const, Ref] PxQueryHit hit);
+};
+SimpleQueryFilterCallback implements PxQueryFilterCallback;
+
+[JSImplementation="SimpleQueryFilterCallback"]
+interface PxQueryFilterCallbackImpl {
+    void PxQueryFilterCallbackImpl();
+    unsigned long simplePreFilter([Const, Ref] PxFilterData filterData, [Const] PxShape shape, [Const] PxRigidActor actor, [Ref] PxHitFlags queryFlags);
+    unsigned long simplePostFilter([Const, Ref] PxFilterData filterData, [Const, Ref] PxQueryHit hit);
+};
+
+[Prefix="physx::"]
+interface PxQueryFilterData {
+    void PxQueryFilterData();
+    void PxQueryFilterData([Const, Ref] PxFilterData fd, [Ref] PxQueryFlags f);
+    void PxQueryFilterData([Ref] PxQueryFlags f);
+    [Value] attribute PxFilterData data;
+    [Value] attribute PxQueryFlags flags;
+};
+
+enum PxQueryFlagEnum {
+    "PxQueryFlagEnum::eSTATIC",
+    "PxQueryFlagEnum::eDYNAMIC",
+    "PxQueryFlagEnum::ePREFILTER",
+    "PxQueryFlagEnum::ePOSTFILTER",
+    "PxQueryFlagEnum::eANY_HIT",
+    "PxQueryFlagEnum::eNO_BLOCK"
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxQueryFlags {
+    void PxQueryFlags(unsigned short flags);
+    boolean isSet(PxQueryFlagEnum flag);
+    void raise(PxQueryFlagEnum flag);
+    void clear(PxQueryFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxQueryHit {
+    attribute unsigned long faceIndex;
+};
+
+interface PxRaycastBuffer10 {
+    void PxRaycastBuffer10();
+    unsigned long getNbAnyHits();
+    [Const, Ref] PxRaycastHit getAnyHit(unsigned long index);
+    unsigned long getNbTouches();
+    [Const] PxRaycastHit getTouches();
+    [Const, Ref] PxRaycastHit getTouch(unsigned long index);
+    unsigned long getMaxNbTouches();
+    [Value] attribute PxRaycastHit block;
+    attribute boolean hasBlock;
+};
+PxRaycastBuffer10 implements PxRaycastCallback;
+
+[Prefix="physx::"]
+interface PxRaycastCallback {
+    boolean hasAnyHits();
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxRaycastHit {
+    void PxRaycastHit();
+    attribute float u;
+    attribute float v;
+
+    // actually part of PxActorShape
+    attribute PxRigidActor actor;
+    attribute PxShape shape;
+};
+PxRaycastHit implements PxLocationHit;
+//PxRaycastHit implements PxActorShape;
+
+[Prefix="physx::", NoDelete]
+interface PxSceneQuerySystemBase {
+    void setDynamicTreeRebuildRateHint(unsigned long dynamicTreeRebuildRateHint);
+    unsigned long getDynamicTreeRebuildRateHint();
+    void forceRebuildDynamicTree(unsigned long prunerIndex);
+    void setUpdateMode(PxSceneQueryUpdateModeEnum updateMode);
+    PxSceneQueryUpdateModeEnum getUpdateMode();
+    unsigned long getStaticTimestamp();
+    void flushUpdates();
+    boolean raycast([Const, Ref] PxVec3 origin, [Const, Ref] PxVec3 unitDir, float distance, [Ref] PxRaycastCallback hitCall,
+                    [Ref] optional PxHitFlags hitFlags, [Const, Ref] optional PxQueryFilterData filterData);
+    boolean sweep([Const, Ref] PxGeometry geometry, [Const, Ref] PxTransform pose, [Const, Ref] PxVec3 unitDir, float distance,
+                    [Ref] PxSweepCallback hitCall, [Ref] optional PxHitFlags hitFlags, [Const, Ref] optional PxQueryFilterData filterData);
+    boolean overlap([Const, Ref] PxGeometry geometry, [Const, Ref] PxTransform pose, [Ref] PxOverlapCallback hitCall,
+                    [Const, Ref] optional PxQueryFilterData filterData);
+};
+
+[Prefix="physx::", NoDelete]
+interface PxSceneSQSystem {
+    void setSceneQueryUpdateMode(PxSceneQueryUpdateModeEnum updateMode);
+    PxSceneQueryUpdateModeEnum getSceneQueryUpdateMode();
+    unsigned long getSceneQueryStaticTimestamp();
+    void flushQueryUpdates();
+    void forceDynamicTreeRebuild(boolean rebuildStaticStructure, boolean rebuildDynamicStructure);
+    PxPruningStructureTypeEnum getStaticStructure();
+    PxPruningStructureTypeEnum getDynamicStructure();
+    void sceneQueriesUpdate(optional PxBaseTask completionTask, optional boolean controlSimulation);
+    boolean checkQueries(optional boolean block);
+    boolean fetchQueries(optional boolean block);
+};
+PxSceneSQSystem implements PxSceneQuerySystemBase;
+
+interface PxSweepBuffer10 {
+    void PxSweepBuffer10();
+    unsigned long getNbAnyHits();
+    [Const, Ref] PxSweepHit getAnyHit(unsigned long index);
+    unsigned long getNbTouches();
+    [Const] PxSweepHit getTouches();
+    [Const, Ref] PxSweepHit getTouch(unsigned long index);
+    unsigned long getMaxNbTouches();
+    [Value] attribute PxSweepHit block;
+    attribute boolean hasBlock;
+};
+PxSweepBuffer10 implements PxSweepCallback;
+
+[Prefix="physx::"]
+interface PxSweepCallback {
+    boolean hasAnyHits();
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxSweepHit {
+    void PxSweepHit();
+
+    // actually part of PxActorShape
+    attribute PxRigidActor actor;
+    attribute PxShape shape;
+};
+PxSweepHit implements PxLocationHit;
+//PxSweepHit implements PxActorShape;

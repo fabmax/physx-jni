@@ -1,20 +1,14 @@
-import me.champeau.mrjar.MultiReleaseExtension
 import java.io.FileInputStream
 import java.util.*
 
 plugins {
-    id("me.champeau.mrjar") version "0.1"
     signing
 }
 
-fun Project.multiReleaseJar(configure: Action<MultiReleaseExtension>): Unit =
-    (this as ExtensionAware).extensions.configure("multiRelease", configure)
-
-multiReleaseJar {
-    targetVersions(8, 9)
-}
-
 java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
     withSourcesJar()
     withJavadocJar()
 
@@ -27,6 +21,11 @@ java {
     }
 }
 
+tasks.javadoc {
+    val opts = options as StandardJavadocDocletOptions
+    opts.addStringOption("Xdoclint:none", "-quiet")
+}
+
 // make sure version string constants in main project and platform projects match the gradle project version
 tasks.register<VersionNameUpdate>("updateVersionNames") {
     versionName = "$version"
@@ -35,38 +34,36 @@ tasks.register<VersionNameUpdate>("updateVersionNames") {
         "${rootDir}/physx-jni-natives-windows/src/main/java/de/fabmax/physxjni/NativeMetaWindows.java",
         "${rootDir}/physx-jni-natives-windows-cuda/src/main/java/de/fabmax/physxjni/NativeMetaWindows.java",
         "${rootDir}/physx-jni-natives-linux/src/main/java/de/fabmax/physxjni/NativeMetaLinux.java",
-        "${rootDir}/physx-jni-natives-linux-cuda/src/main/java/de/fabmax/physxjni/NativeMetaLinux.java",
-        "${rootDir}/physx-jni-natives-macos/src/main/java/de/fabmax/physxjni/NativeMetaMacos.java"
+        "${rootDir}/physx-jni-natives-linux-cuda/src/main/java/de/fabmax/physxjni/NativeMetaLinux.java"
     )
 }
 
 tasks.register<GenerateJavaBindings>("generateJniBindings") {
-    idlSource = File("${projectDir}/src/main/webidl/PhysXJs.idl").absolutePath
+    group = "build"
+    idlModelName = "PhysXJni"
+    idlSource = File("${projectDir}/src/main/webidl/").absolutePath
     generatorOutput = File("${projectDir}/src/main/generated/physx").absolutePath
+    physxIncludeDir = "$rootDir/Physx/physx/include"
 }
 
-tasks.register<CheckWebIdlConsistency>("checkWebIdlConsistency") {
-    idlSource1 = File("${projectDir}/src/main/webidl/PhysXJs.idl").absolutePath
-    idlSource2 = File("${rootDir}/Physx4/physx/source/physxwebbindings/src/PhysXJs.idl").absolutePath
+tasks.compileJava {
+    dependsOn("generateJniBindings")
+    dependsOn("updateVersionNames")
 }
 
-tasks.withType<Test> {
+tasks.test {
+    useJUnitPlatform()
     testLogging {
         showStandardStreams = true
     }
 }
 
-val compileJava by tasks.existing {
-    dependsOn("checkWebIdlConsistency")
-    dependsOn("generateJniBindings")
-    dependsOn("updateVersionNames")
-}
-
 dependencies {
-    testImplementation("junit:junit:4.12")
+    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+
     testRuntimeOnly(project(":physx-jni-natives-windows-cuda"))
     testRuntimeOnly(project(":physx-jni-natives-linux-cuda"))
-    testRuntimeOnly(project(":physx-jni-natives-macos"))
 
     testImplementation("org.lwjgl:lwjgl:3.3.1")
 
@@ -89,21 +86,17 @@ publishing {
                 classifier = "natives-windows"
             }
 
-            artifact(project(":physx-jni-natives-windows-cuda").tasks["jar"]).apply {
-                classifier = "natives-windows-cuda"
-            }
+//            artifact(project(":physx-jni-natives-windows-cuda").tasks["jar"]).apply {
+//                classifier = "natives-windows-cuda"
+//            }
 
             artifact(project(":physx-jni-natives-linux").tasks["jar"]).apply {
                 classifier = "natives-linux"
             }
 
-            artifact(project(":physx-jni-natives-linux-cuda").tasks["jar"]).apply {
-                classifier = "natives-linux-cuda"
-            }
-
-            artifact(project(":physx-jni-natives-macos").tasks["jar"]).apply {
-                classifier = "natives-macos"
-            }
+//            artifact(project(":physx-jni-natives-linux-cuda").tasks["jar"]).apply {
+//                classifier = "natives-linux-cuda"
+//            }
 
             pom {
                 name.set("physx-jni")
