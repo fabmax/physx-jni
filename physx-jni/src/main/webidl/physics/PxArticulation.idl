@@ -231,8 +231,8 @@ interface PxArticulationReducedCoordinate {
     unsigned long getNbLinks();
     // getLinks();
     unsigned long getNbShapes();
-    void setName(DOMString name);
-    DOMString getName();
+    void setName([Const] DOMString name);
+    [Const] DOMString getName();
     [Value] PxBounds3 getWorldBounds(optional float inflation);
     PxAggregate getAggregate();
     void setArticulationFlags([Ref] PxArticulationFlags flags);

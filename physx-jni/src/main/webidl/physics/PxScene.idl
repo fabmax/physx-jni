@@ -109,9 +109,9 @@ interface PxScene {
 
     // Threads and Memory
     //PxTaskManager getTaskManager();
-    void lockRead(optional DOMString file, optional unsigned long line);
+    void lockRead([Const] optional DOMString file, optional unsigned long line);
     void unlockRead();
-    void lockWrite(optional DOMString file, optional unsigned long line);
+    void lockWrite([Const] optional DOMString file, optional unsigned long line);
     void unlockWrite();
     void setNbContactDataBlocks(unsigned long numBlocks);
     unsigned long getNbContactDataBlocksUsed();
@@ -174,7 +174,7 @@ interface PxSceneDesc {
     attribute float ccdMaxSeparation;
     attribute float wakeCounterResetValue;
     [Value] attribute PxBounds3 sanityBounds;
-//    [Value] attribute PxgDynamicsMemoryConfig gpuDynamicsConfig;
+    [Value] attribute PxgDynamicsMemoryConfig gpuDynamicsConfig;
     attribute unsigned long gpuMaxNumPartitions;
     attribute unsigned long gpuMaxNumStaticPartitions;
     attribute unsigned long gpuComputeVersion;

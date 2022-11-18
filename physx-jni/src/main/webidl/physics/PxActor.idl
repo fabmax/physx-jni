@@ -6,7 +6,7 @@
 interface PxActor {
     PxActorTypeEnum getType();
     PxScene getScene();
-    void setName(DOMString name);
+    void setName([Const] DOMString name);
     [Const] DOMString getName();
     [Value] PxBounds3 getWorldBounds(optional float inflation);
     void setActorFlag(PxActorFlagEnum flag, boolean value);

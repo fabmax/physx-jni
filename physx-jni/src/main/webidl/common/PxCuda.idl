@@ -33,11 +33,11 @@ interface PxCudaContextManager {
     long getDriverVersion();
     unsigned long long getDeviceTotalMemBytes();
     long getMultiprocessorCount();
-    long getClockRate();
+    unsigned long getClockRate();
     long getSharedMemPerBlock();
     long getSharedMemPerMultiprocessor();
-    long getMaxThreadsPerBlock();
-    DOMString getDeviceName();
+    unsigned long getMaxThreadsPerBlock();
+    [Const] DOMString getDeviceName();
     CUdevice getDevice();
     PxCudaInteropModeEnum getInteropMode();
     void setUsingConcurrentStreams(boolean flag);
@@ -63,3 +63,20 @@ enum PxCudaInteropModeEnum {
     "PxCudaInteropModeEnum::OGL_INTEROP"
 };
 
+[Prefix="physx::"]
+interface PxgDynamicsMemoryConfig {
+    void PxgDynamicsMemoryConfig();
+    boolean isValid();
+    attribute unsigned long tempBufferCapacity;
+    attribute unsigned long maxRigidContactCount;
+    attribute unsigned long maxRigidPatchCount;
+    attribute unsigned long heapCapacity;
+    attribute unsigned long foundLostPairsCapacity;
+    attribute unsigned long foundLostAggregatePairsCapacity;
+    attribute unsigned long totalAggregatePairsCapacity;
+    attribute unsigned long maxSoftBodyContacts;
+    attribute unsigned long maxFemClothContacts;
+    attribute unsigned long maxParticleContacts;
+    attribute unsigned long collisionStackSize;
+    attribute unsigned long maxHairContacts;
+};

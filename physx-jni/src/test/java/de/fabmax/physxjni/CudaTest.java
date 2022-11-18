@@ -34,7 +34,7 @@ public class CudaTest {
             desc.setInteropMode(PxCudaInteropModeEnum.NO_INTEROP);
             PxCudaContextManager cudaMgr = PxTopLevelFunctions.CreateCudaContextManager(foundation, desc);
             if (cudaMgr == null || !cudaMgr.contextIsValid()) {
-                System.err.println("Failed creating CUDA context, no CUDA capable GPU?");
+                System.err.println("Failed creating CUDA context, no CUDA capable GPU? Skipping CUDA test...");
                 // skip the test as this is probably caused by a missing CUDA hardware support and there
                 // isn't much we can do about that
                 return;

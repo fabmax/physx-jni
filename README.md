@@ -6,25 +6,28 @@
 
 Java JNI bindings for Nvidia [PhysX 5.1](https://github.com/NVIDIA-Omniverse/PhysX).
 
+The PhysX 5.1 bindings are still very much work in progress and not yet contain all parts of the SDK. You may
+want to use the [PhysX 4 bindings](https://github.com/fabmax/physx-jni/tree/physx4) instead. 
+
 ## How to use
-The library is available on maven central, so you can easily add this to your build.gradle:
+There is a SNAPSHOT build available on Sonatype, so you can easily add this to your build.gradle:
 ```
 repositories {
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
 }
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:2.0.0-SNAPSHOT")
+    implementation("de.fabmax:physx-jni:2.0.2-SNAPSHOT")
     
     // native libraries, you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:2.0.0-SNAPSHOT:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:2.0.0-SNAPSHOT:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.0.2-SNAPSHOT:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.0.2-SNAPSHOT:natives-linux")
 }
 ```
 
 ## Library Coverage
 
-The bindings include most major parts of the PhysX SDK:
+This is still work in progress, but the bindings already include many major parts of the PhysX SDK:
 - [x] Basics
     - Static and dynamic actors
     - All geometry types (box, capsule, sphere, plane, convex mesh, triangle mesh and height field)
@@ -33,8 +36,9 @@ The bindings include most major parts of the PhysX SDK:
 - [ ] Vehicles
 - [x] Character controllers
 - [ ] CUDA support
-    - Soft bodies
-    - Particles
+    - [x] Rigid bodies 
+    - [ ] Soft bodies
+    - [ ] Particles
 - [x] Scene serialization
 
 The detailed list of mapped functions is given by the [interface definition files](physx-jni/src/main/webidl).
@@ -60,14 +64,14 @@ more advanced examples (custom simulation callbacks, triangle mesh collision, cu
 To get a feeling of what can be done with this you can take a look at my [kool](https://github.com/fabmax/kool) demos
 (still on PhysX 4.1):
 
-> *__Note:__ These demos run directly in the browser and obviously don't use this library, but the webassembly version mentioned
-> above. However, the two are functionally identical, so it shouldn't matter too much. The JNI version is much faster
-> though.*
-
 - [Vehicle](https://fabmax.github.io/kool/kool-js/?demo=phys-vehicle): Vehicle demo with a racetrack and a few obstacles.
 - [Ragdolls](https://fabmax.github.io/kool/kool-js/?demo=phys-ragdoll): Simple Ragdoll demo.
 - [Joints](https://fabmax.github.io/kool/kool-js/?demo=phys-joints): A chain running over two gears.
 - [Collision](https://fabmax.github.io/kool/kool-js/?demo=physics): Various collision shapes.
+
+> *__Note:__ These demos run directly in the browser and obviously don't use this library, but the webassembly version mentioned
+> above. However, the two are functionally identical, so it shouldn't matter too much. The JNI version is much faster
+> though.*
 
 ### Documentation
 The generated bindings contain most of the original documentation converted to javadoc. For further reading
