@@ -1,7 +1,32 @@
 package de.fabmax.physxjni;
 
+import org.junit.jupiter.api.Test;
+import org.lwjgl.system.MemoryStack;
+import physx.PxTopLevelFunctions;
+import physx.common.PxCudaContextManager;
+import physx.common.PxCudaContextManagerDesc;
+import physx.common.PxCudaInteropModeEnum;
+import physx.common.PxVec3;
+import physx.geometry.PxBoxGeometry;
+import physx.physics.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import static de.fabmax.physxjni.PhysXTestEnv.foundation;
+import static de.fabmax.physxjni.PhysXTestEnv.physics;
+
 public class CudaTest {
-/*
+
+    // simulation duration, for benchmarking this should be at least 30 seconds
+    // for unit testing this should be low to keep the test times low
+    static final float SIM_TIME = 3f;
+
+    // one entry per run: specifies the number of body to simulate, keep it low for unit testing
+    // use higher values for benchmarking
+    static final int[] NUM_BODY_RUNS = new int[] { 1_000, 5_000, /*10_000, 20_000*/ };
+
     @Test
     public void createCudaContextTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -17,52 +42,50 @@ public class CudaTest {
 
             System.out.println("CUDA device: " + cudaMgr.getDeviceName() + ", mem: " + (cudaMgr.getDeviceTotalMemBytes() / 1024.0 / 1024.0) + " MB");
 
-            int[] numBodies1000 = new int[] { 1, 5, 10 };
-            double[] cpuTimes = new double[numBodies1000.length];
-            double[] gpuTimes = new double[numBodies1000.length];
+            double[] cpuTimes = new double[NUM_BODY_RUNS.length];
+            double[] gpuTimes = new double[NUM_BODY_RUNS.length];
 
-            for (int i = 0; i < numBodies1000.length; i++) {
+            for (int i = 0; i < NUM_BODY_RUNS.length; i++) {
                 System.out.println("Running CPU simulation...");
-                cpuTimes[i] = simulateScene(null, numBodies1000[i]);
+                cpuTimes[i] = simulateScene(null, NUM_BODY_RUNS[i]);
                 System.out.println("Running GPU simulation...");
-                gpuTimes[i] = simulateScene(cudaMgr, numBodies1000[i]);
+                gpuTimes[i] = simulateScene(cudaMgr, NUM_BODY_RUNS[i]);
             }
 
             System.out.println();
             System.out.println("# Bodies | CPU Time | GPU Time | GPU speed up");
             System.out.println("---------+----------+----------+-------------");
-            for (int i = 0; i < numBodies1000.length; i++) {
-                int n = numBodies1000[i] * 1000;
+            for (int i = 0; i < NUM_BODY_RUNS.length; i++) {
                 double cpuTime = cpuTimes[i];
                 double gpuTime = gpuTimes[i];
                 System.out.printf(Locale.ENGLISH, " %7d |%7.3f s |%7.3f s | %.2f x\n",
-                        n, cpuTime, gpuTime, cpuTime / gpuTime);
+                        NUM_BODY_RUNS[i], cpuTime, gpuTime, cpuTime / gpuTime);
             }
         }
     }
 
-    private double simulateScene(PxCudaContextManager cudaMgr, int numBodies1000) {
+    private double simulateScene(PxCudaContextManager cudaMgr, int numBodies) {
         try (MemoryStack mem = MemoryStack.stackPush()) {
             PxSceneDesc sceneDesc = PxSceneDesc.createAt(mem, MemoryStack::nmalloc, physics.getTolerancesScale());
             sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
             sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(8));
             sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
-            sceneDesc.getFlags().clear(PxSceneFlagEnum.eENABLE_PCM);
+            //sceneDesc.getFlags().clear(PxSceneFlagEnum.eENABLE_PCM);
 
             if (cudaMgr != null) {
                 // cuda related scene settings
                 sceneDesc.setCudaContextManager(cudaMgr);
-                sceneDesc.getFlags().set(PxSceneFlagEnum.eENABLE_GPU_DYNAMICS);
+                sceneDesc.getFlags().raise(PxSceneFlagEnum.eENABLE_GPU_DYNAMICS);
                 sceneDesc.setBroadPhaseType(PxBroadPhaseTypeEnum.eGPU);
                 sceneDesc.setGpuMaxNumPartitions(8);
             }
 
             PxScene scene = physics.createScene(sceneDesc);
-            return simulateBodies(scene, numBodies1000);
+            return simulateBodies(scene, numBodies);
         }
     }
 
-    private double simulateBodies(PxScene scene, int numBodies1000) {
+    private double simulateBodies(PxScene scene, int numBodies) {
         List<PxActor> actors = new ArrayList<>();
 
         try (MemoryStack mem = MemoryStack.stackPush()) {
@@ -85,7 +108,7 @@ public class CudaTest {
         }
 
         PxRigidDynamic printBox = null;
-        for (int h = 0; h < 2 * numBodies1000; h++) {
+        for (int h = 0; h < 2 * numBodies / 1000; h++) {
             for (int x = -10; x < 10; x++) {
                 for (int z = -12; z <= 12; z++) {
                     PxRigidDynamic box = PhysXTestEnv.createDefaultBox(x * 2f + x % 2 * 0.5f, 5f + h * 2f, z * 2f + z % 2 * 0.5f);
@@ -101,15 +124,14 @@ public class CudaTest {
         scene.simulate(1f / 60f);
         scene.fetchResults(true);
 
-        float tSim = 10f;
-        System.out.printf(Locale.ENGLISH, "Simulating %d actors for %.0f secs...\n", actors.size(), tSim);
+        System.out.printf(Locale.ENGLISH, "Simulating %d actors for %.0f secs...\n", actors.size(), SIM_TIME);
         long t = System.nanoTime();
-        PhysXTestEnv.simulateScene(scene, tSim, printBox);
+        PhysXTestEnv.simulateScene(scene, SIM_TIME, printBox);
         t = System.nanoTime() - t;
         System.out.printf(Locale.ENGLISH, "Done, took: %.3f s\n", t / 1e9);
 
         scene.release();
         actors.forEach(PxActor::release);
         return t / 1e9;
-    }*/
+    }
 }

@@ -44,11 +44,11 @@ interface TypeHelpers {
     static PxBounds3 getBounds3At(PxBounds3 base, long index);
     static PxContactPair getContactPairAt(PxContactPair base, long index);
     static PxContactPairHeader getContactPairHeaderAt(PxContactPairHeader base, long index);
-    //static PxController getControllerAt(PxController base, long index);
-    //static PxControllerShapeHit getControllerShapeHitAt(PxControllerShapeHit base, long index);
-    //static PxControllersHit getControllersHitAt(PxControllersHit base, long index);
-    //static PxControllerObstacleHit getControllerObstacleHitAt(PxControllerObstacleHit base, long index);
-    //static PxObstacle getObstacleAt(PxObstacle base, long index);
+    static PxController getControllerAt(PxController base, long index);
+    static PxControllerShapeHit getControllerShapeHitAt(PxControllerShapeHit base, long index);
+    static PxControllersHit getControllersHitAt(PxControllersHit base, long index);
+    static PxControllerObstacleHit getControllerObstacleHitAt(PxControllerObstacleHit base, long index);
+    static PxObstacle getObstacleAt(PxObstacle base, long index);
     static PxShape getShapeAt(PxShape base, long index);
     static PxTriggerPair getTriggerPairAt(PxTriggerPair base, long index);
     static PxVec3 getVec3At(PxVec3 base, long index);
@@ -57,11 +57,6 @@ interface TypeHelpers {
     [Value] static PxU16Ptr voidToU16Ptr(VoidPtr voidPtr);
     [Value] static PxU32Ptr voidToU32Ptr(VoidPtr voidPtr);
     [Value] static PxRealPtr voidToRealPtr(VoidPtr voidPtr);
-
-    //static PxArticulationJoint articulationBaseJointToJoint(PxArticulationJointBase baseJoint);
-    //static PxArticulationJointReducedCoordinate articulationBaseJointToJointReducedCoordinate(PxArticulationJointBase baseJoint);
-
-    static any voidToAny(VoidPtr voidPtr);
 };
 
 interface Vector_PxMaterialConst {

@@ -38,7 +38,7 @@ interface PxScene {
 
     // Dispatcher
     PxCpuDispatcher getCpuDispatcher();
-//    PxCudaContextManager getCudaContextManager();
+    PxCudaContextManager getCudaContextManager();
 
     // Multiclient
     octet createClient();
@@ -161,7 +161,7 @@ interface PxSceneDesc {
     attribute float frictionCorrelationDistance;
     [Value] attribute PxSceneFlags flags;
     attribute PxCpuDispatcher cpuDispatcher;
-//    attribute PxCudaContextManager cudaContextManager;
+    attribute PxCudaContextManager cudaContextManager;
     attribute VoidPtr userData;
     attribute unsigned long solverBatchSize;
     attribute unsigned long solverArticulationBatchSize;
