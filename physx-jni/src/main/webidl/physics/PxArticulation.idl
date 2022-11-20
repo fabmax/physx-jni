@@ -75,11 +75,11 @@ interface PxArticulationCacheFlags {
 [Prefix="physx::", StackAllocatable]
 interface PxArticulationDrive {
     void PxArticulationDrive();
-    void PxArticulationDrive(float stiffness, float damping, float maxForce, [Value] PxArticulationDriveTypeEnum driveType);
+    void PxArticulationDrive(float stiffness, float damping, float maxForce, PxArticulationDriveTypeEnum driveType);
     attribute float stiffness;
     attribute float damping;
     attribute float maxForce;
-    [Value] attribute PxArticulationDriveTypeEnum driveType;
+    attribute PxArticulationDriveTypeEnum driveType;
 };
 
 enum PxArticulationDriveTypeEnum {
@@ -175,7 +175,7 @@ interface PxArticulationKinematicFlags {
 [Prefix="physx::", NoDelete]
 interface PxArticulationLink {
     [Ref] PxArticulationReducedCoordinate getArticulation();
-    PxArticulationJointReducedCoordinate getInboundJoint();
+    [Nullable] PxArticulationJointReducedCoordinate getInboundJoint();
     unsigned long getInboundJointDof();
     unsigned long getNbChildren();
     unsigned long getLinkIndex();

@@ -34,11 +34,11 @@ interface PxScene {
 
     // Dominance
     void setDominanceGroupPair(octet group1, octet group2, [Const, Ref] PxDominanceGroupPair dominance);
-    [Value] PxDominanceGroupPair getDominanceGroupPair(octet group1, octet group2);
+    [NonJs, Value] PxDominanceGroupPair getDominanceGroupPair(octet group1, octet group2);
 
     // Dispatcher
     PxCpuDispatcher getCpuDispatcher();
-    PxCudaContextManager getCudaContextManager();
+    [NonJs] PxCudaContextManager getCudaContextManager();
 
     // Multiclient
     octet createClient();
@@ -124,7 +124,7 @@ interface PxScene {
 
     // Basics
     void release();
-    void setFlag([Value] PxSceneFlagEnum flag, boolean value);
+    void setFlag(PxSceneFlagEnum flag, boolean value);
     [Value] PxSceneFlags getFlags();
     void setLimits([Const, Ref] PxSceneLimits limits);
     [Value] PxSceneLimits getLimits();
@@ -161,7 +161,7 @@ interface PxSceneDesc {
     attribute float frictionCorrelationDistance;
     [Value] attribute PxSceneFlags flags;
     attribute PxCpuDispatcher cpuDispatcher;
-    attribute PxCudaContextManager cudaContextManager;
+    [NonJs] attribute PxCudaContextManager cudaContextManager;
     attribute VoidPtr userData;
     attribute unsigned long solverBatchSize;
     attribute unsigned long solverArticulationBatchSize;
@@ -174,7 +174,7 @@ interface PxSceneDesc {
     attribute float ccdMaxSeparation;
     attribute float wakeCounterResetValue;
     [Value] attribute PxBounds3 sanityBounds;
-    [Value] attribute PxgDynamicsMemoryConfig gpuDynamicsConfig;
+    [NonJs, Value] attribute PxgDynamicsMemoryConfig gpuDynamicsConfig;
     attribute unsigned long gpuMaxNumPartitions;
     attribute unsigned long gpuMaxNumStaticPartitions;
     attribute unsigned long gpuComputeVersion;

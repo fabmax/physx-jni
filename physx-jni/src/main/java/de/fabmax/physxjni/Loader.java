@@ -59,7 +59,7 @@ public class Loader {
             }
             if (!libTmpFile.exists()) {
                 Files.copy(libIn, libTmpFile.toPath());
-                System.out.println("copy " + libResource + " to " + libTmpFile.getAbsolutePath());
+                //System.out.println("copy " + libResource + " to " + libTmpFile.getAbsolutePath());
             }
             libFiles.add(libTmpFile.getAbsolutePath());
         }
@@ -81,9 +81,6 @@ public class Loader {
                     resourceHash = r.readLine();
                 }
                 isSameHash = fileHash.equals(resourceHash);
-                if (!isSameHash) {
-                    System.out.println("signature mismatch for " + resourceName + ": " + resourceHash + " != " + fileHash);
-                }
             } else {
                 System.err.println("Failed to get signature for " + resourceName + " from resources");
             }

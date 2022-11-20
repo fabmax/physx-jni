@@ -2,16 +2,24 @@
  * [package=common]
  ****************************************/
 
+[NonJs]
+interface PxCudaTopLevelFunctions {
+    static PxCudaContextManager CreateCudaContextManager([Ref] PxFoundation foundation, [Const, Ref] PxCudaContextManagerDesc desc);
+};
+
+[NonJs]
 interface CUcontext { };
 
+[NonJs]
 interface CUdevice { };
 
+[NonJs]
 interface CUmodule { };
 
-[Prefix="physx::", NoDelete]
+[NonJs, Prefix="physx::", NoDelete]
 interface PxCudaContext { };
 
-[Prefix="physx::", NoDelete]
+[NonJs, Prefix="physx::", NoDelete]
 interface PxCudaContextManager {
     void acquireContext();
     void releaseContext();
@@ -47,7 +55,7 @@ interface PxCudaContextManager {
     void release();
 };
 
-[Prefix="physx::", StackAllocatable]
+[NonJs, Prefix="physx::", StackAllocatable]
 interface PxCudaContextManagerDesc {
     void PxCudaContextManagerDesc();
     attribute CUcontext ctx;
@@ -56,6 +64,7 @@ interface PxCudaContextManagerDesc {
     attribute PxCudaInteropModeEnum interopMode;
 };
 
+[NonJs]
 enum PxCudaInteropModeEnum {
     "PxCudaInteropModeEnum::NO_INTEROP",
     "PxCudaInteropModeEnum::D3D10_INTEROP",
@@ -63,7 +72,7 @@ enum PxCudaInteropModeEnum {
     "PxCudaInteropModeEnum::OGL_INTEROP"
 };
 
-[Prefix="physx::"]
+[NonJs, Prefix="physx::"]
 interface PxgDynamicsMemoryConfig {
     void PxgDynamicsMemoryConfig();
     boolean isValid();

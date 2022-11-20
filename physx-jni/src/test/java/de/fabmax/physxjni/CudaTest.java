@@ -3,10 +3,7 @@ package de.fabmax.physxjni;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.system.MemoryStack;
 import physx.PxTopLevelFunctions;
-import physx.common.PxCudaContextManager;
-import physx.common.PxCudaContextManagerDesc;
-import physx.common.PxCudaInteropModeEnum;
-import physx.common.PxVec3;
+import physx.common.*;
 import physx.geometry.PxBoxGeometry;
 import physx.physics.*;
 
@@ -32,7 +29,7 @@ public class CudaTest {
         try (MemoryStack mem = MemoryStack.stackPush()) {
             PxCudaContextManagerDesc desc = PxCudaContextManagerDesc.createAt(mem, MemoryStack::nmalloc);
             desc.setInteropMode(PxCudaInteropModeEnum.NO_INTEROP);
-            PxCudaContextManager cudaMgr = PxTopLevelFunctions.CreateCudaContextManager(foundation, desc);
+            PxCudaContextManager cudaMgr = PxCudaTopLevelFunctions.CreateCudaContextManager(foundation, desc);
             if (cudaMgr == null || !cudaMgr.contextIsValid()) {
                 System.err.println("Failed creating CUDA context, no CUDA capable GPU? Skipping CUDA test...");
                 // skip the test as this is probably caused by a missing CUDA hardware support and there

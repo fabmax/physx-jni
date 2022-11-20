@@ -11,7 +11,7 @@ interface PxShape {
     void setMaterials(PxMaterialPtr materials, unsigned short materialCount);
     unsigned short getNbMaterials();
     unsigned long getMaterials(PxMaterialPtr userBuffer, unsigned long bufferSize, unsigned long startIndex);
-    PxMaterial getMaterialFromInternalFaceIndex(unsigned long faceIndex);
+    PxBaseMaterial getMaterialFromInternalFaceIndex(unsigned long faceIndex);
     void setContactOffset(float contactOffset);
     float getContactOffset();
     void setRestOffset(float restOffset);

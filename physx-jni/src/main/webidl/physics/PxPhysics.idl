@@ -155,7 +155,7 @@ interface PxContactPairFlags {
 
 [Prefix="physx::"]
 interface PxContactPairHeader {
-    attribute PxRigidActor[] actors;
+    attribute PxActor[] actors;
     //attribute PxU8ConstPtr extraDataStream;
     //attribute short extraDataStreamSize;
     [Value] attribute PxContactPairHeaderFlags flags;
@@ -394,9 +394,9 @@ enum PxSolverTypeEnum {
 [Prefix="physx::"]
 interface PxTriggerPair {
     attribute PxShape triggerShape;
-    attribute PxRigidActor triggerActor;
+    attribute PxActor triggerActor;
     attribute PxShape otherShape;
-    attribute PxRigidActor otherActor;
+    attribute PxActor otherActor;
     attribute PxPairFlagEnum status;
     [Value] attribute PxTriggerPairFlags flags;
 };
