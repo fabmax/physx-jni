@@ -7,7 +7,6 @@ import physx.PxTopLevelFunctions;
 import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
 import physx.physics.*;
-import physx.support.TypeHelpers;
 import physx.support.Vector_PxContactPairPoint;
 
 import java.util.*;
@@ -99,7 +98,7 @@ public class SimCallbackTest {
             String name1 = actorNames.get(actor1);
 
             for (int i = 0; i < nbPairs; i++) {
-                PxContactPair pair = TypeHelpers.getContactPairAt(pairs, i);
+                PxContactPair pair = PxContactPair.arrayGet(pairs.getAddress(), i);
                 PxPairFlags events = pair.getEvents();
                 String event = "OTHER";
                 if (events.isSet(PxPairFlagEnum.eNOTIFY_TOUCH_FOUND)) {
@@ -121,7 +120,7 @@ public class SimCallbackTest {
         @Override
         public void onTrigger(PxTriggerPair pairs, int count) {
             for (int i = 0; i < count; i++) {
-                PxTriggerPair pair = TypeHelpers.getTriggerPairAt(pairs, i);
+                PxTriggerPair pair = PxTriggerPair.arrayGet(pairs.getAddress(), i);
                 PxActor actor0 = pair.getTriggerActor();
                 PxActor actor1 = pair.getOtherActor();
                 triggerBodies.add(actor0);

@@ -1,6 +1,8 @@
 /****************************************
  * Static functions / fields
  ****************************************/
+
+[NoDelete]
 interface PxTopLevelFunctions {
     static readonly attribute unsigned long PHYSICS_VERSION;
 

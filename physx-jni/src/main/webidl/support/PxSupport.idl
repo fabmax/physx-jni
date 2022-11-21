@@ -4,7 +4,6 @@
 
 interface SupportFunctions {
     static PxShape PxActor_getShape([Ref] PxRigidActor actor, long index);
-    static PxActor PxContactPairHeader_getActor([Ref] PxContactPairHeader pairHeader, long index);
     [Ref] static Vector_PxActorPtr PxScene_getActiveActors(PxScene scene);
 };
 
@@ -34,11 +33,16 @@ interface PxMaterialConstPtr { };
 
 interface PxVehicleWheelsPtr { };
 
-interface TypeHelpers {
+interface NativeArrayHelpers {
     static octet getU8At([Ref] PxU8ConstPtr base, long index);
     static unsigned short getU16At([Ref] PxU16ConstPtr base, long index);
     static unsigned long getU32At([Ref] PxU32ConstPtr base, long index);
     static float getRealAt([Ref] PxRealPtr base, long index);
+
+    [Value] static PxU8Ptr voidToU8Ptr(VoidPtr voidPtr);
+    [Value] static PxU16Ptr voidToU16Ptr(VoidPtr voidPtr);
+    [Value] static PxU32Ptr voidToU32Ptr(VoidPtr voidPtr);
+    [Value] static PxRealPtr voidToRealPtr(VoidPtr voidPtr);
 
     static PxActor getActorAt(PxActor base, long index);
     static PxBounds3 getBounds3At(PxBounds3 base, long index);
@@ -52,11 +56,6 @@ interface TypeHelpers {
     static PxShape getShapeAt(PxShape base, long index);
     static PxTriggerPair getTriggerPairAt(PxTriggerPair base, long index);
     static PxVec3 getVec3At(PxVec3 base, long index);
-
-    [Value] static PxU8Ptr voidToU8Ptr(VoidPtr voidPtr);
-    [Value] static PxU16Ptr voidToU16Ptr(VoidPtr voidPtr);
-    [Value] static PxU32Ptr voidToU32Ptr(VoidPtr voidPtr);
-    [Value] static PxRealPtr voidToRealPtr(VoidPtr voidPtr);
 };
 
 interface Vector_PxMaterialConst {

@@ -2,7 +2,7 @@
  * [package=common]
  ****************************************/
 
-[NonJs]
+[NonJs, NoDelete]
 interface PxCudaTopLevelFunctions {
     static PxCudaContextManager CreateCudaContextManager([Ref] PxFoundation foundation, [Const, Ref] PxCudaContextManagerDesc desc);
 };

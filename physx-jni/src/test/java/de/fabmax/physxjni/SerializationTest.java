@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import physx.common.PxCollection;
 import physx.extensions.*;
 import physx.physics.PxScene;
+import physx.support.NativeArrayHelpers;
 import physx.support.PxU8ConstPtr;
-import physx.support.TypeHelpers;
 import physx.support.Vector_PxU8;
 
 import java.io.BufferedInputStream;
@@ -45,10 +45,10 @@ public class SerializationTest {
         PxSerialization.complete(sceneCollection, sr);
         PxSerialization.serializeCollectionToXml(memOut, sceneCollection, sr);
 
-        PxU8ConstPtr serData = TypeHelpers.voidToU8Ptr(memOut.getData());
+        PxU8ConstPtr serData = NativeArrayHelpers.voidToU8Ptr(memOut.getData());
         byte[] bin = new byte[memOut.getSize()];
         for (int i = 0; i < bin.length; i++) {
-            bin[i] = TypeHelpers.getU8At(serData, i);
+            bin[i] = NativeArrayHelpers.getU8At(serData, i);
         }
         String[] actual = new String(bin).trim().split("\n");
         //Arrays.stream(actual).forEach(System.out::println);
@@ -85,7 +85,7 @@ public class SerializationTest {
             throw new RuntimeException(e);
         }
 
-        PxDefaultMemoryInputData memIn = new PxDefaultMemoryInputData(TypeHelpers.voidToU8Ptr(data.data()), data.size());
+        PxDefaultMemoryInputData memIn = new PxDefaultMemoryInputData(NativeArrayHelpers.voidToU8Ptr(data.data()), data.size());
         PxSerializationRegistry sr = PxSerialization.createSerializationRegistry(PhysXTestEnv.physics);
         PxCollection loadedCollection = PxSerialization.createCollectionFromXml(memIn, PhysXTestEnv.cooking, sr);
         Assertions.assertEquals(3, loadedCollection.getNbObjects());

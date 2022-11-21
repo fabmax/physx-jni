@@ -33,8 +33,6 @@ interface PxBaseTask { };
 interface PxBoundedData {
     void PxBoundedData();
     attribute unsigned long count;
-    attribute unsigned long stride;
-    [Const] attribute VoidPtr data;
 };
 PxBoundedData implements PxStridedData;
 
