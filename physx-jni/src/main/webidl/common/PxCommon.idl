@@ -136,7 +136,33 @@ interface PxInputData { };
 interface PxInsertionCallback { };
 
 [Prefix="physx::"]
+interface PxMat33 {
+    void PxMat33();
+    void PxMat33(PxIDENTITYEnum r);
+    [Value] attribute PxVec3 column0;
+    [Value] attribute PxVec3 column1;
+    [Value] attribute PxVec3 column2;
+};
+
+[Prefix="physx::"]
 interface PxOutputStream { };
+
+[Prefix="physx::"]
+interface PxPlane {
+    void PxPlane();
+    void PxPlane(float nx, float ny, float nz, float distance);
+    void PxPlane([Const, Ref] PxVec3 normal, float distance);
+    void PxPlane([Const, Ref] PxVec3 p0, [Const, Ref] PxVec3 p1, [Const, Ref] PxVec3 p2);
+    float distance([Const, Ref] PxVec3 p);
+    boolean contains([Const, Ref] PxVec3 p);
+    [Value] PxVec3 project([Const, Ref] PxVec3 p);
+    [Value] PxVec3 pointInPlane();
+    void normalize();
+    [Value] PxPlane transform([Const, Ref] PxTransform pose);
+    [Value] PxPlane inverseTransform([Const, Ref] PxTransform pose);
+    [Value] attribute PxVec3 n;
+    attribute float d;
+};
 
 [Prefix="physx::", StackAllocatable]
 interface PxQuat {

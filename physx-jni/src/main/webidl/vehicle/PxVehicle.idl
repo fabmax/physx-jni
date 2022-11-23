@@ -1,0 +1,742 @@
+/****************************************
+ * [package=vehicle2]
+ ****************************************/
+
+[NoDelete]
+interface PxVehicleTopLevelFunctions {
+    static boolean InitVehicleExtension([Ref] PxFoundation foundation);
+    static void CloseVehicleExtension();
+
+    static readonly attribute unsigned long MAX_NB_ENGINE_TORQUE_CURVE_ENTRIES;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleAckermannParams {
+    void PxVehicleAckermannParams();
+    boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
+    [Value] PxVehicleAckermannParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    attribute unsigned long[] wheelIds;
+    attribute float wheelBase;
+    attribute float trackWidth;
+    attribute float strength;
+};
+
+[Prefix="physx::vehicle2::", StackAllocatable]
+interface PxVehicleAutoboxParams {
+    void PxVehicleAutoboxParams();
+    [Value] PxVehicleAutoboxParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid([Const, Ref] PxVehicleGearboxParams gearboxParams);
+    attribute float[] upRatios;
+    attribute float[] downRatios;
+    attribute float latency;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleAutoboxState {
+    void PxVehicleAutoboxState();
+    void setToDefault();
+    attribute float timeSinceLastShift;
+    attribute boolean activeAutoboxGearShift;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleAxleDescription {
+    void PxVehicleAxleDescription();
+    void setToDefault();
+    //void addAxle(unsigned long nbWheelsOnAxle, unsigned long[] wheelIdsOnAxle);
+    //unsigned long getNbAxles();
+    unsigned long getNbWheelsOnAxle(unsigned long i);
+    unsigned long getWheelOnAxle(unsigned long j, unsigned long i);
+    //unsigned long getNbWheels();
+    unsigned long getAxle(unsigned long wheelId);
+    boolean isValid();
+    attribute unsigned long nbAxles;
+    attribute unsigned long[] nbWheelsPerAxle;
+    attribute unsigned long[] axleToWheelIds;
+    attribute unsigned long[] wheelIdsInAxleOrder;
+    attribute unsigned long nbWheels;
+};
+
+enum PxVehicleAxesEnum {
+    "PxVehicleAxesEnum::ePosX",
+    "PxVehicleAxesEnum::eNegX",
+    "PxVehicleAxesEnum::ePosY",
+    "PxVehicleAxesEnum::eNegY",
+    "PxVehicleAxesEnum::ePosZ",
+    "PxVehicleAxesEnum::eNegZ",
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleBrakeCommandResponseParams {
+    void PxVehicleBrakeCommandResponseParams();
+    [Value] PxVehicleBrakeCommandResponseParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
+};
+PxVehicleBrakeCommandResponseParams implements PxVehicleCommandResponseParams;
+
+enum PxVehicleClutchAccuracyModeEnum {
+    "PxVehicleClutchAccuracyModeEnum::eESTIMATE",
+    "PxVehicleClutchAccuracyModeEnum::eBEST_POSSIBLE"
+};
+
+[Prefix="physx::vehicle2::", StackAllocatable]
+interface PxVehicleClutchCommandResponseParams {
+    void PxVehicleClutchCommandResponseParams();
+    [Value] PxVehicleClutchCommandResponseParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    attribute float maxResponse;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleClutchCommandResponseState {
+    void PxVehicleClutchCommandResponseState();
+    void setToDefault();
+    attribute float normalisedCommandResponse;
+    attribute float commandResponse;
+};
+
+[Prefix="physx::vehicle2::", StackAllocatable]
+interface PxVehicleClutchParams {
+    void PxVehicleClutchParams();
+    [Value] PxVehicleClutchParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    attribute PxVehicleClutchAccuracyModeEnum accuracyMode;
+    attribute unsigned long estimateIterations;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleClutchSlipState {
+    void PxVehicleClutchSlipState();
+    void setToDefault();
+    attribute float clutchSlip;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleCommandNonLinearResponseParams {
+    void PxVehicleCommandNonLinearResponseParams();
+    void clear();
+    boolean addResponse([Const, Ref] PxVehicleCommandValueResponseTable commandValueSpeedResponses);
+    attribute float[] speedResponses;
+    attribute short nbSpeedResponses;
+    attribute short[] speedResponsesPerCommandValue;
+    attribute short[] nbSpeedRenponsesPerCommandValue;
+    attribute float[] commandValues;
+    attribute short nbCommandValues;
+};
+
+enum PxVehicleCommandNonLinearResponseParamsEnum {
+    "PxVehicleCommandNonLinearResponseParamsEnum::eMAX_NB_COMMAND_VALUES"
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleCommandResponseParams {
+    void PxVehicleCommandResponseParams();
+    [Value] attribute PxVehicleCommandNonLinearResponseParams nonlinearResponse;
+    attribute float[] wheelResponseMultipliers;
+    attribute float maxResponse;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleCommandState {
+    void PxVehicleCommandState();
+    void setToDefault();
+    attribute float[] brakes;
+    attribute unsigned long nbBrakes;
+    attribute float throttle;
+    attribute float steer;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleCommandValueResponseTable {
+    void PxVehicleCommandValueResponseTable();
+    attribute float commandValue;
+    //[Value] attribute PxVehicleFixedSizeLookupTable<PxReal, eMAX_NB_SPEED_RESPONSES> speedResponses;
+};
+
+enum PxVehicleCommandValueResponseTableEnum {
+    "PxVehicleCommandValueResponseTableEnum::eMAX_NB_SPEED_RESPONSES"
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleConstraintConnector {
+    void PxVehicleConstraintConnector();
+    void PxVehicleConstraintConnector(PxVehiclePhysXConstraintState vehicleConstraintState);
+    void setConstraintState(PxVehiclePhysXConstraintState constraintState);
+    void getConstantBlock();
+};
+PxVehicleConstraintConnector implements PxConstraintConnector;
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleDifferentialState {
+    void PxVehicleDifferentialState();
+    void setToDefault();
+    attribute unsigned long[] connectedWheels;
+    attribute unsigned long nbConnectedWheels;
+    attribute float[] torqueRatiosAllWheels;
+    attribute float[] aveWheelSpeedContributionAllWheels;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleDirectDriveThrottleCommandResponseParams {
+    void PxVehicleDirectDriveThrottleCommandResponseParams();
+    [Value] PxVehicleDirectDriveThrottleCommandResponseParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
+};
+PxVehicleDirectDriveThrottleCommandResponseParams implements PxVehicleCommandResponseParams;
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleDirectDriveTransmissionCommandState {
+    void PxVehicleDirectDriveTransmissionCommandState();
+    void setToDefault();
+    attribute PxVehicleDirectDriveTransmissionCommandStateEnum gear;
+};
+
+enum PxVehicleDirectDriveTransmissionCommandStateEnum {
+    "PxVehicleDirectDriveTransmissionCommandStateEnum::eREVERSE",
+    "PxVehicleDirectDriveTransmissionCommandStateEnum::eNEUTRAL",
+    "PxVehicleDirectDriveTransmissionCommandStateEnum::eFORWARD"
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleEngineDriveThrottleCommandResponseState {
+    void PxVehicleEngineDriveThrottleCommandResponseState();
+    void setToDefault();
+    attribute float commandResponse;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleEngineDriveTransmissionCommandState {
+    void PxVehicleEngineDriveTransmissionCommandState();
+    void setToDefault();
+    attribute float clutch;
+    attribute unsigned long targetGear;
+};
+
+[Prefix="physx::vehicle2::", StackAllocatable]
+interface PxVehicleEngineParams {
+    void PxVehicleEngineParams();
+    [Value] PxVehicleEngineParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    // [Value] PxVehicleFixedSizeLookupTable<PxReal, eMAX_NB_ENGINE_TORQUE_CURVE_ENTRIES> torqueCurve
+    attribute float moi;
+    attribute float peakTorque;
+    attribute float idleOmega;
+    attribute float maxOmega;
+    attribute float dampingRateZeroThrottleClutchEngaged;
+    attribute float dampingRateZeroThrottleClutchDisengaged;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleEngineState {
+    void PxVehicleEngineState();
+    void setToDefault();
+    attribute float rotationSpeed;
+};
+
+[Prefix="physx::vehicle2::", StackAllocatable]
+interface PxVehicleFourWheelDriveDifferentialParams {
+    void PxVehicleFourWheelDriveDifferentialParams();
+    void setToDefault();
+    [Value] PxVehicleFourWheelDriveDifferentialParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    attribute unsigned long[] frontWheelIds;
+    attribute unsigned long[] rearWheelIds;
+    attribute float frontBias;
+    attribute float frontTarget;
+    attribute float rearBias;
+    attribute float rearTarget;
+    attribute float centerBias;
+    attribute float centerTarget;
+    attribute float rate;
+};
+PxVehicleFourWheelDriveDifferentialParams implements PxVehicleMultiWheelDriveDifferentialParams;
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleFrame {
+    void PxVehicleFrame();
+    void setToDefault();
+    [Value] PxMat33 getFrame();
+    // get[*]Axis() methods clash with enum attributes
+    //[Value] PxVec3 getLngAxis();
+    //[Value] PxVec3 getLatAxis();
+    //[Value] PxVec3 getVrtAxis();
+    boolean isValid();
+    attribute PxVehicleAxesEnum lngAxis;
+    attribute PxVehicleAxesEnum latAxis;
+    attribute PxVehicleAxesEnum vrtAxis;
+};
+
+[Prefix="physx::vehicle2::", StackAllocatable]
+interface PxVehicleGearboxParams {
+    void PxVehicleGearboxParams();
+    [Value] PxVehicleGearboxParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    attribute unsigned long neutralGear;
+    attribute float[] ratios;
+    attribute float finalRatio;
+    attribute unsigned long nbRatios;
+    attribute float switchTime;
+};
+
+enum PxVehicleGearboxParamsEnum {
+    "PxVehicleGearboxParamsEnum::eMAX_NB_GEARS"
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleGearboxState {
+    void PxVehicleGearboxState();
+    void setToDefault();
+    attribute unsigned long currentGear;
+    attribute unsigned long targetGear;
+    attribute float gearSwitchTime;
+};
+
+enum PxVehicleLimitsEnum {
+    "PxVehicleLimitsEnum::eMAX_NB_WHEELS",
+    "PxVehicleLimitsEnum::eMAX_NB_AXLES",
+};
+
+[Prefix="physx::vehicle2::", StackAllocatable]
+interface PxVehicleMultiWheelDriveDifferentialParams {
+    void PxVehicleMultiWheelDriveDifferentialParams();
+    void setToDefault();
+    [Value] PxVehicleMultiWheelDriveDifferentialParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
+    attribute float[] torqueRatios;
+    attribute float[] aveWheelSpeedRatios;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehiclePhysXActor {
+    void setToDefault();
+    attribute PxRigidBody rigidBody;
+    attribute PxShape[] wheelShapes;
+};
+
+enum PxVehiclePhysXActorUpdateModeEnum {
+    "PxVehiclePhysXActorUpdateModeEnum::eAPPLY_VELOCITY",
+    "PxVehiclePhysXActorUpdateModeEnum::eAPPLY_ACCELERATION"
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehiclePhysXConstraints {
+    void setToDefault();
+    [Value] attribute PxVehiclePhysXConstraintState[] constraintStates;
+    attribute PxConstraint[] constraints;
+    attribute PxVehicleConstraintConnector[] constraintConnectors;
+};
+
+enum PxVehiclePhysXConstraintLimitsEnum {
+    "PxVehiclePhysXConstraintLimitsEnum::eNB_DOFS_PER_PXCONSTRAINT",
+    "PxVehiclePhysXConstraintLimitsEnum::eNB_DOFS_PER_WHEEL",
+    "PxVehiclePhysXConstraintLimitsEnum::eNB_WHEELS_PER_PXCONSTRAINT",
+    "PxVehiclePhysXConstraintLimitsEnum::eNB_CONSTRAINTS_PER_VEHICLE"
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehiclePhysXConstraintState {
+    void PxVehiclePhysXConstraintState();
+    void setToDefault();
+    attribute boolean[] tireActiveStatus;
+    [Value] attribute PxVec3[] tireLinears;
+    [Value] attribute PxVec3[] tireAngulars;
+    attribute float[] tireDamping;
+    attribute boolean suspActiveStatus;
+    [Value] attribute PxVec3 suspLinear;
+    [Value] attribute PxVec3 suspAngular;
+    attribute float suspGeometricError;
+    attribute float restitution;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehiclePhysXMaterialFriction {
+    void PxVehiclePhysXMaterialFriction();
+    boolean isValid();
+    [Const] attribute PxMaterial material;
+    attribute float friction;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehiclePhysXMaterialFrictionParams {
+    boolean isValid();
+    attribute PxVehiclePhysXMaterialFriction materialFrictions;
+    attribute unsigned long nbMaterialFrictions;
+    attribute float defaultFriction;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehiclePhysXRoadGeometryQueryParams {
+    [Value] PxVehiclePhysXRoadGeometryQueryParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    attribute PxVehiclePhysXRoadGeometryQueryTypeEnum roadGeometryQueryType;
+    [Value] attribute PxQueryFilterData filterData;
+    attribute PxQueryFilterCallback filterCallback;
+};
+
+enum PxVehiclePhysXRoadGeometryQueryTypeEnum {
+    "PxVehiclePhysXRoadGeometryQueryTypeEnum::eNONE",
+    "PxVehiclePhysXRoadGeometryQueryTypeEnum::eRAYCAST",
+    "PxVehiclePhysXRoadGeometryQueryTypeEnum::eSWEEP"
+};
+
+[Prefix="physx::vehicle2::", NoDelete]
+interface PxVehiclePhysXSimulationContext {
+    void PxVehiclePhysXSimulationContext();
+    [Value] PxVehiclePhysXSimulationContext transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    [Const] attribute PxConvexMesh physxUnitCylinderSweepMesh;
+    [Const] attribute PxScene physxScene;
+    attribute PxVehiclePhysXActorUpdateModeEnum physxActorUpdateMode;
+    attribute float physxActorWakeCounterResetValue;
+    attribute float physxActorWakeCounterThreshold;
+};
+PxVehiclePhysXSimulationContext implements PxVehicleSimulationContext;
+
+[Prefix="physx::vehicle2::"]
+interface PxVehiclePhysXSteerState {
+    void setToDefault();
+    attribute float previousSteerCommand;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehiclePhysXSuspensionLimitConstraintParams {
+    [Value] PxVehiclePhysXSuspensionLimitConstraintParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    attribute float restitution;
+    attribute PxVehiclePhysXSuspensionLimitConstraintParamsDirectionSpecifierEnum directionForSuspensionLimitConstraint;
+};
+
+enum PxVehiclePhysXSuspensionLimitConstraintParamsDirectionSpecifierEnum {
+    "PxVehiclePhysXSuspensionLimitConstraintParamsDirectionSpecifierEnum::eSUSPENSION",
+    "PxVehiclePhysXSuspensionLimitConstraintParamsDirectionSpecifierEnum::eROAD_GEOMETRY_NORMAL",
+    "PxVehiclePhysXSuspensionLimitConstraintParamsDirectionSpecifierEnum::eNONE"
+};
+
+[Prefix="physx::vehicle2::", NoDelete]
+interface PxVehiclePvdContext { };
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleRigidBodyParams {
+    void PxVehicleRigidBodyParams();
+    [Value] PxVehicleRigidBodyParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    attribute float mass;
+    [Value] attribute PxVec3 moi;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleRigidBodyState {
+    void PxVehicleRigidBodyState();
+    void setToDefault();
+    float getVerticalSpeed([Const, Ref] PxVehicleFrame frame);
+    float getLateralSpeed([Const, Ref] PxVehicleFrame frame);
+    float getLongitudinalSpeed([Const, Ref] PxVehicleFrame frame);
+    [Value] attribute PxTransform pose;
+    [Value] attribute PxVec3 linearVelocity;
+    [Value] attribute PxVec3 angularVelocity;
+    [Value] attribute PxVec3 previousLinearVelocity;
+    [Value] attribute PxVec3 previousAngularVelocity;
+    [Value] attribute PxVec3 externalForce;
+    [Value] attribute PxVec3 externalTorque;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleRoadGeometryState {
+    void PxVehicleRoadGeometryState();
+    void setToDefault();
+    [Value] attribute PxPlane plane;
+    attribute float friction;
+    [Value] attribute PxVec3 velocity;
+    attribute boolean hitState;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleScale {
+    void PxVehicleScale();
+    void setToDefault();
+    boolean isValid();
+    attribute float scale;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleSimulationContext {
+    void PxVehicleSimulationContext();
+    PxVehicleSimulationContextTypeEnum getType();
+    void setToDefault();
+    [Value] PxVehicleSimulationContext transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    [Value] attribute PxVec3 gravity;
+    [Value] attribute PxVehicleFrame frame;
+    [Value] attribute PxVehicleScale scale;
+    [Value] attribute PxVehicleTireSlipParams tireSlipParams;
+    [Value] attribute PxVehicleTireStickyParams tireStickyParams;
+    attribute float thresholdForwardSpeedForWheelAngleIntegration;
+    [Value] attribute PxVehiclePvdContext pvdContext;
+};
+
+enum PxVehicleSimulationContextTypeEnum {
+    "PxVehicleSimulationContextTypeEnum::eDEFAULT",
+    "PxVehicleSimulationContextTypeEnum::ePHYSX"
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleSteerCommandResponseParams {
+    void PxVehicleSteerCommandResponseParams();
+    [Value] PxVehicleSteerCommandResponseParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
+};
+PxVehicleSteerCommandResponseParams implements PxVehicleCommandResponseParams;
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleSuspensionComplianceParams {
+    void PxVehicleSuspensionComplianceParams();
+    [Value] PxVehicleSuspensionComplianceParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    //attribute [Value] PxVehicleFixedSizeLookupTable<PxReal, 3> wheelToeAngle;
+    //attribute [Value] PxVehicleFixedSizeLookupTable<PxReal, 3> wheelCamberAngle;
+    //attribute [Value] PxVehicleFixedSizeLookupTable<PxReal, 3> suspForceAppPoint;
+    //attribute [Value] PxVehicleFixedSizeLookupTable<PxReal, 3> tireForceAppPoint;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleSuspensionComplianceState {
+    void PxVehicleSuspensionComplianceState();
+    void setToDefault();
+    attribute float toe;
+    attribute float camber;
+    [Value] attribute PxVec3 tireForceAppPoint;
+    [Value] attribute PxVec3 suspForceAppPoint;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleSuspensionForce {
+    void PxVehicleSuspensionForce();
+    void setToDefault();
+    [Value] attribute PxVec3 force;
+    [Value] attribute PxVec3 torque;
+    attribute float normalForce;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleSuspensionForceParams {
+    void PxVehicleSuspensionForceParams();
+    [Value] PxVehicleSuspensionForceParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    attribute float stiffness;
+    attribute float damping;
+    attribute float sprungMass;
+};
+
+enum PxVehicleSuspensionJounceCalculationTypeEnum {
+    "PxVehicleSuspensionJounceCalculationTypeEnum::eRAYCAST",
+    "PxVehicleSuspensionJounceCalculationTypeEnum::eSWEEP"
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleSuspensionParams {
+    void PxVehicleSuspensionParams();
+    [Value] PxVehicleSuspensionParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    [Value] attribute PxTransform suspensionAttachment;
+    [Value] attribute PxVec3 suspensionTravelDir;
+    attribute float suspensionTravelDist;
+    [Value] attribute PxTransform wheelAttachment;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleSuspensionState {
+    void PxVehicleSuspensionState();
+    void setToDefault(float _jounce, float _separation);
+    attribute float jounce;
+    attribute float jounceSpeed;
+    attribute float separation;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleSuspensionStateCalculationParams {
+    void PxVehicleSuspensionStateCalculationParams();
+    [Value] PxVehicleSuspensionStateCalculationParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    attribute PxVehicleSuspensionJounceCalculationTypeEnum suspensionJounceCalculationType;
+    attribute boolean limitSuspensionExpansionVelocity;
+};
+
+[Prefix="physx::vehicle2::", StackAllocatable]
+interface PxVehicleTankDriveDifferentialParams {
+    void PxVehicleTankDriveDifferentialParams();
+    void setToDefault();
+    //void addTankTrack(unsigned long nbWheelsInTrackToAdd, unsigned long[] wheelIdsInTrackToAdd, unsigned long thrustControllerIndex);
+    //unsigned long getNbTracks();
+    unsigned long getNbWheelsInTrack(unsigned long i);
+    [Value] PxU32ConstPtr getWheelsInTrack(unsigned long i);
+    unsigned long getWheelInTrack(unsigned long j, unsigned long i);
+    unsigned long getThrustControllerIndex(unsigned long i);
+    [Value] PxVehicleTankDriveDifferentialParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    attribute unsigned long nbTracks;
+    attribute unsigned long[] thrustIdPerTrack;
+    attribute unsigned long[] nbWheelsPerTrack;
+    attribute unsigned long[] trackToWheelIds;
+    attribute unsigned long[] wheelIdsInTrackOrder;
+    attribute unsigned long nbWheelsInTracks;
+};
+PxVehicleTankDriveDifferentialParams implements PxVehicleMultiWheelDriveDifferentialParams;
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleTankDriveTransmissionCommandState {
+    void PxVehicleTankDriveTransmissionCommandState();
+    void setToDefault();
+    attribute float[] thrusts;
+};
+PxVehicleTankDriveTransmissionCommandState implements PxVehicleEngineDriveTransmissionCommandState;
+
+[Prefix="physx::vehicle2::", StackAllocatable]
+interface PxVehicleTireAxisStickyParams {
+    void PxVehicleTireAxisStickyParams();
+    [Value] PxVehicleTireAxisStickyParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    attribute float thresholdSpeed;
+    attribute float thresholdTime;
+    attribute float damping;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleTireCamberAngleState {
+    void PxVehicleTireCamberAngleState();
+    void setToDefault();
+    attribute float camberAngle;
+};
+
+enum PxVehicleTireDirectionModesEnum {
+    "PxVehicleTireDirectionModesEnum::eLONGITUDINAL",
+    "PxVehicleTireDirectionModesEnum::eLATERAL"
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleTireDirectionState {
+    void PxVehicleTireDirectionState();
+    void setToDefault();
+    [Value] attribute PxVec3[] directions;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleTireForce {
+    void PxVehicleTireForce();
+    void setToDefault();
+    [Value] attribute PxVec3[] forces;
+    [Value] attribute PxVec3[] torques;
+    attribute float aligningMoment;
+    attribute float wheelTorque;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleTireForceParams {
+    void PxVehicleTireForceParams();
+    [Value] PxVehicleTireForceParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    attribute float latStiffX;
+    attribute float latStiffY;
+    attribute float longStiff;
+    attribute float camberStiff;
+    //attribute float[][] frictionVsSlip;
+    attribute float restLoad;
+    //attribute float[][] loadFilter;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleTireGripState {
+    void setToDefault();
+    attribute float load;
+    attribute float friction;
+};
+
+[Prefix="physx::vehicle2::", StackAllocatable]
+interface PxVehicleTireSlipParams {
+    void PxVehicleTireSlipParams();
+    void setToDefault();
+    [Value] PxVehicleTireSlipParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    attribute float minLatSlipDenominator;
+    attribute float minPassiveLongSlipDenominator;
+    attribute float minActiveLongSlipDenominator;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleTireSlipState {
+    void PxVehicleTireSlipState();
+    void setToDefault();
+    attribute float[] slips;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleTireSpeedState {
+    void PxVehicleTireSpeedState();
+    void setToDefault();
+    attribute float[] speedStates;
+};
+
+[Prefix="physx::vehicle2::", StackAllocatable]
+interface PxVehicleTireStickyParams {
+    void PxVehicleTireStickyParams();
+    void setToDefault();
+    [Value] PxVehicleTireStickyParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    [Value] attribute PxVehicleTireAxisStickyParams[] stickyParams;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleTireStickyState {
+    void PxVehicleTireStickyState();
+    void setToDefault();
+    attribute float[] lowSpeedTime;
+    attribute boolean[] activeStatus;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleWheelActuationState {
+    void PxVehicleWheelActuationState();
+    void setToDefault();
+    attribute boolean isBrakeApplied;
+    attribute boolean isDriveApplied;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleWheelConstraintGroupState {
+    void PxVehicleWheelConstraintGroupState();
+    void setToDefault();
+    //void addConstraintGroup(unsigned long nbWheelsInGroupToAdd, unsigned long[] wheelIdsInGroupToAdd, float[] constraintMultipliers);
+    unsigned long getNbConstraintGroups();
+    unsigned long getNbWheelsInConstraintGroup(unsigned long i);
+    unsigned long getWheelInConstraintGroup(unsigned long j, unsigned long i);
+    float getMultiplierInConstraintGroup(unsigned long j, unsigned long i);
+    attribute unsigned long nbGroups;
+    attribute unsigned long[] nbWheelsPerGroup;
+    attribute unsigned long[] groupToWheelIds;
+    attribute unsigned long[] wheelIdsInGroupOrder;
+    attribute float[] wheelMultipliersInGroupOrder;
+    attribute unsigned long nbWheelsInGroups;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleWheelLocalPose {
+    void PxVehicleWheelLocalPose();
+    void setToDefault();
+    [Value]attribute PxTransform localPose;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleWheelParams {
+    void PxVehicleWheelParams();
+    [Value] PxVehicleWheelParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+    attribute float radius;
+    attribute float halfWidth;
+    attribute float mass;
+    attribute float moi;
+    attribute float dampingRate;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleWheelRigidBody1dState {
+    void PxVehicleWheelRigidBody1dState();
+    void setToDefault();
+    attribute float rotationSpeed;
+    attribute float correctedRotationSpeed;
+    attribute float rotationAngle;
+};

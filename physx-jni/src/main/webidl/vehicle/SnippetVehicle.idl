@@ -1,0 +1,207 @@
+/****************************************
+ * [package=vehicle2]
+ ****************************************/
+
+[Prefix="snippetvehicle2::"]
+interface BaseVehicleParams {
+    void BaseVehicleParams();
+    [Value] BaseVehicleParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid();
+
+	[Value] attribute PxVehicleAxleDescription axleDescription;
+	[Value] attribute PxVehicleFrame frame;
+	[Value] attribute PxVehicleScale scale;
+	[Value] attribute PxVehicleSuspensionStateCalculationParams suspensionStateCalculationParams;
+
+	//Command response
+	[Value] attribute PxVehicleBrakeCommandResponseParams[] brakeResponseParams;
+	[Value] attribute PxVehicleSteerCommandResponseParams steerResponseParams;
+	[Value] attribute PxVehicleAckermannParams[] ackermannParams;
+
+	//Suspension
+	[Value] attribute PxVehicleSuspensionParams[] suspensionParams;
+	[Value] attribute PxVehicleSuspensionComplianceParams[] suspensionComplianceParams;
+	[Value] attribute PxVehicleSuspensionForceParams[] suspensionForceParams;
+
+	//Tires
+	[Value] attribute PxVehicleTireForceParams[] tireForceParams;
+
+	//Wheels
+	[Value] attribute PxVehicleWheelParams[] wheelParams;
+
+	//Rigid body
+	[Value] attribute PxVehicleRigidBodyParams rigidBodyParams;
+};
+
+[Prefix="snippetvehicle2::"]
+interface BaseVehicleState {
+    void BaseVehicleState();
+    void setToDefault();
+
+	//Command responses
+	[Value] attribute float[] brakeCommandResponseStates;
+	[Value] attribute float[] steerCommandResponseStates;
+	[Value] attribute PxVehicleWheelActuationState[] actuationStates;
+
+	//Road geometry
+	[Value] attribute PxVehicleRoadGeometryState[] roadGeomStates;
+
+	//Suspensions
+	[Value] attribute PxVehicleSuspensionState[] suspensionStates;
+	[Value] attribute PxVehicleSuspensionComplianceState[] suspensionComplianceStates;
+	[Value] attribute PxVehicleSuspensionForce[] suspensionForces;
+
+	//Tires
+	[Value] attribute PxVehicleTireGripState[] tireGripStates;
+	[Value] attribute PxVehicleTireDirectionState[] tireDirectionStates;
+	[Value] attribute PxVehicleTireSpeedState[] tireSpeedStates;
+	[Value] attribute PxVehicleTireSlipState[] tireSlipStates;
+	[Value] attribute PxVehicleTireCamberAngleState[] tireCamberAngleStates;
+	[Value] attribute PxVehicleTireStickyState[] tireStickyStates;
+	[Value] attribute PxVehicleTireForce[] tireForces;
+
+	//Wheels
+	[Value] attribute PxVehicleWheelRigidBody1dState[] wheelRigidBody1dStates;
+	[Value] attribute PxVehicleWheelLocalPose[] wheelLocalPoses;
+
+	//Rigid body
+	[Value] attribute PxVehicleRigidBodyState rigidBodyState;
+};
+
+[Prefix="snippetvehicle2::"]
+interface PhysXIntegrationParams {
+    void PhysXIntegrationParams();
+    [Value] PhysXIntegrationParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
+    void create([Const, Ref] PxVehicleAxleDescription axleDesc, [Const, Ref] PxQueryFilterData queryFilterData, PxQueryFilterCallback queryFilterCallback,
+                PxVehiclePhysXMaterialFriction materialFrictions, unsigned long nbMaterialFrictions, float defaultFriction,
+                [Const, Ref] PxTransform physxActorCMassLocalPose, [Const, Ref] PxVec3 physXActorBoxShapeHalfExtents, [Const, Ref] PxTransform physxActorBoxShapeLocalPose);
+
+	[Value] attribute PxVehiclePhysXRoadGeometryQueryParams physxRoadGeometryQueryParams;
+	[Value] attribute PxVehiclePhysXMaterialFrictionParams[] physxMaterialFrictionParams;
+	[Value] attribute PxVehiclePhysXSuspensionLimitConstraintParams[] physxSuspensionLimitConstraintParams;
+	[Value] attribute PxTransform physxActorCMassLocalPose;
+	[Value] attribute PxVec3 physxActorBoxShapeHalfExtents;
+	[Value] attribute PxTransform physxActorBoxShapeLocalPose;
+	[Value] attribute PxTransform[] physxWheelShapeLocalPoses;
+};
+
+[Prefix="snippetvehicle2::"]
+interface PhysXIntegrationState {
+    void PhysXIntegrationState();
+    void destroyState();
+    void setToDefault();
+    void create([Const, Ref] BaseVehicleParams baseParams, [Const, Ref] PhysXIntegrationParams physxParams, [Ref] PxPhysics physics, [Const, Ref] PxCookingParams params, [Ref] PxMaterial defaultMaterial);
+
+    [Value] attribute PxVehiclePhysXActor physxActor;
+    [Value] attribute PxVehiclePhysXSteerState physxSteerState;
+    [Value] attribute PxVehiclePhysXConstraints physxConstraints;
+};
+
+
+[Prefix="snippetvehicle2::"]
+interface DirectDrivetrainParams {
+    void DirectDrivetrainParams();
+    [Value] DirectDrivetrainParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
+
+    [Value] attribute PxVehicleDirectDriveThrottleCommandResponseParams directDriveThrottleResponseParams;
+};
+
+[Prefix="snippetvehicle2::"]
+interface DirectDrivetrainState {
+    void DirectDrivetrainState();
+    void setToDefault();
+    attribute float[] directDriveThrottleResponseStates;
+};
+
+[Prefix="snippetvehicle2::"]
+interface EngineDrivetrainParams {
+    void EngineDrivetrainParams();
+    [Value] EngineDrivetrainParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
+
+	[Value] attribute PxVehicleAutoboxParams autoboxParams;
+	[Value] attribute PxVehicleClutchCommandResponseParams clutchCommandResponseParams;
+	[Value] attribute PxVehicleEngineParams engineParams;
+	[Value] attribute PxVehicleGearboxParams gearBoxParams;
+	[Value] attribute PxVehicleMultiWheelDriveDifferentialParams multiWheelDifferentialParams;
+	[Value] attribute PxVehicleFourWheelDriveDifferentialParams fourWheelDifferentialParams;
+	[Value] attribute PxVehicleTankDriveDifferentialParams tankDifferentialParams;
+	[Value] attribute PxVehicleClutchParams clutchParams;
+};
+
+[Prefix="snippetvehicle2::"]
+interface EngineDrivetrainState {
+    void EngineDrivetrainState();
+    void setToDefault();
+
+	[Value] attribute PxVehicleEngineDriveThrottleCommandResponseState throttleCommandResponseState;
+	[Value] attribute PxVehicleAutoboxState autoboxState;
+	[Value] attribute PxVehicleClutchCommandResponseState clutchCommandResponseState;
+	[Value] attribute PxVehicleDifferentialState differentialState;
+	[Value] attribute PxVehicleWheelConstraintGroupState wheelConstraintGroupState;
+	[Value] attribute PxVehicleEngineState engineState;
+	[Value] attribute PxVehicleGearboxState gearboxState;
+	[Value] attribute PxVehicleClutchSlipState clutchState;
+};
+
+[Prefix="snippetvehicle2::"]
+interface BaseVehicle {
+    boolean initialize();
+    void destroyState();
+    void initComponentSequence(boolean addPhysXBeginEndComponents);
+    void step(float dt, [Const, Ref] PxVehicleSimulationContext context);
+
+    [Value] attribute BaseVehicleParams mBaseParams;
+    [Value] attribute BaseVehicleState mBaseState;
+
+	//[Value] attribute PxVehicleComponentSequence mComponentSequence;
+
+	attribute octet mComponentSequenceSubstepGroupHandle;
+};
+
+[Prefix="snippetvehicle2::"]
+interface PhysXActorVehicle {
+    boolean initialize([Ref] PxPhysics physics, [Const, Ref] PxCookingParams params, [Ref] PxMaterial defaultMaterial);
+    void setUpActor([Ref] PxScene scene, [Const, Ref] PxTransform pose, [Const] DOMString vehicleName);
+
+    [Value] attribute PhysXIntegrationParams mPhysXParams;
+    [Value] attribute PhysXIntegrationState mPhysXState;
+    [Value] attribute PxVehicleCommandState mCommandState;
+};
+PhysXActorVehicle implements BaseVehicle;
+
+[Prefix="snippetvehicle2::"]
+interface DirectDriveVehicle {
+    void DirectDriveVehicle();
+    boolean initialize([Ref] PxPhysics physics, [Const, Ref] PxCookingParams params, [Ref] PxMaterial defaultMaterial, optional boolean addPhysXBeginEndComponents);
+    void initComponentSequence(boolean addPhysXBeginEndComponents);
+
+	[Value] attribute DirectDrivetrainParams mDirectDriveParams;
+	[Value] attribute DirectDrivetrainState mDirectDriveState;
+	[Value] attribute PxVehicleDirectDriveTransmissionCommandState mTransmissionCommandState;
+};
+DirectDriveVehicle implements PhysXActorVehicle;
+
+[Prefix="snippetvehicle2::"]
+interface EngineDriveVehicle {
+    void EngineDriveVehicle();
+    boolean initialize([Ref] PxPhysics physics, [Const, Ref] PxCookingParams params, [Ref] PxMaterial defaultMaterial, EngineDriveVehicleEnum differentialType, optional boolean addPhysXBeginEndComponents);
+    void initComponentSequence(boolean addPhysXBeginEndComponents);
+
+    [Value] attribute EngineDrivetrainParams mEngineDriveParams;
+    [Value] attribute EngineDrivetrainState mEngineDriveState;
+
+    [Value] attribute PxVehicleEngineDriveTransmissionCommandState mTransmissionCommandState;
+    [Value] attribute PxVehicleTankDriveTransmissionCommandState mTankDriveTransmissionCommandState;
+
+    attribute EngineDriveVehicleEnum mDifferentialType;
+};
+EngineDriveVehicle implements PhysXActorVehicle;
+
+enum EngineDriveVehicleEnum {
+    "EngineDriveVehicleEnum::eDIFFTYPE_FOURWHEELDRIVE",
+    "EngineDriveVehicleEnum::eDIFFTYPE_MULTIWHEELDRIVE",
+    "EngineDriveVehicleEnum::eDIFFTYPE_TANKDRIVE"
+};
