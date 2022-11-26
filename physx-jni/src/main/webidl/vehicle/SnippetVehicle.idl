@@ -153,12 +153,12 @@ interface BaseVehicle {
     void initComponentSequence(boolean addPhysXBeginEndComponents);
     void step(float dt, [Const, Ref] PxVehicleSimulationContext context);
 
-    [Value] attribute BaseVehicleParams mBaseParams;
-    [Value] attribute BaseVehicleState mBaseState;
+    [Value] attribute BaseVehicleParams baseParams;
+    [Value] attribute BaseVehicleState baseState;
 
 	//[Value] attribute PxVehicleComponentSequence mComponentSequence;
 
-	attribute octet mComponentSequenceSubstepGroupHandle;
+	attribute octet componentSequenceSubstepGroupHandle;
 };
 
 [Prefix="snippetvehicle2::"]
@@ -166,9 +166,9 @@ interface PhysXActorVehicle {
     boolean initialize([Ref] PxPhysics physics, [Const, Ref] PxCookingParams params, [Ref] PxMaterial defaultMaterial);
     void setUpActor([Ref] PxScene scene, [Const, Ref] PxTransform pose, [Const] DOMString vehicleName);
 
-    [Value] attribute PhysXIntegrationParams mPhysXParams;
-    [Value] attribute PhysXIntegrationState mPhysXState;
-    [Value] attribute PxVehicleCommandState mCommandState;
+    [Value] attribute PhysXIntegrationParams physXParams;
+    [Value] attribute PhysXIntegrationState physXState;
+    [Value] attribute PxVehicleCommandState commandState;
 };
 PhysXActorVehicle implements BaseVehicle;
 
@@ -178,9 +178,9 @@ interface DirectDriveVehicle {
     boolean initialize([Ref] PxPhysics physics, [Const, Ref] PxCookingParams params, [Ref] PxMaterial defaultMaterial, optional boolean addPhysXBeginEndComponents);
     void initComponentSequence(boolean addPhysXBeginEndComponents);
 
-	[Value] attribute DirectDrivetrainParams mDirectDriveParams;
-	[Value] attribute DirectDrivetrainState mDirectDriveState;
-	[Value] attribute PxVehicleDirectDriveTransmissionCommandState mTransmissionCommandState;
+	[Value] attribute DirectDrivetrainParams directDriveParams;
+	[Value] attribute DirectDrivetrainState directDriveState;
+	[Value] attribute PxVehicleDirectDriveTransmissionCommandState transmissionCommandState;
 };
 DirectDriveVehicle implements PhysXActorVehicle;
 
@@ -190,13 +190,13 @@ interface EngineDriveVehicle {
     boolean initialize([Ref] PxPhysics physics, [Const, Ref] PxCookingParams params, [Ref] PxMaterial defaultMaterial, EngineDriveVehicleEnum differentialType, optional boolean addPhysXBeginEndComponents);
     void initComponentSequence(boolean addPhysXBeginEndComponents);
 
-    [Value] attribute EngineDrivetrainParams mEngineDriveParams;
-    [Value] attribute EngineDrivetrainState mEngineDriveState;
+    [Value] attribute EngineDrivetrainParams engineDriveParams;
+    [Value] attribute EngineDrivetrainState engineDriveState;
 
-    [Value] attribute PxVehicleEngineDriveTransmissionCommandState mTransmissionCommandState;
-    [Value] attribute PxVehicleTankDriveTransmissionCommandState mTankDriveTransmissionCommandState;
+    [Value] attribute PxVehicleEngineDriveTransmissionCommandState transmissionCommandState;
+    [Value] attribute PxVehicleTankDriveTransmissionCommandState tankDriveTransmissionCommandState;
 
-    attribute EngineDriveVehicleEnum mDifferentialType;
+    attribute EngineDriveVehicleEnum differentialType;
 };
 EngineDriveVehicle implements PhysXActorVehicle;
 

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.system.MemoryStack;
 import physx.PxTopLevelFunctions;
-import physx.common.PxDefaultCpuDispatcher;
 import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
 import physx.physics.*;
@@ -18,9 +17,7 @@ public class PassThroughFilterShaderTest {
         try (MemoryStack mem = MemoryStack.stackPush()) {
             PxSceneDesc sceneDesc = PxSceneDesc.createAt(mem, MemoryStack::nmalloc, PhysXTestEnv.physics.getTolerancesScale());
             sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
-
-            PxDefaultCpuDispatcher cpuDispatcher = PxTopLevelFunctions.DefaultCpuDispatcherCreate(4);
-            sceneDesc.setCpuDispatcher(cpuDispatcher);
+            sceneDesc.setCpuDispatcher(PhysXTestEnv.defaultDispatcher);
 
             TestFilterShader shader = new TestFilterShader();
             PxTopLevelFunctions.setupPassThroughFilterShader(sceneDesc, shader);

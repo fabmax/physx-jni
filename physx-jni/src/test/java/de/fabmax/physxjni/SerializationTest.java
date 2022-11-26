@@ -36,7 +36,7 @@ public class SerializationTest {
         }
 
 
-        PxScene scene = PhysXTestEnv.createEmptyScene(1);
+        PxScene scene = PhysXTestEnv.createEmptyScene();
         scene.addActor(PhysXTestEnv.createDefaultBox(0f, 0f, 0f));
         PxCollection sceneCollection = PxCollectionExt.createCollection(scene);
 

@@ -217,11 +217,12 @@ interface PxVehicleEngineParams {
     void PxVehicleEngineParams();
     [Value] PxVehicleEngineParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
     boolean isValid();
-    // [Value] PxVehicleFixedSizeLookupTable<PxReal, eMAX_NB_ENGINE_TORQUE_CURVE_ENTRIES> torqueCurve
+    [Value] attribute PxVehicleTorqueCurveLookupTable torqueCurve;
     attribute float moi;
     attribute float peakTorque;
     attribute float idleOmega;
     attribute float maxOmega;
+    attribute float dampingRateFullThrottle;
     attribute float dampingRateZeroThrottleClutchEngaged;
     attribute float dampingRateZeroThrottleClutchDisengaged;
 };
@@ -231,6 +232,22 @@ interface PxVehicleEngineState {
     void PxVehicleEngineState();
     void setToDefault();
     attribute float rotationSpeed;
+};
+
+interface PxVehicleFixedSizeLookupTableFloat_3 {
+    void PxVehicleFixedSizeLookupTableFloat_3();
+    boolean addPair(float x, float y);
+    float interpolate(float x);
+    void clear();
+    boolean isValid();
+};
+
+interface PxVehicleFixedSizeLookupTableVec3_3 {
+    void PxVehicleFixedSizeLookupTableVec3_3();
+    boolean addPair(float x, [Const, Ref] PxVec3 y);
+    [Value] PxVec3 interpolate(float x);
+    void clear();
+    boolean isValid();
 };
 
 [Prefix="physx::vehicle2::", StackAllocatable]
@@ -489,10 +506,10 @@ interface PxVehicleSuspensionComplianceParams {
     void PxVehicleSuspensionComplianceParams();
     [Value] PxVehicleSuspensionComplianceParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
     boolean isValid();
-    //attribute [Value] PxVehicleFixedSizeLookupTable<PxReal, 3> wheelToeAngle;
-    //attribute [Value] PxVehicleFixedSizeLookupTable<PxReal, 3> wheelCamberAngle;
-    //attribute [Value] PxVehicleFixedSizeLookupTable<PxReal, 3> suspForceAppPoint;
-    //attribute [Value] PxVehicleFixedSizeLookupTable<PxReal, 3> tireForceAppPoint;
+    [Value] attribute PxVehicleFixedSizeLookupTableFloat_3 wheelToeAngle;
+    [Value] attribute PxVehicleFixedSizeLookupTableFloat_3 wheelCamberAngle;
+    [Value] attribute PxVehicleFixedSizeLookupTableVec3_3 suspForceAppPoint;
+    [Value] attribute PxVehicleFixedSizeLookupTableVec3_3 tireForceAppPoint;
 };
 
 [Prefix="physx::vehicle2::"]
@@ -639,6 +656,12 @@ interface PxVehicleTireForceParams {
     //attribute float[][] loadFilter;
 };
 
+[NoDelete]
+interface PxVehicleTireForceParamsExt {
+    static void setFrictionVsSlip(PxVehicleTireForceParams tireForceParams, unsigned long i, unsigned long j, float value);
+    static void setLoadFilter(PxVehicleTireForceParams tireForceParams, unsigned long i, unsigned long j, float value);
+};
+
 [Prefix="physx::vehicle2::"]
 interface PxVehicleTireGripState {
     void setToDefault();
@@ -686,6 +709,14 @@ interface PxVehicleTireStickyState {
     void setToDefault();
     attribute float[] lowSpeedTime;
     attribute boolean[] activeStatus;
+};
+
+interface PxVehicleTorqueCurveLookupTable {
+    void PxVehicleTorqueCurveLookupTable();
+    boolean addPair(float x, float y);
+    float interpolate(float x);
+    void clear();
+    boolean isValid();
 };
 
 [Prefix="physx::vehicle2::"]

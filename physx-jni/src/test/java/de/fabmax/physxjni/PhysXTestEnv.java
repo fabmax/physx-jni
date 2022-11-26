@@ -9,6 +9,7 @@ import physx.geometry.PxBoxGeometry;
 import physx.geometry.PxGeometry;
 import physx.geometry.PxPlaneGeometry;
 import physx.physics.*;
+import physx.vehicle2.PxVehicleTopLevelFunctions;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -23,6 +24,7 @@ public class PhysXTestEnv {
     public static final PxCookingParams cookingParams;
     public static final PxCooking cooking;
 
+    public static final PxCpuDispatcher defaultDispatcher;
     public static final PxMaterial defaultMaterial;
     public static final PxFilterData defaultFilterData;
 
@@ -64,14 +66,17 @@ public class PhysXTestEnv {
         cookingParams = new PxCookingParams(tolerances);
         cooking = PxTopLevelFunctions.CreateCooking(PX_PHYSICS_VERSION, foundation, cookingParams);
 
+        defaultDispatcher = PxTopLevelFunctions.DefaultCpuDispatcherCreate(1);
+
         PxTopLevelFunctions.InitExtensions(physics);
+        PxVehicleTopLevelFunctions.InitVehicleExtension(foundation);
     }
 
-    public static PxScene createEmptyScene(int numThreads) {
+    public static PxScene createEmptyScene() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
             PxSceneDesc sceneDesc = PxSceneDesc.createAt(mem, MemoryStack::nmalloc, physics.getTolerancesScale());
             sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
-            sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(numThreads));
+            sceneDesc.setCpuDispatcher(defaultDispatcher);
             sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
             return physics.createScene(sceneDesc);
         }

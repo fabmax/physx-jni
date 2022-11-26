@@ -22,7 +22,7 @@ public class ControllerBehaviorCallbackTest {
     @Test
     public void controllerBehaviorCallbackTest() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
-            PxScene scene = PhysXTestEnv.createEmptyScene(4);
+            PxScene scene = PhysXTestEnv.createEmptyScene();
 
             PxControllerManager controllerManager = PxTopLevelFunctions.CreateControllerManager(scene);
             PxControllerFilters filters = new PxControllerFilters();

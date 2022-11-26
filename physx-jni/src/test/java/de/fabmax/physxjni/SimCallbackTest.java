@@ -23,7 +23,7 @@ public class SimCallbackTest {
             PxSceneDesc sceneDesc = PxSceneDesc.createAt(mem, MemoryStack::nmalloc, physics.getTolerancesScale());
             sceneDesc.setSimulationEventCallback(simCallback);
             sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
-            sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(1));
+            sceneDesc.setCpuDispatcher(PhysXTestEnv.defaultDispatcher);
             sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
             PxScene scene = physics.createScene(sceneDesc);
 
