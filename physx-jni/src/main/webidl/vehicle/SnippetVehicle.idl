@@ -39,8 +39,8 @@ interface BaseVehicleState {
     void setToDefault();
 
 	//Command responses
-	[Value] attribute float[] brakeCommandResponseStates;
-	[Value] attribute float[] steerCommandResponseStates;
+	attribute float[] brakeCommandResponseStates;
+	attribute float[] steerCommandResponseStates;
 	[Value] attribute PxVehicleWheelActuationState[] actuationStates;
 
 	//Road geometry

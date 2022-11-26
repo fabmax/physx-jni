@@ -94,7 +94,7 @@ interface PxConstraintConnector {
     void onOriginShift([Const, Ref] PxVec3 shift);
     //void getExternalReference([Ref] unsigned long typeID);
     PxBase getSerializable();
-    PxConstraintSolverPrep getPrep();
+    [Value] PxConstraintSolverPrep getPrep();
     void getConstantBlock();
     void connectToConstraint(PxConstraint constraint);
 };
