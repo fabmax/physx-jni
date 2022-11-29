@@ -73,7 +73,7 @@ interface PhysXIntegrationParams {
     void PhysXIntegrationParams();
     [Value] PhysXIntegrationParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
     boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
-    void create([Const, Ref] PxVehicleAxleDescription axleDesc, [Const, Ref] PxQueryFilterData queryFilterData, PxQueryFilterCallback queryFilterCallback,
+    void create([Const, Ref] PxVehicleAxleDescription axleDesc, [Const, Ref] PxQueryFilterData queryFilterData, [Nullable] PxQueryFilterCallback queryFilterCallback,
                 PxVehiclePhysXMaterialFriction materialFrictions, unsigned long nbMaterialFrictions, float defaultFriction,
                 [Const, Ref] PxTransform physxActorCMassLocalPose, [Const, Ref] PxVec3 physXActorBoxShapeHalfExtents, [Const, Ref] PxTransform physxActorBoxShapeLocalPose);
 
@@ -164,7 +164,6 @@ interface BaseVehicle {
 [Prefix="snippetvehicle2::"]
 interface PhysXActorVehicle {
     boolean initialize([Ref] PxPhysics physics, [Const, Ref] PxCookingParams params, [Ref] PxMaterial defaultMaterial);
-    void setUpActor([Ref] PxScene scene, [Const, Ref] PxTransform pose, [Const] DOMString vehicleName);
 
     [Value] attribute PhysXIntegrationParams physXParams;
     [Value] attribute PhysXIntegrationState physXState;

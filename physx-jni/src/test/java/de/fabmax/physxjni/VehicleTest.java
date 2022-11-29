@@ -7,10 +7,11 @@ import physx.common.PxIDENTITYEnum;
 import physx.common.PxQuat;
 import physx.common.PxTransform;
 import physx.common.PxVec3;
-import physx.physics.PxScene;
+import physx.physics.*;
 import physx.vehicle2.*;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public class VehicleTest {
 
@@ -20,18 +21,92 @@ public class VehicleTest {
         var groundPlane = PhysXTestEnv.createGroundPlane();
         scene.addActor(groundPlane);
 
-        EngineDriveVehicle vehicle4wd = new EngineDriveVehicle();
-        setBaseParams(vehicle4wd.getBaseParams());
-        setEngineDriveParams(vehicle4wd.getEngineDriveParams(), vehicle4wd.getBaseParams().getAxleDescription());
+        EngineDriveVehicle vehicle = new EngineDriveVehicle();
+        PxVehiclePhysXSimulationContext vehicleSimulationContext = new PxVehiclePhysXSimulationContext();
 
-        Assertions.assertTrue(
-                vehicle4wd.initialize(
-                        PhysXTestEnv.physics,
-                        PhysXTestEnv.cookingParams,
-                        PhysXTestEnv.defaultMaterial,
-                        EngineDriveVehicleEnum.eDIFFTYPE_FOURWHEELDRIVE
-                )
-        );
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            // Create and configure engine drive vehicle properties
+            setBaseParams(vehicle.getBaseParams());
+            setPhysxIntegrationParams(vehicle.getPhysXParams(), vehicle.getBaseParams().getAxleDescription());
+            setEngineDriveParams(vehicle.getEngineDriveParams(), vehicle.getBaseParams().getAxleDescription());
+
+            // Initialize vehicle stuff
+            Assertions.assertTrue(
+                    vehicle.initialize(
+                            PhysXTestEnv.physics,
+                            PhysXTestEnv.cookingParams,
+                            PhysXTestEnv.defaultMaterial,
+                            EngineDriveVehicleEnum.eDIFFTYPE_FOURWHEELDRIVE
+                    )
+            );
+
+            // Apply a start pose to the physx actor and add it to the physx scene.
+            var vehiclePose = PxTransform.createAt(stack, MemoryStack::nmalloc,
+                    PxVec3.createAt(stack, MemoryStack::nmalloc, 0f, 0.1f, 0f),
+                    PxQuat.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity)
+            );
+            vehicle.getPhysXState().getPhysxActor().getRigidBody().setGlobalPose(vehiclePose);
+            scene.addActor(vehicle.getPhysXState().getPhysxActor().getRigidBody());
+
+            var gravity = PxVec3.createAt(stack, MemoryStack::nmalloc, 0f, -9.81f, 0f);
+
+            // Set the vehicle in 1st gear.
+            vehicle.getEngineDriveState().getGearboxState().setCurrentGear(vehicle.getEngineDriveParams().getGearBoxParams().getNeutralGear() + 1);
+            vehicle.getEngineDriveState().getGearboxState().setTargetGear(vehicle.getEngineDriveParams().getGearBoxParams().getNeutralGear() + 1);
+
+            // Set the vehicle to use the automatic gearbox.
+            vehicle.getTransmissionCommandState().setTargetGear(PxVehicleEngineDriveTransmissionCommandStateEnum.eAUTOMATIC_GEAR);
+
+            // Set up the simulation context.
+            // The test is set up with
+            // a) z as the longitudinal axis
+            // b) x as the lateral axis
+            // c) y as the vertical axis.
+            // d) metres as the lengthscale.
+            vehicleSimulationContext.setToDefault();
+            vehicleSimulationContext.getFrame().setLngAxis(PxVehicleAxesEnum.ePosZ);
+            vehicleSimulationContext.getFrame().setLatAxis(PxVehicleAxesEnum.ePosX);
+            vehicleSimulationContext.getFrame().setVrtAxis(PxVehicleAxesEnum.ePosY);
+            vehicleSimulationContext.getScale().setScale(1f);
+            vehicleSimulationContext.setGravity(gravity);
+            vehicleSimulationContext.setPhysxScene(scene);
+            vehicleSimulationContext.setPhysxActorUpdateMode(PxVehiclePhysXActorUpdateModeEnum.eAPPLY_ACCELERATION);
+        }
+
+        runSimulation(scene, vehicle, vehicleSimulationContext);
+    }
+
+    private void runSimulation(PxScene scene, EngineDriveVehicle vehicle, PxVehiclePhysXSimulationContext vehicleSimulationContext) {
+        float duration = 30f;
+        float step = 1/60f;
+        float t = 0;
+
+        var vehicleZ = 0f;
+
+        for (int i = 0; i < duration / step; i++) {
+            // print position of printActor 2 times per simulated sec
+            if (i % 60 == 0) {
+                var vehicleActor = vehicle.getPhysXState().getPhysxActor().getRigidBody();
+                PxVec3 pos = vehicleActor.getGlobalPose().getP();
+                System.out.printf(Locale.ENGLISH, "t = %.2f s, pos(%6.3f, %6.3f, %6.3f)\n", t, pos.getX(), pos.getY(), pos.getZ());
+                vehicleZ = pos.getZ();
+            }
+
+            // Pedal to the metal!
+            vehicle.getCommandState().setThrottle(1f);
+            vehicle.getCommandState().setNbBrakes(0);
+            vehicle.getCommandState().setSteer(0f);
+
+            // Simulate vehicle by a single time step
+            vehicle.step(step, vehicleSimulationContext);
+
+            // Simulate physx scene by a single time step
+            scene.simulate(step);
+            scene.fetchResults(true);
+            t += step;
+        }
+        // vehicle should have driven some distance
+        Assertions.assertTrue(vehicleZ > 10f);
     }
 
     private void setBaseParams(BaseVehicleParams baseParams) {
@@ -89,26 +164,26 @@ public class VehicleTest {
             var ackermann = baseParams.getAckermannParams(0);
             ackermann.setWheelIds(0, 0);
             ackermann.setWheelIds(1, 1);
-            ackermann.setWheelBase(2.8f);
+            ackermann.setWheelBase(2.87f);
             ackermann.setTrackWidth(1.6f);
             ackermann.setStrength(1f);
             Assertions.assertTrue(ackermann.isValid(axleDesc));
 
             var suspensionAttachmentPoses = Arrays.asList(
                     PxTransform.createAt(stack, MemoryStack::nmalloc,
-                            PxVec3.createAt(stack, MemoryStack::nmalloc, -0.8f, -0.1f, 1.4f),
+                            PxVec3.createAt(stack, MemoryStack::nmalloc, -0.8f, -0.1f, 1.27f),
                             PxQuat.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity)
                     ),
                     PxTransform.createAt(stack, MemoryStack::nmalloc,
-                            PxVec3.createAt(stack, MemoryStack::nmalloc, 0.8f, -0.1f, 1.4f),
+                            PxVec3.createAt(stack, MemoryStack::nmalloc, 0.8f, -0.1f, 1.27f),
                             PxQuat.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity)
                     ),
                     PxTransform.createAt(stack, MemoryStack::nmalloc,
-                            PxVec3.createAt(stack, MemoryStack::nmalloc, -0.8f, -0.1f, -1.4f),
+                            PxVec3.createAt(stack, MemoryStack::nmalloc, -0.8f, -0.1f, -1.6f),
                             PxQuat.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity)
                     ),
                     PxTransform.createAt(stack, MemoryStack::nmalloc,
-                            PxVec3.createAt(stack, MemoryStack::nmalloc, -0.8f, -0.1f, -1.4f),
+                            PxVec3.createAt(stack, MemoryStack::nmalloc, 0.8f, -0.1f, -1.6f),
                             PxQuat.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity)
                     )
             );
@@ -181,6 +256,31 @@ public class VehicleTest {
             }
 
             Assertions.assertTrue(baseParams.isValid());
+        }
+    }
+
+    private void setPhysxIntegrationParams(PhysXIntegrationParams physxParams, PxVehicleAxleDescription axleDesc) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            var filterData = PxFilterData.createAt(stack, MemoryStack::nmalloc, 0, 0, 0, 0);
+            var queryFlags = PxQueryFlags.createAt(stack, MemoryStack::nmalloc, (short) PxQueryFlagEnum.eSTATIC);
+            var queryFilterData = PxQueryFilterData.createAt(stack, MemoryStack::nmalloc, filterData, queryFlags);
+
+            var actorCMassLocalPose = PxTransform.createAt(stack, MemoryStack::nmalloc,
+                    PxVec3.createAt(stack, MemoryStack::nmalloc, 0f, 0.55f, 1.594f),
+                    PxQuat.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity)
+            );
+            var actorBoxShapeHalfExtents = PxVec3.createAt(stack, MemoryStack::nmalloc, 0.85f, 0.65f, 2.5f);
+            var actorShapeLocalPose = PxTransform.createAt(stack, MemoryStack::nmalloc,
+                    PxVec3.createAt(stack, MemoryStack::nmalloc, 0f, 0.83f, 1.37f),
+                    PxQuat.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity)
+            );
+
+            PxVehiclePhysXMaterialFriction materialFriction = new PxVehiclePhysXMaterialFriction();
+            materialFriction.setFriction(1f);
+            materialFriction.setMaterial(PhysXTestEnv.defaultMaterial);
+
+            physxParams.create(axleDesc, queryFilterData, null, materialFriction, 1, 1f, actorCMassLocalPose, actorBoxShapeHalfExtents, actorShapeLocalPose);
+            Assertions.assertTrue(physxParams.isValid(axleDesc));
         }
     }
 

@@ -75,7 +75,7 @@ public class PhysXTestEnv {
     public static PxScene createEmptyScene() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
             PxSceneDesc sceneDesc = PxSceneDesc.createAt(mem, MemoryStack::nmalloc, physics.getTolerancesScale());
-            sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
+            sceneDesc.setGravity(PxVec3.createAt(mem, MemoryStack::nmalloc, 0f, -9.81f, 0f));
             sceneDesc.setCpuDispatcher(defaultDispatcher);
             sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
             return physics.createScene(sceneDesc);

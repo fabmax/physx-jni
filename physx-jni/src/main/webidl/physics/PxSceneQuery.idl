@@ -77,7 +77,7 @@ interface PxQueryFilterCallbackImpl {
     unsigned long simplePostFilter([Const, Ref] PxFilterData filterData, [Const, Ref] PxQueryHit hit);
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxQueryFilterData {
     void PxQueryFilterData();
     void PxQueryFilterData([Const, Ref] PxFilterData fd, [Ref] PxQueryFlags f);

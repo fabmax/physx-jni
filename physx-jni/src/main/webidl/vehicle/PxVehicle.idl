@@ -212,6 +212,10 @@ interface PxVehicleEngineDriveTransmissionCommandState {
     attribute unsigned long targetGear;
 };
 
+enum PxVehicleEngineDriveTransmissionCommandStateEnum {
+    "PxVehicleEngineDriveTransmissionCommandStateEnum::eAUTOMATIC_GEAR"
+};
+
 [Prefix="physx::vehicle2::", StackAllocatable]
 interface PxVehicleEngineParams {
     void PxVehicleEngineParams();
