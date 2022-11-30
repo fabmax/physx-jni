@@ -77,19 +77,24 @@ public class VehicleTest {
     }
 
     private void runSimulation(PxScene scene, EngineDriveVehicle vehicle, PxVehiclePhysXSimulationContext vehicleSimulationContext) {
-        float duration = 30f;
+        float duration = 10.1f;
         float step = 1/60f;
         float t = 0;
 
         var vehicleZ = 0f;
+        var prevV = 0f;
 
         for (int i = 0; i < duration / step; i++) {
-            // print position of printActor 2 times per simulated sec
+            var vehicleActor = vehicle.getPhysXState().getPhysxActor().getRigidBody();
+            PxVec3 pos = vehicleActor.getGlobalPose().getP();
+            vehicleZ = pos.getZ();
+
+            // print position of printActor each simulated sec
             if (i % 60 == 0) {
-                var vehicleActor = vehicle.getPhysXState().getPhysxActor().getRigidBody();
-                PxVec3 pos = vehicleActor.getGlobalPose().getP();
-                System.out.printf(Locale.ENGLISH, "t = %.2f s, pos(%6.3f, %6.3f, %6.3f)\n", t, pos.getX(), pos.getY(), pos.getZ());
-                vehicleZ = pos.getZ();
+                var v = vehicle.getPhysXState().getPhysxActor().getRigidBody().getLinearVelocity().getZ();
+                var a = v - prevV;
+                prevV = v;
+                System.out.printf(Locale.ENGLISH, "t = %.2f s, pos(%6.3f, %6.3f, %6.3f), v = %.1f km/s, a = %.1f m/s^2\n", t, pos.getX(), pos.getY(), pos.getZ(), v * 3.6f, a);
             }
 
             // Pedal to the metal!
@@ -106,7 +111,7 @@ public class VehicleTest {
             t += step;
         }
         // vehicle should have driven some distance
-        Assertions.assertTrue(vehicleZ > 10f);
+        Assertions.assertTrue(vehicleZ > 100f);
     }
 
     private void setBaseParams(BaseVehicleParams baseParams) {
@@ -121,8 +126,9 @@ public class VehicleTest {
             axleDesc.setNbWheels(4);
             axleDesc.setNbWheelsPerAxle(0, 2);
             axleDesc.setNbWheelsPerAxle(1, 2);
+            axleDesc.setAxleToWheelIds(0, 0);
+            axleDesc.setAxleToWheelIds(1, 2);
             for (int i = 0; i < 4; i++) {
-                axleDesc.setAxleToWheelIds(i, i);
                 axleDesc.setWheelIdsInAxleOrder(i, i);
             }
             Assertions.assertTrue(axleDesc.isValid());
@@ -336,8 +342,8 @@ public class VehicleTest {
 
         var fourWheelDiff = engineDriveParams.getFourWheelDifferentialParams();
         for (int i = 0; i < 4; i++) {
-            fourWheelDiff.setTorqueRatios(i, 025f);
-            fourWheelDiff.setAveWheelSpeedRatios(i, 025f);
+            fourWheelDiff.setTorqueRatios(i, 0.25f);
+            fourWheelDiff.setAveWheelSpeedRatios(i, 0.25f);
         }
         fourWheelDiff.setFrontWheelIds(0, 0);
         fourWheelDiff.setFrontWheelIds(1, 1);
