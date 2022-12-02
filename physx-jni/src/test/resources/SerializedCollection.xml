@@ -1,11 +1,11 @@
-<PhysXCollection version="5.1.0" >
+<PhysXCollection version="5.1.1" >
     <UpVector >0 0 0</UpVector>
     <Scale >
         <Length >0</Length>
         <Speed >0</Speed>
     </Scale>
     <PxMaterial >
-        <Id >2510227220176</Id>
+        <Id >2071149170992</Id>
         <DynamicFriction >0.5</DynamicFriction>
         <StaticFriction >0.5</StaticFriction>
         <Restitution >0.5</Restitution>
@@ -15,7 +15,7 @@
         <RestitutionCombineMode >eAVERAGE</RestitutionCombineMode>
     </PxMaterial>
     <PxRigidDynamic >
-        <Id >2510228169904</Id>
+        <Id >2071150164816</Id>
         <Name />
         <ActorFlags >eVISUALIZATION</ActorFlags>
         <DominanceGroup >0</DominanceGroup>
@@ -27,7 +27,7 @@
                 <SimulationFilterData >1 4294967295 0 0</SimulationFilterData>
                 <QueryFilterData >0 0 0 0</QueryFilterData>
                 <Materials >
-                    <PxMaterialRef >2510227220176</PxMaterialRef>
+                    <PxMaterialRef >2071149170992</PxMaterialRef>
                 </Materials>
                 <ContactOffset >0.02</ContactOffset>
                 <RestOffset >0</RestOffset>
