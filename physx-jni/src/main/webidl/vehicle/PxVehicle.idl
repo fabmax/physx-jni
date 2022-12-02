@@ -7,6 +7,8 @@ interface PxVehicleTopLevelFunctions {
     static boolean InitVehicleExtension([Ref] PxFoundation foundation);
     static void CloseVehicleExtension();
 
+    static boolean VehicleComputeSprungMasses(unsigned long nbSprungMasses, [Const, Ref] Vector_PxVec3 sprungMassCoordinates, float totalMass, PxVehicleAxesEnum gravityDirection, [Ref] Vector_PxReal sprungMasses);
+
     static readonly attribute unsigned long MAX_NB_ENGINE_TORQUE_CURVE_ENTRIES;
 };
 
@@ -19,6 +21,23 @@ interface PxVehicleAckermannParams {
     attribute float wheelBase;
     attribute float trackWidth;
     attribute float strength;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleAntiRollForceParams {
+    void PxVehicleAntiRollForceParams();
+    [Value] PxVehicleAntiRollForceParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
+    boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
+    attribute unsigned long wheel0;
+    attribute unsigned long wheel1;
+    attribute float stiffness;
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleAntiRollTorque {
+    void PxVehicleAntiRollTorque();
+    void setToDefault();
+    [Value] attribute PxVec3 antiRollTorque;
 };
 
 [Prefix="physx::vehicle2::", StackAllocatable]
@@ -155,6 +174,19 @@ interface PxVehicleCommandValueResponseTable {
 
 enum PxVehicleCommandValueResponseTableEnum {
     "PxVehicleCommandValueResponseTableEnum::eMAX_NB_SPEED_RESPONSES"
+};
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleComponent { };
+
+[Prefix="physx::vehicle2::"]
+interface PxVehicleComponentSequence {
+    void PxVehicleComponentSequence();
+    boolean add(PxVehicleComponent component);
+    octet beginSubstepGroup(optional octet nbSubSteps);
+    void endSubstepGroup();
+    void setSubsteps(octet subGroupHandle, octet nbSteps);
+    void update(float dt, [Const, Ref] PxVehicleSimulationContext context);
 };
 
 [Prefix="physx::vehicle2::"]

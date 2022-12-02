@@ -169,6 +169,26 @@ interface PxQuat {
     void PxQuat();
     void PxQuat(PxIDENTITYEnum r);
     void PxQuat(float x, float y, float z, float w);
+
+    boolean isIdentity();
+    boolean isFinite();
+    boolean isUnit();
+    boolean isSane();
+    float getAngle();
+    float getAngle([Const, Ref] PxQuat q);
+    float magnitudeSquared();
+    float dot([Const, Ref] PxQuat q);
+    [Value] PxQuat getNormalized();
+    float magnitude();
+    float normalize();
+    [Value] PxQuat getConjugate();
+    [Value] PxVec3 getImaginaryPart();
+    [Value] PxVec3 getBasisVector0();
+    [Value] PxVec3 getBasisVector1();
+    [Value] PxVec3 getBasisVector2();
+    [Value] PxVec3 rotate([Const, Ref] PxVec3 v);
+    [Value] PxVec3 rotateInv([Const, Ref] PxVec3 v);
+
     attribute float x;
     attribute float y;
     attribute float z;
@@ -211,6 +231,25 @@ interface PxU16StridedData {
 interface PxVec3 {
     void PxVec3();
     void PxVec3(float x, float y, float z);
+
+    boolean isZero();
+    boolean isFinite();
+    boolean isNormalized();
+    float magnitudeSquared();
+    float magnitude();
+    float dot([Const, Ref] PxVec3 v);
+    [Value] PxVec3 cross([Const, Ref] PxVec3 v);
+    [Value] PxVec3 getNormalized();
+    float normalize();
+    float normalizeSafe();
+    float normalizeFast();
+    [Value] PxVec3 multiply([Const, Ref] PxVec3 a);
+    [Value] PxVec3 minimum([Const, Ref] PxVec3 v);
+    float minElement();
+    [Value] PxVec3 maximum([Const, Ref] PxVec3 v);
+    float maxElement();
+    [Value] PxVec3 abs();
+
     attribute float x;
     attribute float y;
     attribute float z;

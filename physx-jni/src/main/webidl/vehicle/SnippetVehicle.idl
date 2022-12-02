@@ -23,6 +23,9 @@ interface BaseVehicleParams {
 	[Value] attribute PxVehicleSuspensionComplianceParams[] suspensionComplianceParams;
 	[Value] attribute PxVehicleSuspensionForceParams[] suspensionForceParams;
 
+	[Value] attribute PxVehicleAntiRollForceParams[] antiRollForceParams;
+	attribute unsigned long nbAntiRollForceParams;
+
 	//Tires
 	[Value] attribute PxVehicleTireForceParams[] tireForceParams;
 
@@ -50,6 +53,7 @@ interface BaseVehicleState {
 	[Value] attribute PxVehicleSuspensionState[] suspensionStates;
 	[Value] attribute PxVehicleSuspensionComplianceState[] suspensionComplianceStates;
 	[Value] attribute PxVehicleSuspensionForce[] suspensionForces;
+	[Value] attribute PxVehicleAntiRollTorque antiRollTorque;
 
 	//Tires
 	[Value] attribute PxVehicleTireGripState[] tireGripStates;
@@ -73,17 +77,24 @@ interface PhysXIntegrationParams {
     void PhysXIntegrationParams();
     [Value] PhysXIntegrationParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
     boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
-    void create([Const, Ref] PxVehicleAxleDescription axleDesc, [Const, Ref] PxQueryFilterData queryFilterData, [Nullable] PxQueryFilterCallback queryFilterCallback,
+    void create([Const, Ref] PxVehicleAxleDescription axleDesc, [Const, Ref] PxQueryFilterData roadQueryFilterData, [Nullable] PxQueryFilterCallback roadQueryFilterCallback,
                 PxVehiclePhysXMaterialFriction materialFrictions, unsigned long nbMaterialFrictions, float defaultFriction,
-                [Const, Ref] PxTransform physxActorCMassLocalPose, [Const, Ref] PxVec3 physXActorBoxShapeHalfExtents, [Const, Ref] PxTransform physxActorBoxShapeLocalPose);
+                [Const, Ref] PxTransform physxActorCMassLocalPose, [Ref] PxGeometry actorGeometry, [Const, Ref] PxTransform physxActorBoxShapeLocalPose,
+                PxVehiclePhysXRoadGeometryQueryTypeEnum roadGeometryQueryType);
 
 	[Value] attribute PxVehiclePhysXRoadGeometryQueryParams physxRoadGeometryQueryParams;
 	[Value] attribute PxVehiclePhysXMaterialFrictionParams[] physxMaterialFrictionParams;
 	[Value] attribute PxVehiclePhysXSuspensionLimitConstraintParams[] physxSuspensionLimitConstraintParams;
 	[Value] attribute PxTransform physxActorCMassLocalPose;
-	[Value] attribute PxVec3 physxActorBoxShapeHalfExtents;
+	attribute PxGeometry physxActorGeometry;
 	[Value] attribute PxTransform physxActorBoxShapeLocalPose;
 	[Value] attribute PxTransform[] physxWheelShapeLocalPoses;
+	[Value] attribute PxShapeFlags physxActorShapeFlags;
+	[Value] attribute PxFilterData physxActorSimulationFilterData;
+	[Value] attribute PxFilterData physxActorQueryFilterData;
+	[Value] attribute PxShapeFlags physxActorWheelShapeFlags;
+	[Value] attribute PxFilterData physxActorWheelSimulationFilterData;
+	[Value] attribute PxFilterData physxActorWheelQueryFilterData;
 };
 
 [Prefix="snippetvehicle2::"]
@@ -156,7 +167,7 @@ interface BaseVehicle {
     [Value] attribute BaseVehicleParams baseParams;
     [Value] attribute BaseVehicleState baseState;
 
-	//[Value] attribute PxVehicleComponentSequence mComponentSequence;
+	[Value] attribute PxVehicleComponentSequence componentSequence;
 
 	attribute octet componentSequenceSubstepGroupHandle;
 };

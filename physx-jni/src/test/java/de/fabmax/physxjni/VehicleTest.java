@@ -7,6 +7,8 @@ import physx.common.PxIDENTITYEnum;
 import physx.common.PxQuat;
 import physx.common.PxTransform;
 import physx.common.PxVec3;
+import physx.geometry.PxBoxGeometry;
+import physx.geometry.PxGeometry;
 import physx.physics.*;
 import physx.vehicle2.*;
 
@@ -23,11 +25,12 @@ public class VehicleTest {
 
         EngineDriveVehicle vehicle = new EngineDriveVehicle();
         PxVehiclePhysXSimulationContext vehicleSimulationContext = new PxVehiclePhysXSimulationContext();
+        PxGeometry actorGeometry = new PxBoxGeometry(0.85f, 0.65f, 2.5f);
 
         try (MemoryStack stack = MemoryStack.stackPush()) {
             // Create and configure engine drive vehicle properties
             setBaseParams(vehicle.getBaseParams());
-            setPhysxIntegrationParams(vehicle.getPhysXParams(), vehicle.getBaseParams().getAxleDescription());
+            setPhysxIntegrationParams(vehicle.getPhysXParams(), vehicle.getBaseParams().getAxleDescription(), actorGeometry);
             setEngineDriveParams(vehicle.getEngineDriveParams(), vehicle.getBaseParams().getAxleDescription());
 
             // Initialize vehicle stuff
@@ -71,6 +74,8 @@ public class VehicleTest {
             vehicleSimulationContext.setGravity(gravity);
             vehicleSimulationContext.setPhysxScene(scene);
             vehicleSimulationContext.setPhysxActorUpdateMode(PxVehiclePhysXActorUpdateModeEnum.eAPPLY_ACCELERATION);
+            // todo: create and set a unit cylinder convex mesh in order to use sweep
+            //vehicleSimulationContext.setPhysxUnitCylinderSweepMesh(makeConvexCylinderMesh());
         }
 
         runSimulation(scene, vehicle, vehicleSimulationContext);
@@ -81,26 +86,30 @@ public class VehicleTest {
         float step = 1/60f;
         float t = 0;
 
-        var vehicleZ = 0f;
-        var prevV = 0f;
+        var vehicleActor = vehicle.getPhysXState().getPhysxActor().getRigidBody();
+        var pos = vehicleActor.getGlobalPose().getP();
+        var prevSpeed = 0f;
+
+        // Pedal to the metal!
+        vehicle.getCommandState().setThrottle(1f);
+        vehicle.getCommandState().setNbBrakes(0);
+        vehicle.getCommandState().setSteer(0f);
 
         for (int i = 0; i < duration / step; i++) {
-            var vehicleActor = vehicle.getPhysXState().getPhysxActor().getRigidBody();
-            PxVec3 pos = vehicleActor.getGlobalPose().getP();
-            vehicleZ = pos.getZ();
+            var linearVelocity = vehicleActor.getLinearVelocity();
+            var forwardDir = vehicleActor.getGlobalPose().getQ().getBasisVector2();
+            var speed = linearVelocity.dot(forwardDir);
 
             // print position of printActor each simulated sec
             if (i % 60 == 0) {
-                var v = vehicle.getPhysXState().getPhysxActor().getRigidBody().getLinearVelocity().getZ();
-                var a = v - prevV;
-                prevV = v;
-                System.out.printf(Locale.ENGLISH, "t = %.2f s, pos(%6.3f, %6.3f, %6.3f), v = %.1f km/s, a = %.1f m/s^2\n", t, pos.getX(), pos.getY(), pos.getZ(), v * 3.6f, a);
+                var a = speed - prevSpeed;
+                prevSpeed = speed;
+                System.out.printf(Locale.ENGLISH, "t = %.2f s, pos(%6.3f, %6.3f, %6.3f), v = %.1f km/s, a = %.1f m/s^2\n", t, pos.getX(), pos.getY(), pos.getZ(), speed * 3.6f, a);
             }
 
-            // Pedal to the metal!
-            vehicle.getCommandState().setThrottle(1f);
-            vehicle.getCommandState().setNbBrakes(0);
-            vehicle.getCommandState().setSteer(0f);
+            // Apply substepping at low forward speed to improve simulation fidelity.
+            var nbSubsteps = (speed < 5.0f ? 3 : 1);
+            vehicle.getComponentSequence().setSubsteps(vehicle.getComponentSequenceSubstepGroupHandle(), (byte) nbSubsteps);
 
             // Simulate vehicle by a single time step
             vehicle.step(step, vehicleSimulationContext);
@@ -110,8 +119,9 @@ public class VehicleTest {
             scene.fetchResults(true);
             t += step;
         }
+
         // vehicle should have driven some distance
-        Assertions.assertTrue(vehicleZ > 100f);
+        Assertions.assertTrue(pos.getZ() > 100f);
     }
 
     private void setBaseParams(BaseVehicleParams baseParams) {
@@ -236,7 +246,7 @@ public class VehicleTest {
                 tireForce.setLatStiffX(0.01f);
                 tireForce.setLatStiffY(120_000f);
                 tireForce.setCamberStiff(0f);
-                tireForce.setRestLoad(500f);
+                tireForce.setRestLoad(5500f);
                 PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 0, 0, 0f);
                 PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 0, 1, 1f);
                 PxVehicleTireForceParamsExt.setFrictionVsSlip(tireForce, 1, 0, 0.1f);
@@ -265,17 +275,16 @@ public class VehicleTest {
         }
     }
 
-    private void setPhysxIntegrationParams(PhysXIntegrationParams physxParams, PxVehicleAxleDescription axleDesc) {
+    private void setPhysxIntegrationParams(PhysXIntegrationParams physxParams, PxVehicleAxleDescription axleDesc, PxGeometry actorGeometry) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             var filterData = PxFilterData.createAt(stack, MemoryStack::nmalloc, 0, 0, 0, 0);
             var queryFlags = PxQueryFlags.createAt(stack, MemoryStack::nmalloc, (short) PxQueryFlagEnum.eSTATIC);
-            var queryFilterData = PxQueryFilterData.createAt(stack, MemoryStack::nmalloc, filterData, queryFlags);
+            var roadQueryFilterData = PxQueryFilterData.createAt(stack, MemoryStack::nmalloc, filterData, queryFlags);
 
             var actorCMassLocalPose = PxTransform.createAt(stack, MemoryStack::nmalloc,
                     PxVec3.createAt(stack, MemoryStack::nmalloc, 0f, 0.55f, 1.594f),
                     PxQuat.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity)
             );
-            var actorBoxShapeHalfExtents = PxVec3.createAt(stack, MemoryStack::nmalloc, 0.85f, 0.65f, 2.5f);
             var actorShapeLocalPose = PxTransform.createAt(stack, MemoryStack::nmalloc,
                     PxVec3.createAt(stack, MemoryStack::nmalloc, 0f, 0.83f, 1.37f),
                     PxQuat.createAt(stack, MemoryStack::nmalloc, PxIDENTITYEnum.PxIdentity)
@@ -285,7 +294,10 @@ public class VehicleTest {
             materialFriction.setFriction(1f);
             materialFriction.setMaterial(PhysXTestEnv.defaultMaterial);
 
-            physxParams.create(axleDesc, queryFilterData, null, materialFriction, 1, 1f, actorCMassLocalPose, actorBoxShapeHalfExtents, actorShapeLocalPose);
+            // todo: unit cylinder convex mesh needs to be set to vehicle simulation context (see todo above) in order
+            //  to use sweep test instead of raycast
+            physxParams.create(axleDesc, roadQueryFilterData, null, materialFriction, 1, 1f,
+                    actorCMassLocalPose, actorGeometry, actorShapeLocalPose, PxVehiclePhysXRoadGeometryQueryTypeEnum.eRAYCAST);
             Assertions.assertTrue(physxParams.isValid(axleDesc));
         }
     }
