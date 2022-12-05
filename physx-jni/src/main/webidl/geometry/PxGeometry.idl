@@ -18,6 +18,35 @@ interface PxCapsuleGeometry {
 };
 PxCapsuleGeometry implements PxGeometry;
 
+[Prefix="physx::"]
+interface PxContactBuffer {
+    void reset();
+    boolean contact([Const, Ref] PxVec3 worldPoint, [Const, Ref] PxVec3 worldNormalIn, float separation, optional unsigned long faceIndex1);
+    boolean contact([Const, Ref] PxContactPoint pt);
+    [NonJs] PxContactPoint contact();
+
+    [Value] attribute PxContactPoint[] contacts;
+    attribute unsigned long count;
+    attribute unsigned long pad;
+    static readonly attribute unsigned long MAX_CONTACTS;
+};
+
+[Prefix="physx::"]
+interface PxContactPoint {
+    void PxContactPoint();
+    [Value] attribute PxVec3 normal;
+    [Value] attribute PxVec3 point;
+    [Value] attribute PxVec3 targetVel;
+    attribute float separation;
+    attribute float maxImpulse;
+    attribute float staticFriction;
+    attribute octet materialFlags;
+    attribute unsigned long internalFaceIndex1;
+    attribute float dynamicFriction;
+    attribute float restitution;
+    attribute float damping;
+};
+
 [Prefix="physx::", NoDelete]
 interface PxConvexMesh {
     unsigned long getNbVertices();
@@ -46,6 +75,47 @@ interface PxConvexMeshGeometryFlags {
     boolean isSet(PxConvexMeshGeometryFlagEnum flag);
     void raise(PxConvexMeshGeometryFlagEnum flag);
     void clear(PxConvexMeshGeometryFlagEnum flag);
+};
+
+[NonJs, Prefix="physx::"]
+interface PxCustomGeometry {
+    void PxCustomGeometry([Ref] SimpleCustomGeometryCallbacks callbacks);
+    boolean isValid();
+};
+PxCustomGeometry implements PxGeometry;
+
+[NonJs]
+interface SimpleCustomGeometryCallbacks {
+    PxBounds3 getLocalBoundsImpl([Const, Ref] PxGeometry geometry);
+    boolean generateContactsImpl([Const, Ref] PxGeometry geom0, [Const, Ref] PxGeometry geom1, [Const, Ref] PxTransform pose0,
+                             [Const, Ref] PxTransform pose1, float contactDistance, float meshContactMargin, float toleranceLength,
+                             [Ref] PxContactBuffer contactBuffer);
+    unsigned long raycastImpl([Const, Ref] PxVec3 origin, [Const, Ref] PxVec3 unitDir, [Const, Ref] PxGeometry geom, [Const, Ref] PxTransform pose,
+                          float maxDist, [Ref] PxHitFlags hitFlags, unsigned long maxHits, PxGeomRaycastHit rayHits, unsigned long stride);
+    boolean overlapImpl([Const, Ref] PxGeometry geom0, [Const, Ref] PxTransform pose0, [Const, Ref] PxGeometry geom1, [Const, Ref] PxTransform pose1);
+    boolean sweepImpl([Const, Ref] PxVec3 unitDir, float maxDist, [Const, Ref] PxGeometry geom0, [Const, Ref] PxTransform pose0,
+                        [Const, Ref] PxGeometry geom1, [Const, Ref] PxTransform pose1, [Ref] PxGeomSweepHit sweepHit, [Ref] PxHitFlags hitFlags,
+                        float inflation);
+    void computeMassPropertiesImpl([Const, Ref] PxGeometry geometry, [Ref] PxMassProperties massProperties);
+    boolean usePersistentContactManifoldImpl([Const, Ref] PxGeometry geometry);
+
+    attribute float persistentContactManifold_outBreakingThreshold;
+};
+
+[NonJs, JSImplementation="SimpleCustomGeometryCallbacks"]
+interface SimpleCustomGeometryCallbacksImpl {
+    PxBounds3 getLocalBoundsImpl([Const, Ref] PxGeometry geometry);
+    boolean generateContactsImpl([Const, Ref] PxGeometry geom0, [Const, Ref] PxGeometry geom1, [Const, Ref] PxTransform pose0,
+                             [Const, Ref] PxTransform pose1, float contactDistance, float meshContactMargin, float toleranceLength,
+                             [Ref] PxContactBuffer contactBuffer);
+    unsigned long raycastImpl([Const, Ref] PxVec3 origin, [Const, Ref] PxVec3 unitDir, [Const, Ref] PxGeometry geom, [Const, Ref] PxTransform pose,
+                          float maxDist, [Ref] PxHitFlags hitFlags, unsigned long maxHits, PxGeomRaycastHit rayHits, unsigned long stride);
+    boolean overlapImpl([Const, Ref] PxGeometry geom0, [Const, Ref] PxTransform pose0, [Const, Ref] PxGeometry geom1, [Const, Ref] PxTransform pose1);
+    boolean sweepImpl([Const, Ref] PxVec3 unitDir, float maxDist, [Const, Ref] PxGeometry geom0, [Const, Ref] PxTransform pose0,
+                        [Const, Ref] PxGeometry geom1, [Const, Ref] PxTransform pose1, [Ref] PxGeomSweepHit sweepHit, [Ref] PxHitFlags hitFlags,
+                        float inflation);
+    void computeMassPropertiesImpl([Const, Ref] PxGeometry geometry, [Ref] PxMassProperties massProperties);
+    boolean usePersistentContactManifoldImpl([Const, Ref] PxGeometry geometry);
 };
 
 [Prefix="physx::"]

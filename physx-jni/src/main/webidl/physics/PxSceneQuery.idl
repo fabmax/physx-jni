@@ -2,6 +2,20 @@
  * [package=physics]
  ****************************************/
 
+[Prefix="physx::"]
+interface PxGeomRaycastHit {
+    boolean hadInitialOverlap();
+    attribute float u;
+    attribute float v;
+};
+PxGeomRaycastHit implements PxLocationHit;
+
+[Prefix="physx::"]
+interface PxGeomSweepHit {
+    boolean hadInitialOverlap();
+};
+PxGeomSweepHit implements PxLocationHit;
+
 enum PxHitFlagEnum {
     "PxHitFlagEnum::ePOSITION",
     "PxHitFlagEnum::eNORMAL",
@@ -129,14 +143,12 @@ interface PxRaycastCallback {
 [Prefix="physx::", StackAllocatable]
 interface PxRaycastHit {
     void PxRaycastHit();
-    attribute float u;
-    attribute float v;
 
     // actually part of PxActorShape
     attribute PxRigidActor actor;
     attribute PxShape shape;
 };
-PxRaycastHit implements PxLocationHit;
+PxRaycastHit implements PxGeomRaycastHit;
 //PxRaycastHit implements PxActorShape;
 
 [Prefix="physx::", NoDelete]
@@ -197,5 +209,5 @@ interface PxSweepHit {
     attribute PxRigidActor actor;
     attribute PxShape shape;
 };
-PxSweepHit implements PxLocationHit;
+PxSweepHit implements PxGeomSweepHit;
 //PxSweepHit implements PxActorShape;

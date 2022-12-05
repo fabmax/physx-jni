@@ -30,6 +30,22 @@ interface PxDefaultMemoryOutputStream {
 PxDefaultMemoryOutputStream implements PxOutputStream;
 
 [Prefix="physx::"]
+interface PxMassProperties {
+    void PxMassProperties();
+    void PxMassProperties(float m, [Const, Ref] PxMat33 inertiaT, [Const, Ref] PxVec3 com);
+    void PxMassProperties([Const, Ref] PxGeometry geometry);
+    void translate([Const, Ref] PxVec3 t);
+    [Value] static PxVec3 getMassSpaceInertia([Const, Ref] PxMat33 inertia, [Ref] PxQuat massFrame);
+    [Value] static PxMat33 translateInertia([Const, Ref] PxMat33 inertia, float mass, [Const, Ref] PxVec3 t);
+    [Value] static PxMat33 rotateInertia([Const, Ref] PxMat33 inertia, [Const, Ref] PxQuat q);
+    [Value] static PxMat33 scaleInertia([Const, Ref] PxMat33 inertia, [Const, Ref] PxQuat scaleRotation, [Const, Ref] PxVec3 scale);
+    [Value] static PxMassProperties sum([Const] PxMassProperties props, [Const] PxTransform transforms, unsigned long count);
+    [Value] attribute PxMat33 inertiaTensor;
+    [Value] attribute PxVec3 centerOfMass;
+    attribute float mass;
+};
+
+[Prefix="physx::"]
 interface PxMeshOverlapUtil {
     void PxMeshOverlapUtil();
     unsigned long findOverlap([Const, Ref] PxGeometry geom, [Const, Ref] PxTransform geomPose, [Const, Ref] PxTriangleMeshGeometry meshGeom, [Const, Ref] PxTransform meshPose);
