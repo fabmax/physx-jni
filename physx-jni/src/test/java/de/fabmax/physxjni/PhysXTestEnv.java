@@ -29,7 +29,7 @@ public class PhysXTestEnv {
     public static final PxFilterData defaultFilterData;
 
     static class CustomErrorCallback extends PxErrorCallbackImpl {
-        private final Map<Integer, String> codeNames = new HashMap<>() {{
+        private final Map<PxErrorCodeEnum, String> codeNames = new HashMap<>() {{
             put(PxErrorCodeEnum.eDEBUG_INFO, "DEBUG_INFO");
             put(PxErrorCodeEnum.eDEBUG_WARNING, "DEBUG_WARNING");
             put(PxErrorCodeEnum.eINVALID_PARAMETER, "INVALID_PARAMETER");
@@ -41,7 +41,7 @@ public class PhysXTestEnv {
         }};
 
         @Override
-        public void reportError(int code, String message, String file, int line) {
+        public void reportError(PxErrorCodeEnum code, String message, String file, int line) {
             String codeName = codeNames.getOrDefault(code, "code: " + code);
             System.out.printf("[%s] %s (%s:%d)\n", codeName, message, file, line);
         }

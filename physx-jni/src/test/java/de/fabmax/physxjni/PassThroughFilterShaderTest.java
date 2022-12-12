@@ -56,18 +56,18 @@ public class PassThroughFilterShaderTest {
             shaderCalls.incrementAndGet();
 
             if ((0 == (filterData0w0 & filterData1w1)) && (0 == (filterData1w0 & filterData0w1))) {
-                return PxFilterFlagEnum.eSUPPRESS;
+                return PxFilterFlagEnum.eSUPPRESS.value;
             }
 
             int outPairFlags;
-            if ((attributes0 & PxFilterObjectFlagEnum.eTRIGGER) != 0 || (attributes1 & PxFilterObjectFlagEnum.eTRIGGER) != 0) {
-                outPairFlags = PxPairFlagEnum.eTRIGGER_DEFAULT;
+            if ((attributes0 & PxFilterObjectFlagEnum.eTRIGGER.value) != 0 || (attributes1 & PxFilterObjectFlagEnum.eTRIGGER.value) != 0) {
+                outPairFlags = PxPairFlagEnum.eTRIGGER_DEFAULT.value;
             } else {
-                outPairFlags = PxPairFlagEnum.eCONTACT_DEFAULT;
+                outPairFlags = PxPairFlagEnum.eCONTACT_DEFAULT.value;
             }
             setOutputPairFlags(outPairFlags | filterData0w2 | filterData1w2);
 
-            return PxFilterFlagEnum.eDEFAULT;
+            return PxFilterFlagEnum.eDEFAULT.value;
         }
     }
 }

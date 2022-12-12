@@ -29,7 +29,7 @@ public class SimCallbackTest {
 
             // create a box with contact reporting enabled
             // the corresponding flags are encoded in word2 of simulation filter data
-            int reportContactFlags = PxPairFlagEnum.eNOTIFY_TOUCH_FOUND | PxPairFlagEnum.eNOTIFY_TOUCH_LOST | PxPairFlagEnum.eNOTIFY_CONTACT_POINTS;
+            int reportContactFlags = PxPairFlagEnum.eNOTIFY_TOUCH_FOUND.value | PxPairFlagEnum.eNOTIFY_TOUCH_LOST.value | PxPairFlagEnum.eNOTIFY_CONTACT_POINTS.value;
             PxFilterData boxFilterData = PxFilterData.createAt(mem, MemoryStack::nmalloc, 1, -1, reportContactFlags, 0);
             PxRigidDynamic box = PhysXTestEnv.createDefaultBox(0f, 5f, 0f, boxFilterData);
             scene.addActor(box);
@@ -39,7 +39,7 @@ public class SimCallbackTest {
             // with another body
             PxFilterData triggerFilterData = PxFilterData.createAt(mem, MemoryStack::nmalloc, 1, -1, 0, 0);
             PxBoxGeometry triggerGeom = PxBoxGeometry.createAt(mem, MemoryStack::nmalloc, 1f, 0.5f, 1f);
-            PxShapeFlags triggerFlags = PxShapeFlags.createAt(mem, MemoryStack::nmalloc, (byte) PxShapeFlagEnum.eTRIGGER_SHAPE);
+            PxShapeFlags triggerFlags = PxShapeFlags.createAt(mem, MemoryStack::nmalloc, (byte) PxShapeFlagEnum.eTRIGGER_SHAPE.value);
             PxShape triggerShape = physics.createShape(triggerGeom, PhysXTestEnv.defaultMaterial, true, triggerFlags);
             triggerShape.setSimulationFilterData(triggerFilterData);
             PxRigidStatic trigger = PhysXTestEnv.createStaticBody(triggerShape, 0f, 3f, 0f);
@@ -130,7 +130,7 @@ public class SimCallbackTest {
                 String name0 = actorNames.get(actor0);
                 String name1 = actorNames.get(actor1);
 
-                int status = pair.getStatus();
+                PxPairFlagEnum status = pair.getStatus();
                 String event = "OTHER";
                 if (status == PxPairFlagEnum.eNOTIFY_TOUCH_FOUND) {
                     event = "TRIGGER_ENTER";

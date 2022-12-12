@@ -7,7 +7,7 @@ subprojects {
     apply(plugin = "maven-publish")
 
     group = "de.fabmax"
-    version = "2.0.2-SNAPSHOT"
+    version = "2.0.3-SNAPSHOT"
 
     repositories {
         mavenCentral()

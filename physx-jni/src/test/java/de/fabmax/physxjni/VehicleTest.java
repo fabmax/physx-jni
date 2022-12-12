@@ -58,7 +58,7 @@ public class VehicleTest {
             vehicle.getEngineDriveState().getGearboxState().setTargetGear(vehicle.getEngineDriveParams().getGearBoxParams().getNeutralGear() + 1);
 
             // Set the vehicle to use the automatic gearbox.
-            vehicle.getTransmissionCommandState().setTargetGear(PxVehicleEngineDriveTransmissionCommandStateEnum.eAUTOMATIC_GEAR);
+            vehicle.getTransmissionCommandState().setTargetGear(PxVehicleEngineDriveTransmissionCommandStateEnum.eAUTOMATIC_GEAR.value);
 
             // Set up the simulation context.
             // The test is set up with
@@ -278,7 +278,7 @@ public class VehicleTest {
     private void setPhysxIntegrationParams(PhysXIntegrationParams physxParams, PxVehicleAxleDescription axleDesc, PxGeometry actorGeometry) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             var filterData = PxFilterData.createAt(stack, MemoryStack::nmalloc, 0, 0, 0, 0);
-            var queryFlags = PxQueryFlags.createAt(stack, MemoryStack::nmalloc, (short) PxQueryFlagEnum.eSTATIC);
+            var queryFlags = PxQueryFlags.createAt(stack, MemoryStack::nmalloc, (short) PxQueryFlagEnum.eSTATIC.value);
             var roadQueryFilterData = PxQueryFilterData.createAt(stack, MemoryStack::nmalloc, filterData, queryFlags);
 
             var actorCMassLocalPose = PxTransform.createAt(stack, MemoryStack::nmalloc,

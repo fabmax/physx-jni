@@ -45,7 +45,7 @@ public class HelloPhysX {
         // create a default material
         PxMaterial material = physics.createMaterial(0.5f, 0.5f, 0.5f);
         // create default simulation shape flags
-        PxShapeFlags shapeFlags = new PxShapeFlags((byte) (PxShapeFlagEnum.eSCENE_QUERY_SHAPE | PxShapeFlagEnum.eSIMULATION_SHAPE));
+        PxShapeFlags shapeFlags = new PxShapeFlags((byte) (PxShapeFlagEnum.eSCENE_QUERY_SHAPE.value | PxShapeFlagEnum.eSIMULATION_SHAPE.value));
 
         // create a few temporary objects used during setup
         PxTransform tmpPose = new PxTransform(PxIDENTITYEnum.PxIdentity);

@@ -103,7 +103,7 @@ public class ControllerBehaviorCallbackTest {
         @Override
         public int getShapeBehaviorFlags(PxShape shape, PxActor actor) {
             shapeCallbackCalls++;
-            return PxControllerBehaviorFlagEnum.eCCT_SLIDE;
+            return PxControllerBehaviorFlagEnum.eCCT_SLIDE.value;
         }
 
         @Override

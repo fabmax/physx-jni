@@ -4,7 +4,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni)
 ![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
 
-Java JNI bindings for Nvidia [PhysX 5.1](https://github.com/NVIDIA-Omniverse/PhysX).
+Java JNI bindings for Nvidia [PhysX 5.1.1](https://github.com/NVIDIA-Omniverse/PhysX).
 
 The PhysX 5.1 bindings are still very much work in progress and not yet contain all parts of the SDK. You may
 want to use the [PhysX 4 bindings](https://github.com/fabmax/physx-jni/tree/physx4) instead. 
@@ -27,13 +27,14 @@ dependencies {
 
 ## Library Coverage
 
-This is still work in progress, but the bindings already include many major parts of the PhysX SDK:
+This is still work in progress, but the bindings already include most major parts of the PhysX SDK (except the fancy
+new stuff):
 - [x] Basics
     - Static and dynamic actors
     - All geometry types (box, capsule, sphere, plane, convex mesh, triangle mesh and height field)
 - [x] All joint types (revolute, spherical, prismatic, fixed, distance and D6)
 - [x] Articulations
-- [ ] Vehicles
+- [x] Vehicles
 - [x] Character controllers
 - [ ] CUDA support
     - [x] Rigid bodies 
@@ -128,7 +129,7 @@ Here's an example how this might look:
 // implement callback
 public class CustomErrorCallback extends PxErrorCallbackImpl {
     @Override
-    public void reportError(int code, String message, String file, int line) {
+    public void reportError(PxErrorCodeEnum code, String message, String file, int line) {
         System.out.println(code + ": " + message);
     }
 }
@@ -193,9 +194,9 @@ PxScene scene = physics.createScene(sceneDesc);
 
 Using CUDA comes with a few implications:
 
-The CUDA enabled native libraries are quite big (~25 MB), and I therefore decided to build a separate
-set of runtime jars for them (suffixed with `-cuda`, so use `de.fabmax:physx-jni:[version]:natives-windows-cuda` instead of
-`de.fabmax:physx-jni:[version]:natives-windows`).
+The native libraries required for CUDA are pretty big (>100 MB), and I therefore decided to not publish the libraries for
+now. I.e., in case you want to use the CUDA enabled native libraries, you have to build them yourself (see below, it's
+not that difficult). I might publish the libraries in the future, once things settled a bit.
 
 Moreover, CUDA comes with some additional overhead (a lot of data has to be copied around between CPU and GPU). For
 smaller scenes this overhead outweighs the benefits and physics computation might actually be slower than with CPU only.
@@ -205,8 +206,8 @@ version runs about 3 times faster than the CPU Version (with an RTX 2080 / Ryzen
 when using other body shapes (the test uses boxes), joints, etc.
 
 ## Building
-You can build the bindings yourself. However, this requires `python3` and the C++ compiler appropriate to your
-platform (Visual Studio 2019 (Community) on Windows / clang on Linux):
+You can build the bindings yourself. However, this requires `cmake`, `python3` and the C++ compiler appropriate to your
+platform (Visual Studio 2022 (Community) on Windows / clang on Linux):
 ```
 # Clone this repo
 git clone https://github.com/fabmax/physx-jni.git
@@ -217,7 +218,7 @@ cd physx-jni
 # Download submodule containing the PhysX source code
 git submodule update --init
 
-# Build native PhysX (requires Visual Studio 2019 (Community) on Windows / clang on Linux)
+# Build native PhysX (requires Visual Studio 2022 (Community) on Windows / clang on Linux)
 ./gradlew buildNativeProject
 
 # Generate Java/JNI code and build library
