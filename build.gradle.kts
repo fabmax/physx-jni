@@ -68,14 +68,16 @@ tasks.register<Exec>("buildNativeProject") {
     dependsOn("generateNativeGlueCode")
 
     val os = OperatingSystem.current()
+    val buildType = "release"
+    //val buildType = "debug"
     when {
         os.isWindows -> {
             workingDir = File("$projectDir/PhysX/physx")
-            commandLine = listOf("cmake", "--build", "./compiler/jni-vc17win64/", "--config", "release")
+            commandLine = listOf("cmake", "--build", "./compiler/jni-vc17win64/", "--config", buildType)
         }
         os.isLinux -> {
             val makeWorkers = min(32, Runtime.getRuntime().availableProcessors())
-            workingDir = File("$projectDir/PhysX/physx/compiler/jni-linux-release/")
+            workingDir = File("$projectDir/PhysX/physx/compiler/jni-linux-${buildType}/")
             commandLine = listOf("make", "-j${makeWorkers}")
         }
         else -> throw IllegalStateException("Unsupported OS: $os; for now, only Windows and Linux are supported")
@@ -83,7 +85,7 @@ tasks.register<Exec>("buildNativeProject") {
 
     val nativeProjectDir = when {
         os.isWindows -> File("$projectDir/PhysX/physx/compiler/jni-vc17win64")
-        os.isLinux -> File("$projectDir/PhysX/physx/compiler/jni-linux-release")
+        os.isLinux -> File("$projectDir/PhysX/physx/compiler/jni-linux-${buildType}")
         else -> throw IllegalStateException("Unsupported OS: $os; for now, only Windows and Linux are supported")
     }
     if (!nativeProjectDir.exists()) {
@@ -109,14 +111,14 @@ tasks.register<Exec>("buildNativeProject") {
             os.isWindows -> {
                 // copy non-cuda libs to regular windows natives subproject
                 copy {
-                    from("$projectDir/PhysX/physx/bin/jni-windows.x86_64/release")
+                    from("$projectDir/PhysX/physx/bin/jni-windows.x86_64/${buildType}")
                     include("*.dll")
                     exclude("freeglut.dll", "PhysXDevice64.dll", "PhysXGpu_64.dll")
                     into("${projectDir}/physx-jni-natives-windows/src/main/resources/windows/")
                 }
                 // copy cuda libs to cuda windows natives sub-project
                 copy {
-                    from("$projectDir/PhysX/physx/bin/jni-windows.x86_64/release")
+                    from("$projectDir/PhysX/physx/bin/jni-windows.x86_64/${buildType}")
                     include("*.dll")
                     exclude("freeglut.dll")
                     into("${projectDir}/physx-jni-natives-windows-cuda/src/main/resources/windows/")
@@ -128,14 +130,14 @@ tasks.register<Exec>("buildNativeProject") {
             os.isLinux -> {
                 // copy non-cuda libs to regular linux natives subproject
                 copy {
-                    from("$projectDir/PhysX/physx/bin/jni-linux.x86_64/release")
+                    from("$projectDir/PhysX/physx/bin/jni-linux.x86_64/${buildType}")
                     include("*.so")
                     exclude("libPhysXGpu_64.so")
                     into("${projectDir}/physx-jni-natives-linux/src/main/resources/linux/")
                 }
                 // copy cuda libs to cuda windows linux sub-project
                 copy {
-                    from("$projectDir/PhysX/physx/bin/jni-linux.x86_64/release")
+                    from("$projectDir/PhysX/physx/bin/jni-linux.x86_64/${buildType}")
                     include("*.so")
                     into("${projectDir}/physx-jni-natives-linux-cuda/src/main/resources/linux/")
                 }

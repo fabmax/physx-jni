@@ -353,9 +353,15 @@ public class VehicleTest {
         gearbox.setSwitchTime(0.5f);
 
         var fourWheelDiff = engineDriveParams.getFourWheelDifferentialParams();
+        var multiWheelParams = engineDriveParams.getMultiWheelDifferentialParams();
+        var tankWheelParams = engineDriveParams.getTankDifferentialParams();
         for (int i = 0; i < 4; i++) {
             fourWheelDiff.setTorqueRatios(i, 0.25f);
             fourWheelDiff.setAveWheelSpeedRatios(i, 0.25f);
+            multiWheelParams.setTorqueRatios(i, 0.25f);
+            multiWheelParams.setAveWheelSpeedRatios(i, 0.25f);
+            tankWheelParams.setTorqueRatios(i, 0.25f);
+            tankWheelParams.setAveWheelSpeedRatios(i, 0.25f);
         }
         fourWheelDiff.setFrontWheelIds(0, 0);
         fourWheelDiff.setFrontWheelIds(1, 1);

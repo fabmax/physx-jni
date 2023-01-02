@@ -24,7 +24,6 @@ interface PxU32ConstPtr { };
 
 interface PxRealPtr { };
 
-
 interface PxActorPtr { };
 
 interface PxMaterialPtr { };
@@ -148,26 +147,6 @@ interface Vector_PxContactPairPoint {
     void clear();
 };
 
-//interface Vector_PxRaycastQueryResult {
-//    void Vector_PxRaycastQueryResult();
-//    void Vector_PxRaycastQueryResult(unsigned long size);
-//    [Ref] PxRaycastQueryResult at(unsigned long index);
-//    PxRaycastQueryResult data();
-//    unsigned long size();
-//    void push_back([Ref] PxRaycastQueryResult value);
-//    void clear();
-//};
-//
-//interface Vector_PxSweepQueryResult {
-//    void Vector_PxSweepQueryResult();
-//    void Vector_PxSweepQueryResult(unsigned long size);
-//    [Ref] PxSweepQueryResult at(unsigned long index);
-//    PxSweepQueryResult data();
-//    unsigned long size();
-//    void push_back([Ref] PxSweepQueryResult value);
-//    void clear();
-//};
-
 interface Vector_PxRaycastHit {
     void Vector_PxRaycastHit();
     void Vector_PxRaycastHit(unsigned long size);
@@ -188,36 +167,6 @@ interface Vector_PxSweepHit {
     void clear();
 };
 
-//interface Vector_PxVehicleDrivableSurfaceType {
-//    void Vector_PxVehicleDrivableSurfaceType();
-//    void Vector_PxVehicleDrivableSurfaceType(unsigned long size);
-//    [Ref] PxVehicleDrivableSurfaceType at(unsigned long index);
-//    PxVehicleDrivableSurfaceType data();
-//    unsigned long size();
-//    void push_back([Ref] PxVehicleDrivableSurfaceType value);
-//    void clear();
-//};
-//
-//interface Vector_PxWheelQueryResult {
-//    void Vector_PxWheelQueryResult();
-//    void Vector_PxWheelQueryResult(unsigned long size);
-//    [Ref] PxWheelQueryResult at(unsigned long index);
-//    PxWheelQueryResult data();
-//    unsigned long size();
-//    void push_back([Ref] PxWheelQueryResult value);
-//    void clear();
-//};
-//
-//interface Vector_PxVehicleWheels {
-//    void Vector_PxVehicleWheels();
-//    void Vector_PxVehicleWheels(unsigned long size);
-//    PxVehicleWheels at(unsigned long index);
-//    PxVehicleWheelsPtr data();
-//    unsigned long size();
-//    void push_back(PxVehicleWheels value);
-//    void clear();
-//};
-
 interface PassThroughFilterShader {
     unsigned long filterShader(unsigned long attributes0,
                                unsigned long filterData0w0, unsigned long filterData0w1, unsigned long filterData0w2, unsigned long filterData0w3,
@@ -235,11 +184,6 @@ interface PassThroughFilterShaderImpl {
                                unsigned long filterData0w0, unsigned long filterData0w1, unsigned long filterData0w2, unsigned long filterData0w3,
                                unsigned long attributes1,
                                unsigned long filterData1w0, unsigned long filterData1w1, unsigned long filterData1w2, unsigned long filterData1w3);
-};
-
-[Prefix="physx::", NoDelete]
-interface PxPvd {
-    //boolean connect([Ref] PxPvdTransport transport, [Ref] PxPvdInstrumentationFlags flags);
 };
 
 enum PxVisualizationParameterEnum {
@@ -270,4 +214,67 @@ enum PxVisualizationParameterEnum {
     "PxVisualizationParameterEnum::eSDF",
     "PxVisualizationParameterEnum::eNUM_VALUES",
     "PxVisualizationParameterEnum::eFORCE_DWORD"
+};
+
+[Prefix="physx::", NoDelete]
+interface PxPvd {
+    boolean connect([Ref] PxPvdTransport transport, [Ref] PxPvdInstrumentationFlags flags);
+    void release();
+};
+
+[Prefix="physx::", NoDelete]
+interface PxPvdTransport {
+    boolean connect();
+    boolean isConnected();
+    void disconnect();
+    void release();
+    void flush();
+};
+
+interface SimplePvdTransport {
+    void send(any inBytes, unsigned long inLength);
+};
+SimplePvdTransport implements PxPvdTransport;
+
+[JSImplementation="SimplePvdTransport"]
+interface SimplPvdTransportImpl {
+    void SimplPvdTransportImpl();
+    boolean connect();
+    boolean isConnected();
+    void disconnect();
+    void send(any inBytes, unsigned long inLength);
+    void flush();
+};
+
+enum PxPvdInstrumentationFlagEnum {
+    "PxPvdInstrumentationFlagEnum::eDEBUG",
+    "PxPvdInstrumentationFlagEnum::ePROFILE",
+    "PxPvdInstrumentationFlagEnum::eMEMORY",
+    "PxPvdInstrumentationFlagEnum::eALL"
+};
+
+[Prefix="physx::"]
+interface PxPvdInstrumentationFlags {
+    void PxPvdInstrumentationFlags(octet flags);
+    boolean isSet(PxPvdInstrumentationFlagEnum flag);
+    void raise(PxPvdInstrumentationFlagEnum flag);
+    void clear(PxPvdInstrumentationFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxOmniPvd {
+    [NonJs] OmniPvdWriter getWriter();
+    [NonJs] OmniPvdFileWriteStream getFileWriteStream();
+    boolean startSampling();
+    void release();
+};
+
+[NonJs]
+interface OmniPvdWriter {
+    void setWriteStream(OmniPvdFileWriteStream writeStream);
+};
+
+[NoDelete, NonJs]
+interface OmniPvdFileWriteStream {
+    void setFileName(DOMString fileName);
 };
