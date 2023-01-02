@@ -74,8 +74,8 @@ public class VehicleTest {
             vehicleSimulationContext.setGravity(gravity);
             vehicleSimulationContext.setPhysxScene(scene);
             vehicleSimulationContext.setPhysxActorUpdateMode(PxVehiclePhysXActorUpdateModeEnum.eAPPLY_ACCELERATION);
-            // todo: create and set a unit cylinder convex mesh in order to use sweep
-            //vehicleSimulationContext.setPhysxUnitCylinderSweepMesh(makeConvexCylinderMesh());
+            vehicleSimulationContext.setPhysxUnitCylinderSweepMesh(
+                    PxVehicleTopLevelFunctions.VehicleUnitCylinderSweepMeshCreate(vehicleSimulationContext.getFrame(), PhysXTestEnv.physics, PhysXTestEnv.cookingParams));
         }
 
         runSimulation(scene, vehicle, vehicleSimulationContext);
@@ -294,10 +294,8 @@ public class VehicleTest {
             materialFriction.setFriction(1f);
             materialFriction.setMaterial(PhysXTestEnv.defaultMaterial);
 
-            // todo: unit cylinder convex mesh needs to be set to vehicle simulation context (see todo above) in order
-            //  to use sweep test instead of raycast
             physxParams.create(axleDesc, roadQueryFilterData, null, materialFriction, 1, 1f,
-                    actorCMassLocalPose, actorGeometry, actorShapeLocalPose, PxVehiclePhysXRoadGeometryQueryTypeEnum.eRAYCAST);
+                    actorCMassLocalPose, actorGeometry, actorShapeLocalPose, PxVehiclePhysXRoadGeometryQueryTypeEnum.eSWEEP);
             Assertions.assertTrue(physxParams.isValid(axleDesc));
         }
     }
