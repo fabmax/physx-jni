@@ -28,7 +28,7 @@ tasks.register<Exec>("buildNativeProjectWindows") {
 
     val nativeProjectDir = File("$rootDir/PhysX/physx/compiler/jni-vc17win64")
     if (!nativeProjectDir.exists()) {
-        dependsOn("generateNativeProject")
+        dependsOn(":generateNativeProject")
     }
 
     doFirst {

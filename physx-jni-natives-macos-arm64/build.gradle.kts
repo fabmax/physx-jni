@@ -29,7 +29,7 @@ tasks.register<Exec>("buildNativeProjectMacosArm64") {
 
     val nativeProjectDir = File("$rootDir/PhysX/physx/compiler/jni-mac-aarch64")
     if (!nativeProjectDir.exists()) {
-        dependsOn("generateNativeProject")
+        dependsOn(":generateNativeProject")
     }
 
     doFirst {

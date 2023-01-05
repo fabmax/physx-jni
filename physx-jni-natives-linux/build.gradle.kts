@@ -35,7 +35,7 @@ tasks.register<Exec>("buildNativeProjectLinux") {
 
     val nativeProjectDir = File("$rootDir/PhysX/physx/compiler/jni-linux-${BuildSettings.buildType}")
     if (!nativeProjectDir.exists()) {
-        dependsOn("generateNativeProject")
+        dependsOn(":generateNativeProject")
     }
 
     doFirst {

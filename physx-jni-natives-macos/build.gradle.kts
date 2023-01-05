@@ -28,7 +28,7 @@ tasks.register<Exec>("buildNativeProjectMacos") {
 
     val nativeProjectDir = File("$rootDir/PhysX/physx/compiler/jni-mac64")
     if (!nativeProjectDir.exists()) {
-        dependsOn("generateNativeProject")
+        dependsOn(":generateNativeProject")
     }
 
     doFirst {
