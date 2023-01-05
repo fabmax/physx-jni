@@ -89,7 +89,6 @@ publishing {
             artifact(project(":physx-jni-natives-windows").tasks["jar"]).apply {
                 classifier = "natives-windows"
             }
-
 //            artifact(project(":physx-jni-natives-windows-cuda").tasks["jar"]).apply {
 //                classifier = "natives-windows-cuda"
 //            }
@@ -97,10 +96,16 @@ publishing {
             artifact(project(":physx-jni-natives-linux").tasks["jar"]).apply {
                 classifier = "natives-linux"
             }
-
 //            artifact(project(":physx-jni-natives-linux-cuda").tasks["jar"]).apply {
 //                classifier = "natives-linux-cuda"
 //            }
+
+            artifact(project(":physx-jni-natives-macos").tasks["jar"]).apply {
+                classifier = "natives-macos"
+            }
+            artifact(project(":physx-jni-natives-macos-arm64").tasks["jar"]).apply {
+                classifier = "natives-macos-arm64"
+            }
 
             pom {
                 name.set("physx-jni")

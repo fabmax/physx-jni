@@ -64,10 +64,10 @@ hello world example on how to use the library. There also are a few
 [tests](https://github.com/fabmax/physx-jni/tree/main/physx-jni/src/test/java/de/fabmax/physxjni) with slightly
 more advanced examples (custom simulation callbacks, triangle mesh collision, custom filter shader, etc.).
 
-To get a feeling of what can be done with this you can take a look at my [kool](https://github.com/fabmax/kool) demos
-(still on PhysX 4.1):
+To see a few real life demos you can take a look at my [kool](https://github.com/fabmax/kool) demos:
 
 - [Vehicle](https://fabmax.github.io/kool/kool-js/?demo=phys-vehicle): Vehicle demo with a racetrack and a few obstacles.
+- [Character](https://fabmax.github.io/kool/kool-js/?demo=phys-terrain): 3rd person character demo on an island.
 - [Ragdolls](https://fabmax.github.io/kool/kool-js/?demo=phys-ragdoll): Simple Ragdoll demo.
 - [Joints](https://fabmax.github.io/kool/kool-js/?demo=phys-joints): A chain running over two gears.
 - [Collision](https://fabmax.github.io/kool/kool-js/?demo=physics): Various collision shapes.

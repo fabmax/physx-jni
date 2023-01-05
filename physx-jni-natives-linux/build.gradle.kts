@@ -14,14 +14,14 @@ tasks["sourcesJar"].apply {
 
 tasks.register<Exec>("generateNativeProjectLinux") {
     group = "native build"
-    workingDir = File("$projectDir/PhysX/physx")
-    commandLine = listOf("$projectDir/PhysX/physx/generate_projects.sh", "jni-linux")
+    workingDir = File("$rootDir/PhysX/physx")
+    commandLine = listOf("$rootDir/PhysX/physx/generate_projects.sh", "jni-linux")
 
     doFirst {
-        delete("$projectDir/PhysX/physx/compiler/jni-linux-checked")
-        delete("$projectDir/PhysX/physx/compiler/jni-linux-debug")
-        delete("$projectDir/PhysX/physx/compiler/jni-linux-profile")
-        delete("$projectDir/PhysX/physx/compiler/jni-linux-release")
+        delete("$rootDir/PhysX/physx/compiler/jni-linux-checked")
+        delete("$rootDir/PhysX/physx/compiler/jni-linux-debug")
+        delete("$rootDir/PhysX/physx/compiler/jni-linux-profile")
+        delete("$rootDir/PhysX/physx/compiler/jni-linux-release")
     }
 }
 
