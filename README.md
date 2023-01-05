@@ -79,7 +79,7 @@ To get a feeling of what can be done with this you can take a look at my [kool](
 ### Documentation
 The generated bindings contain most of the original documentation converted to javadoc. For further reading
 there is also the official
-[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.1.0/index.html).
+[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.1.2/index.html).
 
 ### Things to consider when working with native objects
 Whenever you create an instance of a wrapper class within this library, this also creates an object on the native

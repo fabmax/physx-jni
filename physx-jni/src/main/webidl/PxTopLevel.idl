@@ -16,8 +16,8 @@ interface PxTopLevelFunctions {
     static boolean InitExtensions([Ref] PxPhysics physics);
     static void CloseExtensions();
     static PxPvd CreatePvd([Ref] PxFoundation foundation);
-    [Platforms="windows,linux,macos"] static PxPvdTransport DefaultPvdSocketTransportCreate(DOMString host, long port, unsigned long timeoutInMilliseconds);
-    [Platforms="windows,linux,macos"] static PxOmniPvd CreateOmniPvd([Ref] PxFoundation foundation);
+    [Platforms="windows;linux;macos"] static PxPvdTransport DefaultPvdSocketTransportCreate(DOMString host, long port, unsigned long timeoutInMilliseconds);
+    [Platforms="windows;linux;macos"] static PxOmniPvd CreateOmniPvd([Ref] PxFoundation foundation);
 
     static PxD6Joint D6JointCreate([Ref] PxPhysics physics, [Nullable] PxRigidActor actor0, [Ref] PxTransform localFrame0, [Nullable] PxRigidActor actor1, [Ref] PxTransform localFrame1);
     static PxDistanceJoint DistanceJointCreate([Ref] PxPhysics physics, [Nullable] PxRigidActor actor0, [Ref] PxTransform localFrame0, [Nullable] PxRigidActor actor1, [Ref] PxTransform localFrame1);

@@ -265,18 +265,18 @@ interface PxPvdInstrumentationFlags {
 
 [Prefix="physx::"]
 interface PxOmniPvd {
-    [Platforms="windows,linux,macos"] OmniPvdWriter getWriter();
-    [Platforms="windows,linux,macos"] OmniPvdFileWriteStream getFileWriteStream();
+    [Platforms="windows;linux;macos"] OmniPvdWriter getWriter();
+    [Platforms="windows;linux;macos"] OmniPvdFileWriteStream getFileWriteStream();
     boolean startSampling();
     void release();
 };
 
-[Platforms="windows,linux,macos"]
+[Platforms="windows;linux;macos"]
 interface OmniPvdWriter {
     void setWriteStream(OmniPvdFileWriteStream writeStream);
 };
 
-[Platforms="windows,linux,macos", NoDelete]
+[Platforms="windows;linux;macos", NoDelete]
 interface OmniPvdFileWriteStream {
     void setFileName(DOMString fileName);
 };

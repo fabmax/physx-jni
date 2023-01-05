@@ -61,7 +61,6 @@ open class GenerateJavaBindings : DefaultTask() {
             WebIdlParser.parseSingleFile(idlFile.path, idlModelName)
         }
 
-        //val os = OperatingSystem.current()
         JniJavaGenerator().apply {
             outputDirectory = generatorOutput
             packagePrefix = "physx"
@@ -69,6 +68,7 @@ open class GenerateJavaBindings : DefaultTask() {
             parseCommentsFromDirectories += physxIncludeDir
 
             // always generate the same java classes, however CUDA related classes will not work on Mac OS
+            //val os = OperatingSystem.current()
             //platform = when {
             //    os.isWindows -> "windows"
             //    os.isLinux -> "linux"
@@ -116,7 +116,6 @@ open class GenerateNativeGlueCode : DefaultTask() {
                 os.isMacOsX -> "macos"
                 else -> throw IllegalStateException("Unsupported platform: $os")
             }
-            platform="macos"
         }.generate(model)
     }
 }

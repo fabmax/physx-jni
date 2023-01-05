@@ -2,24 +2,24 @@
  * [package=common]
  ****************************************/
 
-[Platforms="windows,linux", NoDelete]
+[Platforms="windows;linux", NoDelete]
 interface PxCudaTopLevelFunctions {
     static PxCudaContextManager CreateCudaContextManager([Ref] PxFoundation foundation, [Const, Ref] PxCudaContextManagerDesc desc);
 };
 
-[Platforms="windows,linux"]
+[Platforms="windows;linux"]
 interface CUcontext { };
 
-[Platforms="windows,linux"]
+[Platforms="windows;linux"]
 interface CUdevice { };
 
-[Platforms="windows,linux"]
+[Platforms="windows;linux"]
 interface CUmodule { };
 
-[Platforms="windows,linux", Prefix="physx::", NoDelete]
+[Platforms="windows;linux", Prefix="physx::", NoDelete]
 interface PxCudaContext { };
 
-[Platforms="windows,linux", Prefix="physx::", NoDelete]
+[Platforms="windows;linux", Prefix="physx::", NoDelete]
 interface PxCudaContextManager {
     void acquireContext();
     void releaseContext();
@@ -55,7 +55,7 @@ interface PxCudaContextManager {
     void release();
 };
 
-[Platforms="windows,linux", Prefix="physx::", StackAllocatable]
+[Platforms="windows;linux", Prefix="physx::", StackAllocatable]
 interface PxCudaContextManagerDesc {
     void PxCudaContextManagerDesc();
     attribute CUcontext ctx;
@@ -64,7 +64,7 @@ interface PxCudaContextManagerDesc {
     attribute PxCudaInteropModeEnum interopMode;
 };
 
-[Platforms="windows,linux"]
+[Platforms="windows;linux"]
 enum PxCudaInteropModeEnum {
     "PxCudaInteropModeEnum::NO_INTEROP",
     "PxCudaInteropModeEnum::D3D10_INTEROP",
@@ -72,7 +72,7 @@ enum PxCudaInteropModeEnum {
     "PxCudaInteropModeEnum::OGL_INTEROP"
 };
 
-[Platforms="windows,linux", Prefix="physx::"]
+[Platforms="windows;linux", Prefix="physx::"]
 interface PxgDynamicsMemoryConfig {
     void PxgDynamicsMemoryConfig();
     boolean isValid();
