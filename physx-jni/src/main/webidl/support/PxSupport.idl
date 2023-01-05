@@ -5,6 +5,8 @@
 interface SupportFunctions {
     static PxShape PxActor_getShape([Ref] PxRigidActor actor, long index);
     [Ref] static Vector_PxActorPtr PxScene_getActiveActors(PxScene scene);
+    static unsigned long PxArticulationReducedCoordinate_getMinSolverPositionIterations(PxArticulationReducedCoordinate articulation);
+    static unsigned long PxArticulationReducedCoordinate_getMinSolverVelocityIterations(PxArticulationReducedCoordinate articulation);
 };
 
 interface PxU8Ptr { };
@@ -263,18 +265,18 @@ interface PxPvdInstrumentationFlags {
 
 [Prefix="physx::"]
 interface PxOmniPvd {
-    [NonJs] OmniPvdWriter getWriter();
-    [NonJs] OmniPvdFileWriteStream getFileWriteStream();
+    [Platforms="windows,linux,macos"] OmniPvdWriter getWriter();
+    [Platforms="windows,linux,macos"] OmniPvdFileWriteStream getFileWriteStream();
     boolean startSampling();
     void release();
 };
 
-[NonJs]
+[Platforms="windows,linux,macos"]
 interface OmniPvdWriter {
     void setWriteStream(OmniPvdFileWriteStream writeStream);
 };
 
-[NoDelete, NonJs]
+[Platforms="windows,linux,macos", NoDelete]
 interface OmniPvdFileWriteStream {
     void setFileName(DOMString fileName);
 };

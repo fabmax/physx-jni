@@ -17,11 +17,13 @@ repositories {
 }
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:2.0.2-SNAPSHOT")
+    implementation("de.fabmax:physx-jni:2.0.4-SNAPSHOT")
     
     // native libraries, you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:2.0.2-SNAPSHOT:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:2.0.2-SNAPSHOT:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.0.4-SNAPSHOT:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.0.4-SNAPSHOT:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.0.4-SNAPSHOT:natives-macos")
+    runtimeOnly("de.fabmax:physx-jni:2.0.4-SNAPSHOT:natives-macos-arm64")
 }
 ```
 
@@ -51,7 +53,7 @@ classes are located under `physx-jni/src/main/generated`.
 ### Supported platforms:
 - Windows (64-bit x86)
 - Linux (64-bit x86)
-- ~~macOS (64-bit x86, no native support for Apple Silicon yet)~~
+- MacOS (64-bit x86, and Apple Silicon)
  
 Moreover, there is also a version for javascript/webassembly:
 [physx-js-webidl](https://github.com/fabmax/physx-js-webidl).

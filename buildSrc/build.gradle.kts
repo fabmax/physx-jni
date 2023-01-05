@@ -3,11 +3,11 @@ plugins {
 }
 
 repositories {
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
-    //mavenLocal()
+    //maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    implementation("de.fabmax:webidl-util:0.8.0-SNAPSHOT")
+    implementation("de.fabmax:webidl-util:0.8.1-SNAPSHOT")
 }

@@ -3,16 +3,12 @@ package de.fabmax.physxjni;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NativeMetaWindows implements NativeMeta {
+public class NativeMetaMacosArm64 implements NativeMeta {
 
     private static final String version = "2.0.4-SNAPSHOT";
 
     private static final List<String> libraries = new ArrayList<>() {{
-        add("windows/PhysX_64.dll");
-        add("windows/PhysXCommon_64.dll");
-        add("windows/PhysXCooking_64.dll");
-        add("windows/PhysXFoundation_64.dll");
-        add("windows/PhysXJniBindings_64.dll");
+        add("macos-arm64/libPhysXJniBindings_64.dylib");
     }};
 
     @Override

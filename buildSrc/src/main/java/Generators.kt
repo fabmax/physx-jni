@@ -5,22 +5,9 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
+import org.gradle.internal.os.OperatingSystem
 import java.io.File
 import java.io.FileNotFoundException
-
-//private object CommonGeneratorSettings {
-//    val externallyAllocatableClasses = setOf(
-//        "PxCudaContextManagerDesc",
-//
-//        "PxVehicleAntiRollBarData",
-//        "PxVehicleDriveSimData4W",
-//        "PxVehicleSuspensionData",
-//        "PxVehicleTireData",
-//        "PxVehicleWheelData",
-//        "BatchVehicleUpdateDesc",
-//        "PxVehicleWheelsSimFlags"
-//    )
-//}
 
 open class CheckWebIdlConsistency : DefaultTask() {
     @Input
@@ -74,11 +61,20 @@ open class GenerateJavaBindings : DefaultTask() {
             WebIdlParser.parseSingleFile(idlFile.path, idlModelName)
         }
 
+        //val os = OperatingSystem.current()
         JniJavaGenerator().apply {
             outputDirectory = generatorOutput
             packagePrefix = "physx"
             onClassLoad = "de.fabmax.physxjni.Loader.load();"
             parseCommentsFromDirectories += physxIncludeDir
+
+            // always generate the same java classes, however CUDA related classes will not work on Mac OS
+            //platform = when {
+            //    os.isWindows -> "windows"
+            //    os.isLinux -> "linux"
+            //    os.isMacOsX -> "macos"
+            //    else -> throw IllegalStateException("Unsupported platform: $os")
+            //}
         }.generate(model)
     }
 }
@@ -109,10 +105,18 @@ open class GenerateNativeGlueCode : DefaultTask() {
             WebIdlParser.parseSingleFile(idlFile.path, idlModelName)
         }
 
+        val os = OperatingSystem.current()
         JniNativeGenerator().apply {
             outputDirectory = generatorOutput
             glueFileName = "PhysXJniGlue.h"
             packagePrefix = "physx"
+            platform = when {
+                os.isWindows -> "windows"
+                os.isLinux -> "linux"
+                os.isMacOsX -> "macos"
+                else -> throw IllegalStateException("Unsupported platform: $os")
+            }
+            platform="macos"
         }.generate(model)
     }
 }

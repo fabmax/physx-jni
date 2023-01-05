@@ -26,6 +26,12 @@ public class CudaTest {
 
     @Test
     public void createCudaContextTest() {
+        if (Platform.getPlatform() == Platform.MACOS || Platform.getPlatform() == Platform.MACOS_ARM64) {
+            // no CUDA cupport on Mac OS
+            return;
+        }
+
+        // disabled for now: PxCudaContextManagerDesc is not available on mac os
         try (MemoryStack mem = MemoryStack.stackPush()) {
             PxCudaContextManagerDesc desc = PxCudaContextManagerDesc.createAt(mem, MemoryStack::nmalloc);
             desc.setInteropMode(PxCudaInteropModeEnum.NO_INTEROP);

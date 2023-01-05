@@ -34,7 +34,9 @@ tasks.register<VersionNameUpdate>("updateVersionNames") {
         "${rootDir}/physx-jni-natives-windows/src/main/java/de/fabmax/physxjni/NativeMetaWindows.java",
         "${rootDir}/physx-jni-natives-windows-cuda/src/main/java/de/fabmax/physxjni/NativeMetaWindows.java",
         "${rootDir}/physx-jni-natives-linux/src/main/java/de/fabmax/physxjni/NativeMetaLinux.java",
-        "${rootDir}/physx-jni-natives-linux-cuda/src/main/java/de/fabmax/physxjni/NativeMetaLinux.java"
+        "${rootDir}/physx-jni-natives-linux-cuda/src/main/java/de/fabmax/physxjni/NativeMetaLinux.java",
+        "${rootDir}/physx-jni-natives-macos/src/main/java/de/fabmax/physxjni/NativeMetaMacos.java",
+        "${rootDir}/physx-jni-natives-macos-arm64/src/main/java/de/fabmax/physxjni/NativeMetaMacosArm64.java"
     )
 }
 
@@ -64,6 +66,8 @@ dependencies {
 
     testRuntimeOnly(project(":physx-jni-natives-windows-cuda"))
     testRuntimeOnly(project(":physx-jni-natives-linux-cuda"))
+    testRuntimeOnly(project(":physx-jni-natives-macos"))
+    testRuntimeOnly(project(":physx-jni-natives-macos-arm64"))
 
     testImplementation("org.lwjgl:lwjgl:3.3.1")
 
