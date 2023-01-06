@@ -10,20 +10,17 @@ The PhysX 5.1 bindings are still very much work in progress and not yet contain 
 want to use the [PhysX 4 bindings](https://github.com/fabmax/physx-jni/tree/physx4) instead. 
 
 ## How to use
-There is a SNAPSHOT build available on Sonatype, so you can easily add this to your build.gradle:
+The library is published on maven central, so you can easily add this to your dependencies:
 ```
-repositories {
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
-}
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:2.0.4-SNAPSHOT")
+    implementation("de.fabmax:physx-jni:2.0.4")
     
     // native libraries, you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:2.0.4-SNAPSHOT:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:2.0.4-SNAPSHOT:natives-linux")
-    runtimeOnly("de.fabmax:physx-jni:2.0.4-SNAPSHOT:natives-macos")
-    runtimeOnly("de.fabmax:physx-jni:2.0.4-SNAPSHOT:natives-macos-arm64")
+    runtimeOnly("de.fabmax:physx-jni:2.0.4:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.0.4:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.0.4:natives-macos")
+    runtimeOnly("de.fabmax:physx-jni:2.0.4:natives-macos-arm64")
 }
 ```
 
@@ -51,9 +48,9 @@ After build (or after running the corresponding gradle task `generateJniBindings
 classes are located under `physx-jni/src/main/generated`.
 
 ### Supported platforms:
-- Windows (64-bit x86)
-- Linux (64-bit x86)
-- MacOS (64-bit x86, and Apple Silicon)
+- Windows (x86_64)
+- Linux (x86_64)
+- MacOS (x86_64, and arm64)
  
 Moreover, there is also a version for javascript/webassembly:
 [physx-js-webidl](https://github.com/fabmax/physx-js-webidl).
@@ -196,12 +193,13 @@ PxScene scene = physics.createScene(sceneDesc);
 
 Using CUDA comes with a few implications:
 
-The native libraries required for CUDA are pretty big (>100 MB), and I therefore decided to not publish the libraries for
-now. I.e., in case you want to use the CUDA enabled native libraries, you have to build them yourself (see below, it's
-not that difficult). I might publish the libraries in the future, once things settled a bit.
+The native libraries required for CUDA are pretty big (>100 MB), and I therefore decided to not publish the libraries
+to maven central for now. I.e., in case you want to use the CUDA enabled native libraries, you have to build them
+yourself (see below, it's not that difficult). I might publish the libraries in the future, once things settled a bit.
 
 Moreover, CUDA comes with some additional overhead (a lot of data has to be copied around between CPU and GPU). For
-smaller scenes this overhead outweighs the benefits and physics computation might actually be slower than with CPU only.
+smaller scenes this overhead seems to outweigh the benefits and physics computation might actually be slower than with
+CPU only.
 I wrote a simple [CudaTest](physx-jni/src/test/java/de/fabmax/physxjni/CudaTest.java), which runs a few simulations
 with an increasing number of bodies. According to this the break even point is around 5k bodies. At 20k boxes the CUDA
 version runs about 3 times faster than the CPU Version (with an RTX 2080 / Ryzen 2700X). The results may be different
