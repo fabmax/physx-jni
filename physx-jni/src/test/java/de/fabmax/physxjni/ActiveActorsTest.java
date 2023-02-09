@@ -37,13 +37,12 @@ public class ActiveActorsTest {
 
             Vector_PxActorPtr activeActors = SupportFunctions.PxScene_getActiveActors(scene);
 
-            // there should be exactly one activbe actor (the falling box)
+            // there should be exactly one active actor (the falling box)
             Assertions.assertEquals(activeActors.size(), 1);
             Assertions.assertEquals(activeActors.at(0), activeBox);
 
             // note: the Vector_PxActorPtr returned by PxScene_getActiveActors() is internally stored as a static
             // field, DO NOT DESTROY IT!
-            //   activeActors.destroy(); NO NO NO!
         }
     }
 }

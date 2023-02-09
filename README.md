@@ -6,9 +6,6 @@
 
 Java JNI bindings for Nvidia [PhysX 5.1.2](https://github.com/NVIDIA-Omniverse/PhysX).
 
-The PhysX 5.1 bindings are still very much work in progress and not yet contain all parts of the SDK. You may
-want to use the [PhysX 4 bindings](https://github.com/fabmax/physx-jni/tree/physx4) instead. 
-
 ## How to use
 The library is published on maven central, so you can easily add this to your dependencies:
 ```
@@ -217,6 +214,9 @@ cd physx-jni
 
 # Download submodule containing the PhysX source code
 git submodule update --init
+
+# Optional, but might help in case build fails
+./gradlew generateNativeProject
 
 # Build native PhysX (requires Visual Studio 2022 (Community) on Windows / clang on Linux)
 ./gradlew buildNativeProject

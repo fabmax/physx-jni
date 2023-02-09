@@ -61,6 +61,17 @@ interface PxOverlapBuffer10 {
 };
 PxOverlapBuffer10 implements PxOverlapCallback;
 
+interface PxOverlapResult {
+    void PxOverlapResult();
+    unsigned long getNbAnyHits();
+    [Const, Ref] PxOverlapHit getAnyHit(unsigned long index);
+    unsigned long getNbTouches();
+    [Const, Ref] PxOverlapHit getTouch(unsigned long index);
+    [Value] attribute PxOverlapHit block;
+    attribute boolean hasBlock;
+};
+PxOverlapResult implements PxOverlapCallback;
+
 [Prefix="physx::"]
 interface PxOverlapCallback {
     boolean hasAnyHits();
@@ -135,6 +146,17 @@ interface PxRaycastBuffer10 {
 };
 PxRaycastBuffer10 implements PxRaycastCallback;
 
+interface PxRaycastResult {
+    void PxRaycastResult();
+    unsigned long getNbAnyHits();
+    [Const, Ref] PxRaycastHit getAnyHit(unsigned long index);
+    unsigned long getNbTouches();
+    [Const, Ref] PxRaycastHit getTouch(unsigned long index);
+    [Value] attribute PxRaycastHit block;
+    attribute boolean hasBlock;
+};
+PxRaycastResult implements PxRaycastCallback;
+
 [Prefix="physx::"]
 interface PxRaycastCallback {
     boolean hasAnyHits();
@@ -195,6 +217,17 @@ interface PxSweepBuffer10 {
     attribute boolean hasBlock;
 };
 PxSweepBuffer10 implements PxSweepCallback;
+
+interface PxSweepResult {
+    void PxSweepResult();
+    unsigned long getNbAnyHits();
+    [Const, Ref] PxSweepHit getAnyHit(unsigned long index);
+    unsigned long getNbTouches();
+    [Const, Ref] PxSweepHit getTouch(unsigned long index);
+    [Value] attribute PxSweepHit block;
+    attribute boolean hasBlock;
+};
+PxSweepResult implements PxSweepCallback;
 
 [Prefix="physx::"]
 interface PxSweepCallback {
