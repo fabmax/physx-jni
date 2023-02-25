@@ -4,20 +4,20 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni)
 ![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
 
-Java JNI bindings for Nvidia [PhysX 5.1.2](https://github.com/NVIDIA-Omniverse/PhysX).
+Java JNI bindings for Nvidia [PhysX 5.1.3](https://github.com/NVIDIA-Omniverse/PhysX).
 
 ## How to use
 The library is published on maven central, so you can easily add this to your dependencies:
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:2.0.4")
+    implementation("de.fabmax:physx-jni:2.0.5")
     
     // native libraries, you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:2.0.4:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:2.0.4:natives-linux")
-    runtimeOnly("de.fabmax:physx-jni:2.0.4:natives-macos")
-    runtimeOnly("de.fabmax:physx-jni:2.0.4:natives-macos-arm64")
+    runtimeOnly("de.fabmax:physx-jni:2.0.5:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.0.5:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.0.5:natives-macos")
+    runtimeOnly("de.fabmax:physx-jni:2.0.5:natives-macos-arm64")
 }
 ```
 
@@ -73,7 +73,7 @@ To see a few real life demos you can take a look at my [kool](https://github.com
 ### Documentation
 The generated bindings contain most of the original documentation converted to javadoc. For further reading
 there is also the official
-[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.1.2/index.html).
+[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.1.3/index.html).
 
 ### Things to consider when working with native objects
 Whenever you create an instance of a wrapper class within this library, this also creates an object on the native
@@ -155,7 +155,7 @@ System.out.println(userData.get());
 ### CUDA Support
 
 PhysX supports accelerating physics simulation with CUDA (this, of course, requires an Nvidia GPU). Enabling
-CUDA for a scene is pretty simple (but experimental!):
+CUDA for a scene is pretty simple:
 
 ```java
 // Setup your scene as usual
