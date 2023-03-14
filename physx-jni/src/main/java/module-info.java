@@ -9,5 +9,5 @@ module de.fabmax.physxjni {
     exports physx.geometry;
     exports physx.physics;
     exports physx.support;
-    //exports physx.vehicle;
+    exports physx.vehicle2;
 }

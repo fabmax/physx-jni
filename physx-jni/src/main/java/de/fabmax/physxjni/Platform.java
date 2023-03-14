@@ -2,10 +2,10 @@ package de.fabmax.physxjni;
 
 public enum Platform {
 
-    LINUX("de.fabmax.physxjni.NativeMetaLinux"),
-    WINDOWS("de.fabmax.physxjni.NativeMetaWindows"),
-    MACOS("de.fabmax.physxjni.NativeMetaMacos"),
-    MACOS_ARM64("de.fabmax.physxjni.NativeMetaMacosArm64");
+    LINUX("de.fabmax.physxjni.linux.NativeLibLinux"),
+    WINDOWS("de.fabmax.physxjni.windows.NativeLibWindows"),
+    MACOS("de.fabmax.physxjni.NativeLibMacos"),
+    MACOS_ARM64("de.fabmax.physxjni.NativeLibMacosArm64");
 
     private final String metaClassName;
 
@@ -13,9 +13,9 @@ public enum Platform {
         this.metaClassName = metaClassName;
     }
 
-    public NativeMeta getMeta() throws ReflectiveOperationException {
-        Class<?> metaClass =  Loader.class.getClassLoader().loadClass(metaClassName);
-        return (NativeMeta) metaClass.getConstructor().newInstance();
+    public NativeLib getLib() throws ReflectiveOperationException {
+        Class<?> libImpl =  Loader.class.getClassLoader().loadClass(metaClassName);
+        return (NativeLib) libImpl.getConstructor().newInstance();
     }
 
     public static Platform getPlatform() {
@@ -27,7 +27,7 @@ public enum Platform {
         } else if (osName.contains("linux")) {
             return LINUX;
         } else if (osName.contains("mac os x") || osName.contains("darwin") || osName.contains("osx")) {
-            if (arch != null && arch.equals("aarch64")) {
+            if ("aarch64".equals(arch)) {
                 return MACOS_ARM64;
             } else {
                 return MACOS;

@@ -7,7 +7,8 @@ java {
 
 tasks["sourcesJar"].apply {
     this as Jar
-    exclude("**/linux")
+    exclude("**/*.so")
+    exclude("**/*.sha1")
 }
 
 dependencies {

@@ -7,7 +7,8 @@ java {
 
 tasks["sourcesJar"].apply {
     this as Jar
-    exclude("**/macos")
+    exclude("**/*.dylib")
+    exclude("**/*.sha1")
 }
 
 tasks.register<Exec>("generateNativeProjectMacos") {
@@ -31,17 +32,19 @@ tasks.register<Exec>("buildNativeProjectMacos") {
         dependsOn(":generateNativeProject")
     }
 
+    val resourcesDir = "${rootDir}/physx-jni-natives-macos/src/main/resources/de/fabmax/physxjni/macos/"
+
     doFirst {
-        delete("${rootDir}/physx-jni-natives-macos/src/main/resources/macos/")
+        delete(resourcesDir)
     }
 
     doLast {
         copy {
             from("$rootDir/PhysX/physx/bin/jni-mac.x86_64/${BuildSettings.buildType}")
             include("*.dylib")
-            into("${rootDir}/physx-jni-natives-macos/src/main/resources/macos/")
+            into(resourcesDir)
         }
-        Sha1Helper.writeHashes(File("${rootDir}/physx-jni-natives-macos/src/main/resources/macos/"))
+        Sha1Helper.writeHashes(File(resourcesDir))
     }
 }
 

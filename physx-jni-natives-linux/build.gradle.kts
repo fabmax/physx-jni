@@ -9,7 +9,8 @@ java {
 
 tasks["sourcesJar"].apply {
     this as Jar
-    exclude("**/linux")
+    exclude("**/*.so")
+    exclude("**/*.sha1")
 }
 
 tasks.register<Exec>("generateNativeProjectLinux") {
@@ -38,9 +39,12 @@ tasks.register<Exec>("buildNativeProjectLinux") {
         dependsOn(":generateNativeProject")
     }
 
+    val resourcesDir = "${rootDir}/physx-jni-natives-linux/src/main/resources/de/fabmax/physxjni/linux/"
+    val resourcesCudaDir = "${rootDir}/physx-jni-natives-linux-cuda/src/main/resources/de/fabmax/physxjni/linux/"
+
     doFirst {
-        delete("${rootDir}/physx-jni-natives-linux/src/main/resources/windows/")
-        delete("${rootDir}/physx-jni-natives-linux-cuda/src/main/resources/windows/")
+        delete(resourcesDir)
+        delete(resourcesCudaDir)
     }
 
     doLast {
@@ -49,17 +53,17 @@ tasks.register<Exec>("buildNativeProjectLinux") {
             from("$rootDir/PhysX/physx/bin/jni-linux.x86_64/${BuildSettings.buildType}")
             include("*.so")
             exclude("libPhysXGpu_64.so")
-            into("${rootDir}/physx-jni-natives-linux/src/main/resources/linux/")
+            into(resourcesDir)
         }
 
         // copy cuda libs to cuda windows linux sub-project
         copy {
             from("$rootDir/PhysX/physx/bin/jni-linux.x86_64/${BuildSettings.buildType}")
             include("*.so")
-            into("${rootDir}/physx-jni-natives-linux-cuda/src/main/resources/linux/")
+            into(resourcesCudaDir)
         }
-        Sha1Helper.writeHashes(File("${rootDir}/physx-jni-natives-linux/src/main/resources/linux/"))
-        Sha1Helper.writeHashes(File("${rootDir}/physx-jni-natives-linux-cuda/src/main/resources/linux/"))
+        Sha1Helper.writeHashes(File(resourcesDir))
+        Sha1Helper.writeHashes(File(resourcesCudaDir))
     }
 }
 

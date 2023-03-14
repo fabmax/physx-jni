@@ -7,7 +7,8 @@ java {
 
 tasks["sourcesJar"].apply {
     this as Jar
-    exclude("**/windows")
+    exclude("**/*.dll")
+    exclude("**/*.sha1")
 }
 
 dependencies {

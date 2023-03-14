@@ -7,7 +7,8 @@ java {
 
 tasks["sourcesJar"].apply {
     this as Jar
-    exclude("**/windows")
+    exclude("**/*.dll")
+    exclude("**/*.sha1")
 }
 
 tasks.register<Exec>("generateNativeProjectWindows") {
@@ -31,9 +32,12 @@ tasks.register<Exec>("buildNativeProjectWindows") {
         dependsOn(":generateNativeProject")
     }
 
+    val resourcesDir = "${rootDir}/physx-jni-natives-windows/src/main/resources/de/fabmax/physxjni/windows/"
+    val resourcesCudaDir = "${rootDir}/physx-jni-natives-windows-cuda/src/main/resources/de/fabmax/physxjni/windows/"
+
     doFirst {
-        delete("${rootDir}/physx-jni-natives-windows/src/main/resources/windows/")
-        delete("${rootDir}/physx-jni-natives-windows-cuda/src/main/resources/windows/")
+        delete(resourcesDir)
+        delete(resourcesCudaDir)
     }
 
     doLast {
@@ -42,18 +46,18 @@ tasks.register<Exec>("buildNativeProjectWindows") {
             from("$rootDir/PhysX/physx/bin/jni-windows.x86_64/${BuildSettings.buildType}")
             include("*.dll")
             exclude("freeglut.dll", "PhysXDevice64.dll", "PhysXGpu_64.dll")
-            into("${rootDir}/physx-jni-natives-windows/src/main/resources/windows/")
+            into(resourcesDir)
         }
-        Sha1Helper.writeHashes(File("${rootDir}/physx-jni-natives-windows/src/main/resources/windows/"))
+        Sha1Helper.writeHashes(File(resourcesDir))
 
         // copy cuda libs to cuda windows natives sub-project
         copy {
             from("$rootDir/PhysX/physx/bin/jni-windows.x86_64/${BuildSettings.buildType}")
             include("*.dll")
             exclude("freeglut.dll")
-            into("${rootDir}/physx-jni-natives-windows-cuda/src/main/resources/windows/")
+            into(resourcesCudaDir)
         }
-        Sha1Helper.writeHashes(File("${rootDir}/physx-jni-natives-windows-cuda/src/main/resources/windows/"))
+        Sha1Helper.writeHashes(File(resourcesCudaDir))
     }
 }
 
