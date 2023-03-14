@@ -66,8 +66,8 @@ dependencies {
 
     testRuntimeOnly(project(":physx-jni-natives-windows-cuda"))
     testRuntimeOnly(project(":physx-jni-natives-linux-cuda"))
-//    testRuntimeOnly(project(":physx-jni-natives-macos"))
-//    testRuntimeOnly(project(":physx-jni-natives-macos-arm64"))
+    testRuntimeOnly(project(":physx-jni-natives-macos"))
+    testRuntimeOnly(project(":physx-jni-natives-macos-arm64"))
 
     testImplementation("org.lwjgl:lwjgl:3.3.1")
 
@@ -100,12 +100,12 @@ publishing {
 //                classifier = "natives-linux-cuda"
 //            }
 
-//            artifact(project(":physx-jni-natives-macos").tasks["jar"]).apply {
-//                classifier = "natives-macos"
-//            }
-//            artifact(project(":physx-jni-natives-macos-arm64").tasks["jar"]).apply {
-//                classifier = "natives-macos-arm64"
-//            }
+            artifact(project(":physx-jni-natives-macos").tasks["jar"]).apply {
+                classifier = "natives-macos"
+            }
+            artifact(project(":physx-jni-natives-macos-arm64").tasks["jar"]).apply {
+                classifier = "natives-macos-arm64"
+            }
 
             pom {
                 name.set("physx-jni")
