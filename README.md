@@ -166,7 +166,7 @@ sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
 // Create the PxCudaContextManager
 PxCudaContextManagerDesc desc = new PxCudaContextManagerDesc();
 desc.setInteropMode(PxCudaInteropModeEnum.NO_INTEROP);
-PxCudaContextManager cudaMgr = PxTopLevelFunctions.CreateCudaContextManager(foundation, desc);
+PxCudaContextManager cudaMgr = PxCudaTopLevelFunctions.CreateCudaContextManager(foundation, desc);
 
 // Check if CUDA context is valid / CUDA support is available
 if (cudaMgr != null && cudaMgr.contextIsValid()) {
