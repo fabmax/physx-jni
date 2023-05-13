@@ -40,6 +40,11 @@ interface NativeArrayHelpers {
     static unsigned long getU32At([Ref] PxU32ConstPtr base, long index);
     static float getRealAt([Ref] PxRealPtr base, long index);
 
+    static void setU8At(VoidPtr base, long index, octet value);
+    static void setU16At(VoidPtr base, long index, unsigned short value);
+    static void setU32At(VoidPtr base, long index, unsigned long value);
+    static void setRealAt(VoidPtr base, long index, float value);
+
     [Value] static PxU8Ptr voidToU8Ptr(VoidPtr voidPtr);
     [Value] static PxU16Ptr voidToU16Ptr(VoidPtr voidPtr);
     [Value] static PxU32Ptr voidToU32Ptr(VoidPtr voidPtr);
@@ -126,6 +131,16 @@ interface Vector_PxVec3 {
     PxVec3 data();
     unsigned long size();
     void push_back([Ref] PxVec3 value);
+    void clear();
+};
+
+interface Vector_PxVec4 {
+    void Vector_PxVec4();
+    void Vector_PxVec4(unsigned long size);
+    [Ref] PxVec4 at(unsigned long index);
+    PxVec4 data();
+    unsigned long size();
+    void push_back([Ref] PxVec4 value);
     void clear();
 };
 
