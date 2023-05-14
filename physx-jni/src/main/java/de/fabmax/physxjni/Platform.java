@@ -4,8 +4,8 @@ public enum Platform {
 
     LINUX("de.fabmax.physxjni.linux.NativeLibLinux"),
     WINDOWS("de.fabmax.physxjni.windows.NativeLibWindows"),
-    MACOS("de.fabmax.physxjni.NativeLibMacos"),
-    MACOS_ARM64("de.fabmax.physxjni.NativeLibMacosArm64");
+    MACOS("de.fabmax.physxjni.macos.NativeLibMacos"),
+    MACOS_ARM64("de.fabmax.physxjni.macosarm.NativeLibMacosArm64");
 
     private final String metaClassName;
 
