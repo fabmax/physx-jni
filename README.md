@@ -69,6 +69,13 @@ To see a few real life demos you can take a look at my [kool](https://github.com
 > above. However, the two are functionally identical, so it shouldn't matter too much. The JNI version is much faster
 > though.*
 
+The particle simulation unfortunately requires CUDA and therefore only works on Windows / Linux systems with an Nvidia
+GPU. Here are a few images what this can look like:
+
+| Fluid Simulation                    | Cloth Simulation                    |
+|-------------------------------------|-------------------------------------|
+| ![Fluid simulation](docs/waves.jpg) | ![Cloth simulation](docs/cloth.jpg) |
+
 ### Documentation
 The generated bindings contain most of the original documentation converted to javadoc. For further reading
 there is also the official
