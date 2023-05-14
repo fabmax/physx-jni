@@ -4,7 +4,23 @@
 
 [Platforms="windows;linux", NoDelete]
 interface PxCudaTopLevelFunctions {
+    static long GetSuggestedCudaDeviceOrdinal([Ref] PxFoundation foundation);
+
     static PxCudaContextManager CreateCudaContextManager([Ref] PxFoundation foundation, [Const, Ref] PxCudaContextManagerDesc desc);
+
+    static PxParticleClothPreProcessor CreateParticleClothPreProcessor(PxCudaContextManager cudaContextManager);
+    static PxParticleClothBufferHelper CreateParticleClothBufferHelper(unsigned long maxCloths, unsigned long maxTriangles, unsigned long maxSprings, unsigned long maxParticles, PxCudaContextManager cudaContextManager);
+    static PxParticleClothBuffer CreateAndPopulateParticleClothBuffer([Const, Ref] PxParticleBufferDesc desc, [Const, Ref] PxParticleClothDesc clothDesc, [Ref] PxPartitionedParticleCloth output, PxCudaContextManager cudaContextManager);
+    static PxParticleAndDiffuseBuffer CreateAndPopulateParticleAndDiffuseBuffer([Const, Ref] PxParticleAndDiffuseBufferDesc desc, PxCudaContextManager cudaContextManager);
+    static PxParticleClothCooker CreateParticleClothCooker(unsigned long vertexCount, PxVec4 inVertices, unsigned long triangleIndexCount, [Ref] PxU32Ptr inTriangleIndices, optional unsigned long constraintTypeFlags, [Ref] optional PxVec3 verticalDirection, optional float bendingConstraintMaxAngle);
+
+    static VoidPtr allocPinnedHostBufferPxU32(PxCudaContextManager cudaContextManager, unsigned long numElements);
+    static PxVec4 allocPinnedHostBufferPxVec4(PxCudaContextManager cudaContextManager, unsigned long numElements);
+    static void freePinnedHostBufferPxU32(PxCudaContextManager cudaContextManager, [Ref] PxU32Ptr buffer);
+    static void freePinnedHostBufferPxVec4(PxCudaContextManager cudaContextManager, PxVec4 buffer);
+
+    static unsigned long long pxU32deviceptr(VoidPtr pxU32data);
+    static unsigned long long pxVec4deviceptr(PxVec4 pxVec4data);
 };
 
 [Platforms="windows;linux"]
@@ -14,10 +30,22 @@ interface CUcontext { };
 interface CUdevice { };
 
 [Platforms="windows;linux"]
+interface CUdeviceptr { };
+
+[Platforms="windows;linux"]
 interface CUmodule { };
 
+[Platforms="windows;linux"]
+interface CUstream { };
+
+[Platforms="windows;linux", Prefix="physx::"]
+interface PxCUresult { };
+
 [Platforms="windows;linux", Prefix="physx::", NoDelete]
-interface PxCudaContext { };
+interface PxCudaContext {
+     PxCUresult memcpyDtoH(VoidPtr dstHost, unsigned long long srcDevice, unsigned long byteCount);
+     PxCUresult memcpyHtoD(unsigned long long dstDevice, VoidPtr srcHost, unsigned long byteCount);
+};
 
 [Platforms="windows;linux", Prefix="physx::", NoDelete]
 interface PxCudaContextManager {
@@ -88,4 +116,441 @@ interface PxgDynamicsMemoryConfig {
     attribute unsigned long maxParticleContacts;
     attribute unsigned long collisionStackSize;
     attribute unsigned long maxHairContacts;
+};
+
+/****************************************
+ * [package=particles]
+ ****************************************/
+
+[Platforms="windows;linux", Prefix="physx::", StackAllocatable]
+interface PxConeLimitParams {
+    [Value] attribute PxVec4 lowHighLimits;
+    [Value] attribute PxVec4 axisAngle;
+};
+
+[Platforms="windows;linux", Prefix="physx::", StackAllocatable]
+interface PxDiffuseParticleParams {
+    void PxDiffuseParticleParams();
+    void setToDefault();
+    attribute float threshold;
+    attribute float lifetime;
+    attribute float airDrag;
+    attribute float bubbleDrag;
+    attribute float buoyancy;
+    attribute float kineticEnergyWeight;
+    attribute float pressureWeight;
+    attribute float divergenceWeight;
+    attribute float collisionDecay;
+    attribute boolean useAccurateVelocity;
+};
+
+[Platforms="windows;linux"]
+interface PxGpuMirroredGpuParticleSystemPointer {
+    attribute PxGpuParticleSystem mDevicePtr;
+    attribute PxGpuParticleSystem mHostPtr;
+};
+
+[Platforms="windows;linux", Prefix="physx::"]
+interface PxGpuParticleSystem {
+    unsigned long getNumCells();
+    //[Value] PxNeighborhoodIterator getIterator(unsigned long particleId);
+    //attribute float4 mUnsortedPositions_InvMass;
+    //attribute float4 mUnsortedVelocities;
+    [Value] attribute PxU32Ptr mUnsortedPhaseArray;
+    //attribute float4 mSortedPositions_InvMass;
+    //attribute float4 mSortedVelocities;
+    [Value] attribute PxU32Ptr mSortedPhaseArray;
+    [Value] attribute PxU32Ptr mUnsortedToSortedMapping;
+    [Value] attribute PxU32Ptr mSortedToUnsortedMapping;
+    [Value] attribute PxU32Ptr mParticleSelfCollisionCount;
+    [Value] attribute PxU32Ptr mCollisionIndex;
+    //attribute PxsParticleMaterialData mParticleMaterials;
+    //[Value] attribute PxGpuParticleData mCommonData;
+};
+
+[Platforms="windows;linux", Prefix="physx::", NoDelete]
+interface PxParticleAndDiffuseBuffer {
+    PxVec4 getDiffusePositionLifeTime();
+    unsigned long getNbActiveDiffuseParticles();
+    void setMaxActiveDiffuseParticles(unsigned long maxActiveDiffuseParticles);
+    unsigned long getMaxDiffuseParticles();
+    void setDiffuseParticleParams([Const, Ref] PxDiffuseParticleParams params);
+    [Value] PxDiffuseParticleParams getDiffuseParticleParams();
+};
+PxParticleAndDiffuseBuffer implements PxParticleBuffer;
+
+[Platforms="windows;linux", Prefix="physx::ExtGpu::", StackAllocatable]
+interface PxParticleAndDiffuseBufferDesc {
+    void PxParticleAndDiffuseBufferDesc();
+    [Value] attribute PxDiffuseParticleParams diffuseParams;
+    attribute unsigned long maxDiffuseParticles;
+    attribute unsigned long maxActiveDiffuseParticles;
+};
+PxParticleAndDiffuseBufferDesc implements PxParticleBufferDesc;
+
+[Platforms="windows;linux", Prefix="physx::", NoDelete]
+interface PxParticleBuffer {
+    PxVec4 getPositionInvMasses();
+    PxVec4 getVelocities();
+    VoidPtr getPhases();
+    PxParticleVolume getParticleVolumes();
+    void setNbActiveParticles(unsigned long nbActiveParticles);
+    unsigned long getNbActiveParticles();
+    unsigned long getMaxParticles();
+    unsigned long getNbParticleVolumes();
+    void setNbParticleVolumes(unsigned long nbParticleVolumes);
+    unsigned long getMaxParticleVolumes();
+    void setRigidFilters(PxParticleRigidFilterPair filters, unsigned long nbFilters);
+    void setRigidAttachments(PxParticleRigidAttachment attachments, unsigned long nbAttachments);
+    unsigned long getFlatListStartIndex();
+    void raiseFlags(PxParticleBufferFlagEnum flags);
+    void release();
+    readonly attribute unsigned long bufferIndex;
+    readonly attribute unsigned long bufferUniqueId;
+};
+PxParticleBuffer implements PxBase;
+
+[Platforms="windows;linux", Prefix="physx::ExtGpu::", StackAllocatable]
+interface PxParticleBufferDesc {
+    void PxParticleBufferDesc();
+    attribute PxVec4 positions;
+    attribute PxVec4 velocities;
+    [Value] attribute PxU32Ptr phases;
+    attribute PxParticleVolume volumes;
+    attribute unsigned long numActiveParticles;
+    attribute unsigned long maxParticles;
+    attribute unsigned long numVolumes;
+    attribute unsigned long maxVolumes;
+};
+
+[Platforms="windows;linux", Prefix="physx::", StackAllocatable]
+interface PxParticleCloth {
+    void PxParticleCloth();
+    attribute unsigned long startVertexIndex;
+    attribute unsigned long numVertices;
+    attribute float clothBlendScale;
+    attribute float restVolume;
+    attribute float pressure;
+    attribute unsigned long startTriangleIndex;
+    attribute unsigned long numTriangles;
+};
+
+[Platforms="windows;linux", Prefix="physx::", NoDelete]
+interface PxParticleClothBuffer {
+    PxVec4 getRestPositions();
+    VoidPtr getTriangles();
+    void setNbTriangles(unsigned long nbTriangles);
+    unsigned long getNbTriangles();
+    unsigned long getNbSprings();
+    PxParticleSpring getSprings();
+    void setCloths([Ref] PxPartitionedParticleCloth cloths);
+};
+PxParticleClothBuffer implements PxParticleBuffer;
+
+[Platforms="windows;linux", Prefix="physx::ExtGpu::", NoDelete]
+interface PxParticleClothBufferHelper {
+    void release();
+    unsigned long getMaxCloths();
+    unsigned long getNumCloths();
+    unsigned long getMaxSprings();
+    unsigned long getNumSprings();
+    unsigned long getMaxTriangles();
+    unsigned long getNumTriangles();
+    unsigned long getMaxParticles();
+    unsigned long getNumParticles();
+    void addCloth([Const, Ref] PxParticleCloth particleCloth, [Const, Ref] PxU32Ptr triangles, unsigned long numTriangles, [Const] PxParticleSpring springs, unsigned long numSprings, [Const] PxVec4 restPositions, unsigned long numParticles);
+    void addCloth(float blendScale, float restVolume, float pressure, [Const, Ref] PxU32Ptr triangles, unsigned long numTriangles, [Const] PxParticleSpring springs, unsigned long numSprings, [Const] PxVec4 restPositions, unsigned long numParticles);
+    [Ref] PxParticleClothDesc getParticleClothDesc();
+};
+
+[Platforms="windows;linux"]
+enum PxParticleClothConstraintEnum {
+    "PxParticleClothConstraintEnum::eTYPE_INVALID_CONSTRAINT",
+    "PxParticleClothConstraintEnum::eTYPE_HORIZONTAL_CONSTRAINT",
+    "PxParticleClothConstraintEnum::eTYPE_VERTICAL_CONSTRAINT",
+    "PxParticleClothConstraintEnum::eTYPE_DIAGONAL_CONSTRAINT",
+    "PxParticleClothConstraintEnum::eTYPE_BENDING_CONSTRAINT",
+    "PxParticleClothConstraintEnum::eTYPE_DIAGONAL_BENDING_CONSTRAINT",
+    "PxParticleClothConstraintEnum::eTYPE_ALL",
+};
+
+[Platforms="windows;linux", Prefix="physx::ExtGpu::"]
+interface PxParticleClothConstraint {
+    void PxParticleClothConstraint();
+    attribute unsigned long particleIndexA;
+    attribute unsigned long particleIndexB;
+    attribute float length;
+    attribute unsigned long constraintType;
+};
+
+[Platforms="windows;linux", Prefix="physx::ExtGpu::", NoDelete]
+interface PxParticleClothCooker {
+    void release();
+    void cookConstraints([Const] optional PxParticleClothConstraint constraints, optional unsigned long numConstraints);
+    VoidPtr getTriangleIndices();
+    unsigned long getTriangleIndicesCount();
+    PxParticleClothConstraint getConstraints();
+    unsigned long getConstraintCount();
+    void calculateMeshVolume();
+    float getMeshVolume();
+};
+
+[Platforms="windows;linux", Prefix="physx::", StackAllocatable]
+interface PxParticleClothDesc {
+    void PxParticleClothDesc();
+    attribute PxParticleCloth cloths;
+    [Value] attribute PxU32Ptr triangles;
+    attribute PxParticleSpring springs;
+    attribute PxVec4 restPositions;
+    attribute unsigned long nbCloths;
+    attribute unsigned long nbSprings;
+    attribute unsigned long nbTriangles;
+    attribute unsigned long nbParticles;
+};
+
+[Platforms="windows;linux", Prefix="physx::", NoDelete]
+interface PxParticleClothPreProcessor {
+    void release();
+    void partitionSprings([Const, Ref] PxParticleClothDesc clothDesc, [Ref] PxPartitionedParticleCloth output);
+};
+
+[Platforms="windows;linux"]
+enum PxParticleBufferFlagEnum {
+    "PxParticleBufferFlagEnum::eNONE",
+    "PxParticleBufferFlagEnum::eUPDATE_POSITION",
+    "PxParticleBufferFlagEnum::eUPDATE_VELOCITY",
+    "PxParticleBufferFlagEnum::eUPDATE_PHASE",
+    "PxParticleBufferFlagEnum::eUPDATE_RESTPOSITION",
+    "PxParticleBufferFlagEnum::eUPDATE_CLOTH",
+    "PxParticleBufferFlagEnum::eUPDATE_RIGID",
+    "PxParticleBufferFlagEnum::eUPDATE_DIFFUSE_PARAM",
+    "PxParticleBufferFlagEnum::eUPDATE_ATTACHMENTS",
+    "PxParticleBufferFlagEnum::eALL",
+};
+
+[Platforms="windows;linux", Prefix="physx::", StackAllocatable]
+interface PxParticleBufferFlags {
+    void PxParticleBufferFlags(unsigned long flags);
+    boolean isSet(PxParticleBufferFlagEnum flag);
+    void raise(PxParticleBufferFlagEnum flag);
+    void clear(PxParticleBufferFlagEnum flag);
+};
+
+[Platforms="windows;linux"]
+enum PxParticleFlagEnum {
+    "PxParticleFlagEnum::eDISABLE_SELF_COLLISION",
+    "PxParticleFlagEnum::eDISABLE_RIGID_COLLISION",
+    "PxParticleFlagEnum::eFULL_DIFFUSE_ADVECTION"
+};
+
+[Platforms="windows;linux", Prefix="physx::", StackAllocatable]
+interface PxParticleFlags {
+    void PxParticleFlags(unsigned long flags);
+    boolean isSet(PxParticleFlagEnum flag);
+    void raise(PxParticleFlagEnum flag);
+    void clear(PxParticleFlagEnum flag);
+};
+
+[Platforms="windows;linux", Prefix="physx::", NoDelete]
+interface PxParticleMaterial {
+    void setFriction(float friction);
+    float getFriction();
+    void setDamping(float damping);
+    float getDamping();
+    void setAdhesion(float adhesion);
+    float getAdhesion();
+    void setGravityScale(float scale);
+    float getGravityScale();
+    void setAdhesionRadiusScale(float scale);
+    float getAdhesionRadiusScale();
+};
+PxParticleMaterial implements PxBaseMaterial;
+
+[Platforms="windows;linux"]
+enum PxParticlePhaseFlagEnum {
+    "PxParticlePhaseFlagEnum::eParticlePhaseGroupMask",
+    "PxParticlePhaseFlagEnum::eParticlePhaseFlagsMask",
+    "PxParticlePhaseFlagEnum::eParticlePhaseSelfCollide",
+    "PxParticlePhaseFlagEnum::eParticlePhaseSelfCollideFilter",
+    "PxParticlePhaseFlagEnum::eParticlePhaseFluid"
+};
+
+[Platforms="windows;linux", Prefix="physx::", StackAllocatable]
+interface PxParticlePhaseFlags {
+    void PxParticlePhaseFlags(unsigned long flags);
+    boolean isSet(PxParticlePhaseFlagEnum flag);
+    void raise(PxParticlePhaseFlagEnum flag);
+    void clear(PxParticlePhaseFlagEnum flag);
+};
+
+[Platforms="windows;linux", Prefix="physx::", NoDelete, StackAllocatable]
+interface PxParticleRigidAttachment {
+    void PxParticleRigidAttachment();
+    [Value] attribute PxVec4 mLocalPose0;
+    [Value] attribute PxConeLimitParams mParams;
+};
+PxParticleRigidAttachment implements PxParticleRigidFilterPair;
+
+[Platforms="windows;linux", Prefix="physx::", NoDelete, StackAllocatable]
+interface PxParticleRigidFilterPair {
+    void PxParticleRigidFilterPair();
+    attribute unsigned long long mID0;
+    attribute unsigned long long mID1;
+};
+
+[Platforms="windows;linux"]
+enum PxParticleSolverTypeEnum {
+    "PxParticleSolverTypeEnum::ePBD",
+    "PxParticleSolverTypeEnum::eFLIP",
+    "PxParticleSolverTypeEnum::eMPM",
+    "PxParticleSolverTypeEnum::eCUSTOM"
+};
+
+[Platforms="windows;linux", Prefix="physx::", StackAllocatable]
+interface PxParticleSpring {
+    void PxParticleSpring();
+    attribute unsigned long ind0;
+    attribute unsigned long ind1;
+    attribute float length;
+    attribute float stiffness;
+    attribute float damping;
+    attribute float pad;
+};
+
+[Platforms="windows;linux", Prefix="physx::", NoDelete]
+interface PxParticleSystem {
+    void setSolverIterationCounts(unsigned long minPositionIters, unsigned long minVelocityIters);
+    //void getSolverIterationCounts([Ref] PxU32 minPositionIters, [Ref] PxU32 minVelocityIters);
+    [Value] PxFilterData getSimulationFilterData();
+    void setSimulationFilterData([Const, Ref] PxFilterData data);
+    void setParticleFlag(PxParticleFlagEnum flag, boolean val);
+    void setParticleFlags([Ref] PxParticleFlags flags);
+    [Value] PxParticleFlags getParticleFlags();
+    void setMaxDepenetrationVelocity(float maxDepenetrationVelocity);
+    float getMaxDepenetrationVelocity();
+    void setMaxVelocity(float maxVelocity);
+    float getMaxVelocity();
+    PxCudaContextManager getCudaContextManager();
+    void setRestOffset(float restOffset);
+    float getRestOffset();
+    void setContactOffset(float contactOffset);
+    float getContactOffset();
+    void setParticleContactOffset(float particleContactOffset);
+    float getParticleContactOffset();
+    void setSolidRestOffset(float solidRestOffset);
+    float getSolidRestOffset();
+    void addRigidAttachment(PxRigidActor actor);
+    void removeRigidAttachment(PxRigidActor actor);
+    void enableCCD(boolean enable);
+    unsigned long createPhase(PxParticleMaterial material, [Ref] PxParticlePhaseFlags flags);
+    unsigned long getNbParticleMaterials();
+//    void setParticleSystemCallback(PxParticleSystemCallback callback);
+//    PxParticleSystemCallback getParticleSystemCallback();
+    void setPeriodicBoundary([Const, Ref] PxVec3 boundary);
+    [Value] PxVec3 getPeriodicBoundary();
+    void addParticleBuffer(PxParticleBuffer particleBuffer);
+    void removeParticleBuffer(PxParticleBuffer particleBuffer);
+    unsigned long getGpuParticleSystemIndex();
+};
+PxParticleSystem implements PxActor;
+
+//[Platforms="windows;linux", Prefix="physx::"]
+//interface PxParticleSystemCallback {
+//    void onBegin([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
+//    void onAdvance([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
+//    void onPostSolve([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
+//};
+//
+//[Platforms="windows;linux", JSImplementation="PxParticleSystemCallback"]
+//interface PxParticleSystemCallbackImpl {
+//    void PxParticleSystemCallbackImpl();
+//    void onBegin([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
+//    void onAdvance([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
+//    void onPostSolve([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
+//};
+
+[Platforms="windows;linux", Prefix="physx::", NoDelete]
+interface PxParticleVolume {
+    [Value] attribute PxBounds3 bound;
+    attribute unsigned long particleIndicesOffset;
+    attribute unsigned long numParticles;
+};
+
+[Platforms="windows;linux", Prefix="physx::", StackAllocatable]
+interface PxPartitionedParticleCloth {
+    void PxPartitionedParticleCloth();
+    void allocateBuffers(unsigned long nbParticles, PxCudaContextManager cudaManager);
+    [Value] attribute PxU32Ptr accumulatedSpringsPerPartitions;
+    [Value] attribute PxU32Ptr accumulatedCopiesPerParticles;
+    [Value] attribute PxU32Ptr remapOutput;
+    attribute PxParticleSpring orderedSprings;
+    [Value] attribute PxU32Ptr sortedClothStartIndices;
+    attribute PxParticleCloth cloths;
+    attribute unsigned long remapOutputSize;
+    attribute unsigned long nbPartitions;
+    attribute unsigned long nbSprings;
+    attribute unsigned long nbCloths;
+    attribute unsigned long maxSpringsPerPartition;
+    attribute PxCudaContextManager mCudaManager;
+};
+
+[Platforms="windows;linux", Prefix="physx::", NoDelete]
+interface PxPBDMaterial {
+    void setViscosity(float viscosity);
+    float getViscosity();
+    void setVorticityConfinement(float vorticityConfinement);
+    float getVorticityConfinement();
+    void setSurfaceTension(float surfaceTension);
+    float getSurfaceTension();
+    void setCohesion(float cohesion);
+    float getCohesion();
+    void setLift(float lift);
+    float getLift();
+    void setDrag(float drag);
+    float getDrag();
+    void setCFLCoefficient(float coefficient);
+    float getCFLCoefficient();
+    void setParticleFrictionScale(float scale);
+    float getParticleFrictionScale();
+    void setParticleAdhesionScale(float adhesion);
+    float getParticleAdhesionScale();
+    DOMString getConcreteTypeName();
+};
+PxPBDMaterial implements PxParticleMaterial;
+
+[Platforms="windows;linux", Prefix="physx::"]
+interface PxPBDParticleSystem {
+    void setWind([Const, Ref] PxVec3 wind);
+    [Value] PxVec3 getWind();
+    void setFluidBoundaryDensityScale(float fluidBoundaryDensityScale);
+    float getFluidBoundaryDensityScale();
+    void setFluidRestOffset(float fluidRestOffset);
+    float getFluidRestOffset();
+    void setGridSizeX(unsigned long gridSizeX);
+    void setGridSizeY(unsigned long gridSizeY);
+    void setGridSizeZ(unsigned long gridSizeZ);
+    DOMString getConcreteTypeName();
+};
+PxPBDParticleSystem implements PxParticleSystem;
+
+[Platforms="windows;linux"]
+interface Vector_PxParticleRigidFilterPair {
+    void Vector_PxParticleRigidFilterPair();
+    void Vector_PxParticleRigidFilterPair(unsigned long size);
+    [Ref] PxParticleRigidFilterPair at(unsigned long index);
+    PxParticleRigidFilterPair data();
+    unsigned long size();
+    void push_back([Ref] PxParticleRigidFilterPair value);
+    void clear();
+};
+
+[Platforms="windows;linux"]
+interface Vector_PxParticleSpring {
+    void Vector_PxParticleSpring();
+    void Vector_PxParticleSpring(unsigned long size);
+    [Ref] PxParticleSpring at(unsigned long index);
+    PxParticleSpring data();
+    unsigned long size();
+    void push_back([Ref] PxParticleSpring value);
+    void clear();
 };

@@ -147,7 +147,7 @@ interface PxMat33 {
 [Prefix="physx::"]
 interface PxOutputStream { };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxPlane {
     void PxPlane();
     void PxPlane(float nx, float ny, float nz, float distance);
@@ -253,4 +253,28 @@ interface PxVec3 {
     attribute float x;
     attribute float y;
     attribute float z;
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxVec4 {
+    void PxVec4();
+    void PxVec4(float x, float y, float z, float w);
+
+    boolean isZero();
+    boolean isFinite();
+    boolean isNormalized();
+    float magnitudeSquared();
+    float magnitude();
+    float dot([Const, Ref] PxVec4 v);
+    [Value] PxVec4 getNormalized();
+    float normalize();
+    [Value] PxVec4 multiply([Const, Ref] PxVec4 a);
+    [Value] PxVec4 minimum([Const, Ref] PxVec4 v);
+    [Value] PxVec4 maximum([Const, Ref] PxVec4 v);
+    [Value] PxVec3 getXYZ();
+
+    attribute float x;
+    attribute float y;
+    attribute float z;
+    attribute float w;
 };

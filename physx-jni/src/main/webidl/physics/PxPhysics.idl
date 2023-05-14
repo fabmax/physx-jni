@@ -312,19 +312,12 @@ interface PxPairFlags {
     void clear(PxPairFlagEnum flag);
 };
 
-enum PxParticleSolverTypeEnum {
-    "PxParticleSolverTypeEnum::ePBD",
-    "PxParticleSolverTypeEnum::eFLIP",
-    "PxParticleSolverTypeEnum::eMPM",
-    "PxParticleSolverTypeEnum::eCUSTOM"
-};
-
 [Prefix="physx::"]
 interface PxPhysics {
     // Basics
     void release();
     [Ref] PxFoundation getFoundation();
-    PxAggregate createAggregate(unsigned long size, unsigned long maxShape, boolean enableSelfCollision);
+    PxAggregate createAggregate(unsigned long maxActor, unsigned long maxShape, boolean enableSelfCollision);
     [Const, Ref] PxTolerancesScale getTolerancesScale();
     // Scenes
     PxScene createScene([Const, Ref] PxSceneDesc sceneDesc);
@@ -340,6 +333,12 @@ interface PxPhysics {
     PxMaterial createMaterial(float staticFriction, float dynamicFriction, float restitution);
     // Deletion Listeners
     [Ref] PxInsertionCallback getPhysicsInsertionCallback();
+
+    // Particles stuff - requires CUDA
+    [Platforms="windows;linux"] PxPBDParticleSystem createPBDParticleSystem([Ref] PxCudaContextManager cudaContextManager, optional unsigned long maxNeighborhood);
+    [Platforms="windows;linux"] PxParticleBuffer createParticleBuffer(unsigned long maxParticles, unsigned long maxVolumes, PxCudaContextManager cudaContextManager);
+    [Platforms="windows;linux"] PxParticleClothBuffer createParticleClothBuffer(unsigned long maxParticles, unsigned long maxNumVolumes, unsigned long maxNumCloths, unsigned long maxNumTriangles, unsigned long maxNumSprings, PxCudaContextManager cudaContextManager);
+    [Platforms="windows;linux"] PxPBDMaterial createPBDMaterial(float friction, float damping, float adhesion, float viscosity, float vorticityConfinement, float surfaceTension, float cohesion, float lift, float drag, optional float cflCoefficient, optional float gravityScale);
 };
 
 enum PxPruningStructureTypeEnum {

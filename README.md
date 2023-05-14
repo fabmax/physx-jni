@@ -11,20 +11,19 @@ The library is published on maven central, so you can easily add this to your de
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:2.0.5")
+    implementation("de.fabmax:physx-jni:2.0.6")
     
     // native libraries, you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:2.0.5:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:2.0.5:natives-linux")
-    runtimeOnly("de.fabmax:physx-jni:2.0.5:natives-macos")
-    runtimeOnly("de.fabmax:physx-jni:2.0.5:natives-macos-arm64")
+    runtimeOnly("de.fabmax:physx-jni:2.0.6:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.0.6:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.0.6:natives-macos")
+    runtimeOnly("de.fabmax:physx-jni:2.0.6:natives-macos-arm64")
 }
 ```
 
 ## Library Coverage
 
-This is still work in progress, but the bindings already include most major parts of the PhysX SDK (except the fancy
-new stuff):
+This is still work in progress, but the bindings already include most major parts of the PhysX SDK:
 - [x] Basics
     - Static and dynamic actors
     - All geometry types (box, capsule, sphere, plane, convex mesh, triangle mesh and height field)
@@ -32,10 +31,10 @@ new stuff):
 - [x] Articulations
 - [x] Vehicles
 - [x] Character controllers
-- [ ] CUDA support
-    - [x] Rigid bodies 
+- [ ] CUDA (requires CUDA, see [below](#cuda-support))
+    - [x] Rigid bodies
+    - [x] Particles (Fluids + Cloth)
     - [ ] Soft bodies
-    - [ ] Particles
 - [x] Scene serialization
 
 The detailed list of mapped functions is given by the [interface definition files](physx-jni/src/main/webidl).
@@ -69,6 +68,13 @@ To see a few real life demos you can take a look at my [kool](https://github.com
 > *__Note:__ These demos run directly in the browser and obviously don't use this library, but the webassembly version mentioned
 > above. However, the two are functionally identical, so it shouldn't matter too much. The JNI version is much faster
 > though.*
+
+The particle simulation unfortunately requires CUDA and therefore only works on Windows / Linux systems with an Nvidia
+GPU. Here are a few images what this can look like:
+
+| Fluid Simulation                    | Cloth Simulation                    |
+|-------------------------------------|-------------------------------------|
+| ![Fluid simulation](docs/waves.jpg) | ![Cloth simulation](docs/cloth.jpg) |
 
 ### Documentation
 The generated bindings contain most of the original documentation converted to javadoc. For further reading
@@ -174,7 +180,6 @@ if (cudaMgr != null && cudaMgr.contextIsValid()) {
     sceneDesc.setCudaContextManager(cudaMgr);
     sceneDesc.getFlags().set(PxSceneFlagEnum.eENABLE_GPU_DYNAMICS);
     sceneDesc.setBroadPhaseType(PxBroadPhaseTypeEnum.eGPU);
-    sceneDesc.setGpuMaxNumPartitions(8);
     
     // optionally fine tune amount of allocated CUDA memory
     // PxgDynamicsMemoryConfig memCfg = new PxgDynamicsMemoryConfig();
@@ -191,8 +196,9 @@ PxScene scene = physics.createScene(sceneDesc);
 Using CUDA comes with a few implications:
 
 The native libraries required for CUDA are pretty big (>100 MB), and I therefore decided to not publish the libraries
-to maven central for now. I.e., in case you want to use the CUDA enabled native libraries, you have to build them
-yourself (see below, it's not that difficult). I might publish the libraries in the future, once things settled a bit.
+to maven central for now. I.e., in case you want to use the CUDA enabled native libraries, you have to download them
+from the [releases section](https://github.com/fabmax/physx-jni/releases) and add the jars to your project. I might
+publish the libraries in the future, once things settled a bit.
 
 Moreover, CUDA comes with some additional overhead (a lot of data has to be copied around between CPU and GPU). For
 smaller scenes this overhead seems to outweigh the benefits and physics computation might actually be slower than with

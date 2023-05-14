@@ -5,6 +5,7 @@ import physx.PxTopLevelFunctions;
 import physx.common.*;
 import physx.cooking.PxCooking;
 import physx.cooking.PxCookingParams;
+import physx.extensions.PxRigidBodyExt;
 import physx.geometry.PxBoxGeometry;
 import physx.geometry.PxGeometry;
 import physx.geometry.PxPlaneGeometry;
@@ -66,7 +67,7 @@ public class PhysXTestEnv {
         cookingParams = new PxCookingParams(tolerances);
         cooking = PxTopLevelFunctions.CreateCooking(PX_PHYSICS_VERSION, foundation, cookingParams);
 
-        defaultDispatcher = PxTopLevelFunctions.DefaultCpuDispatcherCreate(1);
+        defaultDispatcher = PxTopLevelFunctions.DefaultCpuDispatcherCreate(2);
 
         PxTopLevelFunctions.InitExtensions(physics);
         PxVehicleTopLevelFunctions.InitVehicleExtension(foundation);
@@ -96,6 +97,8 @@ public class PhysXTestEnv {
             PxRigidDynamic body = physics.createRigidDynamic(pose);
             shape.setSimulationFilterData(simFilterData);
             body.attachShape(shape);
+            shape.release();
+            PxRigidBodyExt.setMassAndUpdateInertia(body, 1f);
             return body;
         }
     }
@@ -109,6 +112,7 @@ public class PhysXTestEnv {
             PxQuat q = PxQuat.createAt(mem, MemoryStack::nmalloc, 0f, 0f, r, r);
             PxVec3 p = PxVec3.createAt(mem, MemoryStack::nmalloc, 0f, 0f, 0f);
             shape.setLocalPose(PxTransform.createAt(mem, MemoryStack::nmalloc, p, q));
+            shape.setSimulationFilterData(defaultFilterData);
             return createStaticBody(shape, 0f, 0f, 0f);
         }
     }

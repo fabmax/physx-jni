@@ -3,7 +3,8 @@ package de.fabmax.physxjni;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.system.MemoryStack;
 import physx.PxTopLevelFunctions;
-import physx.common.*;
+import physx.common.PxCudaContextManager;
+import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
 import physx.physics.*;
 
@@ -11,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static de.fabmax.physxjni.PhysXTestEnv.foundation;
 import static de.fabmax.physxjni.PhysXTestEnv.physics;
 
 public class CudaTest {
@@ -26,23 +26,12 @@ public class CudaTest {
 
     @Test
     public void createCudaContextTest() {
-        if (Platform.getPlatform() == Platform.MACOS || Platform.getPlatform() == Platform.MACOS_ARM64) {
-            // no CUDA cupport on Mac OS
+        PxCudaContextManager cudaMgr = CudaHelpers.createCudaContextManager();
+        if (cudaMgr == null) {
             return;
         }
 
-        // disabled for now: PxCudaContextManagerDesc is not available on mac os
         try (MemoryStack mem = MemoryStack.stackPush()) {
-            PxCudaContextManagerDesc desc = PxCudaContextManagerDesc.createAt(mem, MemoryStack::nmalloc);
-            desc.setInteropMode(PxCudaInteropModeEnum.NO_INTEROP);
-            PxCudaContextManager cudaMgr = PxCudaTopLevelFunctions.CreateCudaContextManager(foundation, desc);
-            if (cudaMgr == null || !cudaMgr.contextIsValid()) {
-                System.err.println("Failed creating CUDA context, no CUDA capable GPU? Skipping CUDA test...");
-                // skip the test as this is probably caused by a missing CUDA hardware support and there
-                // isn't much we can do about that
-                return;
-            }
-
             System.out.println("CUDA device: " + cudaMgr.getDeviceName() + ", mem: " + (cudaMgr.getDeviceTotalMemBytes() / 1024.0 / 1024.0) + " MB");
 
             double[] cpuTimes = new double[NUM_BODY_RUNS.length];
@@ -65,25 +54,21 @@ public class CudaTest {
                         NUM_BODY_RUNS[i], cpuTime, gpuTime, cpuTime / gpuTime);
             }
         }
+        cudaMgr.release();
     }
 
     private double simulateScene(PxCudaContextManager cudaMgr, int numBodies) {
         try (MemoryStack mem = MemoryStack.stackPush()) {
-            PxSceneDesc sceneDesc = PxSceneDesc.createAt(mem, MemoryStack::nmalloc, physics.getTolerancesScale());
-            sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
-            sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(8));
-            sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
-            //sceneDesc.getFlags().clear(PxSceneFlagEnum.eENABLE_PCM);
-
+            PxScene scene;
             if (cudaMgr != null) {
-                // cuda related scene settings
-                sceneDesc.setCudaContextManager(cudaMgr);
-                sceneDesc.getFlags().raise(PxSceneFlagEnum.eENABLE_GPU_DYNAMICS);
-                sceneDesc.setBroadPhaseType(PxBroadPhaseTypeEnum.eGPU);
-                sceneDesc.setGpuMaxNumPartitions(8);
+                scene = CudaHelpers.createCudaEnabledScene(cudaMgr);
+            } else {
+                PxSceneDesc sceneDesc = PxSceneDesc.createAt(mem, MemoryStack::nmalloc, physics.getTolerancesScale());
+                sceneDesc.setGravity(new PxVec3(0f, -9.81f, 0f));
+                sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(8));
+                sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
+                scene = physics.createScene(sceneDesc);
             }
-
-            PxScene scene = physics.createScene(sceneDesc);
             return simulateBodies(scene, numBodies);
         }
     }
