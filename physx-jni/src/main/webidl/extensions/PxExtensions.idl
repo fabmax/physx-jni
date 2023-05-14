@@ -2,6 +2,11 @@
  * [package=extensions]
  ****************************************/
 
+[NoDelete]
+interface PxExtensionTopLevelFunctions {
+    static PxRigidStatic CreatePlane([Ref] PxPhysics sdk, [Const, Ref] PxPlane plane, [Ref] PxMaterial material, [Const, Ref] PxFilterData filterData);
+};
+
 [Prefix="physx::"]
 interface PxCollectionExt {
     static void releaseObjects([Ref] PxCollection collection, optional boolean releaseExclusiveShapes);

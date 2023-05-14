@@ -11,6 +11,7 @@ interface PxCudaTopLevelFunctions {
     static PxParticleClothPreProcessor CreateParticleClothPreProcessor(PxCudaContextManager cudaContextManager);
     static PxParticleClothBufferHelper CreateParticleClothBufferHelper(unsigned long maxCloths, unsigned long maxTriangles, unsigned long maxSprings, unsigned long maxParticles, PxCudaContextManager cudaContextManager);
     static PxParticleClothBuffer CreateAndPopulateParticleClothBuffer([Const, Ref] PxParticleBufferDesc desc, [Const, Ref] PxParticleClothDesc clothDesc, [Ref] PxPartitionedParticleCloth output, PxCudaContextManager cudaContextManager);
+    static PxParticleAndDiffuseBuffer CreateAndPopulateParticleAndDiffuseBuffer([Const, Ref] PxParticleAndDiffuseBufferDesc desc, PxCudaContextManager cudaContextManager);
     static PxParticleClothCooker CreateParticleClothCooker(unsigned long vertexCount, PxVec4 inVertices, unsigned long triangleIndexCount, [Ref] PxU32Ptr inTriangleIndices, optional unsigned long constraintTypeFlags, [Ref] optional PxVec3 verticalDirection, optional float bendingConstraintMaxAngle);
 
     static VoidPtr allocPinnedHostBufferPxU32(PxCudaContextManager cudaContextManager, unsigned long numElements);
@@ -127,6 +128,22 @@ interface PxConeLimitParams {
     [Value] attribute PxVec4 axisAngle;
 };
 
+[Platforms="windows;linux", Prefix="physx::", StackAllocatable]
+interface PxDiffuseParticleParams {
+    void PxDiffuseParticleParams();
+    void setToDefault();
+    attribute float threshold;
+    attribute float lifetime;
+    attribute float airDrag;
+    attribute float bubbleDrag;
+    attribute float buoyancy;
+    attribute float kineticEnergyWeight;
+    attribute float pressureWeight;
+    attribute float divergenceWeight;
+    attribute float collisionDecay;
+    attribute boolean useAccurateVelocity;
+};
+
 [Platforms="windows;linux"]
 interface PxGpuMirroredGpuParticleSystemPointer {
     attribute PxGpuParticleSystem mDevicePtr;
@@ -150,6 +167,26 @@ interface PxGpuParticleSystem {
     //attribute PxsParticleMaterialData mParticleMaterials;
     //[Value] attribute PxGpuParticleData mCommonData;
 };
+
+[Platforms="windows;linux", Prefix="physx::", NoDelete]
+interface PxParticleAndDiffuseBuffer {
+    PxVec4 getDiffusePositionLifeTime();
+    unsigned long getNbActiveDiffuseParticles();
+    void setMaxActiveDiffuseParticles(unsigned long maxActiveDiffuseParticles);
+    unsigned long getMaxDiffuseParticles();
+    void setDiffuseParticleParams([Const, Ref] PxDiffuseParticleParams params);
+    [Value] PxDiffuseParticleParams getDiffuseParticleParams();
+};
+PxParticleAndDiffuseBuffer implements PxParticleBuffer;
+
+[Platforms="windows;linux", Prefix="physx::ExtGpu::", StackAllocatable]
+interface PxParticleAndDiffuseBufferDesc {
+    void PxParticleAndDiffuseBufferDesc();
+    [Value] attribute PxDiffuseParticleParams diffuseParams;
+    attribute unsigned long maxDiffuseParticles;
+    attribute unsigned long maxActiveDiffuseParticles;
+};
+PxParticleAndDiffuseBufferDesc implements PxParticleBufferDesc;
 
 [Platforms="windows;linux", Prefix="physx::", NoDelete]
 interface PxParticleBuffer {

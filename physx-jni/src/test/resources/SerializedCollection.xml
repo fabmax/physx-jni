@@ -45,7 +45,7 @@
         </Shapes>
         <CMassLocalPose >0 0 0 1 0 0 0</CMassLocalPose>
         <Mass >1</Mass>
-        <MassSpaceInertiaTensor >1 1 1</MassSpaceInertiaTensor>
+        <MassSpaceInertiaTensor >0.166667 0.166667 0.166667</MassSpaceInertiaTensor>
         <LinearDamping >0</LinearDamping>
         <AngularDamping >0.05</AngularDamping>
         <MaxLinearVelocity >1e+16</MaxLinearVelocity>

@@ -148,6 +148,7 @@ public class ClothTest {
 
                 var clothBuffers = PxCudaTopLevelFunctions.CreateParticleClothBufferHelper(1, numTriangles, numSprings, numParticles, cudaMgr);
 
+                // create pinned buffers for particle attributes (these are actually arrays, despite the awkward return types)
                 var phase = PxCudaTopLevelFunctions.allocPinnedHostBufferPxU32(cudaMgr, numParticles);
                 var positionInvMass = PxCudaTopLevelFunctions.allocPinnedHostBufferPxVec4(cudaMgr, numParticles);
                 var velocity = PxCudaTopLevelFunctions.allocPinnedHostBufferPxVec4(cudaMgr, numParticles);

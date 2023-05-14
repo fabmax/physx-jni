@@ -147,7 +147,7 @@ interface PxMat33 {
 [Prefix="physx::"]
 interface PxOutputStream { };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxPlane {
     void PxPlane();
     void PxPlane(float nx, float ny, float nz, float distance);
