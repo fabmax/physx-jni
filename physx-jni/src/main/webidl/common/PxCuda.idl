@@ -7,9 +7,11 @@ interface PxCudaTopLevelFunctions {
     static long GetSuggestedCudaDeviceOrdinal([Ref] PxFoundation foundation);
 
     static PxCudaContextManager CreateCudaContextManager([Ref] PxFoundation foundation, [Const, Ref] PxCudaContextManagerDesc desc);
+
     static PxParticleClothPreProcessor CreateParticleClothPreProcessor(PxCudaContextManager cudaContextManager);
     static PxParticleClothBufferHelper CreateParticleClothBufferHelper(unsigned long maxCloths, unsigned long maxTriangles, unsigned long maxSprings, unsigned long maxParticles, PxCudaContextManager cudaContextManager);
     static PxParticleClothBuffer CreateAndPopulateParticleClothBuffer([Const, Ref] PxParticleBufferDesc desc, [Const, Ref] PxParticleClothDesc clothDesc, [Ref] PxPartitionedParticleCloth output, PxCudaContextManager cudaContextManager);
+    static PxParticleClothCooker CreateParticleClothCooker(unsigned long vertexCount, PxVec4 inVertices, unsigned long triangleIndexCount, [Ref] PxU32Ptr inTriangleIndices, optional unsigned long constraintTypeFlags, [Ref] optional PxVec3 verticalDirection, optional float bendingConstraintMaxAngle);
 
     static VoidPtr allocPinnedHostBufferPxU32(PxCudaContextManager cudaContextManager, unsigned long numElements);
     static PxVec4 allocPinnedHostBufferPxVec4(PxCudaContextManager cudaContextManager, unsigned long numElements);
@@ -222,6 +224,38 @@ interface PxParticleClothBufferHelper {
     void addCloth([Const, Ref] PxParticleCloth particleCloth, [Const, Ref] PxU32Ptr triangles, unsigned long numTriangles, [Const] PxParticleSpring springs, unsigned long numSprings, [Const] PxVec4 restPositions, unsigned long numParticles);
     void addCloth(float blendScale, float restVolume, float pressure, [Const, Ref] PxU32Ptr triangles, unsigned long numTriangles, [Const] PxParticleSpring springs, unsigned long numSprings, [Const] PxVec4 restPositions, unsigned long numParticles);
     [Ref] PxParticleClothDesc getParticleClothDesc();
+};
+
+[Platforms="windows;linux"]
+enum PxParticleClothConstraintEnum {
+    "PxParticleClothConstraintEnum::eTYPE_INVALID_CONSTRAINT",
+    "PxParticleClothConstraintEnum::eTYPE_HORIZONTAL_CONSTRAINT",
+    "PxParticleClothConstraintEnum::eTYPE_VERTICAL_CONSTRAINT",
+    "PxParticleClothConstraintEnum::eTYPE_DIAGONAL_CONSTRAINT",
+    "PxParticleClothConstraintEnum::eTYPE_BENDING_CONSTRAINT",
+    "PxParticleClothConstraintEnum::eTYPE_DIAGONAL_BENDING_CONSTRAINT",
+    "PxParticleClothConstraintEnum::eTYPE_ALL",
+};
+
+[Platforms="windows;linux", Prefix="physx::ExtGpu::"]
+interface PxParticleClothConstraint {
+    void PxParticleClothConstraint();
+    attribute unsigned long particleIndexA;
+    attribute unsigned long particleIndexB;
+    attribute float length;
+    attribute unsigned long constraintType;
+};
+
+[Platforms="windows;linux", Prefix="physx::ExtGpu::", NoDelete]
+interface PxParticleClothCooker {
+    void release();
+    void cookConstraints([Const] optional PxParticleClothConstraint constraints, optional unsigned long numConstraints);
+    VoidPtr getTriangleIndices();
+    unsigned long getTriangleIndicesCount();
+    PxParticleClothConstraint getConstraints();
+    unsigned long getConstraintCount();
+    void calculateMeshVolume();
+    float getMeshVolume();
 };
 
 [Platforms="windows;linux", Prefix="physx::", StackAllocatable]
