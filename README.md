@@ -31,7 +31,7 @@ This is still work in progress, but the bindings already include most major part
 - [x] Articulations
 - [x] Vehicles
 - [x] Character controllers
-- [ ] CUDA (requires CUDA, see [below](#cuda-support))
+- [ ] CUDA (requires a Platform with CUDA support, see [below](#cuda-support))
     - [x] Rigid bodies
     - [x] Particles (Fluids + Cloth)
     - [ ] Soft bodies
@@ -75,6 +75,11 @@ GPU. Here are a few images what this can look like:
 | Fluid Simulation                    | Cloth Simulation                    |
 |-------------------------------------|-------------------------------------|
 | ![Fluid simulation](docs/waves.jpg) | ![Cloth simulation](docs/cloth.jpg) |
+
+Simplified non-graphical versions of the two scenes are available in source as tests:
+[FluidTest](https://github.com/fabmax/physx-jni/blob/main/physx-jni/src/test/java/de/fabmax/physxjni/FluidTest.java) and
+[ClothTest](https://github.com/fabmax/physx-jni/blob/main/physx-jni/src/test/java/de/fabmax/physxjni/ClothTest.java)
+They are more or less 1:1 translations of the corresponding PhysX example snippets.
 
 ### Documentation
 The generated bindings contain most of the original documentation converted to javadoc. For further reading
