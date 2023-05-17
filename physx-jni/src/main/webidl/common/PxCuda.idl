@@ -459,20 +459,20 @@ interface PxParticleSystem {
 };
 PxParticleSystem implements PxActor;
 
-//[Platforms="windows;linux", Prefix="physx::"]
-//interface PxParticleSystemCallback {
-//    void onBegin([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
-//    void onAdvance([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
-//    void onPostSolve([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
-//};
-//
-//[Platforms="windows;linux", JSImplementation="PxParticleSystemCallback"]
-//interface PxParticleSystemCallbackImpl {
-//    void PxParticleSystemCallbackImpl();
-//    void onBegin([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
-//    void onAdvance([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
-//    void onPostSolve([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
-//};
+[Platforms="windows;linux", Prefix="physx::"]
+interface PxParticleSystemCallback {
+    void onBegin([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
+    void onAdvance([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
+    void onPostSolve([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
+};
+
+[Platforms="windows;linux", JSImplementation="PxParticleSystemCallback"]
+interface PxParticleSystemCallbackImpl {
+    void PxParticleSystemCallbackImpl();
+    void onBegin([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
+    void onAdvance([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
+    void onPostSolve([Const, Ref] PxGpuMirroredGpuParticleSystemPointer gpuParticleSystem, [Value] CUstream stream);
+};
 
 [Platforms="windows;linux", Prefix="physx::", NoDelete]
 interface PxParticleVolume {
