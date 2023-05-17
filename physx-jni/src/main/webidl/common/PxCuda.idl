@@ -8,12 +8,17 @@ interface PxCudaTopLevelFunctions {
 
     static PxCudaContextManager CreateCudaContextManager([Ref] PxFoundation foundation, [Const, Ref] PxCudaContextManagerDesc desc);
 
+    // cloth particle functions
     static PxParticleClothPreProcessor CreateParticleClothPreProcessor(PxCudaContextManager cudaContextManager);
     static PxParticleClothBufferHelper CreateParticleClothBufferHelper(unsigned long maxCloths, unsigned long maxTriangles, unsigned long maxSprings, unsigned long maxParticles, PxCudaContextManager cudaContextManager);
-    static PxParticleClothBuffer CreateAndPopulateParticleClothBuffer([Const, Ref] PxParticleBufferDesc desc, [Const, Ref] PxParticleClothDesc clothDesc, [Ref] PxPartitionedParticleCloth output, PxCudaContextManager cudaContextManager);
-    static PxParticleAndDiffuseBuffer CreateAndPopulateParticleAndDiffuseBuffer([Const, Ref] PxParticleAndDiffuseBufferDesc desc, PxCudaContextManager cudaContextManager);
     static PxParticleClothCooker CreateParticleClothCooker(unsigned long vertexCount, PxVec4 inVertices, unsigned long triangleIndexCount, [Ref] PxU32Ptr inTriangleIndices, optional unsigned long constraintTypeFlags, [Ref] optional PxVec3 verticalDirection, optional float bendingConstraintMaxAngle);
+    static PxParticleClothBuffer CreateAndPopulateParticleClothBuffer([Const, Ref] PxParticleBufferDesc desc, [Const, Ref] PxParticleClothDesc clothDesc, [Ref] PxPartitionedParticleCloth output, PxCudaContextManager cudaContextManager);
 
+    // fluid particle functions
+    static PxParticleBuffer CreateAndPopulateParticleBuffer([Const, Ref] PxParticleBufferDesc desc, PxCudaContextManager cudaContextManager);
+    static PxParticleAndDiffuseBuffer CreateAndPopulateParticleAndDiffuseBuffer([Const, Ref] PxParticleAndDiffuseBufferDesc desc, PxCudaContextManager cudaContextManager);
+
+    // memory util functions
     static VoidPtr allocPinnedHostBufferPxU32(PxCudaContextManager cudaContextManager, unsigned long numElements);
     static PxVec4 allocPinnedHostBufferPxVec4(PxCudaContextManager cudaContextManager, unsigned long numElements);
     static void freePinnedHostBufferPxU32(PxCudaContextManager cudaContextManager, [Ref] PxU32Ptr buffer);

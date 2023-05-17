@@ -165,8 +165,10 @@ System.out.println(userData.get());
 
 ### CUDA Support
 
-PhysX supports accelerating physics simulation with CUDA (this, of course, requires an Nvidia GPU). Enabling
-CUDA for a scene is pretty simple:
+PhysX supports accelerating physics simulation with CUDA (this, of course, requires an Nvidia GPU). However,
+using CUDA requires different runtime libraries, which are not available via maven central. Instead, you can grab them
+from the [releases section](https://github.com/fabmax/physx-jni/releases) (those suffixed with `-cuda`).
+Apart from that, enabling CUDA acceleration for a scene is straight forward:
 
 ```java
 // Setup your scene as usual
@@ -198,14 +200,7 @@ if (cudaMgr != null && cudaMgr.contextIsValid()) {
 PxScene scene = physics.createScene(sceneDesc);
 ```
 
-Using CUDA comes with a few implications:
-
-The native libraries required for CUDA are pretty big (>100 MB), and I therefore decided to not publish the libraries
-to maven central for now. I.e., in case you want to use the CUDA enabled native libraries, you have to download them
-from the [releases section](https://github.com/fabmax/physx-jni/releases) and add the jars to your project. I might
-publish the libraries in the future, once things settled a bit.
-
-Moreover, CUDA comes with some additional overhead (a lot of data has to be copied around between CPU and GPU). For
+CUDA comes with some additional overhead (a lot of data has to be copied around between CPU and GPU). For
 smaller scenes this overhead seems to outweigh the benefits and physics computation might actually be slower than with
 CPU only.
 I wrote a simple [CudaTest](physx-jni/src/test/java/de/fabmax/physxjni/CudaTest.java), which runs a few simulations
