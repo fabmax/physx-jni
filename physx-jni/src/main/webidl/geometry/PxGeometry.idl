@@ -163,7 +163,8 @@ enum PxGeometryTypeEnum {
     "PxGeometryTypeEnum::eBOX",
     "PxGeometryTypeEnum::eCONVEXMESH",
     "PxGeometryTypeEnum::eTRIANGLEMESH",
-    "PxGeometryTypeEnum::eHEIGHTFIELD"
+    "PxGeometryTypeEnum::eHEIGHTFIELD",
+    "PxGeometryTypeEnum::eCUSTOM"
 };
 
 [Prefix="physx::", NoDelete]
