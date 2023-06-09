@@ -1,9 +1,11 @@
 package de.fabmax.physxjni;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.system.MemoryStack;
 import physx.PxTopLevelFunctions;
 import physx.common.PxCudaContextManager;
+import physx.common.PxCudaTopLevelFunctions;
 import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
 import physx.physics.*;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static de.fabmax.physxjni.PhysXTestEnv.foundation;
 import static de.fabmax.physxjni.PhysXTestEnv.physics;
 
 public class CudaTest {
@@ -121,5 +124,15 @@ public class CudaTest {
         scene.release();
         actors.forEach(PxActor::release);
         return t / 1e9;
+    }
+
+    @Test
+    public void cudaNotAvailableOnMacTest() {
+        if (Platform.getPlatform() == Platform.MACOS || Platform.getPlatform() == Platform.MACOS_ARM64) {
+            // On macOS, CUDA functions are not available and invoking them should result in an exception
+            Assertions.assertThrows(ExceptionInInitializerError.class, () ->
+                PxCudaTopLevelFunctions.GetSuggestedCudaDeviceOrdinal(foundation)
+            );
+        }
     }
 }
