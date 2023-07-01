@@ -1,0 +1,61 @@
+/****************************************
+ * [package=common]
+ ****************************************/
+
+[Prefix="physx::", NoDelete]
+interface PxDebugPoint {
+    [Value] attribute PxVec3 pos;
+    attribute unsigned long color;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxDebugLine {
+    [Value] attribute PxVec3 pos0;
+    attribute unsigned long color0;
+    [Value] attribute PxVec3 pos1;
+    attribute unsigned long color1;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxDebugTriangle {
+    [Value] attribute PxVec3 pos0;
+    attribute unsigned long color0;
+    [Value] attribute PxVec3 pos1;
+    attribute unsigned long color1;
+    [Value] attribute PxVec3 pos2;
+    attribute unsigned long color2;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxRenderBuffer {
+    unsigned long getNbPoints();
+    [Const] PxDebugPoint getPoints();
+    void addPoint([Const, Ref] PxDebugPoint point);
+    unsigned long getNbLines();
+    [Const] PxDebugLine getLines();
+    void addLine([Const, Ref] PxDebugLine line);
+    PxDebugLine reserveLines([Const] unsigned long nbLines);
+    PxDebugPoint reservePoints([Const] unsigned long nbLines);
+    unsigned long getNbTriangles();
+    [Const] PxDebugTriangle getTriangles();
+    void addTriangle([Const, Ref] PxDebugTriangle triangle);
+    void append([Const, Ref] PxRenderBuffer other);
+    void clear();
+    void shift([Const, Ref] PxVec3 delta);
+    boolean empty();
+};
+
+enum PxDebugColorEnum {
+    "PxDebugColorEnum::eARGB_BLACK",
+    "PxDebugColorEnum::eARGB_RED",
+    "PxDebugColorEnum::eARGB_GREEN",
+    "PxDebugColorEnum::eARGB_BLUE",
+    "PxDebugColorEnum::eARGB_YELLOW",
+    "PxDebugColorEnum::eARGB_MAGENTA",
+    "PxDebugColorEnum::eARGB_CYAN",
+    "PxDebugColorEnum::eARGB_WHITE",
+    "PxDebugColorEnum::eARGB_GREY",
+    "PxDebugColorEnum::eARGB_DARKRED",
+    "PxDebugColorEnum::eARGB_DARKGREEN",
+    "PxDebugColorEnum::eARGB_DARKBLUE"
+};

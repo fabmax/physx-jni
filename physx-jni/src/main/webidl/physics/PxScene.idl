@@ -93,6 +93,7 @@ interface PxScene {
     PxSolverTypeEnum getSolverType();
 
     // Visualization and Statistics
+    [Const, Ref] PxRenderBuffer getRenderBuffer();
     boolean setVisualizationParameter(PxVisualizationParameterEnum param, float value);
     float getVisualizationParameter(PxVisualizationParameterEnum paramEnum);
     void setVisualizationCullingBox([Const, Ref] PxBounds3 box);

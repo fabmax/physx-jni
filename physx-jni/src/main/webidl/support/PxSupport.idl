@@ -58,6 +58,9 @@ interface NativeArrayHelpers {
     static PxControllerShapeHit getControllerShapeHitAt(PxControllerShapeHit base, long index);
     static PxControllersHit getControllersHitAt(PxControllersHit base, long index);
     static PxControllerObstacleHit getControllerObstacleHitAt(PxControllerObstacleHit base, long index);
+    static PxDebugPoint getDebugPointAt(PxDebugPoint base, long index);
+    static PxDebugLine getDebugLineAt(PxDebugLine base, long index);
+    static PxDebugTriangle getDebugTriangleAt(PxDebugTriangle base, long index);
     static PxObstacle getObstacleAt(PxObstacle base, long index);
     static PxShape getShapeAt(PxShape base, long index);
     static PxTriggerPair getTriggerPairAt(PxTriggerPair base, long index);
