@@ -1,7 +1,7 @@
 package de.fabmax.physxjni;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.system.MemoryStack;
@@ -17,12 +17,12 @@ import physx.support.Vector_PxVec4;
 
 public class ClothTest {
 
-    private static PxCudaContextManager cudaMgr = CudaHelpers.createCudaContextManager();
+    private static final PxCudaContextManager cudaMgr = CudaHelpers.getCudaContextManager();
     private PxParticleClothBuffer clothBuffer;
 
     @BeforeAll
-    public static void init() {
-        cudaMgr = CudaHelpers.createCudaContextManager();
+    public static void checkIsCudaAvailable() {
+        Assumptions.assumeTrue(cudaMgr != null, "No CUDA support on this platform");
     }
 
     @Test
@@ -33,13 +33,6 @@ public class ClothTest {
         var test = new SimpleClothTest();
         test.simulateClothScene(5f);
         test.cleanup();
-    }
-
-    @AfterAll
-    public static void cleanup() {
-        if (cudaMgr != null) {
-            cudaMgr.release();
-        }
     }
 
     /**

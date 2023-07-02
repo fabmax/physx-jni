@@ -4,20 +4,20 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni)
 ![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
 
-Java JNI bindings for Nvidia [PhysX 5.1.3](https://github.com/NVIDIA-Omniverse/PhysX).
+Java JNI bindings for Nvidia [PhysX 5.2.1](https://github.com/NVIDIA-Omniverse/PhysX).
 
 ## How to use
 The library is published on maven central, so you can easily add this to your dependencies:
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:2.1.0")
+    implementation("de.fabmax:physx-jni:2.2.1")
     
-    // native libraries, you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:2.1.0:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:2.1.0:natives-linux")
-    runtimeOnly("de.fabmax:physx-jni:2.1.0:natives-macos")
-    runtimeOnly("de.fabmax:physx-jni:2.1.0:natives-macos-arm64")
+    // native libraries - you can add the one matching your system or all
+    runtimeOnly("de.fabmax:physx-jni:2.2.1:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.2.1:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.2.1:natives-macos")
+    runtimeOnly("de.fabmax:physx-jni:2.2.1:natives-macos-arm64")
 }
 ```
 
@@ -84,7 +84,7 @@ They are more or less 1:1 translations of the corresponding PhysX example snippe
 ### Documentation
 The generated bindings contain most of the original documentation converted to javadoc. For further reading
 there is also the official
-[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.1.3/index.html).
+[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.2.1/index.html).
 
 ### Things to consider when working with native objects
 Whenever you create an instance of a wrapper class within this library, this also creates an object on the native

@@ -1,6 +1,7 @@
 package de.fabmax.physxjni;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.system.MemoryStack;
 import physx.PxTopLevelFunctions;
@@ -29,35 +30,33 @@ public class CudaTest {
 
     @Test
     public void createCudaContextTest() {
-        PxCudaContextManager cudaMgr = CudaHelpers.createCudaContextManager();
+        Assumptions.assumeTrue(CudaHelpers.getCudaContextManager() != null, "No CUDA support on this platform");
+        PxCudaContextManager cudaMgr = CudaHelpers.getCudaContextManager();
         if (cudaMgr == null) {
             return;
         }
 
-        try (MemoryStack mem = MemoryStack.stackPush()) {
-            System.out.println("CUDA device: " + cudaMgr.getDeviceName() + ", mem: " + (cudaMgr.getDeviceTotalMemBytes() / 1024.0 / 1024.0) + " MB");
+        System.out.println("CUDA device: " + cudaMgr.getDeviceName() + ", mem: " + (cudaMgr.getDeviceTotalMemBytes() / 1024.0 / 1024.0) + " MB");
 
-            double[] cpuTimes = new double[NUM_BODY_RUNS.length];
-            double[] gpuTimes = new double[NUM_BODY_RUNS.length];
+        double[] cpuTimes = new double[NUM_BODY_RUNS.length];
+        double[] gpuTimes = new double[NUM_BODY_RUNS.length];
 
-            for (int i = 0; i < NUM_BODY_RUNS.length; i++) {
-                System.out.println("Running CPU simulation...");
-                cpuTimes[i] = simulateScene(null, NUM_BODY_RUNS[i]);
-                System.out.println("Running GPU simulation...");
-                gpuTimes[i] = simulateScene(cudaMgr, NUM_BODY_RUNS[i]);
-            }
-
-            System.out.println();
-            System.out.println("# Bodies | CPU Time | GPU Time | GPU speed up");
-            System.out.println("---------+----------+----------+-------------");
-            for (int i = 0; i < NUM_BODY_RUNS.length; i++) {
-                double cpuTime = cpuTimes[i];
-                double gpuTime = gpuTimes[i];
-                System.out.printf(Locale.ENGLISH, " %7d |%7.3f s |%7.3f s | %.2f x\n",
-                        NUM_BODY_RUNS[i], cpuTime, gpuTime, cpuTime / gpuTime);
-            }
+        for (int i = 0; i < NUM_BODY_RUNS.length; i++) {
+            System.out.println("Running CPU simulation...");
+            cpuTimes[i] = simulateScene(null, NUM_BODY_RUNS[i]);
+            System.out.println("Running GPU simulation...");
+            gpuTimes[i] = simulateScene(cudaMgr, NUM_BODY_RUNS[i]);
         }
-        cudaMgr.release();
+
+        System.out.println();
+        System.out.println("# Bodies | CPU Time | GPU Time | GPU speed up");
+        System.out.println("---------+----------+----------+-------------");
+        for (int i = 0; i < NUM_BODY_RUNS.length; i++) {
+            double cpuTime = cpuTimes[i];
+            double gpuTime = gpuTimes[i];
+            System.out.printf(Locale.ENGLISH, " %7d |%7.3f s |%7.3f s | %.2f x\n",
+                    NUM_BODY_RUNS[i], cpuTime, gpuTime, cpuTime / gpuTime);
+        }
     }
 
     private double simulateScene(PxCudaContextManager cudaMgr, int numBodies) {

@@ -4,13 +4,16 @@
 
 [Prefix="physx::", NoDelete]
 interface PxShape {
-    PxGeometryTypeEnum getGeometryType();
     void setGeometry([Const, Ref] PxGeometry geometry);
     [Const, Ref] PxGeometry getGeometry();
     PxRigidActor getActor();
     void setMaterials(PxMaterialPtr materials, unsigned short materialCount);
+    //void setSoftBodyMaterials([Const] PxFEMSoftBodyMaterial materials, short materialCount);
+    //void setClothMaterials([Const] PxFEMClothMaterial materials, short materialCount);
     unsigned short getNbMaterials();
     unsigned long getMaterials(PxMaterialPtr userBuffer, unsigned long bufferSize, unsigned long startIndex);
+    //unsigned long getSoftBodyMaterials(PxFEMSoftBodyMaterialPtr userBuffer, unsigned long bufferSize, unsigned long startIndex);
+    //unsigned long getClothMaterials(PxFEMClothMaterialPtr userBuffer, unsigned long bufferSize, unsigned long startIndex);
     PxBaseMaterial getMaterialFromInternalFaceIndex(unsigned long faceIndex);
     void setContactOffset(float contactOffset);
     float getContactOffset();

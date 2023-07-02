@@ -51,13 +51,13 @@ enum PxConvexMeshCookingTypeEnum {
 };
 
 // PxCooking is deprecated, use PxTopLevelFunctions instead; however, PxSerialization needs PxCooking
-[Prefix="physx::", NoDelete]
-interface PxCooking {
-    void release();
-    PxConvexMesh createConvexMesh([Const, Ref] PxConvexMeshDesc desc, [Ref] PxInsertionCallback insertionCallback);
-    PxTriangleMesh createTriangleMesh([Const, Ref] PxTriangleMeshDesc desc, [Ref] PxInsertionCallback insertionCallback);
-    PxHeightField createHeightField([Const, Ref] PxHeightFieldDesc desc, [Ref] PxInsertionCallback insertionCallback);
-};
+//[Prefix="physx::", NoDelete]
+//interface PxCooking {
+//    void release();
+//    PxConvexMesh createConvexMesh([Const, Ref] PxConvexMeshDesc desc, [Ref] PxInsertionCallback insertionCallback);
+//    PxTriangleMesh createTriangleMesh([Const, Ref] PxTriangleMeshDesc desc, [Ref] PxInsertionCallback insertionCallback);
+//    PxHeightField createHeightField([Const, Ref] PxHeightFieldDesc desc, [Ref] PxInsertionCallback insertionCallback);
+//};
 
 [Prefix="physx::"]
 interface PxCookingParams {

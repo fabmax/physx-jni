@@ -4,12 +4,13 @@
 
 [Prefix="physx::", NoDelete]
 interface PxAggregate {
-    boolean addActor([Ref] PxActor actor, [Const] optional PxBVHStructure bvhStructure);
+    boolean addActor([Ref] PxActor actor, [Const] optional PxBVH bvh);
     boolean removeActor([Ref] PxActor actor);
-//    boolean addArticulation([Ref] PxArticulationBase articulation);
-//    boolean removeArticulation([Ref] PxArticulationBase articulation);
+    boolean addArticulation([Ref] PxArticulationReducedCoordinate articulation);
+    boolean removeArticulation([Ref] PxArticulationReducedCoordinate articulation);
     unsigned long getNbActors();
     unsigned long getMaxNbActors();
+    unsigned long getMaxNbShapes();
     // unsigned long getActors();
     PxScene getScene();
     boolean getSelfCollision();
@@ -101,16 +102,15 @@ interface PxConstraintConnector {
 
 enum PxConstraintFlagEnum {
     "PxConstraintFlagEnum::eBROKEN",
-    "PxConstraintFlagEnum::ePROJECT_TO_ACTOR0",
-    "PxConstraintFlagEnum::ePROJECT_TO_ACTOR1",
-    "PxConstraintFlagEnum::ePROJECTION",
     "PxConstraintFlagEnum::eCOLLISION_ENABLED",
     "PxConstraintFlagEnum::eVISUALIZATION",
     "PxConstraintFlagEnum::eDRIVE_LIMITS_ARE_FORCES",
     "PxConstraintFlagEnum::eIMPROVED_SLERP",
     "PxConstraintFlagEnum::eDISABLE_PREPROCESSING",
     "PxConstraintFlagEnum::eENABLE_EXTENDED_LIMITS",
-    "PxConstraintFlagEnum::eGPU_COMPATIBLE"
+    "PxConstraintFlagEnum::eGPU_COMPATIBLE",
+    "PxConstraintFlagEnum::eALWAYS_UPDATE",
+    "PxConstraintFlagEnum::eDISABLE_CONSTRAINT",
 };
 
 [Prefix="physx::", StackAllocatable]

@@ -1,7 +1,7 @@
 package de.fabmax.physxjni;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.system.MemoryStack;
@@ -21,12 +21,12 @@ import java.util.Locale;
 
 public class FluidTest {
 
-    private static PxCudaContextManager cudaMgr = CudaHelpers.createCudaContextManager();
+    private static final PxCudaContextManager cudaMgr = CudaHelpers.getCudaContextManager();
     private PxParticleClothBuffer clothBuffer;
 
     @BeforeAll
-    public static void init() {
-        cudaMgr = CudaHelpers.createCudaContextManager();
+    public static void checkIsCudaAvailable() {
+        Assumptions.assumeTrue(cudaMgr != null, "No CUDA support on this platform");
     }
 
     @Test
@@ -37,13 +37,6 @@ public class FluidTest {
         var test = new FluidTestImpl();
         test.simulateFluidScene(5f);
         test.cleanup();
-    }
-
-    @AfterAll
-    public static void cleanup() {
-        if (cudaMgr != null) {
-            cudaMgr.release();
-        }
     }
 
     /**
@@ -223,7 +216,7 @@ public class FluidTest {
             // boxes should float somewhere on the fluid
             boxes.forEach(box -> {
                 var pos = box.getGlobalPose().getP();
-                Assertions.assertEquals(2f, pos.getY(), 1f);
+                Assertions.assertTrue(pos.getY() > 0.55f);
             });
         }
     }

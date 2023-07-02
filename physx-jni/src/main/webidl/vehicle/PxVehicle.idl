@@ -423,7 +423,8 @@ interface PxVehiclePhysXRoadGeometryQueryParams {
     [Value] PxVehiclePhysXRoadGeometryQueryParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
     boolean isValid();
     attribute PxVehiclePhysXRoadGeometryQueryTypeEnum roadGeometryQueryType;
-    [Value] attribute PxQueryFilterData filterData;
+    [Value] attribute PxQueryFilterData defaultFilterData;
+    [Nullable] attribute PxQueryFilterData filterDataEntries;
     attribute PxQueryFilterCallback filterCallback;
 };
 

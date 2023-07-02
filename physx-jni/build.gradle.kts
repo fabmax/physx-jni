@@ -45,7 +45,7 @@ tasks.register<GenerateJavaBindings>("generateJniBindings") {
     idlModelName = "PhysXJni"
     idlSource = File("${projectDir}/src/main/webidl/").absolutePath
     generatorOutput = File("${projectDir}/src/main/generated/physx").absolutePath
-    physxIncludeDir = "$rootDir/Physx/physx/include"
+    physxIncludeDir = "$rootDir/PhysX/physx/include"
 }
 
 tasks.compileJava {

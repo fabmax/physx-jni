@@ -5,7 +5,7 @@
 [Prefix="physx::", NoDelete]
 interface PxScene {
     // Add/Remove Actors
-    boolean addActor([Ref] PxActor actor, [Const] optional PxBVHStructure bvhStructure);
+    boolean addActor([Ref] PxActor actor, [Const] optional PxBVH bvh);
     void removeActor([Ref] PxActor actor, optional boolean wakeOnLostTouch);
     boolean addAggregate([Ref] PxAggregate aggregate);
     void removeAggregate([Ref] PxAggregate aggregate, optional boolean wakeOnLostTouch);
@@ -93,6 +93,7 @@ interface PxScene {
     PxSolverTypeEnum getSolverType();
 
     // Visualization and Statistics
+    [Const, Ref] PxRenderBuffer getRenderBuffer();
     boolean setVisualizationParameter(PxVisualizationParameterEnum param, float value);
     float getVisualizationParameter(PxVisualizationParameterEnum paramEnum);
     void setVisualizationCullingBox([Const, Ref] PxBounds3 box);

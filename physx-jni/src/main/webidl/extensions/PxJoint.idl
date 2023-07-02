@@ -43,10 +43,6 @@ interface PxD6Joint {
     [Value] PxTransform getDrivePosition();
     void setDriveVelocity([Const, Ref] PxVec3 linear, [Const, Ref] PxVec3 angular);
     void getDriveVelocity([Ref] PxVec3 linear, [Ref] PxVec3 angular);
-    void setProjectionLinearTolerance(float tolerance);
-    float getProjectionLinearTolerance();
-    void setProjectionAngularTolerance(float tolerance);
-    float getProjectionAngularTolerance();
 };
 PxD6Joint implements PxJoint;
 
@@ -112,12 +108,7 @@ interface PxDistanceJointFlags {
 };
 
 [Prefix="physx::"]
-interface PxFixedJoint {
-    void setProjectionLinearTolerance(float tolerance);
-    float getProjectionLinearTolerance();
-    void setProjectionAngularTolerance(float tolerance);
-    float getProjectionAngularTolerance();
-};
+interface PxFixedJoint { };
 PxFixedJoint implements PxJoint;
 
 [Prefix="physx::", NoDelete]
@@ -228,10 +219,6 @@ interface PxPrismaticJoint {
     void setPrismaticJointFlags([Ref] PxPrismaticJointFlags flags);
     void setPrismaticJointFlag(PxPrismaticJointFlagEnum flag, boolean value);
     [Value] PxPrismaticJointFlags getPrismaticJointFlags();
-    void setProjectionLinearTolerance(float tolerance);
-    float getProjectionLinearTolerance();
-    void setProjectionAngularTolerance(float tolerance);
-    float getProjectionAngularTolerance();
 };
 PxPrismaticJoint implements PxJoint;
 
@@ -262,10 +249,6 @@ interface PxRevoluteJoint {
     void setRevoluteJointFlags([Ref] PxRevoluteJointFlags flags);
     void setRevoluteJointFlag(PxRevoluteJointFlagEnum flag, boolean value);
     [Value] PxRevoluteJointFlags getRevoluteJointFlags();
-    void setProjectionLinearTolerance(float tolerance);
-    float getProjectionLinearTolerance();
-    void setProjectionAngularTolerance(float tolerance);
-    float getProjectionAngularTolerance();
 };
 PxRevoluteJoint implements PxJoint;
 
@@ -292,8 +275,6 @@ interface PxSphericalJoint {
     void setSphericalJointFlags([Ref] PxSphericalJointFlags flags);
     void setSphericalJointFlag(PxSphericalJointFlagEnum flag, boolean value);
     [Value] PxSphericalJointFlags getSphericalJointFlags();
-    void setProjectionLinearTolerance(float tolerance);
-    float getProjectionLinearTolerance();
 };
 PxSphericalJoint implements PxJoint;
 

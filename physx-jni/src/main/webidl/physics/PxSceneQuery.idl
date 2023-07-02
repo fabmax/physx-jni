@@ -91,7 +91,7 @@ interface PxQueryFilterCallback { };
 
 interface SimpleQueryFilterCallback {
     unsigned long simplePreFilter([Const, Ref] PxFilterData filterData, [Const] PxShape shape, [Const] PxRigidActor actor, [Ref] PxHitFlags queryFlags);
-    unsigned long simplePostFilter([Const, Ref] PxFilterData filterData, [Const, Ref] PxQueryHit hit);
+    unsigned long simplePostFilter([Const, Ref] PxFilterData filterData, [Const, Ref] PxQueryHit hit, [Const] PxShape shape, [Const] PxRigidActor actor);
 };
 SimpleQueryFilterCallback implements PxQueryFilterCallback;
 
@@ -99,7 +99,7 @@ SimpleQueryFilterCallback implements PxQueryFilterCallback;
 interface PxQueryFilterCallbackImpl {
     void PxQueryFilterCallbackImpl();
     unsigned long simplePreFilter([Const, Ref] PxFilterData filterData, [Const] PxShape shape, [Const] PxRigidActor actor, [Ref] PxHitFlags queryFlags);
-    unsigned long simplePostFilter([Const, Ref] PxFilterData filterData, [Const, Ref] PxQueryHit hit);
+    unsigned long simplePostFilter([Const, Ref] PxFilterData filterData, [Const, Ref] PxQueryHit hit, [Const] PxShape shape, [Const] PxRigidActor actor);
 };
 
 [Prefix="physx::", StackAllocatable]

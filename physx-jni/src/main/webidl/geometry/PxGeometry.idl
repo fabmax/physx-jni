@@ -9,8 +9,8 @@ interface PxBoxGeometry {
 PxBoxGeometry implements PxGeometry;
 
 [Prefix="physx::", NoDelete]
-interface PxBVHStructure { };
-PxBVHStructure implements PxBase;
+interface PxBVH { };
+PxBVH implements PxBase;
 
 [Prefix="physx::", StackAllocatable]
 interface PxCapsuleGeometry {
@@ -152,7 +152,7 @@ interface PxGeometryQuery {
 //    static boolean computePenetration([Ref] PxVec3 direction, [Ref] float depth, [Const, Ref] PxGeometry geom0,
 //                        [Const, Ref] PxTransform pose0, [Const, Ref] PxGeometry geom1, [Const, Ref] PxTransform pose1);
     static float pointDistance([Const, Ref] PxVec3 point, [Const, Ref] PxGeometry geom, [Const, Ref] PxTransform pose, optional PxVec3 closestPoint);
-    [Value] static PxBounds3 getWorldBounds([Const, Ref] PxGeometry geom, [Const, Ref] PxTransform pose, optional float inflation);
+    static void computeGeomBounds([Ref] PxBounds3 bounds, [Const, Ref] PxGeometry geom, [Const, Ref] PxTransform pose, optional float inflation);
     static boolean isValid([Const, Ref] PxGeometry geom);
 };
 

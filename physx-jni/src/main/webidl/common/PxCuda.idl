@@ -80,7 +80,6 @@ interface PxCudaContextManager {
     unsigned long getMaxThreadsPerBlock();
     [Const] DOMString getDeviceName();
     CUdevice getDevice();
-    PxCudaInteropModeEnum getInteropMode();
     void setUsingConcurrentStreams(boolean flag);
     boolean getUsingConcurrentStreams();
     long usingDedicatedGPU();
@@ -94,15 +93,6 @@ interface PxCudaContextManagerDesc {
     attribute CUcontext ctx;
     attribute VoidPtr graphicsDevice;
     attribute DOMString appGUID;
-    attribute PxCudaInteropModeEnum interopMode;
-};
-
-[Platforms="windows;linux"]
-enum PxCudaInteropModeEnum {
-    "PxCudaInteropModeEnum::NO_INTEROP",
-    "PxCudaInteropModeEnum::D3D10_INTEROP",
-    "PxCudaInteropModeEnum::D3D11_INTEROP",
-    "PxCudaInteropModeEnum::OGL_INTEROP"
 };
 
 [Platforms="windows;linux", Prefix="physx::"]
@@ -392,7 +382,7 @@ interface PxParticlePhaseFlags {
 interface PxParticleRigidAttachment {
     void PxParticleRigidAttachment();
     [Value] attribute PxVec4 mLocalPose0;
-    [Value] attribute PxConeLimitParams mParams;
+    [Value] attribute PxConeLimitParams mConeLimitParams;
 };
 PxParticleRigidAttachment implements PxParticleRigidFilterPair;
 
@@ -407,8 +397,7 @@ interface PxParticleRigidFilterPair {
 enum PxParticleSolverTypeEnum {
     "PxParticleSolverTypeEnum::ePBD",
     "PxParticleSolverTypeEnum::eFLIP",
-    "PxParticleSolverTypeEnum::eMPM",
-    "PxParticleSolverTypeEnum::eCUSTOM"
+    "PxParticleSolverTypeEnum::eMPM"
 };
 
 [Platforms="windows;linux", Prefix="physx::", StackAllocatable]
@@ -449,10 +438,8 @@ interface PxParticleSystem {
     void enableCCD(boolean enable);
     unsigned long createPhase(PxParticleMaterial material, [Ref] PxParticlePhaseFlags flags);
     unsigned long getNbParticleMaterials();
-//    void setParticleSystemCallback(PxParticleSystemCallback callback);
-//    PxParticleSystemCallback getParticleSystemCallback();
-    void setPeriodicBoundary([Const, Ref] PxVec3 boundary);
-    [Value] PxVec3 getPeriodicBoundary();
+    void setParticleSystemCallback(PxParticleSystemCallback callback);
+    PxParticleSystemCallback getParticleSystemCallback();
     void addParticleBuffer(PxParticleBuffer particleBuffer);
     void removeParticleBuffer(PxParticleBuffer particleBuffer);
     unsigned long getGpuParticleSystemIndex();
