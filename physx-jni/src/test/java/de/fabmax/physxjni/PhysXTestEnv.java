@@ -3,7 +3,6 @@ package de.fabmax.physxjni;
 import org.lwjgl.system.MemoryStack;
 import physx.PxTopLevelFunctions;
 import physx.common.*;
-import physx.cooking.PxCooking;
 import physx.cooking.PxCookingParams;
 import physx.extensions.PxRigidBodyExt;
 import physx.geometry.PxBoxGeometry;
@@ -23,7 +22,6 @@ public class PhysXTestEnv {
     public static final PxFoundation foundation;
     public static final PxPhysics physics;
     public static final PxCookingParams cookingParams;
-    public static final PxCooking cooking;
 
     public static final PxCpuDispatcher defaultDispatcher;
     public static final PxMaterial defaultMaterial;
@@ -65,7 +63,6 @@ public class PhysXTestEnv {
         defaultFilterData.setWord3(0);          // word3 is currently not used
 
         cookingParams = new PxCookingParams(tolerances);
-        cooking = PxTopLevelFunctions.CreateCooking(PX_PHYSICS_VERSION, foundation, cookingParams);
 
         defaultDispatcher = PxTopLevelFunctions.DefaultCpuDispatcherCreate(2);
 

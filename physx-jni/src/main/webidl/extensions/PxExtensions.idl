@@ -94,9 +94,9 @@ interface PxSerialization {
     static boolean isSerializable([Ref] PxCollection collection, [Ref] PxSerializationRegistry sr, [Const] optional PxCollection externalReferences);
     static void complete([Ref] PxCollection collection, [Ref] PxSerializationRegistry sr, [Const] optional PxCollection exceptFor, optional boolean followJoints);
     static void createSerialObjectIds([Ref] PxCollection collection, unsigned long long base);
-    static PxCollection createCollectionFromXml([Ref] PxInputData inputData, [Ref] PxCooking cooking, [Ref] PxSerializationRegistry sr, [Const] optional PxCollection externalRefs);
+    static PxCollection createCollectionFromXml([Ref] PxInputData inputData, [Const, Ref] PxCookingParams params, [Ref] PxSerializationRegistry sr, [Const] optional PxCollection externalRefs);
     static PxCollection createCollectionFromBinary(VoidPtr memBlock, [Ref] PxSerializationRegistry sr, [Const] optional PxCollection externalRefs);
-    static boolean serializeCollectionToXml([Ref] PxOutputStream outputStream, [Ref] PxCollection collection, [Ref] PxSerializationRegistry sr, optional PxCooking cooking, [Const] optional PxCollection externalRefs);
+    static boolean serializeCollectionToXml([Ref] PxOutputStream outputStream, [Ref] PxCollection collection, [Ref] PxSerializationRegistry sr, [Const] optional PxCookingParams params, [Const] optional PxCollection externalRefs);
     static boolean serializeCollectionToBinary([Ref] PxOutputStream outputStream, [Ref] PxCollection collection, [Ref] PxSerializationRegistry sr, [Const] optional PxCollection externalRefs, optional boolean exportNames);
     static PxSerializationRegistry createSerializationRegistry([Ref] PxPhysics physics);
 };

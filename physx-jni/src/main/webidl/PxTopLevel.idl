@@ -31,5 +31,5 @@ interface PxTopLevelFunctions {
     static PxHeightField CreateHeightField([Const, Ref] PxHeightFieldDesc desc);
 
     // PxCooking is deprecated, only needed for scene serialization
-    static PxCooking CreateCooking(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxCookingParams scale);
+    //static PxCooking CreateCooking(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxCookingParams scale);
 };

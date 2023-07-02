@@ -291,10 +291,14 @@ interface PxOmniPvd {
 
 [Platforms="windows;linux;macos"]
 interface OmniPvdWriter {
-    void setWriteStream(OmniPvdFileWriteStream writeStream);
+    void setWriteStream([Ref] OmniPvdWriteStream writeStream);
 };
 
 [Platforms="windows;linux;macos", NoDelete]
 interface OmniPvdFileWriteStream {
     void setFileName(DOMString fileName);
 };
+OmniPvdFileWriteStream implements OmniPvdWriteStream;
+
+[Platforms="windows;linux;macos", NoDelete]
+interface OmniPvdWriteStream { };

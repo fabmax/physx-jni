@@ -62,7 +62,7 @@ public class ControllerBehaviorCallbackTest {
             meshDesc.setTriangles(triangles);
 
             // cook mesh and delete input data afterwards (no need to keep them around anymore)
-            PxTriangleMesh mesh = PhysXTestEnv.cooking.createTriangleMesh(meshDesc, PhysXTestEnv.physics.getPhysicsInsertionCallback());
+            PxTriangleMesh mesh = PxTopLevelFunctions.CreateTriangleMesh(PhysXTestEnv.cookingParams, meshDesc);
             pointVector.destroy();
             indexVector.destroy();
 

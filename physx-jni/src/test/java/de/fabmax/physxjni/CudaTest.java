@@ -1,6 +1,8 @@
 package de.fabmax.physxjni;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.system.MemoryStack;
 import physx.PxTopLevelFunctions;
@@ -27,9 +29,14 @@ public class CudaTest {
     // use higher values for benchmarking
     static final int[] NUM_BODY_RUNS = new int[] { 1_000, 5_000, /*10_000, 20_000*/ };
 
+    @BeforeAll
+    public static void checkIsCudaAvailable() {
+        Assumptions.assumeTrue(CudaHelpers.getCudaContextManager() != null, "No CUDA support on this platform");
+    }
+
     @Test
     public void createCudaContextTest() {
-        PxCudaContextManager cudaMgr = CudaHelpers.createCudaContextManager();
+        PxCudaContextManager cudaMgr = CudaHelpers.getCudaContextManager();
         if (cudaMgr == null) {
             return;
         }
@@ -57,7 +64,6 @@ public class CudaTest {
                         NUM_BODY_RUNS[i], cpuTime, gpuTime, cpuTime / gpuTime);
             }
         }
-        cudaMgr.release();
     }
 
     private double simulateScene(PxCudaContextManager cudaMgr, int numBodies) {

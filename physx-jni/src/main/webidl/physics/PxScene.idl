@@ -5,7 +5,7 @@
 [Prefix="physx::", NoDelete]
 interface PxScene {
     // Add/Remove Actors
-    boolean addActor([Ref] PxActor actor, [Const] optional PxBVHStructure bvhStructure);
+    boolean addActor([Ref] PxActor actor, [Const] optional PxBVH bvh);
     void removeActor([Ref] PxActor actor, optional boolean wakeOnLostTouch);
     boolean addAggregate([Ref] PxAggregate aggregate);
     void removeAggregate([Ref] PxAggregate aggregate, optional boolean wakeOnLostTouch);
