@@ -46,7 +46,7 @@ open class GenerateJavaBindings : DefaultTask() {
     @Input
     var generatorOutput = "./generated"
     @Input
-    var physxIncludeDir = "../Physx/physx/include"
+    var physxIncludeDir = "../PhysX/physx/include"
 
     @TaskAction
     fun generate() {
