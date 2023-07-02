@@ -1,0 +1,109 @@
+/****************************************
+ * [package=extensions]
+ ****************************************/
+
+[StackAllocatable]
+interface PxGjkQueryProximityInfoResult {
+    void PxGjkQueryProximityInfoResult();
+    attribute boolean success;
+    [Value] attribute PxVec3 pointA;
+    [Value] attribute PxVec3 pointB;
+    [Value] attribute PxVec3 separatingAxis;
+    attribute float separation;
+};
+
+[StackAllocatable]
+interface PxGjkQueryRaycastResult {
+    void PxGjkQueryRaycastResult();
+    attribute boolean success;
+    attribute float t;
+    [Value] attribute PxVec3 n;
+    [Value] attribute PxVec3 p;
+};
+
+[StackAllocatable]
+interface PxGjkQuerySweepResult {
+    void PxGjkQuerySweepResult();
+    attribute boolean success;
+    attribute float t;
+    [Value] attribute PxVec3 n;
+    [Value] attribute PxVec3 p;
+};
+
+interface PxGjkQuery {
+    static boolean proximityInfo([Const, Ref] Support a, [Const, Ref] Support b, [Const, Ref] PxTransform poseA,
+        [Const, Ref] PxTransform poseB, float contactDistance, float toleranceLength, [Ref] PxGjkQueryProximityInfoResult result);
+
+    static boolean raycast([Const, Ref] Support shape, [Const, Ref] PxTransform pose, [Const, Ref] PxVec3 rayStart,
+        [Const, Ref] PxVec3 unitDir, float maxDist, [Ref] PxGjkQueryRaycastResult result);
+
+    static boolean overlap([Const, Ref] Support a, [Const, Ref] Support b, [Const, Ref] PxTransform poseA, [Const, Ref] PxTransform poseB);
+
+    static boolean sweep([Const, Ref] Support a, [Const, Ref] Support b, [Const, Ref] PxTransform poseA, [Const, Ref] PxTransform poseB,
+        [Const, Ref] PxVec3 unitDir, float maxDist, [Ref] PxGjkQuerySweepResult result);
+};
+
+[Prefix="physx::"]
+interface PxGjkQueryExt {
+    static boolean generateContacts([Const, Ref] Support a, [Const, Ref] Support b, [Const, Ref] PxTransform poseA, [Const, Ref] PxTransform poseB,
+        float contactDistance, float toleranceLength, [Ref] PxContactBuffer contactBuffer);
+};
+
+[Prefix="physx::PxGjkQuery::"]
+interface Support {
+    float getMargin();
+    [Value] PxVec3 supportLocal([Const, Ref] PxVec3 dir);
+};
+
+[Prefix="physx::PxGjkQueryExt::", StackAllocatable]
+interface BoxSupport {
+    void BoxSupport([Const, Ref] PxVec3 halfExtents, optional float margin);
+    [Value] attribute PxVec3 halfExtents;
+    attribute float margin;
+};
+BoxSupport implements Support;
+
+[Prefix="physx::PxGjkQueryExt::", StackAllocatable]
+interface CapsuleSupport {
+    void CapsuleSupport(float radius, float halfHeight);
+    attribute float radius;
+    attribute float halfHeight;
+};
+CapsuleSupport implements Support;
+
+[Prefix="physx::PxGjkQueryExt::", StackAllocatable]
+interface ConvexGeomSupport {
+    void ConvexGeomSupport();
+    void ConvexGeomSupport([Const, Ref] PxGeometry geom, optional float margin);
+};
+ConvexGeomSupport implements Support;
+
+[Prefix="physx::PxGjkQueryExt::", StackAllocatable]
+interface ConvexMeshSupport {
+    void ConvexMeshSupport([Const, Ref] PxConvexMesh convexMesh, [Const, Ref] optional PxVec3 scale, [Const, Ref] optional PxQuat scaleRotation, optional float margin);
+    readonly attribute PxConvexMesh convexMesh;
+    [Value] attribute PxVec3 scale;
+    [Value] attribute PxQuat scaleRotation;
+    attribute float margin;
+};
+ConvexMeshSupport implements Support;
+
+[Prefix="physx::PxGjkQueryExt::", StackAllocatable]
+interface SphereSupport {
+    void SphereSupport(float radius);
+    attribute float radius;
+};
+SphereSupport implements Support;
+
+interface CustomSupport {
+    float getCustomMargin();
+    void getCustomSupportLocal([Const, Ref] PxVec3 dir, [Ref] PxVec3 result);
+};
+CustomSupport implements Support;
+
+[JSImplementation="CustomSupport"]
+interface CustomSupportImpl {
+    void CustomSupportImpl();
+    float getCustomMargin();
+    void getCustomSupportLocal([Const, Ref] PxVec3 dir, [Ref] PxVec3 result);
+};
