@@ -5,6 +5,7 @@
 [Prefix="physx::", StackAllocatable]
 interface PxBoxGeometry {
     void PxBoxGeometry(float hx, float hy, float hz);
+    [Value] attribute PxVec3 halfExtents;
 };
 PxBoxGeometry implements PxGeometry;
 
@@ -62,6 +63,8 @@ PxConvexMesh implements PxRefCounted;
 [Prefix="physx::", StackAllocatable]
 interface PxConvexMeshGeometry {
     void PxConvexMeshGeometry(PxConvexMesh mesh, [Const, Ref] optional PxMeshScale scaling, [Ref] optional PxConvexMeshGeometryFlags flags);
+    [Value] attribute PxMeshScale scale;
+    attribute PxConvexMesh convexMesh;
 };
 PxConvexMeshGeometry implements PxGeometry;
 
@@ -297,6 +300,7 @@ interface PxSimpleTriangleMesh {
 [Prefix="physx::", StackAllocatable]
 interface PxSphereGeometry {
     void PxSphereGeometry(float ir);
+    attribute float radius;
 };
 PxSphereGeometry implements PxGeometry;
 
@@ -342,5 +346,7 @@ interface PxTriangleMeshFlags {
 interface PxTriangleMeshGeometry {
     void PxTriangleMeshGeometry(PxTriangleMesh mesh, [Const, Ref] optional PxMeshScale scaling, [Ref] optional PxMeshGeometryFlags flags);
     boolean isValid();
+    [Value] attribute PxMeshScale scale;
+    attribute PxTriangleMesh triangleMesh;
 };
 PxTriangleMeshGeometry implements PxGeometry;
