@@ -16,6 +16,8 @@ PxBVH implements PxBase;
 [Prefix="physx::", StackAllocatable]
 interface PxCapsuleGeometry {
     void PxCapsuleGeometry(float radius, float halfHeight);
+    attribute float radius;
+    attribute float halfHeight;
 };
 PxCapsuleGeometry implements PxGeometry;
 
@@ -65,6 +67,7 @@ interface PxConvexMeshGeometry {
     void PxConvexMeshGeometry(PxConvexMesh mesh, [Const, Ref] optional PxMeshScale scaling, [Ref] optional PxConvexMeshGeometryFlags flags);
     [Value] attribute PxMeshScale scale;
     attribute PxConvexMesh convexMesh;
+    [Value] attribute PxConvexMeshGeometryFlags meshFlags;
 };
 PxConvexMeshGeometry implements PxGeometry;
 
@@ -347,6 +350,7 @@ interface PxTriangleMeshGeometry {
     void PxTriangleMeshGeometry(PxTriangleMesh mesh, [Const, Ref] optional PxMeshScale scaling, [Ref] optional PxMeshGeometryFlags flags);
     boolean isValid();
     [Value] attribute PxMeshScale scale;
+    [Value] attribute PxMeshGeometryFlags meshFlags;
     attribute PxTriangleMesh triangleMesh;
 };
 PxTriangleMeshGeometry implements PxGeometry;
