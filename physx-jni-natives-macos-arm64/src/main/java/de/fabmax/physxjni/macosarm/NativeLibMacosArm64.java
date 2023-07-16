@@ -7,7 +7,7 @@ import java.util.List;
 
 public class NativeLibMacosArm64 extends NativeLib {
 
-    private static final String version = "2.2.2-SNAPSHOT";
+    private static final String version = "2.2.2";
 
     private static final List<String> libraries = new ArrayList<>() {{
         add("libPhysXJniBindings_64.dylib");
