@@ -1,6 +1,3 @@
-import java.io.FileInputStream
-import java.util.*
-
 plugins {
     signing
 }
@@ -71,12 +68,11 @@ dependencies {
 
     testImplementation("org.lwjgl:lwjgl:3.3.1")
 
-    val lwjglNatives = org.gradle.internal.os.OperatingSystem.current().let {
-        when {
-            it.isLinux -> "natives-linux"
-            it.isMacOsX -> "natives-macos"
-            else -> "natives-windows"
-        }
+    val os = org.gradle.internal.os.OperatingSystem.current()
+    val lwjglNatives = when {
+        os.isLinux -> "natives-linux"
+        os.isMacOsX -> "natives-macos"
+        else -> "natives-windows"
     }
     testRuntimeOnly("org.lwjgl:lwjgl:3.3.1:$lwjglNatives")
 }
@@ -89,16 +85,18 @@ publishing {
             artifact(project(":physx-jni-natives-windows").tasks["jar"]).apply {
                 classifier = "natives-windows"
             }
-//            artifact(project(":physx-jni-natives-windows-cuda").tasks["jar"]).apply {
-//                classifier = "natives-windows-cuda"
-//            }
+            // cuda natives are currently not published to maven central because of their excessive size
+            //artifact(project(":physx-jni-natives-windows-cuda").tasks["jar"]).apply {
+            //    classifier = "natives-windows-cuda"
+            //}
 
             artifact(project(":physx-jni-natives-linux").tasks["jar"]).apply {
                 classifier = "natives-linux"
             }
-//            artifact(project(":physx-jni-natives-linux-cuda").tasks["jar"]).apply {
-//                classifier = "natives-linux-cuda"
-//            }
+            // cuda natives are currently not published to maven central because of their excessive size
+            //artifact(project(":physx-jni-natives-linux-cuda").tasks["jar"]).apply {
+            //    classifier = "natives-linux-cuda"
+            //}
 
             artifact(project(":physx-jni-natives-macos").tasks["jar"]).apply {
                 classifier = "natives-macos"
@@ -134,26 +132,26 @@ publishing {
         }
     }
 
-    if (File("${rootDir}/publishingCredentials.properties").exists()) {
-        val props = Properties()
-        props.load(FileInputStream("${rootDir}/publishingCredentials.properties"))
-
-        repositories {
-            maven {
-                url = if (version.toString().endsWith("-SNAPSHOT")) {
-                    uri("https://oss.sonatype.org/content/repositories/snapshots")
-                } else {
-                    uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-                }
-                credentials {
-                    username = props.getProperty("publishUser")
-                    password = props.getProperty("publishPassword")
-                }
+    repositories {
+        maven {
+            name = "ossrh"
+            url = if (version.toString().endsWith("-SNAPSHOT")) {
+                uri("https://oss.sonatype.org/content/repositories/snapshots")
+            } else {
+                uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+            }
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
             }
         }
+    }
 
-        signing {
-            sign(publications["mavenJava"])
-        }
+    signing {
+        val privateKey = System.getenv("GPG_PRIVATE_KEY")
+        val password = System.getenv("GPG_PASSWORD")
+        useInMemoryPgpKeys(privateKey, password)
+
+        sign(publications["mavenJava"])
     }
 }
