@@ -34,22 +34,13 @@ jobs:
         run: chmod +x gradlew
       - name: Build native lib
         run: ./gradlew buildNativeProject
-      - name: Build JNI bindings
-        run: ./gradlew build
-      - name: Copy Linux native-libs to Azure
-        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-linux/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-linux/src/main?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
-      - name: Copy Linux CUDA native-libs to Azure
-        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-linux-cuda/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-linux-cuda/src/main?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
-      - name: Create release
-        uses: ncipollo/release-action@v1
+      - name: Upload Linux native lib artifacts
+        uses: actions/upload-artifact@v3
         with:
-          allowUpdates: true
-          artifacts: >-
-            ${{ github.workspace }}/physx-jni/build/libs/*.jar,
-            ${{ github.workspace }}/physx-jni-natives-linux/build/libs/physx-jni-natives-linux-?.?.?.jar,
-            ${{ github.workspace }}/physx-jni-natives-linux-cuda/build/libs/physx-jni-natives-linux-cuda-?.?.?.jar
-          draft: true
-          updateOnlyUnreleased: true
+          name: linux-native-libs
+          path: |
+            */src/main/resources/de/fabmax/physxjni/linux/*.so
+            */src/main/resources/de/fabmax/physxjni/linux/*.so.sha1
 
   windows:
     name: Build and publish Windows native binaries
@@ -76,21 +67,13 @@ jobs:
           python-version: '3.10'
       - name: Build native lib
         run: ./gradlew buildNativeProject
-      - name: Build JNI bindings
-        run: ./gradlew build
-      - name: Copy Windows native-libs to Azure
-        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-windows/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-windows/src/main?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
-      - name: Copy Windows CUDA native-libs to Azure
-        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-windows-cuda/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-windows-cuda/src/main?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
-      - name: Create release
-        uses: ncipollo/release-action@v1
+      - name: Upload Windows native lib artifacts
+        uses: actions/upload-artifact@v3
         with:
-          allowUpdates: true
-          artifacts: >-
-            ${{ github.workspace }}/physx-jni-natives-windows/build/libs/physx-jni-natives-windows-?.?.?.jar,
-            ${{ github.workspace }}/physx-jni-natives-windows-cuda/build/libs/physx-jni-natives-windows-cuda-?.?.?.jar
-          draft: true
-          updateOnlyUnreleased: true
+          name: windows-native-libs
+          path: |
+            */src/main/resources/de/fabmax/physxjni/windows/*.dll
+            */src/main/resources/de/fabmax/physxjni/windows/*.dll.sha1
 
   macos:
     name: Build and publish MacOS native binaries
@@ -123,18 +106,59 @@ jobs:
         run: ./gradlew buildNativeProject
         env:
           PM_PYTHON_EXT: python3
+      - name: Upload MacOS native lib artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-native-libs
+          path: |
+            */src/main/resources/de/fabmax/physxjni/macos/*.dylib
+            */src/main/resources/de/fabmax/physxjni/macos/*.dylib.sha1
+            */src/main/resources/de/fabmax/physxjni/macosarm/*.dylib
+            */src/main/resources/de/fabmax/physxjni/macosarm/*.dylib.sha1
+
+  publish:
+    name: Build and publish java libs
+    runs-on: ubuntu-latest
+    needs: [ linux, macos, windows ]
+    environment: publish
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Download native lib artifacts
+        uses: actions/download-artifact@v3
+      - name: Copy downloaded artifacts to resources
+        run: |
+          cp -r linux-native-libs/* .
+          cp -r macos-native-libs/* .
+          cp -r windows-native-libs/* .
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
       - name: Build JNI bindings
         run: ./gradlew build
-      - name: Copy MacOS native-libs to Azure
-        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-macos/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-macos/src/main?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
-      - name: Copy MacOS ARM64 native-libs to Azure
-        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-macos-arm64/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-macos-arm64/src/main?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
+      - name: Publish JNI bindings
+        run: ./gradlew publish
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
           artifacts: >-
-            ${{ github.workspace }}/physx-jni-natives-macos/build/libs/physx-jni-natives-macos-?.?.?.jar,
-            ${{ github.workspace }}/physx-jni-natives-macos-arm64/build/libs/physx-jni-natives-macos-arm64-?.?.?.jar
+            physx-jni/build/libs/*.jar,
+            physx-jni-natives-linux/build/libs/physx-jni-natives-linux-?.?.?.jar,
+            physx-jni-natives-linux-cuda/build/libs/physx-jni-natives-linux-cuda-?.?.?.jar
+            physx-jni-natives-windows/build/libs/physx-jni-natives-windows-?.?.?.jar,
+            physx-jni-natives-windows-cuda/build/libs/physx-jni-natives-windows-cuda-?.?.?.jar
+            physx-jni-natives-macos/build/libs/physx-jni-natives-macos-?.?.?.jar,
+            physx-jni-natives-macos-arm64/build/libs/physx-jni-natives-macos-arm64-?.?.?.jar
           draft: true
           updateOnlyUnreleased: true
