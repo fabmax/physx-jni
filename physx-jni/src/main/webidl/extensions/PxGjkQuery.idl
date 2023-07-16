@@ -81,6 +81,7 @@ ConvexGeomSupport implements Support;
 [Prefix="physx::PxGjkQueryExt::", StackAllocatable]
 interface ConvexMeshSupport {
     void ConvexMeshSupport([Const, Ref] PxConvexMesh convexMesh, [Const, Ref] optional PxVec3 scale, [Const, Ref] optional PxQuat scaleRotation, optional float margin);
+    [Platforms="windows;linux;macos"]
     readonly attribute PxConvexMesh convexMesh;
     [Value] attribute PxVec3 scale;
     [Value] attribute PxQuat scaleRotation;
