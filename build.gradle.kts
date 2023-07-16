@@ -62,3 +62,17 @@ tasks.register("buildNativeProject") {
         else -> throw IllegalStateException("Unsupported OS: $os; for now, only Windows and Linux are supported")
     }
 }
+
+tasks.register("deleteNativeLibs") {
+    group = "native build"
+    dependsOn("generateNativeGlueCode")
+
+    doLast {
+        delete("$projectDir/physx-jni-natives-linux/src/main/resources")
+        delete("$projectDir/physx-jni-natives-linux-cuda/src/main/resources")
+        delete("$projectDir/physx-jni-natives-macos/src/main/resources")
+        delete("$projectDir/physx-jni-natives-macos-arm64/src/main/resources")
+        delete("$projectDir/physx-jni-natives-windows/src/main/resources")
+        delete("$projectDir/physx-jni-natives-windows-cuda/src/main/resources")
+    }
+}

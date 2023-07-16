@@ -2,8 +2,8 @@ name: Release
 
 on:
   push:
-    branches:
-      - 'main'
+    tags:
+      - '*'
 
 jobs:
 
@@ -37,9 +37,9 @@ jobs:
       - name: Build JNI bindings
         run: ./gradlew build
       - name: Copy Linux native-libs to Azure
-        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-linux/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-linux/src/main/resources?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
+        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-linux/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-linux/src/main?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
       - name: Copy Linux CUDA native-libs to Azure
-        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-linux-cuda/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-linux-cuda/src/main/resources?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
+        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-linux-cuda/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-linux-cuda/src/main?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
@@ -79,9 +79,9 @@ jobs:
       - name: Build JNI bindings
         run: ./gradlew build
       - name: Copy Windows native-libs to Azure
-        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-windows/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-windows/src/main/resources?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
+        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-windows/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-windows/src/main?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
       - name: Copy Windows CUDA native-libs to Azure
-        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-windows-cuda/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-windows-cuda/src/main/resources?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
+        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-windows-cuda/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-windows-cuda/src/main?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
@@ -126,9 +126,9 @@ jobs:
       - name: Build JNI bindings
         run: ./gradlew build
       - name: Copy MacOS native-libs to Azure
-        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-macos/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-macos/src/main/resources?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
+        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-macos/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-macos/src/main?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
       - name: Copy MacOS ARM64 native-libs to Azure
-        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-macos-arm64/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-macos-arm64/src/main/resources?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
+        run: azcopy cp "${{ github.workspace }}/physx-jni-natives-macos-arm64/src/main/resources" "https://kool.blob.core.windows.net/physx-jni-release/physx-jni-natives-macos-arm64/src/main?${{ secrets.AZURE_SAS_TOKEN }}" --recursive=true
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
