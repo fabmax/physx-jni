@@ -140,7 +140,7 @@ interface PxVehicleCommandNonLinearResponseParams {
     attribute float[] speedResponses;
     attribute short nbSpeedResponses;
     attribute short[] speedResponsesPerCommandValue;
-    attribute short[] nbSpeedRenponsesPerCommandValue;
+    attribute short[] nbSpeedResponsesPerCommandValue;
     attribute float[] commandValues;
     attribute short nbCommandValues;
 };
@@ -630,7 +630,8 @@ interface PxVehicleTankDriveDifferentialParams {
     attribute unsigned long[] nbWheelsPerTrack;
     attribute unsigned long[] trackToWheelIds;
     attribute unsigned long[] wheelIdsInTrackOrder;
-    attribute unsigned long nbWheelsInTracks;
+    attribute float[] torqueRatios;
+    attribute float[] aveWheelSpeedRatios;
 };
 PxVehicleTankDriveDifferentialParams implements PxVehicleMultiWheelDriveDifferentialParams;
 
