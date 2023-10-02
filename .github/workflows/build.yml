@@ -11,14 +11,14 @@ on:
 
 jobs:
   build_linux:
-    name: Build Linux native binaries
+    name: Linux native binaries
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
       with:
         submodules: true
-    - name: Set up JDK 11
+    - name: Set up JDK
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
@@ -35,18 +35,15 @@ jobs:
       run: ./gradlew build
 
   build_windows:
-    name: Build Windows native binaries
+    name: Windows native binaries
     runs-on: windows-latest
-    environment: publish
-    permissions:
-      contents: write
 
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
         with:
           submodules: true
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -61,18 +58,15 @@ jobs:
         run: ./gradlew buildNativeProject
 
   build_macos:
-    name: Build MacOS native binaries
+    name: MacOS native binaries
     runs-on: macos-latest
-    environment: publish
-    permissions:
-      contents: write
 
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
         with:
           submodules: true
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
