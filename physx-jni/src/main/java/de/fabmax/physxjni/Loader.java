@@ -1,13 +1,12 @@
 package de.fabmax.physxjni;
 
-import physx.JniThreadManager;
 import physx.PlatformChecks;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Loader {
 
-    private static final String version = "2.2.2";
+    private static final String version = "2.3.0-SNAPSHOT";
 
     private static final AtomicBoolean isLoaded = new AtomicBoolean(false);
 
@@ -34,7 +33,6 @@ public class Loader {
                             " differs from main version " + version);
                 }
                 lib.load();
-                JniThreadManager.init();
             } catch (Throwable t) {
                 throw new IllegalStateException("Failed loading native PhysX libraries for platform " + platform, t);
             }
