@@ -44,6 +44,8 @@ tasks.register<Exec>("generateNativeProjectAndroid") {
     }
 }
 
+tasks["preBuild"].dependsOn("generateJniBindings")
+
 // builds the linux platform native libraries
 tasks.register<Exec>("buildNativeProjectAndroid") {
     group = "native build"
@@ -55,7 +57,6 @@ tasks.register<Exec>("buildNativeProjectAndroid") {
         dependsOn("generateNativeProjectAndroid")
     }
     dependsOn("generateNativeGlueCodeAndroid")
-    dependsOn("generateJniBindings")
 
     val nativeLibsDir = "${projectDir}/src/main/jniLibs/arm64-v8a/"
 
