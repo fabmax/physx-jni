@@ -26,7 +26,7 @@ interface PxContactBuffer {
     void reset();
     boolean contact([Const, Ref] PxVec3 worldPoint, [Const, Ref] PxVec3 worldNormalIn, float separation, optional unsigned long faceIndex1);
     boolean contact([Const, Ref] PxContactPoint pt);
-    [Platforms="windows;linux;macos"] PxContactPoint contact();
+    [Platforms="windows;linux;macos;android"] PxContactPoint contact();
 
     [Value] attribute PxContactPoint[] contacts;
     attribute unsigned long count;
@@ -83,14 +83,14 @@ interface PxConvexMeshGeometryFlags {
     void clear(PxConvexMeshGeometryFlagEnum flag);
 };
 
-[Platforms="windows;linux;macos", Prefix="physx::"]
+[Platforms="windows;linux;macos;android", Prefix="physx::"]
 interface PxCustomGeometry {
     void PxCustomGeometry([Ref] SimpleCustomGeometryCallbacks callbacks);
     boolean isValid();
 };
 PxCustomGeometry implements PxGeometry;
 
-[Platforms="windows;linux;macos"]
+[Platforms="windows;linux;macos;android"]
 interface SimpleCustomGeometryCallbacks {
     PxBounds3 getLocalBoundsImpl([Const, Ref] PxGeometry geometry);
     boolean generateContactsImpl([Const, Ref] PxGeometry geom0, [Const, Ref] PxGeometry geom1, [Const, Ref] PxTransform pose0,
@@ -108,7 +108,7 @@ interface SimpleCustomGeometryCallbacks {
     attribute float persistentContactManifold_outBreakingThreshold;
 };
 
-[Platforms="windows;linux;macos", JSImplementation="SimpleCustomGeometryCallbacks"]
+[Platforms="windows;linux;macos;android", JSImplementation="SimpleCustomGeometryCallbacks"]
 interface SimpleCustomGeometryCallbacksImpl {
     PxBounds3 getLocalBoundsImpl([Const, Ref] PxGeometry geometry);
     boolean generateContactsImpl([Const, Ref] PxGeometry geom0, [Const, Ref] PxGeometry geom1, [Const, Ref] PxTransform pose0,
