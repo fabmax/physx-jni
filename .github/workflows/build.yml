@@ -6,8 +6,12 @@ name: Build
 on:
   push:
     branches: [ main ]
+    tags:
+      - '!**'
   pull_request:
     branches: [ main ]
+    tags:
+      - '!**'
 
 jobs:
   build_linux:
@@ -31,7 +35,7 @@ jobs:
       run: chmod +x gradlew
     - name: Build native lib
       run: ./gradlew buildNativeProject
-    - name: Build JNI bindings
+    - name: Build and test JNI bindings
       run: ./gradlew build
 
   build_windows:
@@ -56,6 +60,8 @@ jobs:
           python-version: '3.10'
       - name: Build native lib
         run: ./gradlew buildNativeProject
+      - name: Build and test JNI bindings
+        run: ./gradlew build
 
   build_macos:
     name: MacOS native binaries
@@ -70,7 +76,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
       - name: Install coreutils
         run: brew install coreutils
       - name: Setup CMake
@@ -85,3 +91,5 @@ jobs:
         run: ./gradlew buildNativeProject
         env:
           PM_PYTHON_EXT: python3
+      - name: Build and test JNI bindings
+        run: ./gradlew build

@@ -90,6 +90,9 @@ open class GenerateNativeGlueCode : DefaultTask() {
     @Optional
     var idlModelName: String? = null
     @Input
+    @Optional
+    var platform: String? = null
+    @Input
     var generatorOutput = "./generated"
 
     @TaskAction
@@ -110,7 +113,7 @@ open class GenerateNativeGlueCode : DefaultTask() {
             outputDirectory = generatorOutput
             glueFileName = "PhysXJniGlue.h"
             packagePrefix = "physx"
-            platform = when {
+            platform = this@GenerateNativeGlueCode.platform ?: when {
                 os.isWindows -> "windows"
                 os.isLinux -> "linux"
                 os.isMacOsX -> "macos"

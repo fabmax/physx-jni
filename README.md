@@ -8,16 +8,27 @@ Java JNI bindings for Nvidia [PhysX 5.3.0](https://github.com/NVIDIA-Omniverse/P
 
 ## How to use
 The library is published on maven central, so you can easily add this to your dependencies:
+
+### Desktop Java
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:2.3.0")
+    implementation("de.fabmax:physx-jni:2.3.1")
     
     // native libraries - you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:2.3.0:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:2.3.0:natives-linux")
-    runtimeOnly("de.fabmax:physx-jni:2.3.0:natives-macos")
-    runtimeOnly("de.fabmax:physx-jni:2.3.0:natives-macos-arm64")
+    runtimeOnly("de.fabmax:physx-jni:2.3.1:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.3.1:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.3.1:natives-macos")
+    runtimeOnly("de.fabmax:physx-jni:2.3.1:natives-macos-arm64")
+}
+```
+
+### Android
+The Android version of the library is packaged as a single `aar` archive containing both java classes
+and native libs:
+```
+dependencies {
+    implementation("de.fabmax:physx-jni-android:2.3.1")
 }
 ```
 
@@ -47,6 +58,7 @@ classes are located under `physx-jni/src/main/generated`.
 - Windows (x86_64)
 - Linux (x86_64)
 - MacOS (x86_64, and arm64)
+- Android (arm-v8 (aarch64) only for now)
  
 Moreover, there is also a version for javascript/webassembly:
 [physx-js-webidl](https://github.com/fabmax/physx-js-webidl).

@@ -2,19 +2,16 @@ import org.gradle.internal.os.OperatingSystem
 import org.gradle.jvm.tasks.Jar
 
 subprojects {
-    apply(plugin = "java-library")
-    apply(plugin = "maven-publish")
-
     group = "de.fabmax"
-    version = "2.3.0"
+    version = "2.3.1"
 
-    repositories {
-        mavenCentral()
-    }
+    if (name != "physx-jni-android") {
+        apply(plugin = "java-library")
 
-    tasks["jar"].apply {
-        this as Jar
-        from("$rootDir/LICENSE", "$rootDir/NOTICE.md")
+        tasks["jar"].apply {
+            this as Jar
+            from("$rootDir/LICENSE", "$rootDir/NOTICE.md")
+        }
     }
 }
 

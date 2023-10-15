@@ -5,7 +5,7 @@ public enum Platform {
     LINUX("de.fabmax.physxjni.linux.NativeLibLinux"),
     WINDOWS("de.fabmax.physxjni.windows.NativeLibWindows"),
     MACOS("de.fabmax.physxjni.macos.NativeLibMacos"),
-    MACOS_ARM64("de.fabmax.physxjni.macosarm.NativeLibMacosArm64");
+    MACOS_ARM64("de.fabmax.physxjni.macosarm.NativeLibMacosArm64"),;
 
     private final String metaClassName;
 
@@ -19,10 +19,13 @@ public enum Platform {
     }
 
     public static Platform getPlatform() {
-        String osName = System.getProperty("os.name").toLowerCase();
-        String arch = System.getProperty("os.arch");
-        
-        if (osName.contains("windows")) {
+        String vendor = System.getProperty("java.vendor", "unknown").toLowerCase();
+        String osName = System.getProperty("os.name", "unknown").toLowerCase();
+        String arch = System.getProperty("os.arch", "unknown");
+
+        if (vendor.contains("android")) {   // on Android java.vendor should be "The Android Project"
+            throw new IllegalStateException("Android environment detected. Use 'physx-jni-android' library instead of regular 'physx-jni'");
+        } else if (osName.contains("windows")) {
             return WINDOWS;
         } else if (osName.contains("linux")) {
             return LINUX;

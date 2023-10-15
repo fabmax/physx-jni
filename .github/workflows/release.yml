@@ -8,7 +8,7 @@ on:
 jobs:
 
   linux:
-    name: Build and publish Linux native binaries
+    name: Build Linux native binaries
     runs-on: ubuntu-latest
     environment: publish
     permissions:
@@ -43,7 +43,7 @@ jobs:
             */src/main/resources/de/fabmax/physxjni/linux/*.so.sha1
 
   windows:
-    name: Build and publish Windows native binaries
+    name: Build Windows native binaries
     runs-on: windows-latest
     environment: publish
     permissions:
@@ -76,7 +76,7 @@ jobs:
             */src/main/resources/de/fabmax/physxjni/windows/*.dll.sha1
 
   macos:
-    name: Build and publish MacOS native binaries
+    name: Build MacOS native binaries
     runs-on: macos-latest
     environment: publish
     permissions:
@@ -91,7 +91,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
       - name: Install coreutils
         run: brew install coreutils
       - name: Setup CMake
@@ -117,14 +117,16 @@ jobs:
             */src/main/resources/de/fabmax/physxjni/macosarm/*.dylib.sha1
 
   publish:
-    name: Build and publish java libs
-    runs-on: ubuntu-latest
+    name: Build and publish Java and Android libs
+    runs-on: windows-latest
     needs: [ linux, macos, windows ]
     environment: publish
 
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
+        with:
+          submodules: true
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -134,11 +136,11 @@ jobs:
         uses: actions/download-artifact@v3
       - name: Copy downloaded artifacts to resources
         run: |
-          cp -r linux-native-libs/* .
-          cp -r macos-native-libs/* .
-          cp -r windows-native-libs/* .
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+          cp -r -Force linux-native-libs/* .
+          cp -r -Force macos-native-libs/* .
+          cp -r -Force windows-native-libs/* .
+      - name: Build Android bindings
+        run: ./gradlew :physx-jni-android:buildNativeProjectAndroid
       - name: Build JNI bindings
         run: ./gradlew build
       - name: Publish JNI bindings
@@ -155,10 +157,11 @@ jobs:
           artifacts: >-
             physx-jni/build/libs/*.jar,
             physx-jni-natives-linux/build/libs/physx-jni-natives-linux-?.?.?.jar,
-            physx-jni-natives-linux-cuda/build/libs/physx-jni-natives-linux-cuda-?.?.?.jar
+            physx-jni-natives-linux-cuda/build/libs/physx-jni-natives-linux-cuda-?.?.?.jar,
             physx-jni-natives-windows/build/libs/physx-jni-natives-windows-?.?.?.jar,
-            physx-jni-natives-windows-cuda/build/libs/physx-jni-natives-windows-cuda-?.?.?.jar
+            physx-jni-natives-windows-cuda/build/libs/physx-jni-natives-windows-cuda-?.?.?.jar,
             physx-jni-natives-macos/build/libs/physx-jni-natives-macos-?.?.?.jar,
-            physx-jni-natives-macos-arm64/build/libs/physx-jni-natives-macos-arm64-?.?.?.jar
+            physx-jni-natives-macos-arm64/build/libs/physx-jni-natives-macos-arm64-?.?.?.jar,
+            physx-jni-android/build/outputs/aar/physx-jni-android-release.aar
           draft: true
           updateOnlyUnreleased: true

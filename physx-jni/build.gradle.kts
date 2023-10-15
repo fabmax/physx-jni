@@ -1,4 +1,5 @@
 plugins {
+    `maven-publish`
     signing
 }
 
