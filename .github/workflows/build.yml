@@ -109,9 +109,11 @@ jobs:
         run: ./gradlew buildNativeProject
         env:
           PM_PYTHON_EXT: python3
-
       - name: Build and test JNI bindings
         run: ./gradlew build
+
+      - name: Upload MacOS native lib artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: macos-native-libs
           path: |
