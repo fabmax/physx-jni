@@ -21,32 +21,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: true
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-    - uses: lukka/get-cmake@latest
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    - name: Build native lib
-      run: ./gradlew buildNativeProject
-    - name: Build and test JNI bindings
-      run: ./gradlew build
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: lukka/get-cmake@latest
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Build native lib
+        run: ./gradlew buildNativeProject
+      - name: Build and test JNI bindings
+        run: ./gradlew build
 
-    - name: Upload Linux native lib artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: linux-native-libs
-        path: |
-          */src/main/resources/de/fabmax/physxjni/linux/*.so
-          */src/main/resources/de/fabmax/physxjni/linux/*.so.sha1
+      - name: Upload Linux native lib artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-native-libs
+          path: |
+            physx-jni/build/libs/physx-jni-?.?.?.jar
+            physx-jni-natives-linux/build/libs/physx-jni-natives-linux-?.?.?.jar
 
   build_windows:
     name: Windows native binaries
@@ -78,8 +76,8 @@ jobs:
         with:
           name: windows-native-libs
           path: |
-            */src/main/resources/de/fabmax/physxjni/windows/*.dll
-            */src/main/resources/de/fabmax/physxjni/windows/*.dll.sha1
+            physx-jni/build/libs/physx-jni-?.?.?.jar
+            physx-jni-natives-windows/build/libs/physx-jni-natives-windows-?.?.?.jar
 
   build_macos:
     name: MacOS native binaries
@@ -103,8 +101,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.8'
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Build native lib
         run: ./gradlew buildNativeProject
         env:
@@ -117,7 +113,6 @@ jobs:
         with:
           name: macos-native-libs
           path: |
-            */src/main/resources/de/fabmax/physxjni/macos/*.dylib
-            */src/main/resources/de/fabmax/physxjni/macos/*.dylib.sha1
-            */src/main/resources/de/fabmax/physxjni/macosarm/*.dylib
-            */src/main/resources/de/fabmax/physxjni/macosarm/*.dylib.sha1
+            physx-jni/build/libs/physx-jni-?.?.?.jar
+            physx-jni-natives-macos/build/libs/physx-jni-natives-macos-?.?.?.jar
+            physx-jni-natives-macos-arm64/build/libs/physx-jni-natives-macos-arm64-?.?.?.jar
