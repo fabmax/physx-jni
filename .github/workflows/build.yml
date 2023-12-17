@@ -38,6 +38,14 @@ jobs:
     - name: Build and test JNI bindings
       run: ./gradlew build
 
+    - name: Upload Linux native lib artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: linux-native-libs
+        path: |
+          */src/main/resources/de/fabmax/physxjni/linux/*.so
+          */src/main/resources/de/fabmax/physxjni/linux/*.so.sha1
+
   build_windows:
     name: Windows native binaries
     runs-on: windows-latest
@@ -62,6 +70,14 @@ jobs:
         run: ./gradlew buildNativeProject
       - name: Build and test JNI bindings
         run: ./gradlew build
+
+      - name: Upload Windows native lib artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-native-libs
+          path: |
+            */src/main/resources/de/fabmax/physxjni/windows/*.dll
+            */src/main/resources/de/fabmax/physxjni/windows/*.dll.sha1
 
   build_macos:
     name: MacOS native binaries
@@ -91,5 +107,13 @@ jobs:
         run: ./gradlew buildNativeProject
         env:
           PM_PYTHON_EXT: python3
+
       - name: Build and test JNI bindings
         run: ./gradlew build
+        with:
+          name: macos-native-libs
+          path: |
+            */src/main/resources/de/fabmax/physxjni/macos/*.dylib
+            */src/main/resources/de/fabmax/physxjni/macos/*.dylib.sha1
+            */src/main/resources/de/fabmax/physxjni/macosarm/*.dylib
+            */src/main/resources/de/fabmax/physxjni/macosarm/*.dylib.sha1
