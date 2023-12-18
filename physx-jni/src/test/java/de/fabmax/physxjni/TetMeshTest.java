@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.system.MemoryStack;
 import physx.geometry.PxTetrahedronMeshDesc;
-import physx.geometry.PxTetrahedronMeshFormat;
+import physx.geometry.PxTetrahedronMeshFormatEnum;
 import physx.support.PxArray_PxU32;
 import physx.support.PxArray_PxVec3;
 
@@ -25,7 +25,7 @@ public class TetMeshTest {
                 meshIndices.set(i, i);
             }
 
-            var testMeshDesc = PxTetrahedronMeshDesc.createAt(mem, MemoryStack::nmalloc, meshVertices, meshIndices, PxTetrahedronMeshFormat.eTET_MESH);
+            var testMeshDesc = PxTetrahedronMeshDesc.createAt(mem, MemoryStack::nmalloc, meshVertices, meshIndices, PxTetrahedronMeshFormatEnum.eTET_MESH);
             Assertions.assertTrue(testMeshDesc.isValid());
         }
     }
