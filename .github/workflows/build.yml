@@ -41,10 +41,11 @@ jobs:
       - name: Upload Linux native lib artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: linux-native-libs
+          name: linux-libs
           path: |
             physx-jni/build/libs/physx-jni-?.?.?.jar
             physx-jni-natives-linux/build/libs/physx-jni-natives-linux-?.?.?.jar
+            physx-jni-natives-linux-cuda/build/libs/physx-jni-natives-linux-cuda-?.?.?.jar
 
   build_windows:
     name: Windows native binaries
@@ -74,10 +75,11 @@ jobs:
       - name: Upload Windows native lib artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: windows-native-libs
+          name: windows-libs
           path: |
             physx-jni/build/libs/physx-jni-?.?.?.jar
             physx-jni-natives-windows/build/libs/physx-jni-natives-windows-?.?.?.jar
+            physx-jni-natives-windows-cuda/build/libs/physx-jni-natives-windows-cuda-?.?.?.jar
 
   build_macos:
     name: MacOS native binaries
@@ -111,7 +113,7 @@ jobs:
       - name: Upload MacOS native lib artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: macos-native-libs
+          name: macos-libs
           path: |
             physx-jni/build/libs/physx-jni-?.?.?.jar
             physx-jni-natives-macos/build/libs/physx-jni-natives-macos-?.?.?.jar

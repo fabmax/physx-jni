@@ -7,7 +7,7 @@ import physx.PxTopLevelFunctions;
 import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
 import physx.physics.*;
-import physx.support.Vector_PxContactPairPoint;
+import physx.support.PxArray_PxContactPairPoint;
 
 import java.util.*;
 
@@ -80,7 +80,7 @@ public class SimCallbackTest {
         Set<PxActor> contactBodies = new HashSet<>();
         Set<PxActor> triggerBodies = new HashSet<>();
 
-        Vector_PxContactPairPoint contacts = new Vector_PxContactPairPoint(64);
+        PxArray_PxContactPairPoint contacts = new PxArray_PxContactPairPoint(64);
 
         private String vec3ToString(PxVec3 vec3) {
             return String.format(Locale.ENGLISH, "(%.3f, %.3f, %.3f)", vec3.getX(), vec3.getY(), vec3.getZ());
@@ -107,10 +107,10 @@ public class SimCallbackTest {
                     event = "TOUCH_LOST";
                 }
 
-                int contactPoints = pair.extractContacts(contacts.data(), 64);
+                int contactPoints = pair.extractContacts(contacts.begin(), 64);
                 System.out.println("onContact: " + name0 + " and " + name1 + ": " + event + ", " + contactPoints + " contact points");
                 for (int j = 0; j < contactPoints; j++) {
-                    PxContactPairPoint cp = contacts.at(j);
+                    PxContactPairPoint cp = contacts.get(j);
                     System.out.println("  pos: " + vec3ToString(cp.getPosition()) + ", nrm: " + vec3ToString(cp.getNormal())
                             + ", imp: " + vec3ToString(cp.getImpulse()) + ", sep: " + cp.getSeparation());
                 }

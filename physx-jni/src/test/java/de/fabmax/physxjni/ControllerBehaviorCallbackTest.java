@@ -14,8 +14,8 @@ import physx.physics.PxActor;
 import physx.physics.PxRigidStatic;
 import physx.physics.PxScene;
 import physx.physics.PxShape;
-import physx.support.Vector_PxU32;
-import physx.support.Vector_PxVec3;
+import physx.support.PxArray_PxU32;
+import physx.support.PxArray_PxVec3;
 
 public class ControllerBehaviorCallbackTest {
 
@@ -30,32 +30,32 @@ public class ControllerBehaviorCallbackTest {
             PxController controller;
 
             // generate some triangle geometry as ground
-            Vector_PxVec3 pointVector = new Vector_PxVec3();
-            Vector_PxU32 indexVector = new Vector_PxU32();
-            pointVector.push_back(PxVec3.createAt(mem, MemoryStack::nmalloc, 0f, 0f, 0f));
+            PxArray_PxVec3 pointVector = new PxArray_PxVec3();
+            PxArray_PxU32 indexVector = new PxArray_PxU32();
+            pointVector.pushBack(PxVec3.createAt(mem, MemoryStack::nmalloc, 0f, 0f, 0f));
             PxVec3 tmpVec = PxVec3.createAt(mem, MemoryStack::nmalloc, 0f, 0f, 0f);
             for (int i = 0; i <= 4; i++) {
                 double a = i / 4.0 * 2 * Math.PI;
                 tmpVec.setX((float) Math.cos(a) * 5f);
                 tmpVec.setZ((float) Math.sin(a) * -5f);
                 // Vector_PxVec3 stores PxVec3's as value, we can (and should) recycle the same temporary PxVec3 object to fill it
-                pointVector.push_back(tmpVec);
+                pointVector.pushBack(tmpVec);
                 if (i > 0) {
-                    indexVector.push_back(0);
-                    indexVector.push_back(i);
-                    indexVector.push_back(i+1);
+                    indexVector.pushBack(0);
+                    indexVector.pushBack(i);
+                    indexVector.pushBack(i+1);
                 }
             }
 
             PxBoundedData points = PxBoundedData.createAt(mem, MemoryStack::nmalloc);
             points.setCount(pointVector.size());
             points.setStride(PxVec3.SIZEOF);
-            points.setData(pointVector.data());
+            points.setData(pointVector.begin());
 
             PxBoundedData triangles = PxBoundedData.createAt(mem, MemoryStack::nmalloc);
             triangles.setCount(indexVector.size() / 3);
             triangles.setStride(4 * 3);     // 3 4-byte integer indices per triangle
-            triangles.setData(indexVector.data());
+            triangles.setData(indexVector.begin());
 
             PxTriangleMeshDesc meshDesc = PxTriangleMeshDesc.createAt(mem, MemoryStack::nmalloc);
             meshDesc.setPoints(points);

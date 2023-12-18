@@ -9,16 +9,14 @@ import physx.common.PxCudaContextManager;
 import physx.common.PxCudaTopLevelFunctions;
 import physx.common.PxVec4;
 import physx.particles.*;
-import physx.physics.PxRigidBody;
 import physx.physics.PxScene;
 import physx.support.NativeArrayHelpers;
-import physx.support.Vector_PxU32;
-import physx.support.Vector_PxVec4;
+import physx.support.PxArray_PxU32;
+import physx.support.PxArray_PxVec4;
 
 public class ClothTest {
 
     private static final PxCudaContextManager cudaMgr = CudaHelpers.getCudaContextManager();
-    private PxParticleClothBuffer clothBuffer;
 
     @BeforeAll
     public static void checkIsCudaAvailable() {
@@ -60,10 +58,9 @@ public class ClothTest {
         }
 
         void simulateClothScene(float duration) {
-            var positions = new Vector_PxVec4(clothBuffer.getNbActiveParticles());
+            var positions = new PxArray_PxVec4(clothBuffer.getNbActiveParticles());
 
             float step = 1/60f;
-            float t = 0;
             for (int i = 0; i < duration / step; i++) {
                 // print position of printActor 2 times per simulated sec
                 if (i % 30 == 0) {
@@ -72,24 +69,23 @@ public class ClothTest {
 
                     cudaMgr.acquireContext();
                     var cudaContext = cudaMgr.getCudaContext();
-                    cudaContext.memcpyDtoH(positions.data(), PxCudaTopLevelFunctions.pxVec4deviceptr(devPositions), PxVec4.SIZEOF * numParticles);
+                    cudaContext.memcpyDtoH(positions.begin(), PxCudaTopLevelFunctions.pxVec4deviceptr(devPositions), PxVec4.SIZEOF * numParticles);
 
-                    var posCenter = positions.at(id(NUM_X/2, NUM_Z/2));
+                    var posCenter = positions.get(id(NUM_X/2, NUM_Z/2));
                     System.out.println("cloth center pos: " + posCenter.getX() + ", " + posCenter.getY() + ", " + posCenter.getZ());
 
                     cudaMgr.releaseContext();
                 }
                 scene.simulate(step);
                 scene.fetchResults(true);
-                t += step;
             }
 
             // after simulation cloth corners should be on the ground (+ rest offset), center on top of the cube
-            var center = positions.at(id(NUM_X/2, NUM_Z/2));
-            var corner1 = positions.at(id(0, 0));
-            var corner2 = positions.at(id(0, NUM_Z-1));
-            var corner3 = positions.at(id(NUM_X-1, NUM_Z-1));
-            var corner4 = positions.at(id(NUM_X-1, 0));
+            var center = positions.get(id(NUM_X/2, NUM_Z/2));
+            var corner1 = positions.get(id(0, 0));
+            var corner2 = positions.get(id(0, NUM_Z-1));
+            var corner3 = positions.get(id(NUM_X-1, NUM_Z-1));
+            var corner4 = positions.get(id(NUM_X-1, 0));
 
             Assertions.assertEquals(1.05f, center.getY(), 0.01f);
             Assertions.assertEquals(0.05f, corner1.getY(), 0.01f);
@@ -145,15 +141,14 @@ public class ClothTest {
                 var phase = PxCudaTopLevelFunctions.allocPinnedHostBufferPxU32(cudaMgr, numParticles);
                 var positionInvMass = PxCudaTopLevelFunctions.allocPinnedHostBufferPxVec4(cudaMgr, numParticles);
                 var velocity = PxCudaTopLevelFunctions.allocPinnedHostBufferPxVec4(cudaMgr, numParticles);
-                var springs = new Vector_PxParticleSpring(numSprings);
-                var triangles = new Vector_PxU32();
+                var springs = new PxArray_PxParticleSpring(numSprings);
+                var triangles = new PxArray_PxU32();
 
                 var x = positionX;
                 var y = positionY;
                 var z = positionZ;
                 var sqrt2 = (float) Math.sqrt(2.0);
 
-                var vec4Buffer = PxVec4.createAt(mem, MemoryStack::nmalloc);
                 var iSpring = 0;
                 for (int i = 0; i < NUM_X; i++) {
                     for (int j = 0; j < NUM_Z; j++) {
@@ -163,24 +158,24 @@ public class ClothTest {
                         setXyzw(PxVec4.arrayGet(velocity.getAddress(), index),0f, 0f, 0f, 0f);
 
                         if (i > 0) {
-                            setSpring(springs.at(iSpring++), id(i - 1, j), id(i, j), PARTICLE_SPACING, stretchStiffness, springDamping);
+                            setSpring(springs.get(iSpring++), id(i - 1, j), id(i, j), PARTICLE_SPACING, stretchStiffness, springDamping);
                         }
                         if (j > 0) {
-                            setSpring(springs.at(iSpring++), id(i, j - 1), id(i, j), PARTICLE_SPACING, stretchStiffness, springDamping);
+                            setSpring(springs.get(iSpring++), id(i, j - 1), id(i, j), PARTICLE_SPACING, stretchStiffness, springDamping);
                         }
 
                         if (i > 0 && j > 0) {
-                            setSpring(springs.at(iSpring++), id(i - 1, j - 1), id(i, j), sqrt2 * PARTICLE_SPACING, shearStiffness, springDamping);
-                            setSpring(springs.at(iSpring++), id(i - 1, j), id(i, j - 1), sqrt2 * PARTICLE_SPACING, shearStiffness, springDamping);
+                            setSpring(springs.get(iSpring++), id(i - 1, j - 1), id(i, j), sqrt2 * PARTICLE_SPACING, shearStiffness, springDamping);
+                            setSpring(springs.get(iSpring++), id(i - 1, j), id(i, j - 1), sqrt2 * PARTICLE_SPACING, shearStiffness, springDamping);
 
                             //Triangles are used to compute approximated aerodynamic forces for cloth falling down
-                            triangles.push_back(id(i - 1, j - 1));
-                            triangles.push_back(id(i - 1, j));
-                            triangles.push_back(id(i, j - 1));
+                            triangles.pushBack(id(i - 1, j - 1));
+                            triangles.pushBack(id(i - 1, j));
+                            triangles.pushBack(id(i, j - 1));
 
-                            triangles.push_back(id(i - 1, j));
-                            triangles.push_back(id(i, j - 1));
-                            triangles.push_back(id(i, j));
+                            triangles.pushBack(id(i - 1, j));
+                            triangles.pushBack(id(i, j - 1));
+                            triangles.pushBack(id(i, j));
                         }
                         z += PARTICLE_SPACING;
                     }
@@ -191,7 +186,7 @@ public class ClothTest {
                 Assertions.assertEquals(numSprings, springs.size());
                 Assertions.assertEquals(numTriangles, triangles.size() / 3);
 
-                clothBuffers.addCloth(0f, 0f, 0f, NativeArrayHelpers.voidToU32Ptr(triangles.data()), numTriangles, springs.data(), numSprings, positionInvMass, numParticles);
+                clothBuffers.addCloth(0f, 0f, 0f, NativeArrayHelpers.voidToU32Ptr(triangles.begin()), numTriangles, springs.begin(), numSprings, positionInvMass, numParticles);
 
                 var bufferDesc = PxParticleBufferDesc.createAt(mem, MemoryStack::nmalloc);
                 bufferDesc.setMaxParticles(numParticles);
@@ -220,32 +215,27 @@ public class ClothTest {
             }
         }
 
-        private PxRigidBody addSceneBodies() {
-            try (MemoryStack mem = MemoryStack.stackPush()) {
-                scene.addActor(PhysXTestEnv.createGroundPlane());
+        private void addSceneBodies() {
+            scene.addActor(PhysXTestEnv.createGroundPlane());
 
-                var box = PhysXTestEnv.createDefaultBox(0f, 2f, 0f);
-                scene.addActor(box);
-                return box;
-            }
+            var box = PhysXTestEnv.createDefaultBox(0f, 2f, 0f);
+            scene.addActor(box);
         }
     }
 
-    private static PxVec4 setXyzw(PxVec4 target, float x, float y, float z, float w) {
+    private static void setXyzw(PxVec4 target, float x, float y, float z, float w) {
         target.setX(x);
         target.setY(y);
         target.setZ(z);
         target.setW(w);
-        return target;
     }
 
-    private static PxParticleSpring setSpring(PxParticleSpring target, int ind0, int ind1, float length, float stiffness, float damping) {
+    private static void setSpring(PxParticleSpring target, int ind0, int ind1, float length, float stiffness, float damping) {
         target.setInd0(ind0);
         target.setInd1(ind1);
         target.setLength(length);
         target.setStiffness(stiffness);
         target.setDamping(damping);
         target.setPad(0f);
-        return target;
     }
 }

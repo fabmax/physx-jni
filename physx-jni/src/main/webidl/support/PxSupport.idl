@@ -4,7 +4,7 @@
 
 interface SupportFunctions {
     static PxShape PxActor_getShape([Ref] PxRigidActor actor, long index);
-    [Ref] static Vector_PxActorPtr PxScene_getActiveActors(PxScene scene);
+    [Ref] static PxArray_PxActorPtr PxScene_getActiveActors(PxScene scene);
     static unsigned long PxArticulationReducedCoordinate_getMinSolverPositionIterations(PxArticulationReducedCoordinate articulation);
     static unsigned long PxArticulationReducedCoordinate_getMinSolverVelocityIterations(PxArticulationReducedCoordinate articulation);
 };
@@ -67,6 +67,139 @@ interface NativeArrayHelpers {
     static PxVec3 getVec3At(PxVec3 base, long index);
 };
 
+interface PxArray_PxMaterialConst {
+    void PxArray_PxMaterialConst();
+    void PxArray_PxMaterialConst(unsigned long size);
+    [Const] PxMaterial get(unsigned long index);
+    void set(unsigned long index, [Const] PxMaterial value);
+    PxMaterialConstPtr begin();
+    unsigned long size();
+    void pushBack([Const] PxMaterial value);
+    void clear();
+};
+
+interface PxArray_PxHeightFieldSample {
+    void PxArray_PxHeightFieldSample();
+    void PxArray_PxHeightFieldSample(unsigned long size);
+    [Ref] PxHeightFieldSample get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxHeightFieldSample value);
+    PxHeightFieldSample begin();
+    unsigned long size();
+    void pushBack([Ref] PxHeightFieldSample value);
+    void clear();
+};
+
+interface PxArray_PxReal {
+    void PxArray_PxReal();
+    void PxArray_PxReal(unsigned long size);
+    float get(unsigned long index);
+    void set(unsigned long index, float value);
+    VoidPtr begin();
+    unsigned long size();
+    void pushBack(float value);
+    void clear();
+};
+
+interface PxArray_PxU8 {
+    void PxArray_PxU8();
+    void PxArray_PxU8(unsigned long size);
+    octet get(unsigned long index);
+    void set(unsigned long index, octet value);
+    VoidPtr begin();
+    unsigned long size();
+    void pushBack(octet value);
+    void clear();
+};
+
+interface PxArray_PxU16 {
+    void PxArray_PxU16();
+    void PxArray_PxU16(unsigned long size);
+    unsigned short get(unsigned long index);
+    void set(unsigned long index, unsigned short value);
+    VoidPtr begin();
+    unsigned long size();
+    void pushBack(unsigned short value);
+    void clear();
+};
+
+interface PxArray_PxU32 {
+    void PxArray_PxU32();
+    void PxArray_PxU32(unsigned long size);
+    unsigned long get(unsigned long index);
+    void set(unsigned long index, unsigned long value);
+    VoidPtr begin();
+    unsigned long size();
+    void pushBack(unsigned long value);
+    void clear();
+};
+
+interface PxArray_PxVec3 {
+    void PxArray_PxVec3();
+    void PxArray_PxVec3(unsigned long size);
+    [Ref] PxVec3 get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxVec3 value);
+    PxVec3 begin();
+    unsigned long size();
+    void pushBack([Ref] PxVec3 value);
+    void clear();
+};
+
+interface PxArray_PxVec4 {
+    void PxArray_PxVec4();
+    void PxArray_PxVec4(unsigned long size);
+    [Ref] PxVec4 get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxVec4 value);
+    PxVec4 begin();
+    unsigned long size();
+    void pushBack([Ref] PxVec4 value);
+    void clear();
+};
+
+interface PxArray_PxActorPtr {
+    void PxArray_PxActorPtr();
+    void PxArray_PxActorPtr(unsigned long size);
+    PxActor get(unsigned long index);
+    void set(unsigned long index, [Const] PxActor value);
+    PxActorPtr begin();
+    unsigned long size();
+    void pushBack(PxActor value);
+    void clear();
+};
+
+interface PxArray_PxContactPairPoint {
+    void PxArray_PxContactPairPoint();
+    void PxArray_PxContactPairPoint(unsigned long size);
+    [Ref] PxContactPairPoint get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxContactPairPoint value);
+    PxContactPairPoint begin();
+    unsigned long size();
+    void pushBack([Ref] PxContactPairPoint value);
+    void clear();
+};
+
+interface PxArray_PxRaycastHit {
+    void PxArray_PxRaycastHit();
+    void PxArray_PxRaycastHit(unsigned long size);
+    [Ref] PxRaycastHit get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxRaycastHit value);
+    PxRaycastHit begin();
+    unsigned long size();
+    void pushBack([Ref] PxRaycastHit value);
+    void clear();
+};
+
+interface PxArray_PxSweepHit {
+    void PxArray_PxSweepHit();
+    void PxArray_PxSweepHit(unsigned long size);
+    [Ref] PxSweepHit get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxSweepHit value);
+    PxSweepHit begin();
+    unsigned long size();
+    void pushBack([Ref] PxSweepHit value);
+    void clear();
+};
+
+[Deprecated]
 interface Vector_PxMaterialConst {
     void Vector_PxMaterialConst();
     void Vector_PxMaterialConst(unsigned long size);
@@ -77,6 +210,7 @@ interface Vector_PxMaterialConst {
     void clear();
 };
 
+[Deprecated]
 interface Vector_PxHeightFieldSample {
     void Vector_PxHeightFieldSample();
     void Vector_PxHeightFieldSample(unsigned long size);
@@ -87,6 +221,7 @@ interface Vector_PxHeightFieldSample {
     void clear();
 };
 
+[Deprecated]
 interface Vector_PxReal {
     void Vector_PxReal();
     void Vector_PxReal(unsigned long size);
@@ -97,6 +232,7 @@ interface Vector_PxReal {
     void clear();
 };
 
+[Deprecated]
 interface Vector_PxU8 {
     void Vector_PxU8();
     void Vector_PxU8(unsigned long size);
@@ -107,6 +243,7 @@ interface Vector_PxU8 {
     void clear();
 };
 
+[Deprecated]
 interface Vector_PxU16 {
     void Vector_PxU16();
     void Vector_PxU16(unsigned long size);
@@ -117,6 +254,7 @@ interface Vector_PxU16 {
     void clear();
 };
 
+[Deprecated]
 interface Vector_PxU32 {
     void Vector_PxU32();
     void Vector_PxU32(unsigned long size);
@@ -127,6 +265,7 @@ interface Vector_PxU32 {
     void clear();
 };
 
+[Deprecated]
 interface Vector_PxVec3 {
     void Vector_PxVec3();
     void Vector_PxVec3(unsigned long size);
@@ -137,6 +276,7 @@ interface Vector_PxVec3 {
     void clear();
 };
 
+[Deprecated]
 interface Vector_PxVec4 {
     void Vector_PxVec4();
     void Vector_PxVec4(unsigned long size);
@@ -147,6 +287,7 @@ interface Vector_PxVec4 {
     void clear();
 };
 
+[Deprecated]
 interface Vector_PxActorPtr {
     void Vector_PxActorPtr();
     void Vector_PxActorPtr(unsigned long size);
@@ -157,6 +298,7 @@ interface Vector_PxActorPtr {
     void clear();
 };
 
+[Deprecated]
 interface Vector_PxContactPairPoint {
     void Vector_PxContactPairPoint();
     void Vector_PxContactPairPoint(unsigned long size);
@@ -167,6 +309,7 @@ interface Vector_PxContactPairPoint {
     void clear();
 };
 
+[Deprecated]
 interface Vector_PxRaycastHit {
     void Vector_PxRaycastHit();
     void Vector_PxRaycastHit(unsigned long size);
@@ -177,6 +320,7 @@ interface Vector_PxRaycastHit {
     void clear();
 };
 
+[Deprecated]
 interface Vector_PxSweepHit {
     void Vector_PxSweepHit();
     void Vector_PxSweepHit(unsigned long size);

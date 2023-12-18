@@ -5,8 +5,8 @@ import physx.common.PxCollection;
 import physx.extensions.*;
 import physx.physics.PxScene;
 import physx.support.NativeArrayHelpers;
+import physx.support.PxArray_PxU8;
 import physx.support.PxU8ConstPtr;
-import physx.support.Vector_PxU8;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SerializationTest {
@@ -48,13 +48,13 @@ public class SerializationTest {
     @Test
     @Order(2)
     public void deserializeCollection() {
-        Vector_PxU8 data = new Vector_PxU8();
+        PxArray_PxU8 data = new PxArray_PxU8();
         String serialization = serializeScene();
         for (int i = 0; i < serialization.length(); i++) {
-            data.push_back((byte) serialization.charAt(i));
+            data.pushBack((byte) serialization.charAt(i));
         }
 
-        PxDefaultMemoryInputData memIn = new PxDefaultMemoryInputData(NativeArrayHelpers.voidToU8Ptr(data.data()), data.size());
+        PxDefaultMemoryInputData memIn = new PxDefaultMemoryInputData(NativeArrayHelpers.voidToU8Ptr(data.begin()), data.size());
         PxSerializationRegistry sr = PxSerialization.createSerializationRegistry(PhysXTestEnv.physics);
         PxCollection loadedCollection = PxSerialization.createCollectionFromXml(memIn, PhysXTestEnv.cookingParams, sr);
         Assertions.assertEquals(3, loadedCollection.getNbObjects());
