@@ -14,7 +14,7 @@ public class PxArrayTest {
         PhysXTestEnv.init();
 
         try (MemoryStack mem = MemoryStack.stackPush()) {
-            var array = new PxArray_PxVec3(0);
+            var array = PxArray_PxVec3.createAt(mem, MemoryStack::nmalloc);
             Assertions.assertEquals(0, array.size());
 
             // add a vector to the empty array
@@ -37,8 +37,6 @@ public class PxArrayTest {
 
             array.clear();
             Assertions.assertEquals(0, array.size());
-
-            array.destroy();
         }
     }
 
@@ -49,7 +47,7 @@ public class PxArrayTest {
 
         try (MemoryStack mem = MemoryStack.stackPush()) {
             // create an array with initial size of 10: will contain 10 PxVec3 initialized to (0, 0, 0)
-            var array = new PxArray_PxVec3(10);
+            var array = PxArray_PxVec3.createAt(mem, MemoryStack::nmalloc, 10);
             Assertions.assertEquals(10, array.size());
 
             // append an additional vector as 11th element
@@ -66,8 +64,6 @@ public class PxArrayTest {
                     Assertions.assertTrue(it.getX() == 0f && it.getY() == 0f && it.getZ() == 0f);
                 }
             }
-
-            array.destroy();
         }
     }
 
@@ -76,10 +72,12 @@ public class PxArrayTest {
         // needed if this test is run stand-alone, because PxFoundation needs to be created for PxArray to work
         PhysXTestEnv.init();
 
-        var array = new PxArray_PxU32(1);
-        Assertions.assertEquals(0, array.get(0));
+        try (MemoryStack mem = MemoryStack.stackPush()) {
+            var array = PxArray_PxU32.createAt(mem, MemoryStack::nmalloc, 1);
+            Assertions.assertEquals(0, array.get(0));
 
-        array.set(0, 17);
-        Assertions.assertEquals(17, array.get(0));
+            array.set(0, 17);
+            Assertions.assertEquals(17, array.get(0));
+        }
     }
 }

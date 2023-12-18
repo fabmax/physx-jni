@@ -17,7 +17,7 @@ on:
 
 jobs:
   build_linux:
-    name: Linux native binaries
+    name: Linux build
     runs-on: ubuntu-latest
 
     steps:
@@ -38,7 +38,7 @@ jobs:
       - name: Build and test JNI bindings
         run: ./gradlew build
 
-      - name: Upload Linux native lib artifacts
+      - name: Upload native lib artifacts
         uses: actions/upload-artifact@v3
         with:
           name: linux-libs
@@ -48,7 +48,7 @@ jobs:
             physx-jni-natives-linux-cuda/build/libs/physx-jni-natives-linux-cuda-?.?.?.jar
 
   build_windows:
-    name: Windows native binaries
+    name: Windows build
     runs-on: windows-latest
 
     steps:
@@ -72,7 +72,7 @@ jobs:
       - name: Build and test JNI bindings
         run: ./gradlew build
 
-      - name: Upload Windows native lib artifacts
+      - name: Upload Windows lib artifacts
         uses: actions/upload-artifact@v3
         with:
           name: windows-libs
@@ -82,7 +82,7 @@ jobs:
             physx-jni-natives-windows-cuda/build/libs/physx-jni-natives-windows-cuda-?.?.?.jar
 
   build_macos:
-    name: MacOS native binaries
+    name: MacOS build
     runs-on: macos-latest
 
     steps:
@@ -110,7 +110,7 @@ jobs:
       - name: Build and test JNI bindings
         run: ./gradlew build
 
-      - name: Upload MacOS native lib artifacts
+      - name: Upload MacOS lib artifacts
         uses: actions/upload-artifact@v3
         with:
           name: macos-libs

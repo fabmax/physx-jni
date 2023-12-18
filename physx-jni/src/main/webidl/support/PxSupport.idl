@@ -24,6 +24,11 @@ PxU32Ptr implements PxU32ConstPtr;
 
 interface PxU32ConstPtr { };
 
+interface PxI32Ptr { };
+PxI32Ptr implements PxI32ConstPtr;
+
+interface PxI32ConstPtr { };
+
 interface PxRealPtr { };
 
 interface PxActorPtr { };
@@ -48,6 +53,7 @@ interface NativeArrayHelpers {
     [Value] static PxU8Ptr voidToU8Ptr(VoidPtr voidPtr);
     [Value] static PxU16Ptr voidToU16Ptr(VoidPtr voidPtr);
     [Value] static PxU32Ptr voidToU32Ptr(VoidPtr voidPtr);
+    [Value] static PxI32Ptr voidToI32Ptr(VoidPtr voidPtr);
     [Value] static PxRealPtr voidToRealPtr(VoidPtr voidPtr);
 
     static PxActor getActorAt(PxActor base, long index);
@@ -67,17 +73,19 @@ interface NativeArrayHelpers {
     static PxVec3 getVec3At(PxVec3 base, long index);
 };
 
+[StackAllocatable]
 interface PxArray_PxMaterialConst {
     void PxArray_PxMaterialConst();
     void PxArray_PxMaterialConst(unsigned long size);
     [Const] PxMaterial get(unsigned long index);
-    void set(unsigned long index, [Const] PxMaterial value);
+    void set(unsigned long index, [Const, Ref] PxMaterialConstPtr value);
     PxMaterialConstPtr begin();
     unsigned long size();
     void pushBack([Const] PxMaterial value);
     void clear();
 };
 
+[StackAllocatable]
 interface PxArray_PxHeightFieldSample {
     void PxArray_PxHeightFieldSample();
     void PxArray_PxHeightFieldSample(unsigned long size);
@@ -89,6 +97,7 @@ interface PxArray_PxHeightFieldSample {
     void clear();
 };
 
+[StackAllocatable]
 interface PxArray_PxReal {
     void PxArray_PxReal();
     void PxArray_PxReal(unsigned long size);
@@ -100,6 +109,7 @@ interface PxArray_PxReal {
     void clear();
 };
 
+[StackAllocatable]
 interface PxArray_PxU8 {
     void PxArray_PxU8();
     void PxArray_PxU8(unsigned long size);
@@ -111,6 +121,7 @@ interface PxArray_PxU8 {
     void clear();
 };
 
+[StackAllocatable]
 interface PxArray_PxU16 {
     void PxArray_PxU16();
     void PxArray_PxU16(unsigned long size);
@@ -122,6 +133,7 @@ interface PxArray_PxU16 {
     void clear();
 };
 
+[StackAllocatable]
 interface PxArray_PxU32 {
     void PxArray_PxU32();
     void PxArray_PxU32(unsigned long size);
@@ -133,6 +145,7 @@ interface PxArray_PxU32 {
     void clear();
 };
 
+[StackAllocatable]
 interface PxArray_PxVec3 {
     void PxArray_PxVec3();
     void PxArray_PxVec3(unsigned long size);
@@ -144,6 +157,7 @@ interface PxArray_PxVec3 {
     void clear();
 };
 
+[StackAllocatable]
 interface PxArray_PxVec4 {
     void PxArray_PxVec4();
     void PxArray_PxVec4(unsigned long size);
@@ -155,17 +169,19 @@ interface PxArray_PxVec4 {
     void clear();
 };
 
+[StackAllocatable]
 interface PxArray_PxActorPtr {
     void PxArray_PxActorPtr();
     void PxArray_PxActorPtr(unsigned long size);
     PxActor get(unsigned long index);
-    void set(unsigned long index, [Const] PxActor value);
+    void set(unsigned long index, [Const, Ref] PxActorPtr value);
     PxActorPtr begin();
     unsigned long size();
     void pushBack(PxActor value);
     void clear();
 };
 
+[StackAllocatable]
 interface PxArray_PxContactPairPoint {
     void PxArray_PxContactPairPoint();
     void PxArray_PxContactPairPoint(unsigned long size);
@@ -177,6 +193,7 @@ interface PxArray_PxContactPairPoint {
     void clear();
 };
 
+[StackAllocatable]
 interface PxArray_PxRaycastHit {
     void PxArray_PxRaycastHit();
     void PxArray_PxRaycastHit(unsigned long size);
@@ -188,6 +205,7 @@ interface PxArray_PxRaycastHit {
     void clear();
 };
 
+[StackAllocatable]
 interface PxArray_PxSweepHit {
     void PxArray_PxSweepHit();
     void PxArray_PxSweepHit(unsigned long size);
@@ -330,6 +348,12 @@ interface Vector_PxSweepHit {
     void push_back([Ref] PxSweepHit value);
     void clear();
 };
+
+interface PxTypedStridedData_PxU16 {
+    attribute unsigned long stride;
+    [Value] attribute PxU16ConstPtr data;
+};
+
 
 interface PassThroughFilterShader {
     unsigned long filterShader(unsigned long attributes0,

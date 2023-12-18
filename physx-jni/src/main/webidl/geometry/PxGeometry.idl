@@ -307,6 +307,87 @@ interface PxSphereGeometry {
 };
 PxSphereGeometry implements PxGeometry;
 
+[Prefix="physx::", NoDelete]
+interface PxTetMaker {
+    static boolean createConformingTetrahedronMesh([Const, Ref] PxSimpleTriangleMesh triangleMesh, [Ref] PxArray_PxVec3 outVertices, [Ref] PxArray_PxU32 outTetIndices, boolean validate, float volumeThreshold);
+    static boolean createVoxelTetrahedronMesh([Const, Ref] PxTetrahedronMeshDesc tetMesh, unsigned long numVoxelsAlongLongestBoundingBoxAxis, [Ref] PxArray_PxVec3 outVertices, [Ref] PxArray_PxU32 outTetIndices); //, optional PxI32 inputPointToOutputTetIndex, optional PxU32 anchorNodeIndices, unsigned long numTetsPerVoxel
+    static boolean createVoxelTetrahedronMeshFromEdgeLength([Const, Ref] PxTetrahedronMeshDesc tetMesh, float voxelEdgeLength, [Ref] PxArray_PxVec3 outVertices, [Ref] PxArray_PxU32 outTetIndices); //, optional PxI32 inputPointToOutputTetIndex, [Const] optional PxU32 anchorNodeIndices, unsigned long numTetsPerVoxel
+    [Value] static PxTriangleMeshAnalysisResults validateTriangleMesh([Const, Ref] PxSimpleTriangleMesh triangleMesh, float minVolumeThreshold, float minTriangleAngleRadians);
+    [Value] static PxTetrahedronMeshAnalysisResults validateTetrahedronMesh([Const, Ref] PxBoundedData points, [Const, Ref] PxBoundedData tetrahedra, float minTetVolumeThreshold);
+    static void simplifyTriangleMesh([Const, Ref] PxArray_PxVec3 inputVertices, [Const, Ref] PxArray_PxU32 inputIndices, long targetTriangleCount, float maximalEdgeLength, [Ref] PxArray_PxVec3 outputVertices, [Ref] PxArray_PxU32 outputIndices, optional PxArray_PxU32 vertexMap, optional float edgeLengthCostWeight, optional float flatnessDetectionThreshold, optional boolean projectSimplifiedPointsOnInputMeshSurface, optional PxArray_PxU32 outputVertexToInputTriangle, optional boolean removeDisconnectedPatches);
+    static void remeshTriangleMesh([Const, Ref] PxArray_PxVec3 inputVertices, [Const, Ref] PxArray_PxU32 inputIndices, unsigned long gridResolution, [Ref] PxArray_PxVec3 outputVertices, [Ref] PxArray_PxU32 outputIndices, optional PxArray_PxU32 vertexMap);
+    //static void remeshTriangleMesh([Const] PxVec3 inputVertices, unsigned long nbVertices, [Const] PxU32 inputIndices, unsigned long nbIndices, unsigned long gridResolution, [Ref] PxArray<PxVec3> outputVertices, [Ref] PxArray<PxU32> outputIndices, [Ref] optional PxArray<PxU32> *vertexMap);
+    static void createTreeBasedTetrahedralMesh([Const, Ref] PxArray_PxVec3 inputVertices, [Const, Ref] PxArray_PxU32 inputIndices, boolean useTreeNodes, [Ref] PxArray_PxVec3 outputVertices, [Ref] PxArray_PxU32 outputIndices, float volumeThreshold);
+    static void createRelaxedVoxelTetrahedralMesh([Const, Ref] PxArray_PxVec3 inputVertices, [Const, Ref] PxArray_PxU32 inputIndices, [Ref] PxArray_PxVec3 outputVertices, [Ref] PxArray_PxU32 outputIndices, long resolution, optional long numRelaxationIterations, optional float relMinTetVolume);
+    static void detectTriangleIslands([Ref] PxI32ConstPtr triangles, unsigned long numTriangles, [Ref] PxArray_PxU32 islandIndexPerTriangle);
+    static unsigned long findLargestIslandId([Ref] PxU32ConstPtr islandIndexPerTriangle, unsigned long numTriangles);
+};
+
+enum PxTetrahedronMeshAnalysisResultEnum {
+    "PxTetrahedronMeshAnalysisResultEnum::eVALID",
+    "PxTetrahedronMeshAnalysisResultEnum::eDEGENERATE_TETRAHEDRON",
+    "PxTetrahedronMeshAnalysisResultEnum::eMESH_IS_PROBLEMATIC",
+    "PxTetrahedronMeshAnalysisResultEnum::eMESH_IS_INVALID",
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxTetrahedronMeshAnalysisResults {
+    void PxTetrahedronMeshAnalysisResults(unsigned long flags);
+    boolean isSet(PxTetrahedronMeshAnalysisResultEnum flag);
+    void raise(PxTetrahedronMeshAnalysisResultEnum flag);
+    void clear(PxTetrahedronMeshAnalysisResultEnum flag);
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxTetrahedronMeshDesc {
+    void PxTetrahedronMeshDesc();
+    void PxTetrahedronMeshDesc([Ref] PxArray_PxVec3 meshVertices, [Ref] PxArray_PxU32 meshTetIndices, optional PxTetrahedronMeshFormatEnum meshFormat, optional unsigned short numberOfTetsPerHexElement);
+    boolean isValid();
+    [Value] attribute PxTypedStridedData_PxU16 materialIndices;
+    [Value] attribute PxBoundedData points;
+    [Value] attribute PxBoundedData tetrahedrons;
+    [Value] attribute PxMeshFlags flags;
+    attribute short tetsPerElement;
+};
+
+[Prefix="physx::", NoDelete]
+interface PxTetrahedronMesh {
+    unsigned long getNbVertices();
+    [Const] PxVec3 getVertices();
+    unsigned long getNbTetrahedrons();
+    [Const] VoidPtr getTetrahedrons();
+    [Value] PxTetrahedronMeshFlags getTetrahedronMeshFlags();
+    [Value] PxU32ConstPtr getTetrahedraRemap();
+    [Value] PxBounds3 getLocalBounds();
+};
+PxTetrahedronMesh implements PxRefCounted;
+
+[Prefix="physx::", NoDelete]
+interface PxTetrahedronMeshExt {
+    long findTetrahedronContainingPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary, float tolerance);
+    long findTetrahedronClosestToPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary);
+    void createPointsToTetrahedronMap([Const, Ref] PxArray_PxVec3 tetMeshVertices, [Const, Ref] PxArray_PxU32 tetMeshIndices, [Const, Ref] PxArray_PxVec3 pointsToEmbed, [Ref] PxArray_PxVec4 barycentricCoordinates, [Ref] PxArray_PxU32 tetLinks);
+    //void extractTetMeshSurface(VoidPtr tetrahedra, unsigned long numTetrahedra, boolean sixteenBitIndices, [Ref] PxArray_PxU32 surfaceTriangles, optional PxArray_PxU32 surfaceTriangleToTet, optional boolean flipTriangleOrientation);
+    void extractTetMeshSurface([Const] PxTetrahedronMesh mesh, [Ref] PxArray_PxU32 surfaceTriangles, optional PxArray_PxU32 surfaceTriangleToTet, optional boolean flipTriangleOrientation);
+};
+
+enum PxTetrahedronMeshFlagEnum {
+    "PxTetrahedronMeshFlagEnum::e16_BIT_INDICES"
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxTetrahedronMeshFlags {
+    void PxTetrahedronMeshFlags(octet flags);
+    boolean isSet(PxTetrahedronMeshFlagEnum flag);
+    void raise(PxTetrahedronMeshFlagEnum flag);
+    void clear(PxTetrahedronMeshFlagEnum flag);
+};
+
+enum PxTetrahedronMeshFormatEnum {
+    "PxTetrahedronMeshFormatEnum::eTET_MESH",
+    "PxTetrahedronMeshFormatEnum::eHEX_MESH"
+};
+
 [Prefix="physx::"]
 interface PxTriangle {
     void PxTriangle();
@@ -331,6 +412,30 @@ interface PxTriangleMesh {
     [Value] PxBounds3 getLocalBounds();
 };
 PxTriangleMesh implements PxRefCounted;
+
+enum PxTriangleMeshAnalysisResultEnum {
+    "PxTriangleMeshAnalysisResultEnum::eVALID",
+    "PxTriangleMeshAnalysisResultEnum::eZERO_VOLUME",
+    "PxTriangleMeshAnalysisResultEnum::eOPEN_BOUNDARIES",
+    "PxTriangleMeshAnalysisResultEnum::eSELF_INTERSECTIONS",
+    "PxTriangleMeshAnalysisResultEnum::eINCONSISTENT_TRIANGLE_ORIENTATION",
+    "PxTriangleMeshAnalysisResultEnum::eCONTAINS_ACUTE_ANGLED_TRIANGLES",
+    "PxTriangleMeshAnalysisResultEnum::eEDGE_SHARED_BY_MORE_THAN_TWO_TRIANGLES",
+    "PxTriangleMeshAnalysisResultEnum::eCONTAINS_DUPLICATE_POINTS",
+    "PxTriangleMeshAnalysisResultEnum::eCONTAINS_INVALID_POINTS",
+    "PxTriangleMeshAnalysisResultEnum::eREQUIRES_32BIT_INDEX_BUFFER",
+    "PxTriangleMeshAnalysisResultEnum::eTRIANGLE_INDEX_OUT_OF_RANGE",
+    "PxTriangleMeshAnalysisResultEnum::eMESH_IS_PROBLEMATIC",
+    "PxTriangleMeshAnalysisResultEnum::eMESH_IS_INVALID",
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxTriangleMeshAnalysisResults {
+    void PxTriangleMeshAnalysisResults(unsigned long flags);
+    boolean isSet(PxTriangleMeshAnalysisResultEnum flag);
+    void raise(PxTriangleMeshAnalysisResultEnum flag);
+    void clear(PxTriangleMeshAnalysisResultEnum flag);
+};
 
 enum PxTriangleMeshFlagEnum {
     "PxTriangleMeshFlagEnum::e16_BIT_INDICES",
