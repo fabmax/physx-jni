@@ -8,11 +8,14 @@ import physx.support.PxArray_PxU32;
 import physx.support.PxArray_PxVec3;
 
 public class PxArrayTest {
-    @Test
-    public void testBasicArrayFunctions() {
+
+    static {
         // needed if this test is run stand-alone, because PxFoundation needs to be created for PxArray to work
         PhysXTestEnv.init();
+    }
 
+    @Test
+    public void testBasicArrayFunctions() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
             var array = PxArray_PxVec3.createAt(mem, MemoryStack::nmalloc);
             Assertions.assertEquals(0, array.size());
@@ -25,7 +28,7 @@ public class PxArrayTest {
             // items are added by value, changing vecToAdd won't change array content
             vecToAdd.setX(4f);   vecToAdd.setY(5f);   vecToAdd.setZ(6f);
 
-            // get vector from array. vector is returned by value, changing array content will affect the returned
+            // get vector from array. vector is returned by reference, changing array content will affect the returned
             // object
             var vecFromArray = array.get(0);
             Assertions.assertTrue(vecFromArray.getX() == 1f && vecFromArray.getY() == 2f && vecFromArray.getZ() == 3f);
@@ -42,9 +45,6 @@ public class PxArrayTest {
 
     @Test
     public void testZeroInit() {
-        // needed if this test is run stand-alone, because PxFoundation needs to be created for PxArray to work
-        PhysXTestEnv.init();
-
         try (MemoryStack mem = MemoryStack.stackPush()) {
             // create an array with initial size of 10: will contain 10 PxVec3 initialized to (0, 0, 0)
             var array = PxArray_PxVec3.createAt(mem, MemoryStack::nmalloc, 10);
@@ -69,9 +69,6 @@ public class PxArrayTest {
 
     @Test
     public void testPrimitiveArrayFunctions() {
-        // needed if this test is run stand-alone, because PxFoundation needs to be created for PxArray to work
-        PhysXTestEnv.init();
-
         try (MemoryStack mem = MemoryStack.stackPush()) {
             var array = PxArray_PxU32.createAt(mem, MemoryStack::nmalloc, 1);
             Assertions.assertEquals(0, array.get(0));

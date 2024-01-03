@@ -10,13 +10,15 @@ import physx.support.PxArray_PxVec3;
 
 public class TetMeshTest {
 
-    // todo: more tests needed...
+    static {
+        // needed if this test is run stand-alone, because PxFoundation needs to be created for PxArray to work
+        PhysXTestEnv.init();
+    }
+
+    // todo: actual tests needed...
 
     @Test
     public void testTetMeshDesc() {
-        // needed if this test is run stand-alone, because PxFoundation needs to be created for PxArray to work
-        PhysXTestEnv.init();
-
         try (MemoryStack mem = MemoryStack.stackPush()) {
             var meshVertices = PxArray_PxVec3.createAt(mem, MemoryStack::nmalloc, 4);
             var meshIndices = PxArray_PxU32.createAt(mem, MemoryStack::nmalloc, 4);

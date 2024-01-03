@@ -364,11 +364,11 @@ PxTetrahedronMesh implements PxRefCounted;
 
 [Prefix="physx::", NoDelete]
 interface PxTetrahedronMeshExt {
-    long findTetrahedronContainingPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary, float tolerance);
-    long findTetrahedronClosestToPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary);
-    void createPointsToTetrahedronMap([Const, Ref] PxArray_PxVec3 tetMeshVertices, [Const, Ref] PxArray_PxU32 tetMeshIndices, [Const, Ref] PxArray_PxVec3 pointsToEmbed, [Ref] PxArray_PxVec4 barycentricCoordinates, [Ref] PxArray_PxU32 tetLinks);
-    //void extractTetMeshSurface(VoidPtr tetrahedra, unsigned long numTetrahedra, boolean sixteenBitIndices, [Ref] PxArray_PxU32 surfaceTriangles, optional PxArray_PxU32 surfaceTriangleToTet, optional boolean flipTriangleOrientation);
-    void extractTetMeshSurface([Const] PxTetrahedronMesh mesh, [Ref] PxArray_PxU32 surfaceTriangles, optional PxArray_PxU32 surfaceTriangleToTet, optional boolean flipTriangleOrientation);
+    static long findTetrahedronContainingPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary, float tolerance);
+    static long findTetrahedronClosestToPoint([Const] PxTetrahedronMesh mesh, [Const, Ref] PxVec3 point, [Ref] PxVec4 bary);
+    static void createPointsToTetrahedronMap([Const, Ref] PxArray_PxVec3 tetMeshVertices, [Const, Ref] PxArray_PxU32 tetMeshIndices, [Const, Ref] PxArray_PxVec3 pointsToEmbed, [Ref] PxArray_PxVec4 barycentricCoordinates, [Ref] PxArray_PxU32 tetLinks);
+    //static void extractTetMeshSurface(VoidPtr tetrahedra, unsigned long numTetrahedra, boolean sixteenBitIndices, [Ref] PxArray_PxU32 surfaceTriangles, optional PxArray_PxU32 surfaceTriangleToTet, optional boolean flipTriangleOrientation);
+    static void extractTetMeshSurface([Const] PxTetrahedronMesh mesh, [Ref] PxArray_PxU32 surfaceTriangles, optional PxArray_PxU32 surfaceTriangleToTet, optional boolean flipTriangleOrientation);
 };
 
 enum PxTetrahedronMeshFlagEnum {
@@ -387,6 +387,14 @@ enum PxTetrahedronMeshFormatEnum {
     "PxTetrahedronMeshFormatEnum::eTET_MESH",
     "PxTetrahedronMeshFormatEnum::eHEX_MESH"
 };
+
+[Prefix="physx::", NoDelete]
+interface PxTetrahedronMeshGeometry {
+    void PxTetrahedronMeshGeometry(PxTetrahedronMesh mesh);
+    boolean isValid();
+    attribute PxTetrahedronMesh tetrahedronMesh;
+};
+PxTetrahedronMeshGeometry implements PxGeometry;
 
 [Prefix="physx::"]
 interface PxTriangle {
