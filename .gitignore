@@ -4,6 +4,7 @@ build
 generated
 /publishingCredentials.properties
 .DS_Store
+local.properties
 *.dll
 *.so
 *.dylib

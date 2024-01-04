@@ -4,7 +4,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni)
 ![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
 
-Java JNI bindings for Nvidia [PhysX 5.3.0](https://github.com/NVIDIA-Omniverse/PhysX).
+Java JNI bindings for Nvidia [PhysX 5.3.1](https://github.com/NVIDIA-Omniverse/PhysX).
 
 ## How to use
 The library is published on maven central, so you can easily add this to your dependencies:
@@ -13,13 +13,13 @@ The library is published on maven central, so you can easily add this to your de
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:2.3.1")
+    implementation("de.fabmax:physx-jni:2.3.2")
     
     // native libraries - you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:2.3.1:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:2.3.1:natives-linux")
-    runtimeOnly("de.fabmax:physx-jni:2.3.1:natives-macos")
-    runtimeOnly("de.fabmax:physx-jni:2.3.1:natives-macos-arm64")
+    runtimeOnly("de.fabmax:physx-jni:2.3.2:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.3.2:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.3.2:natives-macos")
+    runtimeOnly("de.fabmax:physx-jni:2.3.2:natives-macos-arm64")
 }
 ```
 
@@ -28,7 +28,7 @@ The Android version of the library is packaged as a single `aar` archive contain
 and native libs:
 ```
 dependencies {
-    implementation("de.fabmax:physx-jni-android:2.3.1")
+    implementation("de.fabmax:physx-jni-android:2.3.2")
 }
 ```
 
@@ -47,6 +47,9 @@ This is still work in progress, but the bindings already include most major part
     - [x] Particles (Fluids + Cloth)
     - [ ] Soft bodies
 - [x] Scene serialization
+
+Furthermore, I added bindings to [V-HACD](https://github.com/kmammou/v-hacd), which is not part of PhysX but fits
+in the context very well.
 
 The detailed list of mapped functions is given by the [interface definition files](physx-jni/src/main/webidl).
 The Java classes containing the actual bindings are generated from these files during build.
@@ -96,7 +99,7 @@ They are more or less 1:1 translations of the corresponding PhysX example snippe
 ### Documentation
 The generated bindings contain most of the original documentation converted to javadoc. For further reading
 there is also the official
-[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.3.0/index.html).
+[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.3.1/index.html).
 
 ### Things to consider when working with native objects
 Whenever you create an instance of a wrapper class within this library, this also creates an object on the native

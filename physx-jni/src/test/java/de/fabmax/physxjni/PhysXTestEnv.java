@@ -70,6 +70,10 @@ public class PhysXTestEnv {
         PxVehicleTopLevelFunctions.InitVehicleExtension(foundation);
     }
 
+    static void init() {
+        // empty, the actual init happens on class load in static block
+    }
+
     public static PxScene createEmptyScene() {
         try (MemoryStack mem = MemoryStack.stackPush()) {
             PxSceneDesc sceneDesc = PxSceneDesc.createAt(mem, MemoryStack::nmalloc, physics.getTolerancesScale());

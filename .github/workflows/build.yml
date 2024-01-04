@@ -5,47 +5,59 @@ name: Build
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - "*"
     tags:
       - '!**'
   pull_request:
-    branches: [ main ]
+    branches:
+      - "*"
     tags:
       - '!**'
 
 jobs:
   build_linux:
-    name: Linux native binaries
+    name: Linux build
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: true
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-    - uses: lukka/get-cmake@latest
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    - name: Build native lib
-      run: ./gradlew buildNativeProject
-    - name: Build and test JNI bindings
-      run: ./gradlew build
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+          submodules: true
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: lukka/get-cmake@latest
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Build native lib
+        run: ./gradlew buildNativeProject
+      - name: Build and test JNI bindings
+        run: ./gradlew build
+
+      - name: Upload native lib artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-libs
+          path: |
+            physx-jni/build/libs/*.jar
+            physx-jni-natives-linux/build/libs/*.jar
+            physx-jni-natives-linux-cuda/build/libs/*.jar
+          compression-level: 0
 
   build_windows:
-    name: Windows native binaries
+    name: Windows build
     runs-on: windows-latest
 
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
         with:
+          lfs: true
           submodules: true
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -63,14 +75,25 @@ jobs:
       - name: Build and test JNI bindings
         run: ./gradlew build
 
+      - name: Upload Windows lib artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-libs
+          path: |
+            physx-jni/build/libs/*.jar
+            physx-jni-natives-windows/build/libs/*.jar
+            physx-jni-natives-windows-cuda/build/libs/*.jar
+          compression-level: 0
+
   build_macos:
-    name: MacOS native binaries
+    name: MacOS build
     runs-on: macos-latest
 
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
         with:
+          lfs: true
           submodules: true
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -85,11 +108,19 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.8'
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Build native lib
         run: ./gradlew buildNativeProject
         env:
           PM_PYTHON_EXT: python3
       - name: Build and test JNI bindings
         run: ./gradlew build
+
+      - name: Upload MacOS lib artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-libs
+          path: |
+            physx-jni/build/libs/*.jar
+            physx-jni-natives-macos/build/libs/*.jar
+            physx-jni-natives-macos-arm64/build/libs/*.jar
+          compression-level: 0

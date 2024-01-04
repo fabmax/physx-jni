@@ -7,8 +7,8 @@ import physx.PxTopLevelFunctions;
 import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
 import physx.physics.*;
+import physx.support.PxArray_PxActorPtr;
 import physx.support.SupportFunctions;
-import physx.support.Vector_PxActorPtr;
 
 public class ActiveActorsTest {
     @Test
@@ -35,11 +35,11 @@ public class ActiveActorsTest {
 
             PhysXTestEnv.simulateScene(scene, 5f, activeBox);
 
-            Vector_PxActorPtr activeActors = SupportFunctions.PxScene_getActiveActors(scene);
+            PxArray_PxActorPtr activeActors = SupportFunctions.PxScene_getActiveActors(scene);
 
             // there should be exactly one active actor (the falling box)
             Assertions.assertEquals(activeActors.size(), 1);
-            Assertions.assertEquals(activeActors.at(0), activeBox);
+            Assertions.assertEquals(activeActors.get(0), activeBox);
 
             // note: the Vector_PxActorPtr returned by PxScene_getActiveActors() is internally stored as a static
             // field, DO NOT DESTROY IT!

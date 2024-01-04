@@ -46,6 +46,10 @@ tasks.register<GenerateJavaBindings>("generateJniBindings") {
     physxIncludeDir = "$rootDir/PhysX/physx/include"
 }
 
+tasks["clean"].doLast {
+    delete("$projectDir/src/main/generated")
+}
+
 tasks.compileJava {
     dependsOn("generateJniBindings")
     dependsOn("updateVersionNames")

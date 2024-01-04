@@ -526,6 +526,30 @@ interface PxPBDParticleSystem {
 PxPBDParticleSystem implements PxParticleSystem;
 
 [Platforms="windows;linux"]
+interface PxArray_PxParticleRigidFilterPair {
+    void PxArray_PxParticleRigidFilterPair();
+    void PxArray_PxParticleRigidFilterPair(unsigned long size);
+    [Ref] PxParticleRigidFilterPair get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxParticleRigidFilterPair value);
+    PxParticleRigidFilterPair begin();
+    unsigned long size();
+    void pushBack([Ref] PxParticleRigidFilterPair value);
+    void clear();
+};
+
+[Platforms="windows;linux"]
+interface PxArray_PxParticleSpring {
+    void PxArray_PxParticleSpring();
+    void PxArray_PxParticleSpring(unsigned long size);
+    [Ref] PxParticleSpring get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxParticleSpring value);
+    PxParticleSpring begin();
+    unsigned long size();
+    void pushBack([Ref] PxParticleSpring value);
+    void clear();
+};
+
+[Platforms="windows;linux", Deprecated]
 interface Vector_PxParticleRigidFilterPair {
     void Vector_PxParticleRigidFilterPair();
     void Vector_PxParticleRigidFilterPair(unsigned long size);
@@ -536,7 +560,7 @@ interface Vector_PxParticleRigidFilterPair {
     void clear();
 };
 
-[Platforms="windows;linux"]
+[Platforms="windows;linux", Deprecated]
 interface Vector_PxParticleSpring {
     void Vector_PxParticleSpring();
     void Vector_PxParticleSpring(unsigned long size);

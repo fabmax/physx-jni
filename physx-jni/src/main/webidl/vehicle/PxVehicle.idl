@@ -7,7 +7,7 @@ interface PxVehicleTopLevelFunctions {
     static boolean InitVehicleExtension([Ref] PxFoundation foundation);
     static void CloseVehicleExtension();
 
-    static boolean VehicleComputeSprungMasses(unsigned long nbSprungMasses, [Const, Ref] Vector_PxVec3 sprungMassCoordinates, float totalMass, PxVehicleAxesEnum gravityDirection, [Ref] Vector_PxReal sprungMasses);
+    static boolean VehicleComputeSprungMasses(unsigned long nbSprungMasses, [Ref] PxArray_PxVec3 sprungMassCoordinates, float totalMass, PxVehicleAxesEnum gravityDirection, [Ref] PxArray_PxReal sprungMasses);
     static PxConvexMesh VehicleUnitCylinderSweepMeshCreate([Const, Ref] PxVehicleFrame vehicleFrame, [Ref] PxPhysics physics, [Const, Ref] PxCookingParams params);
     static void VehicleUnitCylinderSweepMeshDestroy(PxConvexMesh mesh);
 
@@ -630,8 +630,8 @@ interface PxVehicleTankDriveDifferentialParams {
     attribute unsigned long[] nbWheelsPerTrack;
     attribute unsigned long[] trackToWheelIds;
     attribute unsigned long[] wheelIdsInTrackOrder;
-    attribute float[] torqueRatios;
-    attribute float[] aveWheelSpeedRatios;
+    //attribute float[] torqueRatios;               // defined in super interface
+    //attribute float[] aveWheelSpeedRatios;
 };
 PxVehicleTankDriveDifferentialParams implements PxVehicleMultiWheelDriveDifferentialParams;
 
