@@ -630,8 +630,8 @@ interface PxVehicleTankDriveDifferentialParams {
     attribute unsigned long[] nbWheelsPerTrack;
     attribute unsigned long[] trackToWheelIds;
     attribute unsigned long[] wheelIdsInTrackOrder;
-    attribute float[] torqueRatios;
-    attribute float[] aveWheelSpeedRatios;
+    //attribute float[] torqueRatios;               // defined in super interface
+    //attribute float[] aveWheelSpeedRatios;
 };
 PxVehicleTankDriveDifferentialParams implements PxVehicleMultiWheelDriveDifferentialParams;
 
