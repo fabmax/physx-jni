@@ -30,6 +30,9 @@ PxI32Ptr implements PxI32ConstPtr;
 interface PxI32ConstPtr { };
 
 interface PxRealPtr { };
+PxRealPtr implements PxRealConstPtr;
+
+interface PxRealConstPtr { };
 
 interface PxActorPtr { };
 

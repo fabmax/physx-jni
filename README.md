@@ -48,6 +48,9 @@ This is still work in progress, but the bindings already include most major part
     - [ ] Soft bodies
 - [x] Scene serialization
 
+Furthermore, I added bindings to [V-HACD](https://github.com/kmammou/v-hacd), which is not part of PhysX but fits
+in the context very well.
+
 The detailed list of mapped functions is given by the [interface definition files](physx-jni/src/main/webidl).
 The Java classes containing the actual bindings are generated from these files during build.
 

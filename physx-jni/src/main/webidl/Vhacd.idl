@@ -1,0 +1,67 @@
+/****************************************
+ * [package=vhacd]
+ ****************************************/
+
+[Prefix="VHACD::"]
+interface VHACDImpl {
+    void VHACDImpl();
+    boolean Compute([Const, Ref] PxRealConstPtr points, unsigned long countPoints, [Const, Ref] PxU32ConstPtr triangles, unsigned long countTriangles, [Const, Ref] VHACDParameters params);
+    unsigned long GetNConvexHulls();
+    boolean GetConvexHull(unsigned long index, [Ref] VHACDConvexHull ch);
+};
+
+[StackAllocatable]
+interface VHACDParameters {
+    void VHACDParameters();
+    attribute unsigned long m_maxConvexHulls;
+    attribute unsigned long m_resolution;
+    attribute double m_minimumVolumePercentErrorAllowed;
+    attribute unsigned long m_maxRecursionDepth;
+    attribute boolean m_shrinkWrap;
+    //attribute FillMode m_fillMode;
+    attribute unsigned long m_maxNumVerticesPerCH;
+    attribute boolean m_asyncACD;
+    attribute unsigned long m_minEdgeLength;
+    attribute boolean m_findBestPlane;
+};
+
+[StackAllocatable]
+interface VHACDConvexHull {
+    void VHACDConvexHull();
+    [Value] attribute Vector_VHACDVertex m_points;
+    [Value] attribute Vector_VHACDTriangle m_triangles;
+    attribute double m_volume;
+    attribute unsigned long m_meshId;
+};
+
+interface VHACDVertex {
+    void VHACDVertex();
+    attribute double mX;
+    attribute double mY;
+    attribute double mZ;
+};
+
+interface VHACDTriangle {
+    void VHACDTriangle();
+    attribute unsigned long mI0;
+    attribute unsigned long mI1;
+    attribute unsigned long mI2;
+};
+
+[StackAllocatable]
+interface Vector_VHACDVertex {
+    [Ref] VHACDVertex at(unsigned long index);
+    VHACDVertex data();
+    unsigned long size();
+    void push_back([Ref] VHACDVertex value);
+    void clear();
+};
+
+[StackAllocatable]
+interface Vector_VHACDTriangle {
+    [Ref] VHACDTriangle at(unsigned long index);
+    VHACDTriangle data();
+    unsigned long size();
+    void push_back([Ref] VHACDTriangle value);
+    void clear();
+};
