@@ -34,7 +34,7 @@ tasks.register<GenerateNativeGlueCode>("generateNativeGlueCodeAndroid") {
 tasks.register<Exec>("generateNativeProjectAndroid") {
     group = "native build"
     workingDir = File("$rootDir/PhysX/physx")
-    commandLine = listOf("$rootDir/PhysX/physx/generate_projects.bat", "jni-android-arm64-v8a")
+    commandLine = listOf("$rootDir/PhysX/physx/generate_projects.sh", "jni-android-arm64-v8a")
 
     doFirst {
         delete("$rootDir/PhysX/physx/compiler/jni-android-arm64-v8a-checked")
