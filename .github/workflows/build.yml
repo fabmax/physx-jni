@@ -23,6 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          lfs: true
           submodules: true
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -39,13 +40,14 @@ jobs:
         run: ./gradlew build
 
       - name: Upload native lib artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-libs
           path: |
-            physx-jni/build/libs/physx-jni-?.?.?.jar
-            physx-jni-natives-linux/build/libs/physx-jni-natives-linux-?.?.?.jar
-            physx-jni-natives-linux-cuda/build/libs/physx-jni-natives-linux-cuda-?.?.?.jar
+            physx-jni/build/libs/*.jar
+            physx-jni-natives-linux/build/libs/*.jar
+            physx-jni-natives-linux-cuda/build/libs/*.jar
+          compression-level: 0
 
   build_windows:
     name: Windows build
@@ -55,6 +57,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v3
         with:
+          lfs: true
           submodules: true
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -73,13 +76,14 @@ jobs:
         run: ./gradlew build
 
       - name: Upload Windows lib artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-libs
           path: |
-            physx-jni/build/libs/physx-jni-?.?.?.jar
-            physx-jni-natives-windows/build/libs/physx-jni-natives-windows-?.?.?.jar
-            physx-jni-natives-windows-cuda/build/libs/physx-jni-natives-windows-cuda-?.?.?.jar
+            physx-jni/build/libs/*.jar
+            physx-jni-natives-windows/build/libs/*.jar
+            physx-jni-natives-windows-cuda/build/libs/*.jar
+          compression-level: 0
 
   build_macos:
     name: MacOS build
@@ -89,6 +93,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v3
         with:
+          lfs: true
           submodules: true
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -115,6 +120,7 @@ jobs:
         with:
           name: macos-libs
           path: |
-            physx-jni/build/libs/physx-jni-?.?.?.jar
-            physx-jni-natives-macos/build/libs/physx-jni-natives-macos-?.?.?.jar
-            physx-jni-natives-macos-arm64/build/libs/physx-jni-natives-macos-arm64-?.?.?.jar
+            physx-jni/build/libs/*.jar
+            physx-jni-natives-macos/build/libs/*.jar
+            physx-jni-natives-macos-arm64/build/libs/*.jar
+          compression-level: 0
