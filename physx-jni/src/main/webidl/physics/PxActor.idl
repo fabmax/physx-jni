@@ -71,7 +71,7 @@ interface PxRigidActor {
     boolean attachShape([Ref] PxShape shape);
     void detachShape([Ref] PxShape shape, optional boolean wakeOnLostTouch);
     unsigned long getNbShapes();
-    //long getShapes(PxShape[] userBuffer, unsigned long bufferSize, unsigned long startIndex);
+    unsigned long getShapes(PxShapePtr userBuffer, unsigned long bufferSize, unsigned long startIndex);
     unsigned long getNbConstraints();
     //long getConstraints(PxConstraint[] userBuffer, unsigned long bufferSize, unsigned long startIndex);
 };

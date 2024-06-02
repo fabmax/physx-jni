@@ -42,6 +42,8 @@ interface PxMaterialConstPtr { };
 
 interface PxVehicleWheelsPtr { };
 
+interface PxShapePtr { };
+
 interface NativeArrayHelpers {
     static octet getU8At([Ref] PxU8ConstPtr base, long index);
     static unsigned short getU16At([Ref] PxU16ConstPtr base, long index);
@@ -239,6 +241,18 @@ interface Vector_PxHeightFieldSample {
     PxHeightFieldSample data();
     unsigned long size();
     void push_back([Ref] PxHeightFieldSample value);
+    void clear();
+};
+
+[StackAllocatable]
+interface PxArray_PxShapePtr {
+    void PxArray_PxShapePtr();
+    void PxArray_PxShapePtr(unsigned long size);
+    PxShape get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxShapePtr value);
+    PxShapePtr begin();
+    unsigned long size();
+    void pushBack(PxShape value);
     void clear();
 };
 

@@ -3,7 +3,7 @@ import org.gradle.jvm.tasks.Jar
 
 subprojects {
     group = "de.fabmax"
-    version = "2.3.2"
+    version = "2.3.3-SNAPSHOT"
 
     if (name != "physx-jni-android") {
         apply(plugin = "java-library")
