@@ -175,7 +175,7 @@ interface PxSceneDesc {
     attribute float ccdMaxSeparation;
     attribute float wakeCounterResetValue;
     [Value] attribute PxBounds3 sanityBounds;
-    [Platforms="windows;linux", Value] attribute PxgDynamicsMemoryConfig gpuDynamicsConfig;
+    [Platforms="windows;linux", Value] attribute PxGpuDynamicsMemoryConfig gpuDynamicsConfig;
     attribute unsigned long gpuMaxNumPartitions;
     attribute unsigned long gpuMaxNumStaticPartitions;
     attribute unsigned long gpuComputeVersion;

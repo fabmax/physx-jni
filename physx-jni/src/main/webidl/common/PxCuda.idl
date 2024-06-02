@@ -96,8 +96,8 @@ interface PxCudaContextManagerDesc {
 };
 
 [Platforms="windows;linux", Prefix="physx::"]
-interface PxgDynamicsMemoryConfig {
-    void PxgDynamicsMemoryConfig();
+interface PxGpuDynamicsMemoryConfig {
+    void PxGpuDynamicsMemoryConfig();
     boolean isValid();
     attribute unsigned long tempBufferCapacity;
     attribute unsigned long maxRigidContactCount;
@@ -200,7 +200,6 @@ interface PxParticleBuffer {
     unsigned long getFlatListStartIndex();
     void raiseFlags(PxParticleBufferFlagEnum flags);
     void release();
-    readonly attribute unsigned long bufferIndex;
     readonly attribute unsigned long bufferUniqueId;
 };
 PxParticleBuffer implements PxBase;
@@ -395,9 +394,7 @@ interface PxParticleRigidFilterPair {
 
 [Platforms="windows;linux"]
 enum PxParticleSolverTypeEnum {
-    "PxParticleSolverTypeEnum::ePBD",
-    "PxParticleSolverTypeEnum::eFLIP",
-    "PxParticleSolverTypeEnum::eMPM"
+    "PxParticleSolverTypeEnum::ePBD"
 };
 
 [Platforms="windows;linux", Prefix="physx::", StackAllocatable]

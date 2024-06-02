@@ -71,15 +71,17 @@ dependencies {
     testRuntimeOnly(project(":physx-jni-natives-macos"))
     testRuntimeOnly(project(":physx-jni-natives-macos-arm64"))
 
-    testImplementation("org.lwjgl:lwjgl:3.3.1")
+    testImplementation("org.lwjgl:lwjgl:3.3.3")
 
     val os = org.gradle.internal.os.OperatingSystem.current()
+    val arch = System.getProperty("os.arch", "unknown")
     val lwjglNatives = when {
         os.isLinux -> "natives-linux"
-        os.isMacOsX -> "natives-macos"
+        os.isMacOsX && arch == "aarch64" -> "natives-macos-arm64"
+        os.isMacOsX && arch != "aarch64" -> "natives-macos"
         else -> "natives-windows"
     }
-    testRuntimeOnly("org.lwjgl:lwjgl:3.3.1:$lwjglNatives")
+    testRuntimeOnly("org.lwjgl:lwjgl:3.3.3:$lwjglNatives")
 }
 
 publishing {

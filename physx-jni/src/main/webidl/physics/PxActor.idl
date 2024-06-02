@@ -51,8 +51,6 @@ enum PxActorTypeEnum {
     "PxActorTypeEnum::eSOFTBODY",
     "PxActorTypeEnum::eFEMCLOTH",
     "PxActorTypeEnum::ePBD_PARTICLESYSTEM",
-    "PxActorTypeEnum::eFLIP_PARTICLESYSTEM",
-    "PxActorTypeEnum::eMPM_PARTICLESYSTEM",
     "PxActorTypeEnum::eHAIRSYSTEM"
 };
 

@@ -41,8 +41,8 @@ interface PxArticulationCache {
     [Value] attribute PxRealPtr jointForce;
     attribute PxSpatialVelocity linkVelocity;
     attribute PxSpatialVelocity linkAcceleration;
+    attribute PxSpatialForce linkIncomingJointForce;
     attribute PxArticulationRootLinkData rootLinkData;
-    attribute PxSpatialForce sensorForces;
     [Value] attribute PxRealPtr coefficientMatrix;
     [Value] attribute PxRealPtr lambda;
     attribute VoidPtr scratchMemory;
@@ -59,8 +59,9 @@ enum PxArticulationCacheFlagEnum {
     "PxArticulationCacheFlagEnum::eLINK_ACCELERATION",
     "PxArticulationCacheFlagEnum::eROOT_TRANSFORM",
     "PxArticulationCacheFlagEnum::eROOT_VELOCITIES",
-    "PxArticulationCacheFlagEnum::eSENSOR_FORCES",
-    "PxArticulationCacheFlagEnum::eJOINT_SOLVER_FORCES",
+    "PxArticulationCacheFlagEnum::eLINK_INCOMING_JOINT_FORCE",
+    "PxArticulationCacheFlagEnum::eJOINT_TARGET_POSITIONS",
+    "PxArticulationCacheFlagEnum::eJOINT_TARGET_VELOCITIES",
     "PxArticulationCacheFlagEnum::eALL"
 };
 
@@ -105,8 +106,7 @@ PxArticulationFixedTendon implements PxArticulationTendon;
 enum PxArticulationFlagEnum {
     "PxArticulationFlagEnum::eFIX_BASE",
     "PxArticulationFlagEnum::eDRIVE_LIMITS_ARE_FORCES",
-    "PxArticulationFlagEnum::eDISABLE_SELF_COLLISION",
-    "PxArticulationFlagEnum::eCOMPUTE_JOINT_FORCES"
+    "PxArticulationFlagEnum::eDISABLE_SELF_COLLISION"
 };
 
 [Prefix="physx::", StackAllocatable]
@@ -271,44 +271,13 @@ interface PxArticulationReducedCoordinate {
     unsigned long getGpuArticulationIndex();
     PxArticulationSpatialTendon createSpatialTendon();
     PxArticulationFixedTendon createFixedTendon();
-    PxArticulationSensor createSensor(PxArticulationLink link, [Const, Ref] PxTransform relativePose);
     //unsigned long getSpatialTendons();
     unsigned long getNbSpatialTendons();
     //unsigned long getFixedTendons();
     unsigned long getNbFixedTendons();
-    //unsigned long getSensors();
-    unsigned long getNbSensors();
     void updateKinematic([Ref] PxArticulationKinematicFlags flags);
 };
 PxArticulationReducedCoordinate implements PxBase;
-
-[Prefix="physx::"]
-interface PxArticulationSensor {
-    [Value] PxSpatialForce getForces();
-    [Value] PxTransform getRelativePose();
-    void setRelativePose([Const, Ref] PxTransform pose);
-    PxArticulationLink getLink();
-    unsigned long getIndex();
-    PxArticulationReducedCoordinate getArticulation();
-    [Value] PxArticulationSensorFlags getFlags();
-    void setFlag(PxArticulationSensorFlagEnum flag, boolean enabled);
-    attribute VoidPtr userData;
-};
-PxArticulationSensor implements PxBase;
-
-enum PxArticulationSensorFlagEnum {
-    "PxArticulationSensorFlagEnum::eFORWARD_DYNAMICS_FORCES",
-    "PxArticulationSensorFlagEnum::eCONSTRAINT_SOLVER_FORCES",
-    "PxArticulationSensorFlagEnum::eWORLD_FRAME"
-};
-
-[Prefix="physx::", StackAllocatable]
-interface PxArticulationSensorFlags {
-    void PxArticulationSensorFlags(octet flags);
-    boolean isSet(PxArticulationSensorFlagEnum flag);
-    void raise(PxArticulationSensorFlagEnum flag);
-    void clear(PxArticulationSensorFlagEnum flag);
-};
 
 [Prefix="physx::"]
 interface PxArticulationSpatialTendon {
