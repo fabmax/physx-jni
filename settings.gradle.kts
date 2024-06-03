@@ -16,7 +16,7 @@ dependencyResolutionManagement {
 rootProject.name = "physx-jni"
 
 include("physx-jni")
-//include("physx-jni-android")
+include("physx-jni-android")
 include("physx-jni-natives-windows")
 include("physx-jni-natives-windows-cuda")
 include("physx-jni-natives-linux")
