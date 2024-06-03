@@ -7,7 +7,7 @@ import java.util.List;
 
 public class NativeLibLinux extends NativeLib {
 
-    private static final String version = "2.4.0-SNAPSHOT";
+    private static final String version = "2.4.0";
 
     private static final List<String> libraries = new ArrayList<>() {{
         add("libPhysXJniBindings_64.so");
