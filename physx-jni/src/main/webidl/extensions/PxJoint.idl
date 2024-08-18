@@ -143,10 +143,9 @@ enum PxJointActorIndexEnum {
     "PxJointActorIndexEnum::eACTOR1"
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxJointAngularLimitPair {
-    // javascript bindings do not support overloaded functions with same parameter count
-    //void PxJointAngularLimitPair(float lowerLimit, float upperLimit, optional float contactDist);
+    void PxJointAngularLimitPair(float lowerLimit, float upperLimit);
     void PxJointAngularLimitPair(float lowerLimit, float upperLimit, [Const, Ref] PxSpring spring);
 
     attribute float upper;
@@ -154,10 +153,9 @@ interface PxJointAngularLimitPair {
 };
 PxJointAngularLimitPair implements PxJointLimitParameters;
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxJointLimitCone {
-    // javascript bindings do not support overloaded functions with same parameter count
-    //void PxJointLimitCone(float yLimitAngle, float zLimitAngle, optional float contactDist);
+    void PxJointLimitCone(float yLimitAngle, float zLimitAngle);
     void PxJointLimitCone(float yLimitAngle, float zLimitAngle, [Const, Ref] PxSpring spring);
 
     attribute float yAngle;
@@ -176,10 +174,9 @@ interface PxJointLimitParameters {
     attribute float damping;
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxJointLimitPyramid {
-    // javascript bindings do not support overloaded functions with same parameter count
-    //void PxJointLimitPyramid(float yLimitAngleMin, float yLimitAngleMax, float zLimitAngleMin, float zLimitAngleMax, optional float contactDist);
+    void PxJointLimitPyramid(float yLimitAngleMin, float yLimitAngleMax, float zLimitAngleMin, float zLimitAngleMax);
     void PxJointLimitPyramid(float yLimitAngleMin, float yLimitAngleMax, float zLimitAngleMin, float zLimitAngleMax, [Const, Ref] PxSpring spring);
 
     attribute float yAngleMin;
@@ -189,7 +186,7 @@ interface PxJointLimitPyramid {
 };
 PxJointLimitPyramid implements PxJointLimitParameters;
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxJointLinearLimit {
     // javascript bindings do not support overloaded functions with same parameter count
     //void PxJointLinearLimit([Const, Ref] PxTolerancesScale scale, float extent, optional float contactDist);
@@ -199,7 +196,7 @@ interface PxJointLinearLimit {
 };
 PxJointLinearLimit implements PxJointLimitParameters;
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxJointLinearLimitPair {
     // javascript bindings do not support overloaded functions with same parameter count
     //void PxJointLinearLimitPair([Const, Ref] PxTolerancesScale scale, optional float lowerLimit, optional float upperLimit, optional float contactDist);
@@ -290,7 +287,7 @@ interface PxSphericalJointFlags {
     void clear(PxSphericalJointFlagEnum flag);
 };
 
-[Prefix="physx::"]
+[Prefix="physx::", StackAllocatable]
 interface PxSpring {
     void PxSpring(float stiffness, float damping);
     attribute float stiffness;

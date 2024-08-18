@@ -25,7 +25,7 @@ tasks.register<Exec>("generateNativeProjectWindows") {
 tasks.register<Exec>("buildNativeProjectWindows") {
     group = "native build"
     workingDir = File("$rootDir/PhysX/physx")
-    commandLine = listOf("cmake", "--build", "./compiler/jni-vc17win64/", "--config", BuildSettings.buildType)
+    commandLine = listOf("cmake", "--build", "./compiler/jni-vc17win64/", "--config", NativeBuildSettings.buildType)
 
     val nativeProjectDir = File("$rootDir/PhysX/physx/compiler/jni-vc17win64")
     if (!nativeProjectDir.exists()) {
@@ -43,7 +43,7 @@ tasks.register<Exec>("buildNativeProjectWindows") {
     doLast {
         // copy non-cuda libs to regular windows natives subproject
         copy {
-            from("$rootDir/PhysX/physx/bin/jni-windows.x86_64/${BuildSettings.buildType}")
+            from("$rootDir/PhysX/physx/bin/jni-windows.x86_64/${NativeBuildSettings.buildType}")
             include("*.dll")
             exclude("freeglut.dll", "PhysXDevice64.dll", "PhysXGpu_64.dll")
             into(resourcesDir)
@@ -52,7 +52,7 @@ tasks.register<Exec>("buildNativeProjectWindows") {
 
         // copy cuda libs to cuda windows natives sub-project
         copy {
-            from("$rootDir/PhysX/physx/bin/jni-windows.x86_64/${BuildSettings.buildType}")
+            from("$rootDir/PhysX/physx/bin/jni-windows.x86_64/${NativeBuildSettings.buildType}")
             include("*.dll")
             exclude("freeglut.dll")
             into(resourcesCudaDir)
