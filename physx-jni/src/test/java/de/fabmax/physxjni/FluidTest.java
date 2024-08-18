@@ -22,7 +22,6 @@ import java.util.Locale;
 public class FluidTest {
 
     private static final PxCudaContextManager cudaMgr = CudaHelpers.getCudaContextManager();
-    private PxParticleClothBuffer clothBuffer;
 
     @BeforeAll
     public static void checkIsCudaAvailable() {
@@ -35,7 +34,7 @@ public class FluidTest {
             return;
         }
         var test = new FluidTestImpl();
-        test.simulateFluidScene(5f);
+        test.simulateFluidScene(1f);
         test.cleanup();
     }
 

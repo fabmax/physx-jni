@@ -31,10 +31,10 @@ tasks.register<Exec>("buildNativeProjectLinux") {
     val makeWorkers = min(32, Runtime.getRuntime().availableProcessors())
 
     group = "native build"
-    workingDir = File("$rootDir/PhysX/physx/compiler/jni-linux-${BuildSettings.buildType}/")
+    workingDir = File("$rootDir/PhysX/physx/compiler/jni-linux-${NativeBuildSettings.buildType}/")
     commandLine = listOf("make", "-j${makeWorkers}")
 
-    val nativeProjectDir = File("$rootDir/PhysX/physx/compiler/jni-linux-${BuildSettings.buildType}")
+    val nativeProjectDir = File("$rootDir/PhysX/physx/compiler/jni-linux-${NativeBuildSettings.buildType}")
     if (!nativeProjectDir.exists()) {
         dependsOn(":generateNativeProject")
     }
@@ -50,7 +50,7 @@ tasks.register<Exec>("buildNativeProjectLinux") {
     doLast {
         // copy non-cuda libs to regular linux natives subproject
         copy {
-            from("$rootDir/PhysX/physx/bin/jni-linux.x86_64/${BuildSettings.buildType}")
+            from("$rootDir/PhysX/physx/bin/jni-linux.x86_64/${NativeBuildSettings.buildType}")
             include("*.so")
             exclude("libPhysXGpu_64.so")
             into(resourcesDir)
@@ -58,7 +58,7 @@ tasks.register<Exec>("buildNativeProjectLinux") {
 
         // copy cuda libs to cuda windows linux sub-project
         copy {
-            from("$rootDir/PhysX/physx/bin/jni-linux.x86_64/${BuildSettings.buildType}")
+            from("$rootDir/PhysX/physx/bin/jni-linux.x86_64/${NativeBuildSettings.buildType}")
             include("*.so")
             into(resourcesCudaDir)
         }

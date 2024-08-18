@@ -1,3 +1,3 @@
-object BuildSettings {
+object NativeBuildSettings {
     val buildType = "release"
 }

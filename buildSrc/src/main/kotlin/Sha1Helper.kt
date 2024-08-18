@@ -1,12 +1,9 @@
-import org.gradle.internal.impldep.org.apache.commons.lang.text.StrBuilder
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
 import java.security.MessageDigest
-import java.util.*
 
 object Sha1Helper {
-
     fun writeHashes(forFilesInDirectory: File) {
         forFilesInDirectory.listFiles { _, name -> !name.endsWith(".sha1", true) }?.forEach { writeHash(it) }
     }
@@ -32,5 +29,4 @@ object Sha1Helper {
         }
         return hashStr.toString()
     }
-
 }

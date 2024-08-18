@@ -26,7 +26,7 @@ tasks.register<Exec>("generateNativeProjectMacosArm64") {
 tasks.register<Exec>("buildNativeProjectMacosArm64") {
     group = "native build"
     workingDir = File("$rootDir/PhysX/physx")
-    commandLine = listOf("cmake", "--build", "./compiler/jni-mac-aarch64/", "--config", BuildSettings.buildType)
+    commandLine = listOf("cmake", "--build", "./compiler/jni-mac-aarch64/", "--config", NativeBuildSettings.buildType)
 
     val nativeProjectDir = File("$rootDir/PhysX/physx/compiler/jni-mac-aarch64")
     if (!nativeProjectDir.exists()) {
@@ -41,7 +41,7 @@ tasks.register<Exec>("buildNativeProjectMacosArm64") {
 
     doLast {
         copy {
-            from("$rootDir/PhysX/physx/bin/jni-mac.aarch64/${BuildSettings.buildType}")
+            from("$rootDir/PhysX/physx/bin/jni-mac.aarch64/${NativeBuildSettings.buildType}")
             include("*.dylib")
             into(resourcesDir)
         }

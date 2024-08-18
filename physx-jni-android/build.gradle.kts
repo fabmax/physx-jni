@@ -66,7 +66,7 @@ tasks.register<Exec>("buildNativeProjectAndroid") {
 
     doLast {
         copy {
-            from("$rootDir/PhysX/physx/bin/jni-android.aarch64/${BuildSettings.buildType}/libPhysXJniBindings_64.so")
+            from("$rootDir/PhysX/physx/bin/jni-android.aarch64/${NativeBuildSettings.buildType}/libPhysXJniBindings_64.so")
             into(nativeLibsDir)
         }
     }
@@ -117,6 +117,7 @@ publishing {
         }
     }
 
+    val props = LocalProperties.get(project)
     repositories {
         maven {
             name = "ossrh"
@@ -132,11 +133,14 @@ publishing {
         }
     }
 
-    signing {
-        val privateKey = System.getenv("GPG_PRIVATE_KEY")
-        val password = System.getenv("GPG_PASSWORD")
-        useInMemoryPgpKeys(privateKey, password)
-
-        sign(publications["release"])
+    if (props.isRelease) {
+        signing {
+            publications.forEach {
+                val privateKey = props["GPG_PRIVATE_KEY"]
+                val password = props["GPG_PASSWORD"]
+                useInMemoryPgpKeys(privateKey, password)
+                sign(it)
+            }
+        }
     }
 }
