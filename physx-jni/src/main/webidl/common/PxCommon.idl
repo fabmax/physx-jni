@@ -139,6 +139,16 @@ interface PxInsertionCallback { };
 interface PxMat33 {
     void PxMat33();
     void PxMat33(PxIDENTITYEnum r);
+    void PxMat33([Const, Ref] PxVec3 col0, [Const, Ref] PxVec3 col1, [Const, Ref] PxVec3 col2);
+    void PxMat33(float r);
+    void PxMat33([Const, Ref] PxQuat q);
+
+    [Value] PxMat33 getTranspose();
+    [Value] PxMat33 getInverse();
+    float getDeterminant();
+    [Value] PxVec3 transform([Const, Ref] PxVec3 other);
+    [Value] PxVec3 transformTranspose([Const, Ref] PxVec3 other);
+
     [Value] attribute PxVec3 column0;
     [Value] attribute PxVec3 column1;
     [Value] attribute PxVec3 column2;
@@ -152,6 +162,7 @@ interface PxPlane {
     void PxPlane();
     void PxPlane(float nx, float ny, float nz, float distance);
     void PxPlane([Const, Ref] PxVec3 normal, float distance);
+    void PxPlane([Const, Ref] PxVec3 point, [Const, Ref] PxVec3 normal);
     void PxPlane([Const, Ref] PxVec3 p0, [Const, Ref] PxVec3 p1, [Const, Ref] PxVec3 p2);
     float distance([Const, Ref] PxVec3 p);
     boolean contains([Const, Ref] PxVec3 p);
@@ -160,6 +171,7 @@ interface PxPlane {
     void normalize();
     [Value] PxPlane transform([Const, Ref] PxTransform pose);
     [Value] PxPlane inverseTransform([Const, Ref] PxTransform pose);
+
     [Value] attribute PxVec3 n;
     attribute float d;
 };
@@ -168,7 +180,10 @@ interface PxPlane {
 interface PxQuat {
     void PxQuat();
     void PxQuat(PxIDENTITYEnum r);
-    void PxQuat(float x, float y, float z, float w);
+    void PxQuat(float r);
+    void PxQuat(float nx, float ny, float nz, float nw);
+    void PxQuat(float angleRadians, [Const, Ref] PxVec3 unitAxis);
+    void PxQuat([Const, Ref] PxMat33 m);
 
     boolean isIdentity();
     boolean isFinite();
@@ -211,13 +226,32 @@ interface PxStridedData {
 [Prefix="physx::"]
 interface PxTolerancesScale {
     void PxTolerancesScale();
+    boolean isValid();
+
+    [Value] attribute PxRealPtr length;
+    [Value] attribute PxRealPtr speed;
 };
 
 [Prefix="physx::", StackAllocatable]
 interface PxTransform {
     void PxTransform();
+    void PxTransform([Const, Ref] PxVec3 position);
     void PxTransform(PxIDENTITYEnum r);
+    void PxTransform([Const, Ref] PxQuat orientation);
     void PxTransform([Const, Ref] PxVec3 p0, [Const, Ref] PxQuat q0);
+
+    [Value] PxTransform getInverse();
+    [Value] PxVec3 transform([Const, Ref] PxVec3 input);
+    [Value] PxVec3 transformInv([Const, Ref] PxVec3 input);
+    [Value] PxTransform transform([Const, Ref] PxTransform src);
+    boolean isValid();
+    boolean isSane();
+    boolean isFinite();
+    [Value] PxTransform transformInv([Const, Ref] PxTransform src);
+    [Value] PxPlane transform([Const, Ref] PxPlane plane);
+    [Value] PxPlane inverseTransform([Const, Ref] PxPlane plane);
+    [Value] PxTransform getNormalized();
+
     [Value] attribute PxQuat q;
     [Value] attribute PxVec3 p;
 };
