@@ -228,8 +228,8 @@ interface PxTolerancesScale {
     void PxTolerancesScale();
     boolean isValid();
 
-    [Value] attribute PxRealPtr length;
-    [Value] attribute PxRealPtr speed;
+    [Value] attribute float length;
+    [Value] attribute float speed;
 };
 
 [Prefix="physx::", StackAllocatable]
@@ -237,19 +237,14 @@ interface PxTransform {
     void PxTransform();
     void PxTransform([Const, Ref] PxVec3 position);
     void PxTransform(PxIDENTITYEnum r);
-    void PxTransform([Const, Ref] PxQuat orientation);
     void PxTransform([Const, Ref] PxVec3 p0, [Const, Ref] PxQuat q0);
 
     [Value] PxTransform getInverse();
     [Value] PxVec3 transform([Const, Ref] PxVec3 input);
     [Value] PxVec3 transformInv([Const, Ref] PxVec3 input);
-    [Value] PxTransform transform([Const, Ref] PxTransform src);
     boolean isValid();
     boolean isSane();
     boolean isFinite();
-    [Value] PxTransform transformInv([Const, Ref] PxTransform src);
-    [Value] PxPlane transform([Const, Ref] PxPlane plane);
-    [Value] PxPlane inverseTransform([Const, Ref] PxPlane plane);
     [Value] PxTransform getNormalized();
 
     [Value] attribute PxQuat q;
@@ -307,7 +302,7 @@ interface PxVec4 {
     [Value] PxVec4 maximum([Const, Ref] PxVec4 v);
     [Value] PxVec3 getXYZ();
 
-    attribute float x;
+    attribute float  x;
     attribute float y;
     attribute float z;
     attribute float w;
