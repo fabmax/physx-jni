@@ -3,7 +3,7 @@ import org.gradle.jvm.tasks.Jar
 
 subprojects {
     group = "de.fabmax"
-    version = "2.4.1"
+    version = "2.4.2-SNAPSHOT"
 
     if (name != "physx-jni-android") {
         apply(plugin = "java-library")
@@ -37,16 +37,9 @@ tasks.register("generateNativeProject") {
     }
 }
 
-// generates native glue code based on PhysXJs.idl
-tasks.register<GenerateNativeGlueCode>("generateNativeGlueCode") {
-    idlModelName = "PhysXJni"
-    idlSource = File("${projectDir}/physx-jni/src/main/webidl/").absolutePath
-    generatorOutput = File("${projectDir}/PhysX/physx/source/webidlbindings/src/jni/").absolutePath
-}
-
 tasks.register("buildNativeProject") {
     group = "native build"
-    dependsOn("generateNativeGlueCode")
+    dependsOn(":physx-jni:generateJniNativeBindings")
 
     val os = OperatingSystem.current()
     when {

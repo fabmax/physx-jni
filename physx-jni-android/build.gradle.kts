@@ -1,5 +1,6 @@
 plugins {
     id("com.android.library") version "8.1.2"
+    id("de.fabmax.webidl-util") version "0.9.0"
     `maven-publish`
     signing
 }
@@ -23,14 +24,6 @@ android {
     }
 }
 
-// generates native glue code based on PhysXJs.idl
-tasks.register<GenerateNativeGlueCode>("generateNativeGlueCodeAndroid") {
-    idlModelName = "PhysXJni"
-    platform = "android"
-    idlSource = File("${rootDir}/physx-jni/src/main/webidl/").absolutePath
-    generatorOutput = File("${rootDir}/PhysX/physx/source/webidlbindings/src/jni/").absolutePath
-}
-
 tasks.register<Exec>("generateNativeProjectAndroid") {
     group = "native build"
     workingDir = File("$rootDir/PhysX/physx")
@@ -44,7 +37,7 @@ tasks.register<Exec>("generateNativeProjectAndroid") {
     }
 }
 
-tasks["preBuild"].dependsOn("generateJniBindings")
+tasks["preBuild"].dependsOn("generateJniJavaBindings")
 
 // builds the linux platform native libraries
 tasks.register<Exec>("buildNativeProjectAndroid") {
@@ -56,7 +49,7 @@ tasks.register<Exec>("buildNativeProjectAndroid") {
     if (!nativeProjectDir.exists()) {
         dependsOn("generateNativeProjectAndroid")
     }
-    dependsOn("generateNativeGlueCodeAndroid")
+    dependsOn("generateJniNativeBindings")
 
     val nativeLibsDir = "${projectDir}/src/main/jniLibs/arm64-v8a/"
 
@@ -72,12 +65,19 @@ tasks.register<Exec>("buildNativeProjectAndroid") {
     }
 }
 
-tasks.register<GenerateJavaBindings>("generateJniBindings") {
-    group = "build"
-    idlModelName = "PhysXJni"
-    idlSource = File("${rootDir}/physx-jni/src/main/webidl/").absolutePath
-    generatorOutput = File("${projectDir}/src/main/generated/physx").absolutePath
-    physxIncludeDir = "$rootDir/PhysX/physx/include"
+webidl {
+    modelPath = file("${rootDir}/physx-jni/src/main/webidl/")
+    modelName = "PhysXJni"
+
+    generateJni {
+        javaClassesOutputDirectory = file("$projectDir/src/main/generated/physx")
+        nativeGlueCodeOutputFile = file("${rootDir}/PhysX/physx/source/webidlbindings/src/jni/PhysXJniGlue.h")
+
+        nativePlatform = "android"
+        packagePrefix = "physx"
+        onClassLoadStatement = "de.fabmax.physxjni.Loader.load();"
+        nativeIncludeDir = file("$rootDir/PhysX/physx/include")
+    }
 }
 
 publishing {
