@@ -1,4 +1,5 @@
 plugins {
+    id("de.fabmax.webidl-util") version "0.9.0"
     `maven-publish`
     signing
 }
@@ -16,6 +17,24 @@ java {
                 srcDir("src/main/generated")
             }
         }
+    }
+}
+
+webidl {
+    modelPath = file("${projectDir}/src/main/webidl/")
+    modelName = "PhysXJni"
+
+    generateJni {
+        javaClassesOutputDirectory = file("$projectDir/src/main/generated/physx")
+        nativeGlueCodeOutputFile = file("${rootDir}/PhysX/physx/source/webidlbindings/src/jni/PhysXJniGlue.h")
+
+        packagePrefix = "physx"
+        onClassLoadStatement = "de.fabmax.physxjni.Loader.load();"
+        nativeIncludeDir = file("$rootDir/PhysX/physx/include")
+    }
+
+    generateCompactWebIdl {
+        outputFile = file("${rootDir}/PhysX/physx/source/webidlbindings/src/wasm/PhysXWasm.idl")
     }
 }
 
@@ -38,20 +57,12 @@ tasks.register<VersionNameUpdate>("updateVersionNames") {
     )
 }
 
-tasks.register<GenerateJavaBindings>("generateJniBindings") {
-    group = "build"
-    idlModelName = "PhysXJni"
-    idlSource = File("${projectDir}/src/main/webidl/").absolutePath
-    generatorOutput = File("${projectDir}/src/main/generated/physx").absolutePath
-    physxIncludeDir = "$rootDir/PhysX/physx/include"
-}
-
 tasks["clean"].doLast {
     delete("$projectDir/src/main/generated")
 }
 
 tasks.compileJava {
-    dependsOn("generateJniBindings")
+    dependsOn("generateJniJavaBindings")
     dependsOn("updateVersionNames")
 }
 
@@ -71,7 +82,7 @@ dependencies {
     testRuntimeOnly(project(":physx-jni-natives-macos"))
     testRuntimeOnly(project(":physx-jni-natives-macos-arm64"))
 
-    testImplementation("org.lwjgl:lwjgl:3.3.3")
+    testImplementation("org.lwjgl:lwjgl:3.3.4")
 
     val os = org.gradle.internal.os.OperatingSystem.current()
     val arch = System.getProperty("os.arch", "unknown")
@@ -81,7 +92,7 @@ dependencies {
         os.isMacOsX && arch != "aarch64" -> "natives-macos"
         else -> "natives-windows"
     }
-    testRuntimeOnly("org.lwjgl:lwjgl:3.3.3:$lwjglNatives")
+    testRuntimeOnly("org.lwjgl:lwjgl:3.3.4:$lwjglNatives")
 }
 
 publishing {
