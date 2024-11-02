@@ -21,6 +21,7 @@ enum PxHitFlagEnum {
     "PxHitFlagEnum::eNORMAL",
     "PxHitFlagEnum::eUV",
     "PxHitFlagEnum::eASSUME_NO_INITIAL_OVERLAP",
+    "PxHitFlagEnum::eANY_HIT",
     "PxHitFlagEnum::eMESH_MULTIPLE",
     "PxHitFlagEnum::eMESH_ANY",
     "PxHitFlagEnum::eMESH_BOTH_SIDES",

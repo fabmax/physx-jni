@@ -22,7 +22,9 @@ interface PxTopLevelFunctions {
     static PxD6Joint D6JointCreate([Ref] PxPhysics physics, [Nullable] PxRigidActor actor0, [Ref] PxTransform localFrame0, [Nullable] PxRigidActor actor1, [Ref] PxTransform localFrame1);
     static PxDistanceJoint DistanceJointCreate([Ref] PxPhysics physics, [Nullable] PxRigidActor actor0, [Ref] PxTransform localFrame0, [Nullable] PxRigidActor actor1, [Ref] PxTransform localFrame1);
     static PxFixedJoint FixedJointCreate([Ref] PxPhysics physics, [Nullable] PxRigidActor actor0, [Ref] PxTransform localFrame0, [Nullable] PxRigidActor actor1, [Ref] PxTransform localFrame1);
+    static PxGearJoint GearJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
     static PxPrismaticJoint PrismaticJointCreate([Ref] PxPhysics physics, [Nullable] PxRigidActor actor0, [Ref] PxTransform localFrame0, [Nullable] PxRigidActor actor1, [Ref] PxTransform localFrame1);
+    static PxRackAndPinionJoint RackAndPinionJointCreate([Ref] PxPhysics physics, PxRigidActor actor0, [Ref] PxTransform localFrame0, PxRigidActor actor1, [Ref] PxTransform localFrame1);
     static PxRevoluteJoint RevoluteJointCreate([Ref] PxPhysics physics, [Nullable] PxRigidActor actor0, [Ref] PxTransform localFrame0, [Nullable] PxRigidActor actor1, [Ref] PxTransform localFrame1);
     static PxSphericalJoint SphericalJointCreate([Ref] PxPhysics physics, [Nullable] PxRigidActor actor0, [Ref] PxTransform localFrame0, [Nullable] PxRigidActor actor1, [Ref] PxTransform localFrame1);
 

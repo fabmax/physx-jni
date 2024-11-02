@@ -111,6 +111,14 @@ interface PxDistanceJointFlags {
 interface PxFixedJoint { };
 PxFixedJoint implements PxJoint;
 
+[Prefix="physx::"]
+interface PxGearJoint {
+    boolean setHinges([Const] PxBase hinge0, [Const] PxBase hinge1);
+    void setGearRatio(float ratio);
+    float getGearRatio();
+};
+PxGearJoint implements PxJoint;
+
 [Prefix="physx::", NoDelete]
 interface PxJoint {
     void setActors(PxRigidActor actor0, PxRigidActor actor1);
@@ -230,6 +238,15 @@ interface PxPrismaticJointFlags {
     void raise(PxPrismaticJointFlagEnum flag);
     void clear(PxPrismaticJointFlagEnum flag);
 };
+
+[Prefix="physx::"]
+interface PxRackAndPinionJoint {
+    boolean setJoints([Const] PxBase hinge, [Const] PxBase prismatic);
+    void setRatio(float ratio);
+    float getRatio();
+    boolean setData(unsigned long nbRackTeeth, unsigned long nbPinionTeeth, float rackLength);
+};
+PxRackAndPinionJoint implements PxJoint;
 
 [Prefix="physx::"]
 interface PxRevoluteJoint {
