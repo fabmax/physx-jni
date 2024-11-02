@@ -326,6 +326,8 @@ interface PxPhysics {
     PxRigidDynamic createRigidDynamic([Const, Ref] PxTransform pose);
     // Shapes
     PxShape createShape([Const, Ref] PxGeometry geometry, [Const, Ref] PxMaterial material, optional boolean isExclusive, [Ref] optional PxShapeFlags shapeFlags);
+    PxTriangleMesh createTriangleMesh([Ref] PxInputData stream);
+    PxConvexMesh createConvexMesh([Ref] PxInputData stream);
     long getNbShapes();
     // Constraints and Articulations
     PxArticulationReducedCoordinate createArticulationReducedCoordinate();

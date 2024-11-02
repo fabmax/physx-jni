@@ -121,6 +121,12 @@ enum PxQueryFlagEnum {
     "PxQueryFlagEnum::eNO_BLOCK"
 };
 
+enum PxQueryHitType {
+    "PxQueryHitType::eNONE",
+    "PxQueryHitType::eBLOCK",
+    "PxQueryHitType::eTOUCH"
+};
+
 [Prefix="physx::", StackAllocatable]
 interface PxQueryFlags {
     void PxQueryFlags(unsigned short flags);

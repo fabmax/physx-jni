@@ -32,6 +32,22 @@ interface PxTopLevelFunctions {
     static PxTriangleMesh CreateTriangleMesh([Const, Ref] PxCookingParams params, [Const, Ref] PxTriangleMeshDesc desc);
     static PxHeightField CreateHeightField([Const, Ref] PxHeightFieldDesc desc);
 
-    // PxCooking is deprecated, only needed for scene serialization
-    //static PxCooking CreateCooking(unsigned long version, [Ref] PxFoundation foundation, [Const, Ref] PxCookingParams scale);
+    static boolean CookTriangleMesh([Const, Ref] PxCookingParams params, [Const, Ref] PxTriangleMeshDesc desc, [Ref] PxOutputStream stream);
+    static boolean CookConvexMesh([Const, Ref] PxCookingParams params, [Const, Ref] PxConvexMeshDesc desc, [Ref] PxOutputStream stream);
+
+    static PxRigidDynamic CreateDynamicFromShape([Ref] PxPhysics sdk, [Const, Ref] PxTransform transform, [Ref] PxShape shape, float density);
+    static PxRigidDynamic CreateDynamic([Ref] PxPhysics sdk, [Const, Ref] PxTransform transform, [Const, Ref] PxGeometry geometry, [Ref] PxMaterial material, float density, [Const, Ref] optional PxTransform shapeOffset);
+    static PxRigidDynamic CreateKinematicFromShape([Ref] PxPhysics sdk, [Const, Ref] PxTransform transform, [Ref] PxShape shape, float density);
+    static PxRigidDynamic CreateKinematic([Ref] PxPhysics sdk, [Const, Ref] PxTransform transform, [Const, Ref] PxGeometry geometry, [Ref] PxMaterial material, float density, [Const, Ref] optional PxTransform shapeOffset);
+    static PxRigidStatic CreateStaticFromShape([Ref] PxPhysics sdk, [Const, Ref] PxTransform transform, [Ref] PxShape shape);
+    static PxRigidStatic CreateStatic([Ref] PxPhysics sdk, [Const, Ref] PxTransform transform, [Const, Ref] PxGeometry geometry, [Ref] PxMaterial material, [Const, Ref] PxTransform shapeOffset);
+    static PxRigidStatic CreatePlane([Ref] PxPhysics sdk, [Const, Ref] PxPlane plane, [Ref] PxMaterial material);
+
+    static PxShape CloneShape([Ref] PxPhysics physics, [Const, Ref] PxShape from, boolean isExclusive);
+    static PxRigidStatic CloneStatic([Ref] PxPhysics physicsSDK, [Const, Ref] PxTransform transform, [Const, Ref] PxRigidActor from);
+    static PxRigidDynamic CloneDynamic([Ref] PxPhysics physicsSDK, [Const, Ref] PxTransform transform, [Const, Ref] PxRigidDynamic from);
+
+    static void ScaleRigidActor([Ref] PxRigidActor actor, float scale, boolean scaleMassProps);
+
+    static void IntegrateTransform([Const, Ref] PxTransform curTrans, [Const, Ref] PxVec3 linvel, [Const, Ref] PxVec3 angvel, float timeStep, [Ref] PxTransform result);
 };

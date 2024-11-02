@@ -123,6 +123,7 @@ interface PxArray_PxU8 {
     VoidPtr begin();
     unsigned long size();
     void pushBack(octet value);
+    void setFromBuffer(VoidPtr buffer, unsigned long size);
     void clear();
 };
 
