@@ -140,8 +140,8 @@ interface PxMat33 {
     void PxMat33();
     void PxMat33(PxIDENTITYEnum r);
     void PxMat33([Const, Ref] PxVec3 col0, [Const, Ref] PxVec3 col1, [Const, Ref] PxVec3 col2);
-    void PxMat33(float r);
-    void PxMat33([Const, Ref] PxQuat q);
+    [Platforms="windows;linux;macos;android"] void PxMat33(float r);
+    [Platforms="windows;linux;macos;android"] void PxMat33([Const, Ref] PxQuat q);
 
     [Value] PxMat33 getTranspose();
     [Value] PxMat33 getInverse();
@@ -162,8 +162,9 @@ interface PxPlane {
     void PxPlane();
     void PxPlane(float nx, float ny, float nz, float distance);
     void PxPlane([Const, Ref] PxVec3 normal, float distance);
-    void PxPlane([Const, Ref] PxVec3 point, [Const, Ref] PxVec3 normal);
     void PxPlane([Const, Ref] PxVec3 p0, [Const, Ref] PxVec3 p1, [Const, Ref] PxVec3 p2);
+    [Platforms="windows;linux;macos;android"] void PxPlane([Const, Ref] PxVec3 point, [Const, Ref] PxVec3 normal);
+
     float distance([Const, Ref] PxVec3 p);
     boolean contains([Const, Ref] PxVec3 p);
     [Value] PxVec3 project([Const, Ref] PxVec3 p);
@@ -180,10 +181,10 @@ interface PxPlane {
 interface PxQuat {
     void PxQuat();
     void PxQuat(PxIDENTITYEnum r);
-    void PxQuat(float r);
     void PxQuat(float nx, float ny, float nz, float nw);
     void PxQuat(float angleRadians, [Const, Ref] PxVec3 unitAxis);
-    void PxQuat([Const, Ref] PxMat33 m);
+    [Platforms="windows;linux;macos;android"] void PxQuat(float r);
+    [Platforms="windows;linux;macos;android"] void PxQuat([Const, Ref] PxMat33 m);
 
     boolean isIdentity();
     boolean isFinite();
@@ -228,16 +229,16 @@ interface PxTolerancesScale {
     void PxTolerancesScale();
     boolean isValid();
 
-    [Value] attribute float length;
-    [Value] attribute float speed;
+    attribute float length;
+    attribute float speed;
 };
 
 [Prefix="physx::", StackAllocatable]
 interface PxTransform {
     void PxTransform();
-    void PxTransform([Const, Ref] PxVec3 position);
     void PxTransform(PxIDENTITYEnum r);
     void PxTransform([Const, Ref] PxVec3 p0, [Const, Ref] PxQuat q0);
+    [Platforms="windows;linux;macos;android"] void PxTransform([Const, Ref] PxVec3 position);
 
     [Value] PxTransform getInverse();
     [Value] PxVec3 transform([Const, Ref] PxVec3 input);
@@ -302,7 +303,7 @@ interface PxVec4 {
     [Value] PxVec4 maximum([Const, Ref] PxVec4 v);
     [Value] PxVec3 getXYZ();
 
-    attribute float  x;
+    attribute float x;
     attribute float y;
     attribute float z;
     attribute float w;
