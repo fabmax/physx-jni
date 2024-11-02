@@ -4,7 +4,11 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni)
 ![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
 
-Java JNI bindings for Nvidia [PhysX 5.4.1](https://github.com/NVIDIA-Omniverse/PhysX).
+Java JNI bindings for Nvidia [PhysX 5.4.2](https://github.com/NVIDIA-Omniverse/PhysX).
+
+The generated bindings contain most of the original documentation converted to javadoc. For further reading
+there is also the official
+[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.4.2/index.html).
 
 ## How to use
 The library is published on maven central, so you can easily add this to your dependencies:
@@ -13,13 +17,13 @@ The library is published on maven central, so you can easily add this to your de
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:2.4.1")
+    implementation("de.fabmax:physx-jni:2.4.2")
     
     // native libraries - you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:2.4.1:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:2.4.1:natives-linux")
-    runtimeOnly("de.fabmax:physx-jni:2.4.1:natives-macos")
-    runtimeOnly("de.fabmax:physx-jni:2.4.1:natives-macos-arm64")
+    runtimeOnly("de.fabmax:physx-jni:2.4.2:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.4.2:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.4.2:natives-macos")
+    runtimeOnly("de.fabmax:physx-jni:2.4.2:natives-macos-arm64")
 }
 ```
 
@@ -28,7 +32,7 @@ The Android version of the library is packaged as a single `aar` archive contain
 and native libs:
 ```
 dependencies {
-    implementation("de.fabmax:physx-jni-android:2.4.1")
+    implementation("de.fabmax:physx-jni-android:2.4.2")
 }
 ```
 
@@ -95,11 +99,6 @@ Simplified non-graphical versions of the two scenes are available in source as t
 [FluidTest](https://github.com/fabmax/physx-jni/blob/main/physx-jni/src/test/java/de/fabmax/physxjni/FluidTest.java) and
 [ClothTest](https://github.com/fabmax/physx-jni/blob/main/physx-jni/src/test/java/de/fabmax/physxjni/ClothTest.java)
 They are more or less 1:1 translations of the corresponding PhysX example snippets.
-
-### Documentation
-The generated bindings contain most of the original documentation converted to javadoc. For further reading
-there is also the official
-[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.4.1/index.html).
 
 ### Things to consider when working with native objects
 Whenever you create an instance of a wrapper class within this library, this also creates an object on the native
