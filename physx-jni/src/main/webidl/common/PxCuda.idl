@@ -106,11 +106,12 @@ interface PxGpuDynamicsMemoryConfig {
     attribute unsigned long foundLostPairsCapacity;
     attribute unsigned long foundLostAggregatePairsCapacity;
     attribute unsigned long totalAggregatePairsCapacity;
-    attribute unsigned long maxSoftBodyContacts;
+    attribute unsigned long maxDeformableSurfaceContacts;
     attribute unsigned long maxFemClothContacts;
+    attribute unsigned long maxDeformableVolumeContacts;
+    attribute unsigned long maxSoftBodyContacts;
     attribute unsigned long maxParticleContacts;
     attribute unsigned long collisionStackSize;
-    attribute unsigned long maxHairContacts;
 };
 
 /****************************************

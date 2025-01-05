@@ -48,10 +48,10 @@ enum PxActorTypeEnum {
     "PxActorTypeEnum::eRIGID_STATIC",
     "PxActorTypeEnum::eRIGID_DYNAMIC",
     "PxActorTypeEnum::eARTICULATION_LINK",
+    "PxActorTypeEnum::eDEFORMABLE_SURFACE",
+    "PxActorTypeEnum::eDEFORMABLE_VOLUME",
     "PxActorTypeEnum::eSOFTBODY",
-    "PxActorTypeEnum::eFEMCLOTH",
-    "PxActorTypeEnum::ePBD_PARTICLESYSTEM",
-    "PxActorTypeEnum::eHAIRSYSTEM"
+    "PxActorTypeEnum::ePBD_PARTICLESYSTEM"
 };
 
 enum PxActorTypeFlagEnum {

@@ -252,7 +252,12 @@ interface PxTransform {
     [Value] attribute PxVec3 p;
 };
 
-interface PxU16StridedData {
+interface PxTypedStridedData_PxU16 {
+    attribute unsigned long stride;
+    [Value] attribute PxU16Ptr data;
+};
+
+interface PxTypedStridedData_PxU16Const {
     attribute unsigned long stride;
     [Const, Value] attribute PxU16ConstPtr data;
 };

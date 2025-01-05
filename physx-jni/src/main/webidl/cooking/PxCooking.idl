@@ -115,6 +115,6 @@ enum PxMeshMidPhaseEnum {
 interface PxTriangleMeshDesc {
     void PxTriangleMeshDesc();
 
-    [Value] attribute PxU16StridedData materialIndices;
+    [Const, Value] attribute PxTypedStridedData_PxU16Const materialIndices;
 };
 PxTriangleMeshDesc implements PxSimpleTriangleMesh;

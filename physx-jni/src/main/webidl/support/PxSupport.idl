@@ -367,11 +367,6 @@ interface Vector_PxSweepHit {
     void clear();
 };
 
-interface PxTypedStridedData_PxU16 {
-    attribute unsigned long stride;
-    [Value] attribute PxU16ConstPtr data;
-};
-
 
 interface PassThroughFilterShader {
     unsigned long filterShader(unsigned long attributes0,
