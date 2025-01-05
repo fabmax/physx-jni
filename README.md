@@ -1,14 +1,14 @@
 # physx-jni
 
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.fabmax/physx-jni)
+[![Maven Central](https://img.shields.io/maven-central/v/de.fabmax/physx-jni.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22de.fabmax%22%20AND%20a:%22physx-jni%22)
 ![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
 
-Java JNI bindings for Nvidia [PhysX 5.4.2](https://github.com/NVIDIA-Omniverse/PhysX).
+Java JNI bindings for Nvidia [PhysX 5.5.0](https://github.com/NVIDIA-Omniverse/PhysX).
 
 The generated bindings contain most of the original documentation converted to javadoc. For further reading
 there is also the official
-[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.4.2/index.html).
+[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.5.0/index.html).
 
 ## How to use
 The library is published on maven central, so you can easily add this to your dependencies:
@@ -17,13 +17,13 @@ The library is published on maven central, so you can easily add this to your de
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:2.4.2")
+    implementation("de.fabmax:physx-jni:2.5.0")
     
     // native libraries - you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:2.4.2:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:2.4.2:natives-linux")
-    runtimeOnly("de.fabmax:physx-jni:2.4.2:natives-macos")
-    runtimeOnly("de.fabmax:physx-jni:2.4.2:natives-macos-arm64")
+    runtimeOnly("de.fabmax:physx-jni:2.5.0:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.5.0:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.5.0:natives-macos")
+    runtimeOnly("de.fabmax:physx-jni:2.5.0:natives-macos-arm64")
 }
 ```
 
@@ -32,7 +32,7 @@ The Android version of the library is packaged as a single `aar` archive contain
 and native libs:
 ```
 dependencies {
-    implementation("de.fabmax:physx-jni-android:2.4.2")
+    implementation("de.fabmax:physx-jni-android:2.5.0")
 }
 ```
 
@@ -224,7 +224,7 @@ when using other body shapes (the test uses boxes), joints, etc.
 
 ## Building
 You can build the bindings yourself. However, this requires `cmake`, `python3` and the C++ compiler appropriate to your
-platform (Visual Studio 2022 (Community) on Windows / clang on Linux):
+platform (Visual Studio 2022 (Community) on Windows, clang on Linux, and Xcode on MacOS):
 ```
 # Clone this repo
 git clone https://github.com/fabmax/physx-jni.git
@@ -238,7 +238,7 @@ git submodule update --init
 # Optional, but might help in case build fails
 ./gradlew generateNativeProject
 
-# Build native PhysX (requires Visual Studio 2022 (Community) on Windows / clang on Linux)
+# Build native PhysX (requires Visual Studio 2022 (Community) on Windows, clang on Linux, and Xcode on MacOS)
 ./gradlew buildNativeProject
 
 # Generate Java/JNI code and build library
