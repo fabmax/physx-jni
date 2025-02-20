@@ -21,7 +21,6 @@ tasks.register<Exec>("generateNativeProjectMacosArm64") {
     }
 }
 
-
 // builds the windows platform native libraries
 tasks.register<Exec>("buildNativeProjectMacosArm64") {
     group = "native build"
@@ -48,6 +47,7 @@ tasks.register<Exec>("buildNativeProjectMacosArm64") {
         Sha1Helper.writeHashes(File(resourcesDir))
     }
 }
+
 dependencies {
     implementation(project(":physx-jni"))
 }
