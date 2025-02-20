@@ -21,20 +21,20 @@ java {
 }
 
 webidl {
-    modelPath = file("${projectDir}/src/main/webidl/")
-    modelName = "PhysXJni"
+    modelPath.set(file("${projectDir}/src/main/webidl/"))
+    modelName.set("PhysXJni")
 
     generateJni {
-        javaClassesOutputDirectory = file("$projectDir/src/main/generated/physx")
-        nativeGlueCodeOutputFile = file("${rootDir}/PhysX/physx/source/webidlbindings/src/jni/PhysXJniGlue.h")
+        javaClassesOutputDirectory.set(file("$projectDir/src/main/generated/physx"))
+        nativeGlueCodeOutputFile.set(file("${rootDir}/PhysX/physx/source/webidlbindings/src/jni/PhysXJniGlue.h"))
 
-        packagePrefix = "physx"
-        onClassLoadStatement = "de.fabmax.physxjni.Loader.load();"
-        nativeIncludeDir = file("$rootDir/PhysX/physx/include")
+        packagePrefix.set("physx")
+        onClassLoadStatement.set("de.fabmax.physxjni.Loader.load();")
+        nativeIncludeDir.set(file("$rootDir/PhysX/physx/include"))
     }
 
     generateCompactWebIdl {
-        outputFile = file("${rootDir}/PhysX/physx/source/webidlbindings/src/wasm/PhysXWasm.idl")
+        outputFile.set(file("${rootDir}/PhysX/physx/source/webidlbindings/src/wasm/PhysXWasm.idl"))
     }
 }
 

@@ -66,17 +66,17 @@ tasks.register<Exec>("buildNativeProjectAndroid") {
 }
 
 webidl {
-    modelPath = file("${rootDir}/physx-jni/src/main/webidl/")
-    modelName = "PhysXJni"
+    modelPath.set(file("${rootDir}/physx-jni/src/main/webidl/"))
+    modelName.set("PhysXJni")
 
     generateJni {
-        javaClassesOutputDirectory = file("$projectDir/src/main/generated/physx")
-        nativeGlueCodeOutputFile = file("${rootDir}/PhysX/physx/source/webidlbindings/src/jni/PhysXJniGlue.h")
+        javaClassesOutputDirectory.set(file("$projectDir/src/main/generated/physx"))
+        nativeGlueCodeOutputFile.set(file("${rootDir}/PhysX/physx/source/webidlbindings/src/jni/PhysXJniGlue.h"))
 
-        nativePlatform = "android"
-        packagePrefix = "physx"
-        onClassLoadStatement = "de.fabmax.physxjni.Loader.load();"
-        nativeIncludeDir = file("$rootDir/PhysX/physx/include")
+        nativePlatform.set("android")
+        packagePrefix.set("physx")
+        onClassLoadStatement.set("de.fabmax.physxjni.Loader.load();")
+        nativeIncludeDir.set(file("$rootDir/PhysX/physx/include"))
     }
 }
 
