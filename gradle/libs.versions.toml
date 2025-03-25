@@ -1,0 +1,8 @@
+[versions]
+lwjgl = "3.3.6"
+
+[libraries]
+lwjgl-core = { group = "org.lwjgl", name = "lwjgl", version.ref = "lwjgl" }
+
+[plugins]
+webidl = { id = "de.fabmax.webidl-util", version = "0.10.0" }
