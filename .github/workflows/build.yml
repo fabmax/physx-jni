@@ -36,6 +36,8 @@ jobs:
           python-version: '3.10'
       - name: Build native lib
         run: ./gradlew buildNativeProject
+      - name: Build Android bindings
+        run: ./gradlew :physx-jni-android:buildNativeProjectAndroid
       - name: Build and test JNI bindings
         run: ./gradlew build
 
