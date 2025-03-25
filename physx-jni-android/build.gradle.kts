@@ -1,6 +1,6 @@
 plugins {
     id("com.android.library") version "8.1.2"
-    id("de.fabmax.webidl-util") version "0.9.0"
+    alias(libs.plugins.webidl)
     `maven-publish`
     signing
 }

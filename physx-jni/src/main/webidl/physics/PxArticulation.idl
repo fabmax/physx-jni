@@ -86,8 +86,6 @@ interface PxArticulationDrive {
 enum PxArticulationDriveTypeEnum {
     "PxArticulationDriveTypeEnum::eFORCE",
     "PxArticulationDriveTypeEnum::eACCELERATION",
-    "PxArticulationDriveTypeEnum::eTARGET",
-    "PxArticulationDriveTypeEnum::eVELOCITY",
     "PxArticulationDriveTypeEnum::eNONE",
 };
 
@@ -223,10 +221,6 @@ interface PxArticulationReducedCoordinate {
     float getWakeCounter();
     void wakeUp();
     void putToSleep();
-    void setMaxCOMLinearVelocity(float maxLinerVelocity);
-    float getMaxCOMLinearVelocity();
-    void setMaxCOMAngularVelocity(float maxAngularVelocity);
-    float getMaxCOMAngularVelocity();
     PxArticulationLink createLink([Nullable] PxArticulationLink parent, [Const, Ref] PxTransform pose);
     unsigned long getNbLinks();
     // getLinks();
@@ -248,7 +242,9 @@ interface PxArticulationReducedCoordinate {
     //void unpackJointData(out float reduced, out float maximum);
     void commonInit();
     void computeGeneralizedGravityForce([Ref] PxArticulationCache cache);
+    void computeGravityCompensation([Ref] PxArticulationCache cache);
     void computeCoriolisAndCentrifugalForce([Ref] PxArticulationCache cache);
+    void computeCoriolisCompensation([Ref] PxArticulationCache cache);
     void computeGeneralizedExternalForce([Ref] PxArticulationCache cache);
     void computeJointAcceleration([Ref] PxArticulationCache cache);
     void computeJointForce([Ref] PxArticulationCache cache);
@@ -256,6 +252,9 @@ interface PxArticulationReducedCoordinate {
     void computeCoefficientMatrix([Ref] PxArticulationCache cache);
     //void computeLambda()
     void computeGeneralizedMassMatrix([Ref] PxArticulationCache cache);
+    void computeMassMatrix([Ref] PxArticulationCache cache);
+    [Value] PxVec3 computeArticulationCOM(boolean rootFrame);
+    void computeCentroidalMomentumMatrix([Ref] PxArticulationCache cache);
     void addLoopJoint(PxConstraint joint);
     void removeLoopJoint(PxConstraint joint);
     unsigned long getNbLoopJoints();
@@ -268,7 +267,7 @@ interface PxArticulationReducedCoordinate {
     void setRootAngularVelocity([Const, Ref] PxVec3 angularVelocity, optional boolean autowake);
     [Value] PxVec3 getRootAngularVelocity();
     [Value] PxSpatialVelocity getLinkAcceleration(unsigned long linkId);
-    unsigned long getGpuArticulationIndex();
+    unsigned long getGPUIndex();
     PxArticulationSpatialTendon createSpatialTendon();
     PxArticulationFixedTendon createFixedTendon();
     //unsigned long getSpatialTendons();

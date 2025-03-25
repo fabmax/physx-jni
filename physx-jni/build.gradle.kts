@@ -1,5 +1,5 @@
 plugins {
-    id("de.fabmax.webidl-util") version "0.9.0"
+    alias(libs.plugins.webidl)
     `maven-publish`
     signing
 }
@@ -74,25 +74,27 @@ tasks.test {
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
 
-    testRuntimeOnly(project(":physx-jni-natives-windows-cuda"))
-    testRuntimeOnly(project(":physx-jni-natives-linux-cuda"))
+    //testRuntimeOnly(project(":physx-jni-natives-windows-cuda"))
+    //testRuntimeOnly(project(":physx-jni-natives-linux-cuda"))
+    testRuntimeOnly(project(":physx-jni-natives-windows"))
+    testRuntimeOnly(project(":physx-jni-natives-linux"))
     testRuntimeOnly(project(":physx-jni-natives-macos"))
     testRuntimeOnly(project(":physx-jni-natives-macos-arm64"))
 
-    testImplementation("org.lwjgl:lwjgl:3.3.4")
+    testImplementation(libs.lwjgl.core)
 
     val os = org.gradle.internal.os.OperatingSystem.current()
     val arch = System.getProperty("os.arch", "unknown")
-    val lwjglNatives = when {
+    val lwjglPlatform = when {
         os.isLinux -> "natives-linux"
         os.isMacOsX && arch == "aarch64" -> "natives-macos-arm64"
         os.isMacOsX && arch != "aarch64" -> "natives-macos"
         else -> "natives-windows"
     }
-    testRuntimeOnly("org.lwjgl:lwjgl:3.3.4:$lwjglNatives")
+    testRuntimeOnly("${libs.lwjgl.core.get()}:$lwjglPlatform")
 }
 
 publishing {

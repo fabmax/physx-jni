@@ -9,7 +9,7 @@ jobs:
 
   linux:
     name: Build Linux native binaries
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     environment: publish
     permissions:
       contents: write

@@ -21,9 +21,9 @@ interface PxScene {
     unsigned long getNbActors([Ref] PxActorTypeFlags types);
     // unsigned long getActors(...)
     // PxActorPtr getActiveActors();    -> SupportFunctions.PxScene_getActiveActors();
-    [Platforms="windows;linux", Value] unsigned long getNbSoftBodies();
+    //[Platforms="windows;linux", Value] unsigned long getNbSoftBodies();
     // unsigned long getSoftBodies(...);
-    [Platforms="windows;linux", Value] unsigned long getNbParticleSystems(PxParticleSolverTypeEnum type);
+    //[Platforms="windows;linux", Value] unsigned long getNbParticleSystems(PxParticleSolverTypeEnum type);
     // unsigned long getParticleSystems(...);
     unsigned long getNbArticulations();
     // unsigned long getArticulations(...);
@@ -38,7 +38,7 @@ interface PxScene {
 
     // Dispatcher
     PxCpuDispatcher getCpuDispatcher();
-    [Platforms="windows;linux"] PxCudaContextManager getCudaContextManager();
+    //[Platforms="windows;linux"] PxCudaContextManager getCudaContextManager();
 
     // Multiclient
     octet createClient();
@@ -162,7 +162,7 @@ interface PxSceneDesc {
     attribute float frictionCorrelationDistance;
     [Value] attribute PxSceneFlags flags;
     attribute PxCpuDispatcher cpuDispatcher;
-    [Platforms="windows;linux"] attribute PxCudaContextManager cudaContextManager;
+    //[Platforms="windows;linux"] attribute PxCudaContextManager cudaContextManager;
     attribute VoidPtr userData;
     attribute unsigned long solverBatchSize;
     attribute unsigned long solverArticulationBatchSize;
@@ -175,7 +175,7 @@ interface PxSceneDesc {
     attribute float ccdMaxSeparation;
     attribute float wakeCounterResetValue;
     [Value] attribute PxBounds3 sanityBounds;
-    [Platforms="windows;linux", Value] attribute PxGpuDynamicsMemoryConfig gpuDynamicsConfig;
+    //[Platforms="windows;linux", Value] attribute PxGpuDynamicsMemoryConfig gpuDynamicsConfig;
     attribute unsigned long gpuMaxNumPartitions;
     attribute unsigned long gpuMaxNumStaticPartitions;
     attribute unsigned long gpuComputeVersion;

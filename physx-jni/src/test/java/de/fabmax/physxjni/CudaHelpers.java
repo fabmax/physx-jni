@@ -1,6 +1,6 @@
 package de.fabmax.physxjni;
 
-import org.lwjgl.system.MemoryStack;
+/*import org.lwjgl.system.MemoryStack;
 import physx.PxTopLevelFunctions;
 import physx.common.PxCudaContextManager;
 import physx.common.PxCudaContextManagerDesc;
@@ -63,4 +63,4 @@ public class CudaHelpers {
             return physics.createScene(sceneDesc);
         }
     }
-}
+}*/
