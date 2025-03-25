@@ -1,6 +1,6 @@
 package de.fabmax.physxjni;
 
-import org.junit.jupiter.api.Assertions;
+/*import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -38,9 +38,8 @@ public class FluidTest {
         test.cleanup();
     }
 
-    /**
-     * Based on PhysX snippet SnippetPBF.cpp
-     */
+
+    // Based on PhysX snippet SnippetPBF.cpp
     private static class FluidTestImpl {
 
         private static final boolean USE_LARGE_FLUID = true;
@@ -227,4 +226,4 @@ public class FluidTest {
         target.setW(w);
         return target;
     }
-}
+}*/

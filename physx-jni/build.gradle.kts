@@ -74,11 +74,13 @@ tasks.test {
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
 
-    testRuntimeOnly(project(":physx-jni-natives-windows-cuda"))
-    testRuntimeOnly(project(":physx-jni-natives-linux-cuda"))
+    //testRuntimeOnly(project(":physx-jni-natives-windows-cuda"))
+    //testRuntimeOnly(project(":physx-jni-natives-linux-cuda"))
+    testRuntimeOnly(project(":physx-jni-natives-windows"))
+    testRuntimeOnly(project(":physx-jni-natives-linux"))
     testRuntimeOnly(project(":physx-jni-natives-macos"))
     testRuntimeOnly(project(":physx-jni-natives-macos-arm64"))
 

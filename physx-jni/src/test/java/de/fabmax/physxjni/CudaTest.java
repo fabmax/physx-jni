@@ -1,6 +1,6 @@
 package de.fabmax.physxjni;
 
-import org.junit.jupiter.api.Assertions;
+/*import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.lwjgl.system.MemoryStack;
@@ -26,7 +26,12 @@ public class CudaTest {
 
     // one entry per run: specifies the number of body to simulate, keep it low for unit testing
     // use higher values for benchmarking
-    static final int[] NUM_BODY_RUNS = new int[] { 1_000, 5_000, /*10_000, 20_000*/ };
+    static final int[] NUM_BODY_RUNS = new int[] {
+            1_000,
+            5_000,
+            //10_000,
+            //20_000
+    };
 
     @Test
     public void createCudaContextTest() {
@@ -134,4 +139,4 @@ public class CudaTest {
             );
         }
     }
-}
+}*/

@@ -1,6 +1,6 @@
 package de.fabmax.physxjni;
 
-import org.junit.jupiter.api.Assertions;
+/*import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -33,9 +33,7 @@ public class ClothTest {
         test.cleanup();
     }
 
-    /**
-     * Based on PhysX snippet SnippetPBDCloth.cpp
-     */
+    // Based on PhysX snippet SnippetPBDCloth.cpp
     private static class SimpleClothTest {
         private static final int NUM_X = 250;
         private static final int NUM_Z = 250;
@@ -238,4 +236,4 @@ public class ClothTest {
         target.setDamping(damping);
         target.setPad(0f);
     }
-}
+}*/

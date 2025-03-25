@@ -1,8 +1,11 @@
 [versions]
+junitBom = "5.9.1"
 lwjgl = "3.3.6"
 
 [libraries]
 lwjgl-core = { group = "org.lwjgl", name = "lwjgl", version.ref = "lwjgl" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junitBom" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 
 [plugins]
 webidl = { id = "de.fabmax.webidl-util", version = "0.10.0" }

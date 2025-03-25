@@ -2,7 +2,7 @@
  * [package=common]
  ****************************************/
 
-[Platforms="windows;linux", NoDelete]
+/*[Platforms="windows;linux", NoDelete]
 interface PxCudaTopLevelFunctions {
     static long GetSuggestedCudaDeviceOrdinal([Ref] PxFoundation foundation);
 
@@ -112,13 +112,13 @@ interface PxGpuDynamicsMemoryConfig {
     attribute unsigned long maxSoftBodyContacts;
     attribute unsigned long maxParticleContacts;
     attribute unsigned long collisionStackSize;
-};
+};*/
 
 /****************************************
  * [package=particles]
  ****************************************/
 
-[Platforms="windows;linux", Prefix="physx::", StackAllocatable]
+/*[Platforms="windows;linux", Prefix="physx::", StackAllocatable]
 interface PxConeLimitParams {
     [Value] attribute PxVec4 lowHighLimits;
     [Value] attribute PxVec4 axisAngle;
@@ -567,4 +567,4 @@ interface Vector_PxParticleSpring {
     unsigned long size();
     void push_back([Ref] PxParticleSpring value);
     void clear();
-};
+};*/
