@@ -4,11 +4,11 @@
 [![Maven Central](https://img.shields.io/maven-central/v/de.fabmax/physx-jni.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22de.fabmax%22%20AND%20a:%22physx-jni%22)
 ![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
 
-Java JNI bindings for Nvidia [PhysX 5.5.1](https://github.com/NVIDIA-Omniverse/PhysX).
+Java JNI bindings for Nvidia [PhysX 5.6.0](https://github.com/NVIDIA-Omniverse/PhysX).
 
 The generated bindings contain most of the original documentation converted to javadoc. For further reading
 there is also the official
-[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.5.1/index.html).
+[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.6.0/index.html).
 
 ## How to use
 The library is published on maven central, so you can easily add this to your dependencies:
@@ -17,13 +17,13 @@ The library is published on maven central, so you can easily add this to your de
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:2.5.1")
+    implementation("de.fabmax:physx-jni:2.6.0")
     
     // native libraries - you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:2.5.1:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:2.5.1:natives-linux")
-    runtimeOnly("de.fabmax:physx-jni:2.5.1:natives-macos")
-    runtimeOnly("de.fabmax:physx-jni:2.5.1:natives-macos-arm64")
+    runtimeOnly("de.fabmax:physx-jni:2.6.0:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.6.0:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.6.0:natives-macos")
+    runtimeOnly("de.fabmax:physx-jni:2.6.0:natives-macos-arm64")
 }
 ```
 
@@ -32,7 +32,7 @@ The Android version of the library is packaged as a single `aar` archive contain
 and native libs:
 ```
 dependencies {
-    implementation("de.fabmax:physx-jni-android:2.5.1")
+    implementation("de.fabmax:physx-jni-android:2.6.0")
 }
 ```
 
@@ -46,11 +46,8 @@ This is still work in progress, but the bindings already include most major part
 - [x] Articulations
 - [x] Vehicles
 - [x] Character controllers
-- [ ] CUDA (requires a Platform with CUDA support, see [below](#cuda-support))
-    - [x] Rigid bodies
-    - [x] Particles (Fluids + Cloth)
-    - [ ] Soft bodies
 - [x] Scene serialization
+- [ ] CUDA support is removed from jni bindings, see [below](#cuda-support)
 
 Furthermore, I added bindings to [V-HACD](https://github.com/kmammou/v-hacd), which is not part of PhysX but fits
 in the context very well.
@@ -87,18 +84,6 @@ To see a few real life demos you can take a look at my [kool](https://github.com
 > *__Note:__ These demos run directly in the browser and obviously don't use this library, but the webassembly version mentioned
 > above. However, the two are functionally identical, so it shouldn't matter too much. The JNI version is much faster
 > though.*
-
-The particle simulation unfortunately requires CUDA and therefore only works on Windows / Linux systems with an Nvidia
-GPU. Here are a few images what this can look like:
-
-| Fluid Simulation                    | Cloth Simulation                    |
-|-------------------------------------|-------------------------------------|
-| ![Fluid simulation](docs/waves.jpg) | ![Cloth simulation](docs/cloth.jpg) |
-
-Simplified non-graphical versions of the two scenes are available in source as tests:
-[FluidTest](https://github.com/fabmax/physx-jni/blob/main/physx-jni/src/test/java/de/fabmax/physxjni/FluidTest.java) and
-[ClothTest](https://github.com/fabmax/physx-jni/blob/main/physx-jni/src/test/java/de/fabmax/physxjni/ClothTest.java)
-They are more or less 1:1 translations of the corresponding PhysX example snippets.
 
 ### Things to consider when working with native objects
 Whenever you create an instance of a wrapper class within this library, this also creates an object on the native
@@ -172,55 +157,23 @@ PxRigidDynamic myActor = ...
 // set user data, can be any java object, here we use a String:
 myActor.setUserData(new JavaNativeRef<>("Arbitrary data"));
 
-// get user data, here we expect it to be a String:
+// get user data. You need to specify the type yourself, here we expect it to be a String:
 JavaNativeRef<String> userData = JavaNativeRef.fromNativeObject(myActor.getUserData());
 System.out.println(userData.get());
 ```
 
 ### CUDA Support
 
-PhysX supports accelerating physics simulation with CUDA (this, of course, requires an Nvidia GPU). However,
-using CUDA requires different runtime libraries, which are not available via maven central. Instead, you can grab them
-from the [releases section](https://github.com/fabmax/physx-jni/releases) (those suffixed with `-cuda`).
-Apart from that, enabling CUDA acceleration for a scene is straight forward:
+This library used to support PhysX CUDA extensions (partially). However, with version `5.6.0`, building PhysX with
+CUDA support became a lot more complicated because now the CUDA toolkit needs to be installed separately, which is
+relatively cumbersome to do (especially in the GitHub workflow environment, which builds the distribution version
+of this library).
 
-```java
-// Setup your scene as usual
-PxSceneDesc sceneDesc = new PxSceneDesc(physics.getTolerancesScale());
-sceneDesc.setCpuDispatcher(PxTopLevelFunctions.DefaultCpuDispatcherCreate(8));
-sceneDesc.setFilterShader(PxTopLevelFunctions.DefaultFilterShader());
-
-// Create the PxCudaContextManager
-PxCudaContextManagerDesc desc = new PxCudaContextManagerDesc();
-desc.setInteropMode(PxCudaInteropModeEnum.NO_INTEROP);
-PxCudaContextManager cudaMgr = PxCudaTopLevelFunctions.CreateCudaContextManager(foundation, desc);
-
-// Check if CUDA context is valid / CUDA support is available
-if (cudaMgr != null && cudaMgr.contextIsValid()) {
-    // enable CUDA!
-    sceneDesc.setCudaContextManager(cudaMgr);
-    sceneDesc.getFlags().set(PxSceneFlagEnum.eENABLE_GPU_DYNAMICS);
-    sceneDesc.setBroadPhaseType(PxBroadPhaseTypeEnum.eGPU);
-    
-    // optionally fine tune amount of allocated CUDA memory
-    // PxgDynamicsMemoryConfig memCfg = new PxgDynamicsMemoryConfig();
-    // memCfg.setStuff...
-    // sceneDesc.setGpuDynamicsConfig(memCfg);
-} else {
-    System.err.println("No CUDA support!");
-}
-
-// Create scene as usual
-PxScene scene = physics.createScene(sceneDesc);
-```
-
-CUDA comes with some additional overhead (a lot of data has to be copied around between CPU and GPU). For
-smaller scenes this overhead seems to outweigh the benefits and physics computation might actually be slower than with
-CPU only.
-I wrote a simple [CudaTest](physx-jni/src/test/java/de/fabmax/physxjni/CudaTest.java), which runs a few simulations
-with an increasing number of bodies. According to this the break even point is around 5k bodies. At 20k boxes the CUDA
-version runs about 3 times faster than the CPU Version (with an RTX 2080 / Ryzen 2700X). The results may be different
-when using other body shapes (the test uses boxes), joints, etc.
+Personally, I never really used the CUDA functions because the strict requirement to have an Nvidia GPU was to much
+of a limitation for me anyway (and, for typical scenes, the performance benefits where not even that great). I
+therefore opted to remove CUDA support for now. If you absolutely need CUDA you can still use the last version with
+working CUDA support which is [`v2.5.1`](https://github.com/fabmax/physx-jni/releases/tag/v2.5.1). And it might be
+possible that I bring back CUDA support some time in the future.
 
 ## Building
 You can build the bindings yourself. However, this requires `cmake`, `python3` and the C++ compiler appropriate to your
