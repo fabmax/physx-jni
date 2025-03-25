@@ -27,7 +27,6 @@ enum PxConvexFlagEnum {
     "PxConvexFlagEnum::eDISABLE_MESH_VALIDATION",
     "PxConvexFlagEnum::ePLANE_SHIFTING",
     "PxConvexFlagEnum::eFAST_INERTIA_COMPUTATION",
-    "PxConvexFlagEnum::eGPU_COMPATIBLE",
     "PxConvexFlagEnum::eSHIFT_VERTICES"
 };
 

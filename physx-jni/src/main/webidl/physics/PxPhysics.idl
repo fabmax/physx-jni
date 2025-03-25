@@ -237,8 +237,6 @@ enum PxForceModeEnum {
 
 enum PxFrictionTypeEnum {
     "PxFrictionTypeEnum::ePATCH",
-    "PxFrictionTypeEnum::eONE_DIRECTIONAL",
-    "PxFrictionTypeEnum::eTWO_DIRECTIONAL",
     "PxFrictionTypeEnum::eFRICTION_COUNT"
 };
 
@@ -265,7 +263,7 @@ PxMaterial implements PxBaseMaterial;
 enum PxMaterialFlagEnum {
     "PxMaterialFlagEnum::eDISABLE_FRICTION",
     "PxMaterialFlagEnum::eDISABLE_STRONG_FRICTION",
-    "PxMaterialFlagEnum::eIMPROVED_PATCH_FRICTION"
+    "PxMaterialFlagEnum::eCOMPLIANT_ACCELERATION_SPRING"
 };
 
 [Prefix="physx::", StackAllocatable]

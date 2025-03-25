@@ -40,8 +40,6 @@ interface PxMaterialPtr { };
 
 interface PxMaterialConstPtr { };
 
-interface PxVehicleWheelsPtr { };
-
 interface PxShapePtr { };
 
 interface NativeArrayHelpers {
