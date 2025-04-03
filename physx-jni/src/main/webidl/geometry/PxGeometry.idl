@@ -343,7 +343,7 @@ interface PxTetrahedronMeshDesc {
     void PxTetrahedronMeshDesc();
     void PxTetrahedronMeshDesc([Ref] PxArray_PxVec3 meshVertices, [Ref] PxArray_PxU32 meshTetIndices, optional PxTetrahedronMeshFormatEnum meshFormat, optional unsigned short numberOfTetsPerHexElement);
     boolean isValid();
-    [Value] attribute PxTypedStridedData_PxU16 materialIndices;
+    [Value] attribute PxTypedBoundedData_PxU16 materialIndices;
     [Value] attribute PxBoundedData points;
     [Value] attribute PxBoundedData tetrahedrons;
     [Value] attribute PxMeshFlags flags;
