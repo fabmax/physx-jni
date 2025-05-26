@@ -8,4 +8,4 @@ junit-bom = { module = "org.junit:junit-bom", version.ref = "junitBom" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 
 [plugins]
-webidl = { id = "de.fabmax.webidl-util", version = "0.10.0" }
+webidl = { id = "de.fabmax.webidl-util", version = "0.10.1" }
