@@ -460,6 +460,28 @@ interface PxPvdInstrumentationFlags {
     void clear(PxPvdInstrumentationFlagEnum flag);
 };
 
+[Prefix="physx::", NoDelete]
+interface PxPvdSceneClient {
+    void setScenePvdFlag(PxPvdSceneFlagEnum flag, boolean value);
+    void setScenePvdFlags([Ref] PxPvdSceneFlags flags);
+    [Value] PxPvdSceneFlags getScenePvdFlags();
+    void updateCamera(DOMString name, [Const, Ref] PxVec3 origin, [Const, Ref] PxVec3 up, [Const, Ref] PxVec3 target);
+};
+
+enum PxPvdSceneFlagEnum {
+    "PxPvdSceneFlagEnum::eTRANSMIT_CONTACTS",
+    "PxPvdSceneFlagEnum::eTRANSMIT_SCENEQUERIES",
+    "PxPvdSceneFlagEnum::eTRANSMIT_CONSTRAINTS",
+};
+
+[Prefix="physx::"]
+interface PxPvdSceneFlags {
+    void PxPvdSceneFlags(octet flags);
+    boolean isSet(PxPvdSceneFlagEnum flag);
+    void raise(PxPvdSceneFlagEnum flag);
+    void clear(PxPvdSceneFlagEnum flag);
+};
+
 [Prefix="physx::"]
 interface PxOmniPvd {
     [Platforms="windows;linux;macos"] OmniPvdWriter getWriter();

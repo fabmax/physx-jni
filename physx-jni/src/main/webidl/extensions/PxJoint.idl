@@ -137,6 +137,10 @@ interface PxJoint {
     float getInvMassScale0();
     void setInvMassScale1(float invMassScale);
     float getInvMassScale1();
+    void setInvInertiaScale0(float invInertiaScale);
+    float getInvInertiaScale0();
+    void setInvInertiaScale1(float invInertiaScale);
+    float getInvInertiaScale1();
     PxConstraint getConstraint();
     void setName([Const] DOMString name);
     [Const] DOMString getName();

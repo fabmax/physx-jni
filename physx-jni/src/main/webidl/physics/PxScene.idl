@@ -131,6 +131,7 @@ interface PxScene {
     [Value] PxSceneLimits getLimits();
     [Ref] PxPhysics getPhysics();
     unsigned long getTimestamp();
+    PxPvdSceneClient getScenePvdClient();
 
     attribute VoidPtr userData;
 };
