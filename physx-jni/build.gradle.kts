@@ -144,10 +144,14 @@ publishing {
 
     repositories {
         maven {
-            url = if (version.toString().endsWith("-SNAPSHOT")) {
-                uri("https://central.sonatype.com/repository/maven-snapshots/")
+            if (version.toString().endsWith("-SNAPSHOT")) {
+                url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+                credentials {
+                    username = System.getenv("MAVEN_USERNAME")
+                    password = System.getenv("MAVEN_PASSWORD")
+                }
             } else {
-                uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+                url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
             }
         }
     }

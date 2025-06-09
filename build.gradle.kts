@@ -71,15 +71,17 @@ tasks.register("deleteNativeLibs") {
     }
 }
 
-nexusPublishing {
-    repositories {
+if (!version.toString().endsWith("-SNAPSHOT")) {
+    nexusPublishing {
         repositories {
-            sonatype {
-                nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
-                snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+            repositories {
+                sonatype {
+                    nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+                    snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
 
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
+                    username = System.getenv("MAVEN_USERNAME")
+                    password = System.getenv("MAVEN_PASSWORD")
+                }
             }
         }
     }
