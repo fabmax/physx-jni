@@ -3,7 +3,7 @@ import java.io.File
 import java.util.*
 
 class LocalProperties private constructor(file: File) : Properties() {
-    val isRelease: Boolean get() = getProperty("physxjni.isRelease", "true").toBoolean()
+    val publishUnsigned: Boolean get() = getProperty("physxjni.publishUnsigned", "false").toBoolean()
 
     init {
         if (file.exists()) {

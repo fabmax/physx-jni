@@ -117,23 +117,18 @@ publishing {
         }
     }
 
-    val props = LocalProperties.get(project)
     repositories {
         maven {
-            name = "ossrh"
             url = if (version.toString().endsWith("-SNAPSHOT")) {
-                uri("https://oss.sonatype.org/content/repositories/snapshots")
+                uri("https://central.sonatype.com/repository/maven-snapshots/")
             } else {
-                uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-            }
-            credentials {
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
+                uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
             }
         }
     }
 
-    if (props.isRelease) {
+    val props = LocalProperties.get(project)
+    if (!props.publishUnsigned) {
         signing {
             publications.forEach {
                 val privateKey = props["GPG_PRIVATE_KEY"]

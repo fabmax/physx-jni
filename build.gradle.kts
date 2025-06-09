@@ -1,6 +1,10 @@
 import org.gradle.internal.os.OperatingSystem
 import org.gradle.jvm.tasks.Jar
 
+plugins {
+    alias(libs.plugins.nexusPublish)
+}
+
 subprojects {
     group = "de.fabmax"
     version = "2.6.1-SNAPSHOT"
@@ -64,5 +68,19 @@ tasks.register("deleteNativeLibs") {
         delete("$projectDir/physx-jni-natives-macos-arm64/src/main/resources")
         delete("$projectDir/physx-jni-natives-windows/src/main/resources")
         delete("$projectDir/physx-jni-natives-windows-cuda/src/main/resources")
+    }
+}
+
+nexusPublishing {
+    repositories {
+        repositories {
+            sonatype {
+                nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+                snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
+        }
     }
 }
