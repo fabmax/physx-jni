@@ -145,7 +145,7 @@ jobs:
       - name: Build JNI bindings
         run: ./gradlew build
       - name: Publish JNI bindings
-        run: ./gradlew :physx-jni:publish :physx-jni-android:publish
+        run: ./gradlew :physx-jni:publish
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
