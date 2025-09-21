@@ -1,14 +1,14 @@
 # physx-jni
 
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Maven Central](https://img.shields.io/maven-central/v/de.fabmax/physx-jni.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22de.fabmax%22%20AND%20a:%22physx-jni%22)
+[![Maven Central](https://img.shields.io/maven-central/v/de.fabmax/physx-jni.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/de.fabmax/physx-jni)
 ![Build](https://github.com/fabmax/physx-jni/workflows/Build/badge.svg)
 
-Java JNI bindings for Nvidia [PhysX 5.6.0](https://github.com/NVIDIA-Omniverse/PhysX).
+Java JNI bindings for Nvidia [PhysX 5.6.1](https://github.com/NVIDIA-Omniverse/PhysX).
 
 The generated bindings contain most of the original documentation converted to javadoc. For further reading
 there is also the official
-[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.6.0/index.html).
+[PhysX documentation](https://nvidia-omniverse.github.io/PhysX/physx/5.6.1/index.html).
 
 ## How to use
 The library is published on maven central, so you can easily add this to your dependencies:
@@ -17,13 +17,13 @@ The library is published on maven central, so you can easily add this to your de
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:2.6.0")
+    implementation("de.fabmax:physx-jni:2.6.1")
     
     // native libraries - you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:2.6.0:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:2.6.0:natives-linux")
-    runtimeOnly("de.fabmax:physx-jni:2.6.0:natives-macos")
-    runtimeOnly("de.fabmax:physx-jni:2.6.0:natives-macos-arm64")
+    runtimeOnly("de.fabmax:physx-jni:2.6.1:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.6.1:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.6.1:natives-macos")
+    runtimeOnly("de.fabmax:physx-jni:2.6.1:natives-macos-arm64")
 }
 ```
 
@@ -32,7 +32,7 @@ The Android version of the library is packaged as a single `aar` archive contain
 and native libs:
 ```
 dependencies {
-    implementation("de.fabmax:physx-jni-android:2.6.0")
+    implementation("de.fabmax:physx-jni-android:2.6.1")
 }
 ```
 
