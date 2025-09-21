@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Loader {
 
-    private static final String version = "2.6.1";
+    private static final String version = "2.6.1-SNAPSHOT";
 
     private static final AtomicBoolean isLoaded = new AtomicBoolean(false);
 

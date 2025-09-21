@@ -1,15 +1,13 @@
 plugins {
     alias(libs.plugins.webidl)
-    `maven-publish`
-    signing
+    alias(libs.plugins.mavenPublish)
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
     withSourcesJar()
-    withJavadocJar()
 
     sourceSets {
         main {
@@ -97,74 +95,58 @@ dependencies {
     testRuntimeOnly("${libs.lwjgl.core.get()}:$lwjglPlatform")
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-
-            artifact(project(":physx-jni-natives-windows").tasks["jar"]).apply {
-                classifier = "natives-windows"
-            }
-            artifact(project(":physx-jni-natives-linux").tasks["jar"]).apply {
-                classifier = "natives-linux"
-            }
-            artifact(project(":physx-jni-natives-macos").tasks["jar"]).apply {
-                classifier = "natives-macos"
-            }
-            artifact(project(":physx-jni-natives-macos-arm64").tasks["jar"]).apply {
-                classifier = "natives-macos-arm64"
-            }
-
-            pom {
-                name.set("physx-jni")
-                description.set("JNI bindings for Nvidia PhysX.")
-                url.set("https://github.com/fabmax/physx-jni")
-                developers {
-                    developer {
-                        name.set("Max Thiele")
-                        email.set("fabmax.thiele@gmail.com")
-                        organization.set("github")
-                        organizationUrl.set("https://github.com/fabmax")
-                    }
-                }
-                licenses {
-                    license {
-                        name.set("MIT License")
-                        url.set("https://opensource.org/licenses/MIT")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git://github.com/fabmax/physx-jni.git")
-                    developerConnection.set("scm:git:ssh://github.com:fabmax/physx-jni.git")
-                    url.set("https://github.com/fabmax/physx-jni/tree/main")
-                }
-            }
-        }
+mavenPublishing {
+    publishToMavenCentral()
+    if (!version.toString().endsWith("-SNAPSHOT")) {
+        signAllPublications()
     }
 
-    repositories {
-        maven {
-            if (version.toString().endsWith("-SNAPSHOT")) {
-                url = uri("https://central.sonatype.com/repository/maven-snapshots/")
-                credentials {
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
-                }
-            } else {
-                url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+    coordinates(group.toString(), name, version.toString())
+
+    pom {
+        name.set("physx-jni")
+        description.set("JNI bindings for Nvidia PhysX.")
+        inceptionYear.set("2020")
+        url.set("https://github.com/fabmax/physx-jni")
+        licenses {
+            license {
+                name.set("MIT License")
+                url.set("https://opensource.org/licenses/MIT")
+                distribution.set("https://opensource.org/licenses/MIT")
             }
         }
-    }
-
-    val props = LocalProperties.get(project)
-    if (!props.publishUnsigned) {
-        signing {
-            publications.forEach {
-                val privateKey = props["GPG_PRIVATE_KEY"]
-                val password = props["GPG_PASSWORD"]
-                useInMemoryPgpKeys(privateKey, password)
-                sign(it)
+        developers {
+            developer {
+                id.set("fabmax")
+                name.set("Max Thiele")
+                url.set("https://github.com/fabmax/")
             }
+        }
+        scm {
+            url.set("https://github.com/fabmax/physx-jni/")
+            connection.set("scm:git:git://github.com/fabmax/physx-jni.git")
+            developerConnection.set("scm:git:ssh://git@github.com/fabmax/physx-jni.git")
+        }
+    }
+}
+
+afterEvaluate {
+    tasks["generateMetadataFileForMavenPublication"].dependsOn("plainJavadocJar")
+
+    publishing.publications["maven"].apply {
+        this as MavenPublication
+
+        artifact(project(":physx-jni-natives-windows").tasks["jar"]).apply {
+            classifier = "natives-windows"
+        }
+        artifact(project(":physx-jni-natives-linux").tasks["jar"]).apply {
+            classifier = "natives-linux"
+        }
+        artifact(project(":physx-jni-natives-macos").tasks["jar"]).apply {
+            classifier = "natives-macos"
+        }
+        artifact(project(":physx-jni-natives-macos-arm64").tasks["jar"]).apply {
+            classifier = "natives-macos-arm64"
         }
     }
 }

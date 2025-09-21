@@ -2,7 +2,8 @@ import org.gradle.internal.os.OperatingSystem
 import org.gradle.jvm.tasks.Jar
 
 plugins {
-    alias(libs.plugins.nexusPublish)
+    id("com.android.library") version "8.11.2" apply false
+    alias(libs.plugins.mavenPublish) apply false
 }
 
 subprojects {
@@ -68,21 +69,5 @@ tasks.register("deleteNativeLibs") {
         delete("$projectDir/physx-jni-natives-macos-arm64/src/main/resources")
         delete("$projectDir/physx-jni-natives-windows/src/main/resources")
         delete("$projectDir/physx-jni-natives-windows-cuda/src/main/resources")
-    }
-}
-
-if (!version.toString().endsWith("-SNAPSHOT")) {
-    nexusPublishing {
-        repositories {
-            repositories {
-                sonatype {
-                    nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
-                    snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
-
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
-                }
-            }
-        }
     }
 }

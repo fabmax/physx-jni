@@ -1,7 +1,10 @@
-name: Snapshot release
+name: Publish
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - '*'
 
 jobs:
 
@@ -116,8 +119,8 @@ jobs:
             */src/main/resources/de/fabmax/physxjni/macosarm/*.dylib.sha1
           compression-level: 0
 
-  publish_snapshot:
-    name: Build and publish Java and Android snapshot libs
+  publish:
+    name: Build and publish Java and Android libs
     runs-on: ubuntu-latest
     needs: [ linux, macos, windows ]
     environment: publish
@@ -145,9 +148,22 @@ jobs:
       - name: Build JNI bindings
         run: ./gradlew build
       - name: Publish JNI bindings
-        run: ./gradlew :physx-jni:publish
+        run: ./gradlew :physx-jni:publishToMavenCentral :physx-jni-android:publishToMavenCentral --no-configuration-cache
         env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSWORD }}
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifacts: >-
+            physx-jni/build/libs/*.jar,
+            physx-jni-natives-linux/build/libs/physx-jni-natives-linux-?.?.?.jar,
+            physx-jni-natives-windows/build/libs/physx-jni-natives-windows-?.?.?.jar,
+            physx-jni-natives-macos/build/libs/physx-jni-natives-macos-?.?.?.jar,
+            physx-jni-natives-macos-arm64/build/libs/physx-jni-natives-macos-arm64-?.?.?.jar,
+            physx-jni-android/build/outputs/aar/physx-jni-android-release.aar
+          draft: true
+          updateOnlyUnreleased: true

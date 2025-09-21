@@ -1,8 +1,7 @@
 plugins {
-    id("com.android.library") version "8.1.2"
+    id("com.android.library") version "8.11.2"
     alias(libs.plugins.webidl)
-    `maven-publish`
-    signing
+    alias(libs.plugins.mavenPublish)
 }
 
 android {
@@ -15,12 +14,6 @@ android {
 
     sourceSets.getByName("main") {
         java.srcDir("src/main/generated")
-    }
-
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
     }
 }
 
@@ -86,66 +79,37 @@ webidl {
     }
 }
 
-publishing {
-    publications {
-        register<MavenPublication>("release") {
-            groupId = "de.fabmax"
-            artifactId = "physx-jni-android"
-
-            afterEvaluate {
-                from(components["release"])
-            }
-
-            pom {
-                name.set("physx-jni-android")
-                description.set("JNI bindings for Nvidia PhysX on Android.")
-                url.set("https://github.com/fabmax/physx-jni")
-                developers {
-                    developer {
-                        name.set("Max Thiele")
-                        email.set("fabmax.thiele@gmail.com")
-                        organization.set("github")
-                        organizationUrl.set("https://github.com/fabmax")
-                    }
-                }
-                licenses {
-                    license {
-                        name.set("MIT License")
-                        url.set("https://opensource.org/licenses/MIT")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git://github.com/fabmax/physx-jni.git")
-                    developerConnection.set("scm:git:ssh://github.com:fabmax/physx-jni.git")
-                    url.set("https://github.com/fabmax/physx-jni/tree/main")
-                }
-            }
-        }
+mavenPublishing {
+    publishToMavenCentral()
+    if (!version.toString().endsWith("-SNAPSHOT")) {
+        signAllPublications()
     }
 
-    repositories {
-        maven {
-            if (version.toString().endsWith("-SNAPSHOT")) {
-                url = uri("https://central.sonatype.com/repository/maven-snapshots/")
-                credentials {
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
-                }
-            } else {
-                url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+    coordinates(group.toString(), name, version.toString())
+
+    pom {
+        name.set("physx-jni-android")
+        description.set("JNI bindings for Nvidia PhysX on Android.")
+        inceptionYear.set("2020")
+        url.set("https://github.com/fabmax/physx-jni")
+        licenses {
+            license {
+                name.set("MIT License")
+                url.set("https://opensource.org/licenses/MIT")
+                distribution.set("https://opensource.org/licenses/MIT")
             }
         }
-    }
-
-    val props = LocalProperties.get(project)
-    if (!props.publishUnsigned) {
-        signing {
-            publications.forEach {
-                val privateKey = props["GPG_PRIVATE_KEY"]
-                val password = props["GPG_PASSWORD"]
-                useInMemoryPgpKeys(privateKey, password)
-                sign(it)
+        developers {
+            developer {
+                id.set("fabmax")
+                name.set("Max Thiele")
+                url.set("https://github.com/fabmax/")
             }
+        }
+        scm {
+            url.set("https://github.com/fabmax/physx-jni/")
+            connection.set("scm:git:git://github.com/fabmax/physx-jni.git")
+            developerConnection.set("scm:git:ssh://git@github.com/fabmax/physx-jni.git")
         }
     }
 }
