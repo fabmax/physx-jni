@@ -23,25 +23,27 @@ public abstract class NativeLib {
 
         // 1st: make sure all libs are available in system temp dir
         List<String> libFiles = new ArrayList<>();
-        for (String libResource : getLibResourceNames()) {
-            File libTmpFile = new File(tempLibDir, new File(libResource).getName());
-
-            if (loadFromResources) {
-                InputStream libIn = getClass().getResourceAsStream(libResource);
-                if (libIn == null) {
-                    throw new IllegalStateException("Failed loading " + libResource + " from resources");
-                }
-                if (libTmpFile.exists() && !checkHash(libResource, libTmpFile)) {
-                    if (!libTmpFile.delete()) {
-                        throw new IllegalStateException("Failed deleting existing native lib file " + libTmpFile);
+        if (Loader.libraryPaths != null && !Loader.libraryPaths.isEmpty()) {
+            libFiles.addAll(Loader.libraryPaths);
+        } else {
+            for (String libResource : getLibResourceNames()) {
+                File libTmpFile = new File(tempLibDir, new File(libResource).getName());
+                if (loadFromResources) {
+                    InputStream libIn = getClass().getResourceAsStream(libResource);
+                    if (libIn == null) {
+                        throw new IllegalStateException("Failed loading " + libResource + " from resources");
+                    }
+                    if (libTmpFile.exists() && !checkHash(libResource, libTmpFile)) {
+                        if (!libTmpFile.delete()) {
+                            throw new IllegalStateException("Failed deleting existing native lib file " + libTmpFile);
+                        }
+                    }
+                    if (!libTmpFile.exists()) {
+                        Files.copy(libIn, libTmpFile.toPath());
                     }
                 }
-                if (!libTmpFile.exists()) {
-                    Files.copy(libIn, libTmpFile.toPath());
-                }
+                libFiles.add(libTmpFile.getAbsolutePath());
             }
-
-            libFiles.add(libTmpFile.getAbsolutePath());
         }
 
         // 2nd: load libs

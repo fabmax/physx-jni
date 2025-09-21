@@ -2,13 +2,27 @@ package de.fabmax.physxjni;
 
 import physx.PlatformChecks;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Loader {
 
-    private static final String version = "2.6.1-SNAPSHOT";
+    private static final String version = "2.6.1";
 
     private static final AtomicBoolean isLoaded = new AtomicBoolean(false);
+
+    static List<String> libraryPaths = null;
+
+    /**
+     * Forces the library loaded to load the native libraries at the given paths instead of the builtin ones.
+     * Paths must be absolute. Must be called before any PhysX function is called.
+     */
+    public static void setLoadLibraryPaths(List<String> paths) {
+        if (isLoaded.get()) {
+            throw new IllegalStateException("Library path cannot be set after library is loaded");
+        }
+        libraryPaths = paths;
+    }
 
     public static void load() {
         if (!isLoaded.getAndSet(true)) {
