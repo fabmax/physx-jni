@@ -44,6 +44,13 @@ public class SceneQueryTest {
                 Assertions.assertEquals((i+1) * 5, queryResult.getNbAnyHits());
             }
 
+            queryResult.clear();
+
+            PxVec3 pos = PxVec3.createAt(mem, MemoryStack::nmalloc, 100f, 0f, 0f);
+            queryPose.setP(pos);
+            scene.overlap(querySphere, queryPose, queryResult);
+            Assertions.assertEquals(0, queryResult.getNbAnyHits());
+
             scene.release();
             queryResult.destroy();
         }
