@@ -69,12 +69,12 @@ webidl {
     modelName.set("PhysXJni")
 
     generateJni {
-        javaClassesOutputDirectory.set(file("$projectDir/src/main/generated/physx"))
+        javaClassesOutputDirectory.set(file("$projectDir/src/main/generated/physxandroid"))
         nativeGlueCodeOutputFile.set(file("${rootDir}/PhysX/physx/source/webidlbindings/src/jni/PhysXJniGlue.h"))
 
         nativePlatform.set("android")
-        packagePrefix.set("physx")
-        onClassLoadStatement.set("de.fabmax.physxjni.Loader.load();")
+        packagePrefix.set("physxandroid")
+        onClassLoadStatement.set("de.fabmax.physxandroid.Loader.load();")
         nativeIncludeDir.set(file("$rootDir/PhysX/physx/include"))
     }
 }

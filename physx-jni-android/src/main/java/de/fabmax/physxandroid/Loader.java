@@ -1,7 +1,7 @@
-package de.fabmax.physxjni;
+package de.fabmax.physxandroid;
 
 import android.util.Log;
-import physx.PlatformChecks;
+import physxandroid.PlatformChecks;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
