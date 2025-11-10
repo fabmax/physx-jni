@@ -17,13 +17,13 @@ The library is published on maven central, so you can easily add this to your de
 ```
 dependencies {
     // java bindings
-    implementation("de.fabmax:physx-jni:2.6.1")
+    implementation("de.fabmax:physx-jni:2.7.0")
     
     // native libraries - you can add the one matching your system or all
-    runtimeOnly("de.fabmax:physx-jni:2.6.1:natives-windows")
-    runtimeOnly("de.fabmax:physx-jni:2.6.1:natives-linux")
-    runtimeOnly("de.fabmax:physx-jni:2.6.1:natives-macos")
-    runtimeOnly("de.fabmax:physx-jni:2.6.1:natives-macos-arm64")
+    runtimeOnly("de.fabmax:physx-jni:2.7.0:natives-windows")
+    runtimeOnly("de.fabmax:physx-jni:2.7.0:natives-linux")
+    runtimeOnly("de.fabmax:physx-jni:2.7.0:natives-macos")
+    runtimeOnly("de.fabmax:physx-jni:2.7.0:natives-macos-arm64")
 }
 ```
 
@@ -32,7 +32,7 @@ The Android version of the library is packaged as a single `aar` archive contain
 and native libs:
 ```
 dependencies {
-    implementation("de.fabmax:physx-jni-android:2.6.1")
+    implementation("de.fabmax:physx-jni-android:2.7.0")
 }
 ```
 
@@ -191,7 +191,7 @@ git submodule update --init
 # Optional, but might help in case build fails
 ./gradlew generateNativeProject
 
-# Build native PhysX (requires Visual Studio 2022 (Community) on Windows, clang on Linux, and Xcode on MacOS)
+# Build native PhysX (requires Visual Studio 2022 (Community) on Windows, clang on Linux, and Xcode on macOS)
 ./gradlew buildNativeProject
 
 # Generate Java/JNI code and build library
