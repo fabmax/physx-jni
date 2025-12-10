@@ -11,7 +11,7 @@ of the **MIT License** which is available at https://opensource.org/licenses/MIT
 
 ### NVIDIA PhysX
 
-This software includes a binary distribution of [NVIDIA PhysX 5.3.1](https://github.com/NVIDIA-Omniverse/PhysX).
+This software includes a binary distribution of [NVIDIA PhysX 5.6.1](https://github.com/NVIDIA-Omniverse/PhysX).
 
 NVIDIA PhysX comes under the following license:
 
