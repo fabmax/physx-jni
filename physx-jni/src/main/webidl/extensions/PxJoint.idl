@@ -2,6 +2,12 @@
  * [package=extensions]
  ****************************************/
 
+enum PxD6AngularDriveConfigEnum {
+    "PxD6AngularDriveConfigEnum::eSWING_TWIST",
+    "PxD6AngularDriveConfigEnum::eSLERP",
+    "PxD6AngularDriveConfigEnum::eLEGACY"
+};
+
 enum PxD6AxisEnum {
     "PxD6AxisEnum::eX",
     "PxD6AxisEnum::eY",
@@ -43,6 +49,8 @@ interface PxD6Joint {
     [Value] PxTransform getDrivePosition();
     void setDriveVelocity([Const, Ref] PxVec3 linear, [Const, Ref] PxVec3 angular);
     void getDriveVelocity([Ref] PxVec3 linear, [Ref] PxVec3 angular);
+    void setAngularDriveConfig(PxD6AngularDriveConfigEnum config);
+    PxD6AngularDriveConfigEnum getAngularDriveConfig();
 };
 PxD6Joint implements PxJoint;
 
