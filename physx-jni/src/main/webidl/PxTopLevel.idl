@@ -50,4 +50,7 @@ interface PxTopLevelFunctions {
     static void ScaleRigidActor([Ref] PxRigidActor actor, float scale, boolean scaleMassProps);
 
     static void IntegrateTransform([Const, Ref] PxTransform curTrans, [Const, Ref] PxVec3 linvel, [Const, Ref] PxVec3 angvel, float timeStep, [Ref] PxTransform result);
+
+
+    [Value] static PxDim3 GetTriangleMeshSDFDimensions([Const, Ref] PxTriangleMesh mesh);
 };

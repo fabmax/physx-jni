@@ -23,7 +23,9 @@ enum PxD6DriveEnum {
     "PxD6DriveEnum::eZ",
     "PxD6DriveEnum::eSWING",
     "PxD6DriveEnum::eTWIST",
-    "PxD6DriveEnum::eSLERP"
+    "PxD6DriveEnum::eSLERP",
+    "PxD6DriveEnum::eSWING1",
+    "PxD6DriveEnum::eSWING2"
 };
 
 [Prefix="physx::"]

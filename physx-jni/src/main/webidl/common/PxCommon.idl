@@ -97,6 +97,14 @@ interface PxDefaultErrorCallback {
 PxDefaultErrorCallback implements PxErrorCallback;
 
 [Prefix="physx::"]
+interface PxDim3 {
+    void PxDim3();
+    attribute unsigned long x;
+    attribute unsigned long y;
+    attribute unsigned long z;
+};
+
+[Prefix="physx::"]
 interface PxErrorCallback {
     void reportError(PxErrorCodeEnum code, [Const] DOMString message, [Const] DOMString file, long line);
 };

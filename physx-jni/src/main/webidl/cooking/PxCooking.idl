@@ -83,7 +83,8 @@ enum PxMeshPreprocessingFlagEnum {
     "PxMeshPreprocessingFlagEnum::eWELD_VERTICES",
     "PxMeshPreprocessingFlagEnum::eDISABLE_CLEAN_MESH",
     "PxMeshPreprocessingFlagEnum::eDISABLE_ACTIVE_EDGES_PRECOMPUTE",
-    "PxMeshPreprocessingFlagEnum::eFORCE_32BIT_INDICES"
+    "PxMeshPreprocessingFlagEnum::eFORCE_32BIT_INDICES",
+    "PxMeshPreprocessingFlagEnum::eENABLE_INERTIA"
 };
 
 [Prefix="physx::", StackAllocatable]
@@ -110,10 +111,38 @@ enum PxMeshMidPhaseEnum {
     "PxMeshMidPhaseEnum::eBVH34"
 };
 
+[Prefix="physx::"]
+interface PxSDFDesc {
+    void PxSDFDesc();
+    [Value] attribute PxBoundedData sdf;
+    [Value] attribute PxDim3 dims;
+    [Value] attribute PxVec3 meshLower;
+    attribute float spacing;
+    attribute unsigned long subgridSize;
+    attribute PxSdfBitsPerSubgridPixelEnum bitsPerSubgridPixel;
+    [Value] attribute PxDim3 sdfSubgrids3DTexBlockDim;
+    [Value] attribute PxBoundedData sdfSubgrids;
+    [Value] attribute PxBoundedData sdfStartSlots;
+    attribute float subgridsMinSdfValue;
+    attribute float subgridsMaxSdfValue;
+    [Value] attribute PxBounds3 sdfBounds;
+    attribute float narrowBandThicknessRelativeToSdfBoundsDiagonal;
+    attribute unsigned long numThreadsForSdfConstruction;
+    boolean isValid();
+};
+
+enum PxSdfBitsPerSubgridPixelEnum {
+    "PxSdfBitsPerSubgridPixelEnum::e8_BIT_PER_PIXEL",
+    "PxSdfBitsPerSubgridPixelEnum::e16_BIT_PER_PIXEL",
+    "PxSdfBitsPerSubgridPixelEnum::e32_BIT_PER_PIXEL"
+};
+
+
 [Prefix="physx::", StackAllocatable]
 interface PxTriangleMeshDesc {
     void PxTriangleMeshDesc();
 
     [Const, Value] attribute PxTypedBoundedData_PxU16Const materialIndices;
+    attribute PxSDFDesc sdfDesc;
 };
 PxTriangleMeshDesc implements PxSimpleTriangleMesh;

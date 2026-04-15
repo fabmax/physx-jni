@@ -485,6 +485,8 @@ interface PxTriangleMesh {
     [Const, Value] PxU32ConstPtr getTrianglesRemap();
     unsigned short getTriangleMaterialIndex(unsigned long triangleIndex);
     [Value] PxBounds3 getLocalBounds();
+    [Const, Value] PxRealConstPtr getSDF();
+    void setPreferSDFProjection(boolean prefer);
 };
 PxTriangleMesh implements PxRefCounted;
 
