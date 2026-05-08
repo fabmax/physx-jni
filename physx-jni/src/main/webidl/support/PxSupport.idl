@@ -5,8 +5,25 @@
 interface SupportFunctions {
     static PxShape PxActor_getShape([Ref] PxRigidActor actor, long index);
     [Ref] static PxArray_PxActorPtr PxScene_getActiveActors(PxScene scene);
+    static unsigned long PxScene_getActors(PxScene scene,[Ref] PxActorTypeFlags types,
+    [Ref]PxArray_PxActorPtr buffer,unsigned long bufferSize,unsigned long startIndex);
+    static unsigned long PxScene_getArticulations(PxScene scene,
+    [Ref]PxArray_PxArticulationReducedCoordinatePtr buffer,unsigned long bufferSize,unsigned long startIndex);
+    static unsigned long PxArticulationReducedCoordinate_getLinks(PxArticulationReducedCoordinate articulation,
+    [Ref]PxArray_PxArticulationLinkPtr buffer,unsigned long bufferSize,unsigned long startIndex);
     static unsigned long PxArticulationReducedCoordinate_getMinSolverPositionIterations(PxArticulationReducedCoordinate articulation);
     static unsigned long PxArticulationReducedCoordinate_getMinSolverVelocityIterations(PxArticulationReducedCoordinate articulation);
+};
+
+interface PxArray_PxHullPolygon {
+    void PxArray_PxHullPolygon();
+    void PxArray_PxHullPolygon(unsigned long size);
+    [Ref] PxHullPolygon get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxHullPolygon value);
+    PxHullPolygon begin();
+    unsigned long size();
+    void pushBack([Ref] PxHullPolygon value);
+    void clear();
 };
 
 interface PxU8Ptr { };
@@ -14,17 +31,23 @@ PxU8Ptr implements PxU8ConstPtr;
 
 interface PxU8ConstPtr { };
 
-interface PxU16Ptr { };
+interface PxU16Ptr {
+    void PxU16Ptr();
+};
 PxU16Ptr implements PxU16ConstPtr;
 
 interface PxU16ConstPtr { };
 
-interface PxU32Ptr { };
+interface PxU32Ptr {
+    void PxU32Ptr();
+};
 PxU32Ptr implements PxU32ConstPtr;
 
 interface PxU32ConstPtr { };
 
-interface PxI32Ptr { };
+interface PxI32Ptr {
+    void PxI32Ptr();
+};
 PxI32Ptr implements PxI32ConstPtr;
 
 interface PxI32ConstPtr { };
@@ -35,6 +58,10 @@ PxRealPtr implements PxRealConstPtr;
 interface PxRealConstPtr { };
 
 interface PxActorPtr { };
+
+interface PxArticulationReducedCoordinatePtr { };
+
+interface PxArticulationLinkPtr { };
 
 interface PxMaterialPtr { };
 
@@ -48,11 +75,13 @@ interface NativeArrayHelpers {
     static octet getU8At([Ref] PxU8ConstPtr base, long index);
     static unsigned short getU16At([Ref] PxU16ConstPtr base, long index);
     static unsigned long getU32At([Ref] PxU32ConstPtr base, long index);
+    static long getI32At ([Ref] PxI32ConstPtr base, long index);
     static float getRealAt([Ref] PxRealPtr base, long index);
 
     static void setU8At(VoidPtr base, long index, octet value);
     static void setU16At(VoidPtr base, long index, unsigned short value);
     static void setU32At(VoidPtr base, long index, unsigned long value);
+    static void setI32At(VoidPtr base, long index, long value);
     static void setRealAt(VoidPtr base, long index, float value);
 
     [Value] static PxU8Ptr voidToU8Ptr(VoidPtr voidPtr);
@@ -184,6 +213,30 @@ interface PxArray_PxActorPtr {
     PxActorPtr begin();
     unsigned long size();
     void pushBack(PxActor value);
+    void clear();
+};
+
+[StackAllocatable]
+interface PxArray_PxArticulationReducedCoordinatePtr {
+    void PxArray_PxArticulationReducedCoordinatePtr();
+    void PxArray_PxArticulationReducedCoordinatePtr(unsigned long size);
+    PxArticulationReducedCoordinate get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxArticulationReducedCoordinatePtr value);
+    PxArticulationReducedCoordinatePtr begin();
+    unsigned long size();
+    void pushBack(PxArticulationReducedCoordinate value);
+    void clear();
+};
+
+[StackAllocatable]
+interface PxArray_PxArticulationLinkPtr {
+    void PxArray_PxArticulationLinkPtr();
+    void PxArray_PxArticulationLinkPtr(unsigned long size);
+    PxArticulationLink get(unsigned long index);
+    void set(unsigned long index, [Const, Ref] PxArticulationLinkPtr value);
+    PxArticulationLinkPtr begin();
+    unsigned long size();
+    void pushBack(PxArticulationLink value);
     void clear();
 };
 

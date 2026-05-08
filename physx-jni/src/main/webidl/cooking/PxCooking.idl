@@ -44,6 +44,8 @@ interface PxConvexMeshDesc {
     void PxConvexMeshDesc();
     [Value] attribute PxBoundedData points;
     [Value] attribute PxConvexFlags flags;
+    [Value] attribute PxBoundedData polygons;
+    [Value] attribute PxBoundedData indices;
 };
 
 enum PxConvexMeshCookingTypeEnum {

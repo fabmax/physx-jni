@@ -372,6 +372,22 @@ interface PxSimulationEventCallbackImpl {
 };
 
 [Prefix="physx::"]
+interface PxContactModifyCallback{ };
+
+interface SimpleContactModifyCallback{
+    void onContactModify(PxContactModifyPair pairs,unsigned long count);
+};
+SimpleContactModifyCallback implements PxContactModifyCallback;
+
+[JSImplementation="SimpleContactModifyCallback"]
+interface PxContactModifyCallbackImpl{
+
+    void PxContactModifyCallbackImpl();
+    void onContactModify(PxContactModifyPair pairs,unsigned long count);
+
+};
+
+[Prefix="physx::"]
 interface PxSimulationFilterShader { };
 
 [Prefix="physx::"]
@@ -420,6 +436,23 @@ interface PxTriggerPair {
     [Value] attribute PxTriggerPairFlags flags;
 };
 
+[Prefix="physx::"]
+interface PxContactModifyPair{
+
+    PxRigidActor getActor(unsigned long index);
+    void setActor(unsigned long index,PxRigidActor value);
+
+    PxShape getShape(unsigned long index);
+    void setShape(unsigned long index,PxShape value);
+
+    PxTransform getTransform(unsigned long index);
+    void setTransform(unsigned long index,PxTransform value);
+
+    PxContactSet getContacts();
+    void setContacts(PxContactSet value);
+
+};
+
 enum PxTriggerPairFlagEnum {
     "PxTriggerPairFlagEnum::eREMOVED_SHAPE_TRIGGER",
     "PxTriggerPairFlagEnum::eREMOVED_SHAPE_OTHER",
@@ -432,4 +465,49 @@ interface PxTriggerPairFlags {
     boolean isSet(PxTriggerPairFlagEnum flag);
     void raise(PxTriggerPairFlagEnum flag);
     void clear(PxTriggerPairFlagEnum flag);
+};
+
+[Prefix="physx::"]
+interface PxContactSet{
+
+    [Ref]PxVec3 getPoint(unsigned long i);
+    void setPoint(unsigned long i ,[Ref]PxVec3 p);
+
+    [Ref]PxVec3 getNormal(unsigned long i);
+    void setNormal(unsigned long i ,[Ref]PxVec3 n);
+
+    float getSeparation(unsigned long i);
+    void setSeparation(unsigned long i, float s);
+
+    [Ref]PxVec3 getTargetVelocity(unsigned long i);
+    void setTargetVelocity(unsigned long i,[Ref]PxVec3 v);
+
+    unsigned long getInternalFaceIndex0(unsigned long i);
+    unsigned long getInternalFaceIndex1(unsigned long i);
+
+    float getMaxImpulse(unsigned long i);
+    void setMaxImpulse(unsigned long i,float s);
+
+    float getRestitution(unsigned long i);
+    void setRestitution(unsigned long i, float r);
+
+    float getStaticFriction(unsigned long i);
+    void setStaticFriction(unsigned long i, float f);
+
+    float getDynamicFriction(unsigned long i);
+    void setDynamicFriction(unsigned long i, float f);
+
+    unsigned long size();
+    void ignore(unsigned long i);
+
+    float getInvMassScale0();
+    void setInvMassScale0(float scale);
+    float getInvMassScale1();
+    void setInvMassScale1(float scale);
+
+    float getInvInertiaScale0();
+    void setInvInertiaScale0(float scale);
+    float getInvInertiaScale1();
+    void setInvInertiaScale1(float scale);
+
 };

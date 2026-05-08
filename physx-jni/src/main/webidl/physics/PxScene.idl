@@ -19,7 +19,7 @@ interface PxScene {
 
     // Contained Object Retrieval
     unsigned long getNbActors([Ref] PxActorTypeFlags types);
-    // unsigned long getActors(...)
+//    unsigned long getActors([Ref]PxActorTypeFlags types,[Ref]PxArray_PxActorPtr buffer,unsigned long bufferSize,unsigned long startIndex);
     // PxActorPtr getActiveActors();    -> SupportFunctions.PxScene_getActiveActors();
     [Platforms="windows;linux", Value] unsigned long getNbSoftBodies();
     // unsigned long getSoftBodies(...);
@@ -46,6 +46,9 @@ interface PxScene {
     // Callbacks
     void setSimulationEventCallback(PxSimulationEventCallback callback);
     PxSimulationEventCallback getSimulationEventCallback();
+    void setContactModifyCallback(PxContactModifyCallback callback);
+    PxContactModifyCallback getContactModifyCallback();
+
     // set/get contact modify callback
     // set/get ccd contact modify callback
     // set/get broad phase callback
