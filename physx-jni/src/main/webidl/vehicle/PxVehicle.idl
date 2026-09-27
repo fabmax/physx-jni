@@ -1,5 +1,5 @@
 /****************************************
- * [package=vehicle2]
+ * [package=vehicle]
  ****************************************/
 
 [NoDelete]
@@ -14,7 +14,7 @@ interface PxVehicleTopLevelFunctions {
     static readonly attribute unsigned long MAX_NB_ENGINE_TORQUE_CURVE_ENTRIES;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleAckermannParams {
     void PxVehicleAckermannParams();
     boolean isValid([Const, Ref] PxVehicleAxleDescription axleDesc);
@@ -25,7 +25,7 @@ interface PxVehicleAckermannParams {
     attribute float strength;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleAntiRollForceParams {
     void PxVehicleAntiRollForceParams();
     [Value] PxVehicleAntiRollForceParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -35,14 +35,14 @@ interface PxVehicleAntiRollForceParams {
     attribute float stiffness;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleAntiRollTorque {
     void PxVehicleAntiRollTorque();
     void setToDefault();
     [Value] attribute PxVec3 antiRollTorque;
 };
 
-[Prefix="physx::vehicle2::", StackAllocatable]
+[Prefix="physx::", StackAllocatable]
 interface PxVehicleAutoboxParams {
     void PxVehicleAutoboxParams();
     [Value] PxVehicleAutoboxParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -52,7 +52,7 @@ interface PxVehicleAutoboxParams {
     attribute float latency;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleAutoboxState {
     void PxVehicleAutoboxState();
     void setToDefault();
@@ -60,7 +60,7 @@ interface PxVehicleAutoboxState {
     attribute boolean activeAutoboxGearShift;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleAxleDescription {
     void PxVehicleAxleDescription();
     void setToDefault();
@@ -87,7 +87,7 @@ enum PxVehicleAxesEnum {
     "PxVehicleAxesEnum::eNegZ",
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleBrakeCommandResponseParams {
     void PxVehicleBrakeCommandResponseParams();
     [Value] PxVehicleBrakeCommandResponseParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -100,7 +100,7 @@ enum PxVehicleClutchAccuracyModeEnum {
     "PxVehicleClutchAccuracyModeEnum::eBEST_POSSIBLE"
 };
 
-[Prefix="physx::vehicle2::", StackAllocatable]
+[Prefix="physx::", StackAllocatable]
 interface PxVehicleClutchCommandResponseParams {
     void PxVehicleClutchCommandResponseParams();
     [Value] PxVehicleClutchCommandResponseParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -108,7 +108,7 @@ interface PxVehicleClutchCommandResponseParams {
     attribute float maxResponse;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleClutchCommandResponseState {
     void PxVehicleClutchCommandResponseState();
     void setToDefault();
@@ -116,7 +116,7 @@ interface PxVehicleClutchCommandResponseState {
     attribute float commandResponse;
 };
 
-[Prefix="physx::vehicle2::", StackAllocatable]
+[Prefix="physx::", StackAllocatable]
 interface PxVehicleClutchParams {
     void PxVehicleClutchParams();
     [Value] PxVehicleClutchParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -125,14 +125,14 @@ interface PxVehicleClutchParams {
     attribute unsigned long estimateIterations;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleClutchSlipState {
     void PxVehicleClutchSlipState();
     void setToDefault();
     attribute float clutchSlip;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleCommandNonLinearResponseParams {
     void PxVehicleCommandNonLinearResponseParams();
     void clear();
@@ -149,7 +149,7 @@ enum PxVehicleCommandNonLinearResponseParamsEnum {
     "PxVehicleCommandNonLinearResponseParamsEnum::eMAX_NB_COMMAND_VALUES"
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleCommandResponseParams {
     void PxVehicleCommandResponseParams();
     [Value] attribute PxVehicleCommandNonLinearResponseParams nonlinearResponse;
@@ -157,7 +157,7 @@ interface PxVehicleCommandResponseParams {
     attribute float maxResponse;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleCommandState {
     void PxVehicleCommandState();
     void setToDefault();
@@ -167,7 +167,7 @@ interface PxVehicleCommandState {
     attribute float steer;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleCommandValueResponseTable {
     void PxVehicleCommandValueResponseTable();
     attribute float commandValue;
@@ -178,10 +178,10 @@ enum PxVehicleCommandValueResponseTableEnum {
     "PxVehicleCommandValueResponseTableEnum::eMAX_NB_SPEED_RESPONSES"
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleComponent { };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleComponentSequence {
     void PxVehicleComponentSequence();
     boolean add(PxVehicleComponent component);
@@ -191,7 +191,7 @@ interface PxVehicleComponentSequence {
     void update(float dt, [Const, Ref] PxVehicleSimulationContext context);
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleConstraintConnector {
     void PxVehicleConstraintConnector();
     void PxVehicleConstraintConnector(PxVehiclePhysXConstraintState vehicleConstraintState);
@@ -200,7 +200,7 @@ interface PxVehicleConstraintConnector {
 };
 PxVehicleConstraintConnector implements PxConstraintConnector;
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleDifferentialState {
     void PxVehicleDifferentialState();
     void setToDefault();
@@ -210,7 +210,7 @@ interface PxVehicleDifferentialState {
     attribute float[] aveWheelSpeedContributionAllWheels;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleDirectDriveThrottleCommandResponseParams {
     void PxVehicleDirectDriveThrottleCommandResponseParams();
     [Value] PxVehicleDirectDriveThrottleCommandResponseParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -218,7 +218,7 @@ interface PxVehicleDirectDriveThrottleCommandResponseParams {
 };
 PxVehicleDirectDriveThrottleCommandResponseParams implements PxVehicleCommandResponseParams;
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleDirectDriveTransmissionCommandState {
     void PxVehicleDirectDriveTransmissionCommandState();
     void setToDefault();
@@ -231,14 +231,14 @@ enum PxVehicleDirectDriveTransmissionCommandStateEnum {
     "PxVehicleDirectDriveTransmissionCommandStateEnum::eFORWARD"
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleEngineDriveThrottleCommandResponseState {
     void PxVehicleEngineDriveThrottleCommandResponseState();
     void setToDefault();
     attribute float commandResponse;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleEngineDriveTransmissionCommandState {
     void PxVehicleEngineDriveTransmissionCommandState();
     void setToDefault();
@@ -250,7 +250,7 @@ enum PxVehicleEngineDriveTransmissionCommandStateEnum {
     "PxVehicleEngineDriveTransmissionCommandStateEnum::eAUTOMATIC_GEAR"
 };
 
-[Prefix="physx::vehicle2::", StackAllocatable]
+[Prefix="physx::", StackAllocatable]
 interface PxVehicleEngineParams {
     void PxVehicleEngineParams();
     [Value] PxVehicleEngineParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -265,7 +265,7 @@ interface PxVehicleEngineParams {
     attribute float dampingRateZeroThrottleClutchDisengaged;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleEngineState {
     void PxVehicleEngineState();
     void setToDefault();
@@ -288,7 +288,7 @@ interface PxVehicleFixedSizeLookupTableVec3_3 {
     boolean isValid();
 };
 
-[Prefix="physx::vehicle2::", StackAllocatable]
+[Prefix="physx::", StackAllocatable]
 interface PxVehicleFourWheelDriveDifferentialParams {
     void PxVehicleFourWheelDriveDifferentialParams();
     void setToDefault();
@@ -305,7 +305,7 @@ interface PxVehicleFourWheelDriveDifferentialParams {
 };
 PxVehicleFourWheelDriveDifferentialParams implements PxVehicleMultiWheelDriveDifferentialParams;
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleFrame {
     void PxVehicleFrame();
     void setToDefault();
@@ -320,7 +320,7 @@ interface PxVehicleFrame {
     attribute PxVehicleAxesEnum vrtAxis;
 };
 
-[Prefix="physx::vehicle2::", StackAllocatable]
+[Prefix="physx::", StackAllocatable]
 interface PxVehicleGearboxParams {
     void PxVehicleGearboxParams();
     [Value] PxVehicleGearboxParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -336,7 +336,7 @@ enum PxVehicleGearboxParamsEnum {
     "PxVehicleGearboxParamsEnum::eMAX_NB_GEARS"
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleGearboxState {
     void PxVehicleGearboxState();
     void setToDefault();
@@ -350,7 +350,7 @@ enum PxVehicleLimitsEnum {
     "PxVehicleLimitsEnum::eMAX_NB_AXLES",
 };
 
-[Prefix="physx::vehicle2::", StackAllocatable]
+[Prefix="physx::", StackAllocatable]
 interface PxVehicleMultiWheelDriveDifferentialParams {
     void PxVehicleMultiWheelDriveDifferentialParams();
     void setToDefault();
@@ -360,7 +360,7 @@ interface PxVehicleMultiWheelDriveDifferentialParams {
     attribute float[] aveWheelSpeedRatios;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehiclePhysXActor {
     void setToDefault();
     attribute PxRigidBody rigidBody;
@@ -372,7 +372,7 @@ enum PxVehiclePhysXActorUpdateModeEnum {
     "PxVehiclePhysXActorUpdateModeEnum::eAPPLY_ACCELERATION"
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehiclePhysXConstraints {
     void setToDefault();
     [Value] attribute PxVehiclePhysXConstraintState[] constraintStates;
@@ -387,7 +387,7 @@ enum PxVehiclePhysXConstraintLimitsEnum {
     "PxVehiclePhysXConstraintLimitsEnum::eNB_CONSTRAINTS_PER_VEHICLE"
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehiclePhysXConstraintState {
     void PxVehiclePhysXConstraintState();
     void setToDefault();
@@ -402,7 +402,7 @@ interface PxVehiclePhysXConstraintState {
     attribute float restitution;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehiclePhysXMaterialFriction {
     void PxVehiclePhysXMaterialFriction();
     boolean isValid();
@@ -410,7 +410,7 @@ interface PxVehiclePhysXMaterialFriction {
     attribute float friction;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehiclePhysXMaterialFrictionParams {
     boolean isValid();
     attribute PxVehiclePhysXMaterialFriction materialFrictions;
@@ -418,7 +418,7 @@ interface PxVehiclePhysXMaterialFrictionParams {
     attribute float defaultFriction;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehiclePhysXRoadGeometryQueryParams {
     [Value] PxVehiclePhysXRoadGeometryQueryParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
     boolean isValid();
@@ -434,7 +434,7 @@ enum PxVehiclePhysXRoadGeometryQueryTypeEnum {
     "PxVehiclePhysXRoadGeometryQueryTypeEnum::eSWEEP"
 };
 
-[Prefix="physx::vehicle2::", NoDelete]
+[Prefix="physx::", NoDelete]
 interface PxVehiclePhysXSimulationContext {
     void PxVehiclePhysXSimulationContext();
     [Value] PxVehiclePhysXSimulationContext transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -446,13 +446,13 @@ interface PxVehiclePhysXSimulationContext {
 };
 PxVehiclePhysXSimulationContext implements PxVehicleSimulationContext;
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehiclePhysXSteerState {
     void setToDefault();
     attribute float previousSteerCommand;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehiclePhysXSuspensionLimitConstraintParams {
     [Value] PxVehiclePhysXSuspensionLimitConstraintParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
     boolean isValid();
@@ -466,10 +466,10 @@ enum PxVehiclePhysXSuspensionLimitConstraintParamsDirectionSpecifierEnum {
     "PxVehiclePhysXSuspensionLimitConstraintParamsDirectionSpecifierEnum::eNONE"
 };
 
-[Prefix="physx::vehicle2::", NoDelete]
+[Prefix="physx::", NoDelete]
 interface PxVehiclePvdContext { };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleRigidBodyParams {
     void PxVehicleRigidBodyParams();
     [Value] PxVehicleRigidBodyParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -478,7 +478,7 @@ interface PxVehicleRigidBodyParams {
     [Value] attribute PxVec3 moi;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleRigidBodyState {
     void PxVehicleRigidBodyState();
     void setToDefault();
@@ -494,7 +494,7 @@ interface PxVehicleRigidBodyState {
     [Value] attribute PxVec3 externalTorque;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleRoadGeometryState {
     void PxVehicleRoadGeometryState();
     void setToDefault();
@@ -504,7 +504,7 @@ interface PxVehicleRoadGeometryState {
     attribute boolean hitState;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleScale {
     void PxVehicleScale();
     void setToDefault();
@@ -512,7 +512,7 @@ interface PxVehicleScale {
     attribute float scale;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleSimulationContext {
     void PxVehicleSimulationContext();
     PxVehicleSimulationContextTypeEnum getType();
@@ -532,7 +532,7 @@ enum PxVehicleSimulationContextTypeEnum {
     "PxVehicleSimulationContextTypeEnum::ePHYSX"
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleSteerCommandResponseParams {
     void PxVehicleSteerCommandResponseParams();
     [Value] PxVehicleSteerCommandResponseParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -540,7 +540,7 @@ interface PxVehicleSteerCommandResponseParams {
 };
 PxVehicleSteerCommandResponseParams implements PxVehicleCommandResponseParams;
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleSuspensionComplianceParams {
     void PxVehicleSuspensionComplianceParams();
     [Value] PxVehicleSuspensionComplianceParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -551,7 +551,7 @@ interface PxVehicleSuspensionComplianceParams {
     [Value] attribute PxVehicleFixedSizeLookupTableVec3_3 tireForceAppPoint;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleSuspensionComplianceState {
     void PxVehicleSuspensionComplianceState();
     void setToDefault();
@@ -561,7 +561,7 @@ interface PxVehicleSuspensionComplianceState {
     [Value] attribute PxVec3 suspForceAppPoint;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleSuspensionForce {
     void PxVehicleSuspensionForce();
     void setToDefault();
@@ -570,7 +570,7 @@ interface PxVehicleSuspensionForce {
     attribute float normalForce;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleSuspensionForceParams {
     void PxVehicleSuspensionForceParams();
     [Value] PxVehicleSuspensionForceParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -585,7 +585,7 @@ enum PxVehicleSuspensionJounceCalculationTypeEnum {
     "PxVehicleSuspensionJounceCalculationTypeEnum::eSWEEP"
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleSuspensionParams {
     void PxVehicleSuspensionParams();
     [Value] PxVehicleSuspensionParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -596,7 +596,7 @@ interface PxVehicleSuspensionParams {
     [Value] attribute PxTransform wheelAttachment;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleSuspensionState {
     void PxVehicleSuspensionState();
     void setToDefault(float _jounce, float _separation);
@@ -605,7 +605,7 @@ interface PxVehicleSuspensionState {
     attribute float separation;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleSuspensionStateCalculationParams {
     void PxVehicleSuspensionStateCalculationParams();
     [Value] PxVehicleSuspensionStateCalculationParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -614,7 +614,7 @@ interface PxVehicleSuspensionStateCalculationParams {
     attribute boolean limitSuspensionExpansionVelocity;
 };
 
-[Prefix="physx::vehicle2::", StackAllocatable]
+[Prefix="physx::", StackAllocatable]
 interface PxVehicleTankDriveDifferentialParams {
     void PxVehicleTankDriveDifferentialParams();
     void setToDefault();
@@ -635,7 +635,7 @@ interface PxVehicleTankDriveDifferentialParams {
 };
 PxVehicleTankDriveDifferentialParams implements PxVehicleMultiWheelDriveDifferentialParams;
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleTankDriveTransmissionCommandState {
     void PxVehicleTankDriveTransmissionCommandState();
     void setToDefault();
@@ -643,7 +643,7 @@ interface PxVehicleTankDriveTransmissionCommandState {
 };
 PxVehicleTankDriveTransmissionCommandState implements PxVehicleEngineDriveTransmissionCommandState;
 
-[Prefix="physx::vehicle2::", StackAllocatable]
+[Prefix="physx::", StackAllocatable]
 interface PxVehicleTireAxisStickyParams {
     void PxVehicleTireAxisStickyParams();
     [Value] PxVehicleTireAxisStickyParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -653,7 +653,7 @@ interface PxVehicleTireAxisStickyParams {
     attribute float damping;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleTireCamberAngleState {
     void PxVehicleTireCamberAngleState();
     void setToDefault();
@@ -665,14 +665,14 @@ enum PxVehicleTireDirectionModesEnum {
     "PxVehicleTireDirectionModesEnum::eLATERAL"
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleTireDirectionState {
     void PxVehicleTireDirectionState();
     void setToDefault();
     [Value] attribute PxVec3[] directions;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleTireForce {
     void PxVehicleTireForce();
     void setToDefault();
@@ -682,7 +682,7 @@ interface PxVehicleTireForce {
     attribute float wheelTorque;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleTireForceParams {
     void PxVehicleTireForceParams();
     [Value] PxVehicleTireForceParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -702,14 +702,14 @@ interface PxVehicleTireForceParamsExt {
     static void setLoadFilter(PxVehicleTireForceParams tireForceParams, unsigned long i, unsigned long j, float value);
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleTireGripState {
     void setToDefault();
     attribute float load;
     attribute float friction;
 };
 
-[Prefix="physx::vehicle2::", StackAllocatable]
+[Prefix="physx::", StackAllocatable]
 interface PxVehicleTireSlipParams {
     void PxVehicleTireSlipParams();
     void setToDefault();
@@ -720,21 +720,21 @@ interface PxVehicleTireSlipParams {
     attribute float minActiveLongSlipDenominator;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleTireSlipState {
     void PxVehicleTireSlipState();
     void setToDefault();
     attribute float[] slips;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleTireSpeedState {
     void PxVehicleTireSpeedState();
     void setToDefault();
     attribute float[] speedStates;
 };
 
-[Prefix="physx::vehicle2::", StackAllocatable]
+[Prefix="physx::", StackAllocatable]
 interface PxVehicleTireStickyParams {
     void PxVehicleTireStickyParams();
     void setToDefault();
@@ -743,7 +743,7 @@ interface PxVehicleTireStickyParams {
     [Value] attribute PxVehicleTireAxisStickyParams[] stickyParams;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleTireStickyState {
     void PxVehicleTireStickyState();
     void setToDefault();
@@ -759,7 +759,7 @@ interface PxVehicleTorqueCurveLookupTable {
     boolean isValid();
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleWheelActuationState {
     void PxVehicleWheelActuationState();
     void setToDefault();
@@ -767,7 +767,7 @@ interface PxVehicleWheelActuationState {
     attribute boolean isDriveApplied;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleWheelConstraintGroupState {
     void PxVehicleWheelConstraintGroupState();
     void setToDefault();
@@ -784,14 +784,14 @@ interface PxVehicleWheelConstraintGroupState {
     attribute unsigned long nbWheelsInGroups;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleWheelLocalPose {
     void PxVehicleWheelLocalPose();
     void setToDefault();
     [Value]attribute PxTransform localPose;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleWheelParams {
     void PxVehicleWheelParams();
     [Value] PxVehicleWheelParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -803,7 +803,7 @@ interface PxVehicleWheelParams {
     attribute float dampingRate;
 };
 
-[Prefix="physx::vehicle2::"]
+[Prefix="physx::"]
 interface PxVehicleWheelRigidBody1dState {
     void PxVehicleWheelRigidBody1dState();
     void setToDefault();

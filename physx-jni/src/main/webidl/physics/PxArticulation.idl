@@ -241,9 +241,7 @@ interface PxArticulationReducedCoordinate {
     //void packJointData(out float maximum, out float reduced);
     //void unpackJointData(out float reduced, out float maximum);
     void commonInit();
-    void computeGeneralizedGravityForce([Ref] PxArticulationCache cache);
     void computeGravityCompensation([Ref] PxArticulationCache cache);
-    void computeCoriolisAndCentrifugalForce([Ref] PxArticulationCache cache);
     void computeCoriolisCompensation([Ref] PxArticulationCache cache);
     void computeGeneralizedExternalForce([Ref] PxArticulationCache cache);
     void computeJointAcceleration([Ref] PxArticulationCache cache);
@@ -251,7 +249,6 @@ interface PxArticulationReducedCoordinate {
     //void computeDenseJacobian([Ref] PxArticulationCache cache, out unsigned long nRows, out unsigned long nCols);
     void computeCoefficientMatrix([Ref] PxArticulationCache cache);
     //void computeLambda()
-    void computeGeneralizedMassMatrix([Ref] PxArticulationCache cache);
     void computeMassMatrix([Ref] PxArticulationCache cache);
     [Value] PxVec3 computeArticulationCOM(boolean rootFrame);
     void computeCentroidalMomentumMatrix([Ref] PxArticulationCache cache);

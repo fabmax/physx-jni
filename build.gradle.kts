@@ -2,7 +2,7 @@ import org.gradle.internal.os.OperatingSystem
 import org.gradle.jvm.tasks.Jar
 
 plugins {
-    id("com.android.library") version "8.11.2" apply false
+    id("com.android.library") version "9.1.1" apply false
     alias(libs.plugins.mavenPublish) apply false
 }
 

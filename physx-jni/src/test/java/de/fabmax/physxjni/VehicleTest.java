@@ -10,7 +10,7 @@ import physx.common.PxVec3;
 import physx.geometry.PxBoxGeometry;
 import physx.geometry.PxGeometry;
 import physx.physics.*;
-import physx.vehicle2.*;
+import physx.vehicle.*;
 
 import java.util.Arrays;
 import java.util.Locale;

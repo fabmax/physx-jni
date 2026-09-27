@@ -4,8 +4,7 @@
 
 enum PxD6AngularDriveConfigEnum {
     "PxD6AngularDriveConfigEnum::eSWING_TWIST",
-    "PxD6AngularDriveConfigEnum::eSLERP",
-    "PxD6AngularDriveConfigEnum::eLEGACY"
+    "PxD6AngularDriveConfigEnum::eSLERP"
 };
 
 enum PxD6AxisEnum {
@@ -21,7 +20,6 @@ enum PxD6DriveEnum {
     "PxD6DriveEnum::eX",
     "PxD6DriveEnum::eY",
     "PxD6DriveEnum::eZ",
-    "PxD6DriveEnum::eSWING",
     "PxD6DriveEnum::eTWIST",
     "PxD6DriveEnum::eSLERP",
     "PxD6DriveEnum::eSWING1",

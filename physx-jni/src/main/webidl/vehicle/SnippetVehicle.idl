@@ -1,8 +1,8 @@
 /****************************************
- * [package=vehicle2]
+ * [package=vehicle]
  ****************************************/
 
-[Prefix="snippetvehicle2::"]
+[Prefix="snippetvehicle::"]
 interface BaseVehicleParams {
     void BaseVehicleParams();
     [Value] BaseVehicleParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -36,7 +36,7 @@ interface BaseVehicleParams {
 	[Value] attribute PxVehicleRigidBodyParams rigidBodyParams;
 };
 
-[Prefix="snippetvehicle2::"]
+[Prefix="snippetvehicle::"]
 interface BaseVehicleState {
     void BaseVehicleState();
     void setToDefault();
@@ -72,7 +72,7 @@ interface BaseVehicleState {
 	[Value] attribute PxVehicleRigidBodyState rigidBodyState;
 };
 
-[Prefix="snippetvehicle2::"]
+[Prefix="snippetvehicle::"]
 interface PhysXIntegrationParams {
     void PhysXIntegrationParams();
     [Value] PhysXIntegrationParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -97,7 +97,7 @@ interface PhysXIntegrationParams {
 	[Value] attribute PxFilterData physxActorWheelQueryFilterData;
 };
 
-[Prefix="snippetvehicle2::"]
+[Prefix="snippetvehicle::"]
 interface PhysXIntegrationState {
     void PhysXIntegrationState();
     void destroyState();
@@ -110,7 +110,7 @@ interface PhysXIntegrationState {
 };
 
 
-[Prefix="snippetvehicle2::"]
+[Prefix="snippetvehicle::"]
 interface DirectDrivetrainParams {
     void DirectDrivetrainParams();
     [Value] DirectDrivetrainParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -119,14 +119,14 @@ interface DirectDrivetrainParams {
     [Value] attribute PxVehicleDirectDriveThrottleCommandResponseParams directDriveThrottleResponseParams;
 };
 
-[Prefix="snippetvehicle2::"]
+[Prefix="snippetvehicle::"]
 interface DirectDrivetrainState {
     void DirectDrivetrainState();
     void setToDefault();
     attribute float[] directDriveThrottleResponseStates;
 };
 
-[Prefix="snippetvehicle2::"]
+[Prefix="snippetvehicle::"]
 interface EngineDrivetrainParams {
     void EngineDrivetrainParams();
     [Value] EngineDrivetrainParams transformAndScale([Const, Ref] PxVehicleFrame srcFrame, [Const, Ref] PxVehicleFrame trgFrame, [Const, Ref] PxVehicleScale srcScale, [Const, Ref] PxVehicleScale trgScale);
@@ -142,7 +142,7 @@ interface EngineDrivetrainParams {
 	[Value] attribute PxVehicleClutchParams clutchParams;
 };
 
-[Prefix="snippetvehicle2::"]
+[Prefix="snippetvehicle::"]
 interface EngineDrivetrainState {
     void EngineDrivetrainState();
     void setToDefault();
@@ -157,7 +157,7 @@ interface EngineDrivetrainState {
 	[Value] attribute PxVehicleClutchSlipState clutchState;
 };
 
-[Prefix="snippetvehicle2::"]
+[Prefix="snippetvehicle::"]
 interface BaseVehicle {
     boolean initialize();
     void destroyState();
@@ -172,7 +172,7 @@ interface BaseVehicle {
 	attribute octet componentSequenceSubstepGroupHandle;
 };
 
-[Prefix="snippetvehicle2::"]
+[Prefix="snippetvehicle::"]
 interface PhysXActorVehicle {
     boolean initialize([Ref] PxPhysics physics, [Const, Ref] PxCookingParams params, [Ref] PxMaterial defaultMaterial);
 
@@ -182,7 +182,7 @@ interface PhysXActorVehicle {
 };
 PhysXActorVehicle implements BaseVehicle;
 
-[Prefix="snippetvehicle2::"]
+[Prefix="snippetvehicle::"]
 interface DirectDriveVehicle {
     void DirectDriveVehicle();
     boolean initialize([Ref] PxPhysics physics, [Const, Ref] PxCookingParams params, [Ref] PxMaterial defaultMaterial, optional boolean addPhysXBeginEndComponents);
@@ -194,7 +194,7 @@ interface DirectDriveVehicle {
 };
 DirectDriveVehicle implements PhysXActorVehicle;
 
-[Prefix="snippetvehicle2::"]
+[Prefix="snippetvehicle::"]
 interface EngineDriveVehicle {
     void EngineDriveVehicle();
     boolean initialize([Ref] PxPhysics physics, [Const, Ref] PxCookingParams params, [Ref] PxMaterial defaultMaterial, EngineDriveVehicleEnum differentialType, optional boolean addPhysXBeginEndComponents);

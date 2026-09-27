@@ -485,7 +485,6 @@ interface PxPvdSceneFlags {
 [Prefix="physx::"]
 interface PxOmniPvd {
     [Platforms="windows;linux;macos"] OmniPvdWriter getWriter();
-    [Platforms="windows;linux;macos"] OmniPvdFileWriteStream getFileWriteStream();
     boolean startSampling();
     void release();
 };

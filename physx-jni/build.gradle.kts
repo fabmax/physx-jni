@@ -74,6 +74,7 @@ tasks.test {
 dependencies {
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.platform.launcher)
 
     //testRuntimeOnly(project(":physx-jni-natives-windows-cuda"))
     //testRuntimeOnly(project(":physx-jni-natives-linux-cuda"))

@@ -1,12 +1,12 @@
 plugins {
-    id("com.android.library") version "8.11.2"
+    id("com.android.library") version "9.1.1"
     alias(libs.plugins.webidl)
     alias(libs.plugins.mavenPublish)
 }
 
 android {
     namespace = "de.fabmax.physxjni"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24

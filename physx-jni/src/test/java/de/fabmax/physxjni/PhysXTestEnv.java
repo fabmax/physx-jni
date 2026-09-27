@@ -9,7 +9,7 @@ import physx.geometry.PxBoxGeometry;
 import physx.geometry.PxGeometry;
 import physx.geometry.PxPlaneGeometry;
 import physx.physics.*;
-import physx.vehicle2.PxVehicleTopLevelFunctions;
+import physx.vehicle.PxVehicleTopLevelFunctions;
 
 import java.util.HashMap;
 import java.util.Locale;

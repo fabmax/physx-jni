@@ -1,12 +1,13 @@
 [versions]
 junitBom = "5.9.1"
-lwjgl = "3.3.6"
+lwjgl = "3.4.3"
 
 [libraries]
 lwjgl-core = { group = "org.lwjgl", name = "lwjgl", version.ref = "lwjgl" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junitBom" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 
 [plugins]
-webidl = { id = "de.fabmax.webidl-util", version = "0.10.5" }
-mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.34.0" }
+webidl = { id = "de.fabmax.webidl-util", version = "0.11.0" }
+mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.37.0" }

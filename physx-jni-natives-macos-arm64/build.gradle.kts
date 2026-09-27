@@ -25,7 +25,7 @@ tasks.register<Exec>("generateNativeProjectMacosArm64") {
 tasks.register<Exec>("buildNativeProjectMacosArm64") {
     group = "native build"
     workingDir = File("$rootDir/PhysX/physx")
-    commandLine = listOf("cmake", "--build", "./compiler/jni-mac-aarch64/", "--config", NativeBuildSettings.buildType)
+    commandLine = listOf("/opt/homebrew/bin/cmake", "--build", "./compiler/jni-mac-aarch64/", "--config", NativeBuildSettings.buildType)
 
     val nativeProjectDir = File("$rootDir/PhysX/physx/compiler/jni-mac-aarch64")
     if (!nativeProjectDir.exists()) {
