@@ -53,7 +53,8 @@ jobs:
 
   build_windows:
     name: Windows build
-    runs-on: windows-latest
+    # windows-2022 required for vc17 - latest VS version supported by PhysX generator
+    runs-on: windows-2022
 
     steps:
       - name: Checkout project

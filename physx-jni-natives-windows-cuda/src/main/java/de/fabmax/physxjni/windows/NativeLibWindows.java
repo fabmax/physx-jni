@@ -7,7 +7,7 @@ import java.util.List;
 
 public class NativeLibWindows extends NativeLib {
 
-    private static final String version = "2.7.2";
+    private static final String version = "2.8.0";
 
     private static final List<String> libraries = new ArrayList<>() {{
         add("PhysX_64.dll");
