@@ -84,6 +84,7 @@ enum PxMeshPreprocessingFlagEnum {
     "PxMeshPreprocessingFlagEnum::eDISABLE_CLEAN_MESH",
     "PxMeshPreprocessingFlagEnum::eDISABLE_ACTIVE_EDGES_PRECOMPUTE",
     "PxMeshPreprocessingFlagEnum::eFORCE_32BIT_INDICES",
+    "PxMeshPreprocessingFlagEnum::eENABLE_VERT_MAPPING",
     "PxMeshPreprocessingFlagEnum::eENABLE_INERTIA"
 };
 
@@ -144,5 +145,6 @@ interface PxTriangleMeshDesc {
 
     [Const, Value] attribute PxTypedBoundedData_PxU16Const materialIndices;
     attribute PxSDFDesc sdfDesc;
+    attribute float geomEpsilon;
 };
 PxTriangleMeshDesc implements PxSimpleTriangleMesh;

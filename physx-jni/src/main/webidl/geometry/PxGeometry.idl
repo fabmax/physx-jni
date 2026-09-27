@@ -326,13 +326,14 @@ enum PxMeshFlagEnum {
 
 [Prefix="physx::", StackAllocatable]
 interface PxMeshFlags {
-    void PxMeshFlags(octet flags);
+    void PxMeshFlags(unsigned short flags);
     boolean isSet(PxMeshFlagEnum flag);
     void raise(PxMeshFlagEnum flag);
     void clear(PxMeshFlagEnum flag);
 };
 
 enum PxMeshGeometryFlagEnum {
+    "PxMeshGeometryFlagEnum::eTIGHT_BOUNDS",
     "PxMeshGeometryFlagEnum::eDOUBLE_SIDED"
 };
 
@@ -516,7 +517,8 @@ interface PxTriangleMeshAnalysisResults {
 
 enum PxTriangleMeshFlagEnum {
     "PxTriangleMeshFlagEnum::e16_BIT_INDICES",
-    "PxTriangleMeshFlagEnum::eADJACENCY_INFO"
+    "PxTriangleMeshFlagEnum::eADJACENCY_INFO",
+    "PxTriangleMeshFlagEnum::ePREFER_NO_SDF_PROJ"
 };
 
 [Prefix="physx::", StackAllocatable]

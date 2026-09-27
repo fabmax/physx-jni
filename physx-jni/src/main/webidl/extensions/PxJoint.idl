@@ -65,7 +65,8 @@ interface PxD6JointDrive {
 PxD6JointDrive implements PxSpring;
 
 enum PxD6JointDriveFlagEnum {
-    "PxD6JointDriveFlagEnum::eACCELERATION"
+    "PxD6JointDriveFlagEnum::eACCELERATION",
+    "PxD6JointDriveFlagEnum::eOUTPUT_FORCE"
 };
 
 [Prefix="physx::", StackAllocatable]

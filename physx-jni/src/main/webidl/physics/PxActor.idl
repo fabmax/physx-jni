@@ -100,6 +100,10 @@ interface PxRigidBody {
     void setMaxAngularVelocity(float maxAngVel);
     float getMaxAngularVelocity();
 
+    // Accelerations, require PxSceneFlagEnum::eENABLE_BODY_ACCELERATIONS
+    [Value] PxVec3 getLinearAcceleration();
+    [Value] PxVec3 getAngularAcceleration();
+
     // Forces
     void addForce([Const, Ref] PxVec3 force, optional PxForceModeEnum mode, optional boolean autowake);
     void addTorque([Const, Ref] PxVec3 torque, optional PxForceModeEnum mode, optional boolean autowake);
@@ -129,12 +133,15 @@ enum PxRigidBodyFlagEnum {
     "PxRigidBodyFlagEnum::eENABLE_POSE_INTEGRATION_PREVIEW",
     "PxRigidBodyFlagEnum::eENABLE_SPECULATIVE_CCD",
     "PxRigidBodyFlagEnum::eENABLE_CCD_MAX_CONTACT_IMPULSE",
-    "PxRigidBodyFlagEnum::eRETAIN_ACCELERATIONS"
+    "PxRigidBodyFlagEnum::eRETAIN_ACCELERATIONS",
+    "PxRigidBodyFlagEnum::eFORCE_KINE_KINE_NOTIFICATIONS",
+    "PxRigidBodyFlagEnum::eFORCE_STATIC_KINE_NOTIFICATIONS",
+    "PxRigidBodyFlagEnum::eENABLE_GYROSCOPIC_FORCES"
 };
 
 [Prefix="physx::", StackAllocatable]
 interface PxRigidBodyFlags {
-    void PxRigidBodyFlags(octet flags);
+    void PxRigidBodyFlags(unsigned short flags);
     boolean isSet(PxRigidBodyFlagEnum flag);
     void raise(PxRigidBodyFlagEnum flag);
     void clear(PxRigidBodyFlagEnum flag);

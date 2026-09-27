@@ -118,7 +118,8 @@ enum PxQueryFlagEnum {
     "PxQueryFlagEnum::ePREFILTER",
     "PxQueryFlagEnum::ePOSTFILTER",
     "PxQueryFlagEnum::eANY_HIT",
-    "PxQueryFlagEnum::eNO_BLOCK"
+    "PxQueryFlagEnum::eNO_BLOCK",
+    "PxQueryFlagEnum::eDISABLE_HARDCODED_FILTER"
 };
 
 enum PxQueryHitType {

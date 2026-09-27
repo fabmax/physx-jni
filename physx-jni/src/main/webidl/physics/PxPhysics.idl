@@ -225,7 +225,8 @@ enum PxFilterFlagEnum {
 
 enum PxFilterObjectFlagEnum {
     "PxFilterObjectFlagEnum::eKINEMATIC",
-    "PxFilterObjectFlagEnum::eTRIGGER"
+    "PxFilterObjectFlagEnum::eTRIGGER",
+    "PxFilterObjectFlagEnum::eCUSTOM_GEOMETRY"
 };
 
 enum PxForceModeEnum {

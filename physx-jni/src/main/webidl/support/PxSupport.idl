@@ -395,7 +395,10 @@ enum PxVisualizationParameterEnum {
     "PxVisualizationParameterEnum::eCONTACT_POINT",
     "PxVisualizationParameterEnum::eCONTACT_NORMAL",
     "PxVisualizationParameterEnum::eCONTACT_ERROR",
-    "PxVisualizationParameterEnum::eCONTACT_FORCE",
+    "PxVisualizationParameterEnum::eCONTACT_IMPULSE",
+    "PxVisualizationParameterEnum::eFRICTION_POINT",
+    "PxVisualizationParameterEnum::eFRICTION_NORMAL",
+    "PxVisualizationParameterEnum::eFRICTION_IMPULSE",
     "PxVisualizationParameterEnum::eACTOR_AXES",
     "PxVisualizationParameterEnum::eCOLLISION_AABBS",
     "PxVisualizationParameterEnum::eCOLLISION_SHAPES",
@@ -486,6 +489,8 @@ interface PxPvdSceneFlags {
 interface PxOmniPvd {
     [Platforms="windows;linux;macos"] OmniPvdWriter getWriter();
     boolean startSampling();
+    boolean stopSampling();
+    boolean isSampling();
     void release();
 };
 

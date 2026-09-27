@@ -84,6 +84,7 @@ interface PxCudaContextManager {
     boolean getUsingConcurrentStreams();
     long usingDedicatedGPU();
     CUmodule getCuModules();
+    void acquireReference();
     void release();
 };
 

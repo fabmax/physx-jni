@@ -207,7 +207,11 @@ enum PxSceneFlagEnum {
     "PxSceneFlagEnum::eENABLE_GPU_DYNAMICS",
     "PxSceneFlagEnum::eENABLE_ENHANCED_DETERMINISM",
     "PxSceneFlagEnum::eENABLE_FRICTION_EVERY_ITERATION",
+    "PxSceneFlagEnum::eENABLE_EXTERNAL_FORCES_EVERY_ITERATION_TGS",
     "PxSceneFlagEnum::eENABLE_DIRECT_GPU_API",
+    "PxSceneFlagEnum::eENABLE_BODY_ACCELERATIONS",
+    "PxSceneFlagEnum::eDISABLE_SLEEPING",
+    "PxSceneFlagEnum::eSOLVE_ARTICULATION_CONTACT_LAST",
     "PxSceneFlagEnum::eMUTABLE_FLAGS"
 };
 
