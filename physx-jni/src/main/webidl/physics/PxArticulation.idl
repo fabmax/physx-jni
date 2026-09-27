@@ -88,8 +88,9 @@ interface PxPerformanceEnvelope {
 [Prefix="physx::", StackAllocatable]
 interface PxArticulationDrive {
     void PxArticulationDrive();
-    void PxArticulationDrive(float stiffness, float damping, float maxForce, PxArticulationDriveTypeEnum driveType);
     void PxArticulationDrive(float stiffness, float damping, [Const, Ref] PxPerformanceEnvelope envelope, PxArticulationDriveTypeEnum driveType);
+    // emscripten's webidl_binder cannot overload on argument types, only on argument count
+    [Platforms="windows;linux;macos;android"] void PxArticulationDrive(float stiffness, float damping, float maxForce, PxArticulationDriveTypeEnum driveType);
     attribute float stiffness;
     attribute float damping;
     attribute float maxForce;
