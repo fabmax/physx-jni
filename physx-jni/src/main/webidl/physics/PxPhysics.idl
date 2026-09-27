@@ -104,7 +104,6 @@ enum PxConstraintFlagEnum {
     "PxConstraintFlagEnum::eBROKEN",
     "PxConstraintFlagEnum::eCOLLISION_ENABLED",
     "PxConstraintFlagEnum::eVISUALIZATION",
-    "PxConstraintFlagEnum::eDRIVE_LIMITS_ARE_FORCES",
     "PxConstraintFlagEnum::eIMPROVED_SLERP",
     "PxConstraintFlagEnum::eDISABLE_PREPROCESSING",
     "PxConstraintFlagEnum::eENABLE_EXTENDED_LIMITS",

@@ -76,12 +76,24 @@ interface PxArticulationCacheFlags {
 };
 
 [Prefix="physx::", StackAllocatable]
+interface PxPerformanceEnvelope {
+    void PxPerformanceEnvelope();
+    void PxPerformanceEnvelope(float maxEffort, float maxActuatorVelocity, float velocityDependentResistance, float speedEffortGradient);
+    attribute float maxEffort;
+    attribute float maxActuatorVelocity;
+    attribute float velocityDependentResistance;
+    attribute float speedEffortGradient;
+};
+
+[Prefix="physx::", StackAllocatable]
 interface PxArticulationDrive {
     void PxArticulationDrive();
     void PxArticulationDrive(float stiffness, float damping, float maxForce, PxArticulationDriveTypeEnum driveType);
+    void PxArticulationDrive(float stiffness, float damping, [Const, Ref] PxPerformanceEnvelope envelope, PxArticulationDriveTypeEnum driveType);
     attribute float stiffness;
     attribute float damping;
     attribute float maxForce;
+    [Value] attribute PxPerformanceEnvelope envelope;
     attribute PxArticulationDriveTypeEnum driveType;
 };
 
@@ -105,7 +117,6 @@ PxArticulationFixedTendon implements PxArticulationTendon;
 
 enum PxArticulationFlagEnum {
     "PxArticulationFlagEnum::eFIX_BASE",
-    "PxArticulationFlagEnum::eDRIVE_LIMITS_ARE_FORCES",
     "PxArticulationFlagEnum::eDISABLE_SELF_COLLISION"
 };
 
@@ -133,7 +144,7 @@ interface PxArticulationJointReducedCoordinate {
     void setLimitParams(PxArticulationAxisEnum axis, [Const, Ref] PxArticulationLimit limit);
     [Value] PxArticulationLimit getLimitParams(PxArticulationAxisEnum axis);
     void setDriveParams(PxArticulationAxisEnum axis, [Const, Ref] PxArticulationDrive drive);
-    // getDriveParams
+    [Value] PxArticulationDrive getDriveParams(PxArticulationAxisEnum axis);
     void setDriveTarget(PxArticulationAxisEnum axis, float target, optional boolean autowake);
     float getDriveTarget(PxArticulationAxisEnum axis);
     void setDriveVelocity(PxArticulationAxisEnum axis, float targetVel, optional boolean autowake);
