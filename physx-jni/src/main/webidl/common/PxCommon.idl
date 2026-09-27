@@ -171,7 +171,7 @@ interface PxPlane {
     void PxPlane(float nx, float ny, float nz, float distance);
     void PxPlane([Const, Ref] PxVec3 normal, float distance);
     void PxPlane([Const, Ref] PxVec3 p0, [Const, Ref] PxVec3 p1, [Const, Ref] PxVec3 p2);
-    [Platforms="windows;linux;macos;android"] void PxPlane([Const, Ref] PxVec3 point, [Const, Ref] PxVec3 normal);
+    [Platforms="windows;linux;macos;android"] void PxPlane([Const, Ref] PxVec3 point, [Const, Ref] PxVec3 nFormal);
 
     float distance([Const, Ref] PxVec3 p);
     boolean contains([Const, Ref] PxVec3 p);
@@ -250,6 +250,7 @@ interface PxTransform {
 
     [Value] PxTransform getInverse();
     [Value] PxVec3 transform([Const, Ref] PxVec3 input);
+//    [Value] PxTransform transform([Const, Ref] PxTransform input);
     [Value] PxVec3 transformInv([Const, Ref] PxVec3 input);
     boolean isValid();
     boolean isSane();
