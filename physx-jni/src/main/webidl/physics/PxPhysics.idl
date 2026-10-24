@@ -235,11 +235,6 @@ enum PxForceModeEnum {
     "PxForceModeEnum::eACCELERATION"
 };
 
-enum PxFrictionTypeEnum {
-    "PxFrictionTypeEnum::ePATCH",
-    "PxFrictionTypeEnum::eFRICTION_COUNT"
-};
-
 [Prefix="physx::", NoDelete]
 interface PxMaterial {
     void setDynamicFriction(float coef);

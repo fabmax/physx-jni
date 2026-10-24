@@ -266,7 +266,7 @@ interface PxHeightFieldDesc {
     attribute unsigned long nbRows;
     attribute unsigned long nbColumns;
     attribute PxHeightFieldFormatEnum format;
-    [Value] attribute PxStridedData samples;
+    [Value] attribute PxBoundedData samples;
     attribute float convexEdgeThreshold;
     [Value] attribute PxHeightFieldFlags flags;
 };

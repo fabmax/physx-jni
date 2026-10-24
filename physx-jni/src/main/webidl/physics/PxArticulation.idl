@@ -89,11 +89,8 @@ interface PxPerformanceEnvelope {
 interface PxArticulationDrive {
     void PxArticulationDrive();
     void PxArticulationDrive(float stiffness, float damping, [Const, Ref] PxPerformanceEnvelope envelope, PxArticulationDriveTypeEnum driveType);
-    // emscripten's webidl_binder cannot overload on argument types, only on argument count
-    [Platforms="windows;linux;macos;android"] void PxArticulationDrive(float stiffness, float damping, float maxForce, PxArticulationDriveTypeEnum driveType);
     attribute float stiffness;
     attribute float damping;
-    attribute float maxForce;
     [Value] attribute PxPerformanceEnvelope envelope;
     attribute PxArticulationDriveTypeEnum driveType;
 };
@@ -141,7 +138,6 @@ interface PxArticulationJointReducedCoordinate {
     PxArticulationJointTypeEnum getJointType();
     void setMotion(PxArticulationAxisEnum axis, PxArticulationMotionEnum motion);
     PxArticulationMotionEnum getMotion(PxArticulationAxisEnum axis);
-    // getLimit()
     void setLimitParams(PxArticulationAxisEnum axis, [Const, Ref] PxArticulationLimit limit);
     [Value] PxArticulationLimit getLimitParams(PxArticulationAxisEnum axis);
     void setDriveParams(PxArticulationAxisEnum axis, [Const, Ref] PxArticulationDrive drive);
@@ -152,10 +148,10 @@ interface PxArticulationJointReducedCoordinate {
     float getDriveVelocity(PxArticulationAxisEnum axis);
     void setArmature(PxArticulationAxisEnum axis, float armature);
     float getArmature(PxArticulationAxisEnum axis);
-    void setFrictionCoefficient(float coefficient);
-    float getFrictionCoefficient();
-    void setMaxJointVelocity(float maxJointV);
-    float getMaxJointVelocity();
+    void setFrictionParams(PxArticulationAxisEnum axis, [Const, Ref] PxJointFrictionParams jointFrictionParams);
+    [Value] PxJointFrictionParams getFrictionParams(PxArticulationAxisEnum axis);
+    void setMaxJointVelocity(PxArticulationAxisEnum axis, float maxJointV);
+    float getMaxJointVelocity(PxArticulationAxisEnum axis);
     void setJointPosition(PxArticulationAxisEnum axis, float jointPos);
     float getJointPosition(PxArticulationAxisEnum axis);
     void setJointVelocity(PxArticulationAxisEnum axis, float jointVel);
@@ -327,6 +323,15 @@ interface PxArticulationTendonJoint {
 interface PxArticulationTendonLimit {
     attribute float lowLimit;
     attribute float highLimit;
+};
+
+[Prefix="physx::", StackAllocatable]
+interface PxJointFrictionParams {
+    void PxJointFrictionParams();
+    void PxJointFrictionParams(float staticFrictionEffort, float dynamicFrictionEffort, float viscousFrictionCoefficient);
+    attribute float staticFrictionEffort;
+    attribute float dynamicFrictionEffort;
+    attribute float viscousFrictionCoefficient;
 };
 
 [Prefix="physx::"]

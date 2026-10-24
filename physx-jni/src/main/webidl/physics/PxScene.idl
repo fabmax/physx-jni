@@ -89,7 +89,6 @@ interface PxScene {
     float getFrictionOffsetThreshold();
     void setFrictionCorrelationDistance(float t);
     float getFrictionCorrelationDistance();
-    PxFrictionTypeEnum getFrictionType();
     PxSolverTypeEnum getSolverType();
 
     // Visualization and Statistics
@@ -156,7 +155,6 @@ interface PxSceneDesc {
     attribute PxBroadPhaseTypeEnum broadPhaseType;
     // [Value] PxBroadPhaseCallback broadPhaseCallback;
     [Value] attribute PxSceneLimits limits;
-    attribute PxFrictionTypeEnum frictionType;
     attribute PxSolverTypeEnum solverType;
     attribute float bounceThresholdVelocity;
     attribute float frictionOffsetThreshold;

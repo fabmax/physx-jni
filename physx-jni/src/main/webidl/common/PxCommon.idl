@@ -32,9 +32,10 @@ interface PxBaseTask { };
 [Prefix="physx::", StackAllocatable]
 interface PxBoundedData {
     void PxBoundedData();
+    attribute unsigned long stride;
     attribute unsigned long count;
+    [Const] attribute VoidPtr data;
 };
-PxBoundedData implements PxStridedData;
 
 [Prefix="physx::", StackAllocatable]
 interface PxBounds3 {
@@ -225,12 +226,6 @@ interface PxRefCounted {
     void acquireReference();
 };
 PxRefCounted implements PxBase;
-
-[Prefix="physx::"]
-interface PxStridedData {
-    attribute unsigned long stride;
-    [Const] attribute VoidPtr data;
-};
 
 [Prefix="physx::"]
 interface PxTolerancesScale {

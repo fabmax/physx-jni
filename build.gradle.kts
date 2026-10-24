@@ -8,7 +8,7 @@ plugins {
 
 subprojects {
     group = "de.fabmax"
-    version = "2.8.0"
+    version = "2.9.0"
 
     if (name != "physx-jni-android") {
         apply(plugin = "java-library")
