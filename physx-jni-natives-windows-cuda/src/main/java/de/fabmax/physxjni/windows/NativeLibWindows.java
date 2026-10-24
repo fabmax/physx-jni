@@ -12,7 +12,6 @@ public class NativeLibWindows extends NativeLib {
     private static final List<String> libraries = new ArrayList<>() {{
         add("PhysX_64.dll");
         add("PhysXCommon_64.dll");
-        add("PhysXCooking_64.dll");
         add("PhysXFoundation_64.dll");
         add("PhysXGpu_64.dll");
         add("PhysXDevice64.dll");
